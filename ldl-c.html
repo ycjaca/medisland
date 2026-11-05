@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>為何 LDL-C 仍未達標？深入探索</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sea:#0d2a33;--sea-deep:#082028;--panel:#0a252d;--grid:#1a4350;--grid2:#2a5662;
+  --ink:#e8efe9;--ink-soft:#9fb9b8;--buoy:#f2b134;--acc:#d0715e;--acc-l:#f0a291;
+  --ok:#7fb26a;--warn:#e0a24a;--stop:#d0715e;--drug:#f2b134;--teal:#5fa8a0;--old:#6f8c92;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--sea);color:var(--ink);font-family:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:16.5px}
+a{color:var(--buoy)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--buoy);outline-offset:3px}
+svg text{font-family:var(--body)}
+.mono{font-family:var(--mono)}
+.col{max-width:760px;margin:0 auto;padding:0 20px}
+.wide{max-width:1040px;margin:0 auto;padding:0 20px}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(8,32,40,.94);border-bottom:1px solid var(--grid)}
+.topbar .wide{display:flex;align-items:center;gap:14px;height:48px}
+.back{font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--buoy)}
+.prog{flex:1;height:3px;background:var(--grid);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--acc)}
+.chapnav{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+header.hero{padding:48px 0 26px}
+.coords{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,6vw,62px);line-height:1.12;margin:8px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--acc)}
+.lede{color:var(--ink-soft);margin:0 0 18px;max-width:38em}
+.speakers{display:flex;flex-wrap:wrap;gap:10px}
+.spk{border:1px solid var(--grid);border-radius:4px;padding:8px 12px;font-size:14px;line-height:1.5}
+.spk b{font-weight:500}.spk span{display:block;color:var(--ink-soft);font-size:12.5px}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:22px;padding:0;list-style:none}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14.5px;padding:8px 10px;border:1px solid var(--grid);border-radius:4px}
+.toc a:hover{border-color:var(--acc)}
+.toc a span{font-family:var(--mono);font-size:11px;color:var(--acc)}
+section.ch{padding:56px 0 20px;border-top:1px solid var(--grid)}
+.chno{font-family:var(--mono);font-size:12px;color:var(--acc);letter-spacing:.1em}
+h2{font-family:var(--display);font-size:clamp(27px,4.2vw,38px);line-height:1.2;margin:4px 0 8px;font-weight:700;text-wrap:balance}
+h3{font-family:var(--display);font-size:22px;margin:34px 0 8px;font-weight:700;text-wrap:balance}
+.src{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);border:1px solid var(--grid);border-radius:20px;padding:1px 9px;margin:0 6px 6px 0}
+.src.spk1{border-color:var(--acc);color:var(--acc-l)}
+.src.add{border-style:dashed}
+.src.ad{border-color:#8f86c9;color:#c4bdf0}
+p{margin:0 0 14px}
+.soft{color:var(--ink-soft)}
+small.note{display:block;font-size:13px;color:var(--ink-soft);line-height:1.6}
+figure{margin:22px 0 26px;padding:0}
+.plate{background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px;padding:16px;position:relative}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+figcaption b{color:var(--ink);font-weight:500}
+.figno{font-family:var(--mono);font-size:11px;color:var(--acc);margin-right:6px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--grid);background:transparent;border-radius:20px;padding:5px 13px;font-size:13.5px;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+.chip.on{border-color:var(--acc);background:rgba(208,113,94,.16);color:var(--ink)}
+.chip.right{border-color:var(--ok);background:rgba(127,178,106,.16);color:var(--ink)}
+.chip.wrong{border-color:var(--stop);background:rgba(208,113,94,.1);color:var(--ink-soft)}
+.btn{border:1px solid var(--acc);background:rgba(208,113,94,.12);border-radius:4px;padding:7px 16px;cursor:pointer;font-size:14px}
+.btn:hover{background:rgba(208,113,94,.25)}
+.btn.ghost{border-color:var(--grid);background:transparent;color:var(--ink-soft)}
+.callout{border-left:3px solid var(--buoy);background:rgba(242,177,52,.06);padding:12px 16px;margin:18px 0;border-radius:0}
+.callout.acc{border-left-color:var(--acc);background:rgba(208,113,94,.07)}
+.callout.purple{border-left-color:#8f86c9;background:rgba(143,134,201,.08)}
+.callout h4{margin:0 0 4px;font-size:15px;font-weight:500}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.callout ul{margin:4px 0 0;padding-left:20px}
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0 20px}
+table.t th,table.t td{border-bottom:1px solid var(--grid);padding:8px 8px;text-align:left;vertical-align:top}
+table.t th{font-weight:500;color:var(--ink-soft);font-size:13px}
+table.t td.num{font-family:var(--mono);white-space:nowrap}
+.tw{overflow-x:auto}
+.old{color:var(--old);text-decoration:line-through}
+.up{color:var(--acc-l)}
+/* case */
+.visits{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.visits button{border:1px solid var(--grid);background:transparent;border-radius:4px;padding:6px 12px;cursor:pointer;font-size:13.5px;color:var(--ink-soft);text-align:left;line-height:1.35}
+.visits button b{display:block;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--acc)}
+.visits button.on{border-color:var(--acc);background:rgba(208,113,94,.14);color:var(--ink)}
+.case{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px;align-items:start}
+@media (max-width:780px){.case{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:18px}
+.card .who{font-family:var(--display);font-size:21px;margin:0 0 6px}
+.card ul{margin:0;padding-left:20px}.card li{margin-bottom:3px}
+.lab{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0 4px}
+.lab div{border:1px solid var(--grid);border-radius:4px;padding:6px 10px;min-width:96px}
+.lab span{display:block;font-size:11.5px;color:var(--ink-soft)}
+.lab b{font-family:var(--mono);font-size:20px;font-weight:500}
+.lab b.bad{color:var(--acc-l)}.lab b.good{color:#a9d496}
+.q{font-weight:500;margin:4px 0 6px}
+.fb{border:1px solid var(--grid);border-radius:4px;padding:12px 14px;font-size:14.5px;margin-top:10px;display:none}
+.fb.show{display:block}
+.fb h5{margin:0 0 4px;font-size:14.5px;font-weight:500}
+.opt{display:grid;gap:8px;margin-top:8px}
+.optc{border:1px solid var(--grid);border-radius:4px;padding:10px 12px;background:transparent;text-align:left;cursor:pointer;font-size:14px;line-height:1.5}
+.optc b{font-weight:500}
+.optc small{display:block;color:var(--ink-soft);font-size:12.5px}
+.optc.on{border-color:var(--buoy);background:rgba(242,177,52,.07)}
+.pane{display:none}.pane.on{display:block}
+/* classifier */
+.cls{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:20px;align-items:start}
+@media (max-width:820px){.cls{grid-template-columns:1fr}}
+.grp{margin-bottom:12px}
+.grp h5{margin:0 0 6px;font-size:13px;font-weight:500;color:var(--ink-soft);font-family:var(--mono)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px}
+.check{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--grid);border-radius:4px;padding:7px 10px;cursor:pointer;font-size:13.5px;line-height:1.45}
+.check input{margin-top:4px;accent-color:var(--acc)}
+.check.on{border-color:var(--acc);background:rgba(208,113,94,.08)}
+.result{position:sticky;top:64px}
+.tier{border-radius:6px;padding:16px;border:1px solid var(--grid);background:var(--panel)}
+.tier .nm{font-family:var(--display);font-size:28px;line-height:1.2}
+.tier .why{font-size:13px;color:var(--ink-soft);margin:4px 0 10px}
+.tier .nums{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tier .nums div{border:1px solid var(--grid);border-radius:4px;padding:6px 10px}
+.tier .nums span{display:block;font-size:11.5px;color:var(--ink-soft)}
+.tier .nums b{font-family:var(--mono);font-size:19px;font-weight:500}
+.tier .plan{font-size:13.5px;margin-top:10px;line-height:1.6}
+.ldlin{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px}
+.ldlin input{width:84px;background:var(--sea-deep);border:1px solid var(--grid2);border-radius:4px;padding:4px 8px;font-family:var(--mono)}
+.ldlv{font-size:13.5px;margin-top:6px}
+/* timeline */
+.tl{display:grid;grid-template-columns:110px 1fr;gap:10px 14px;align-items:center;font-size:14px}
+.tl .lbl{color:var(--ink-soft);font-size:13px}
+.bar{position:relative;height:30px;background:rgba(26,67,80,.5);border-radius:3px}
+.bar span{position:absolute;top:0;bottom:0;border-radius:3px;display:flex;align-items:center;padding:0 8px;font-size:12.5px;white-space:nowrap;overflow:hidden}
+/* pitfalls */
+.pits{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;counter-reset:p}
+.pit{border:1px solid var(--grid);border-radius:6px;padding:12px 14px;background:var(--panel);position:relative}
+.pit .k{font-family:var(--mono);font-size:11px;color:var(--acc)}
+.pit h4{margin:2px 0 4px;font-size:16px;font-weight:500;line-height:1.4}
+.pit p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+.pit .tag{display:inline-block;font-size:11.5px;border-radius:3px;padding:0 7px;margin-top:6px}
+.tag.n{background:rgba(127,178,106,.18);color:#a9d496}
+.tag.s{background:rgba(242,177,52,.15);color:#f5cf7f}
+.tag.x{background:rgba(208,113,94,.2);color:#f0a291}
+/* rewards */
+.rw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:780px){.rw{grid-template-columns:1fr}}
+.pts{font-family:var(--mono);font-size:40px;color:var(--buoy);line-height:1.1}
+/* mechanism */
+.mech{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:20px;align-items:start}
+@media (max-width:820px){.mech{grid-template-columns:1fr}}
+.dtag{cursor:pointer}
+.dtag rect{fill:rgba(242,177,52,.12);stroke:var(--drug);stroke-width:1;transition:all .2s}
+.dtag text{fill:#f5cf7f;font-size:12.5px}
+.dtag:hover rect,.dtag.on rect{fill:var(--drug)}
+.dtag:hover text,.dtag.on text{fill:#2a1d03}
+.nd rect{fill:#0f3540;stroke:var(--grid2);stroke-width:1}
+.nd text{fill:var(--ink);font-size:13px}
+.blk{stroke:var(--drug);stroke-width:2;transition:opacity .3s}
+.dimmed{opacity:.25;transition:opacity .4s}
+.dinfo h4{font-family:var(--display);font-size:22px;margin:0 0 4px;font-weight:700}
+.dinfo dl{margin:8px 0 0;display:grid;grid-template-columns:76px 1fr;gap:4px 10px;font-size:13.5px}
+.dinfo dt{color:var(--ink-soft)}
+.dinfo dd{margin:0}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0}
+.stat{border:1px solid var(--grid);border-radius:6px;padding:10px 12px}
+.stat b{display:block;font-family:var(--mono);font-size:26px;font-weight:500;color:var(--buoy);line-height:1.2}
+.stat span{font-size:12.5px;color:var(--ink-soft);line-height:1.45;display:block}
+.twocol{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:780px){.twocol{grid-template-columns:1fr}}
+.dose{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.dose div{border:1px solid var(--grid);border-radius:6px;padding:10px;text-align:center}
+.dose b{display:block;font-family:var(--mono);font-size:30px;font-weight:500}
+.dose span{font-size:12.5px;color:var(--ink-soft)}
+.dots{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;margin:6px auto 4px;max-width:160px;min-height:66px;align-content:center}
+.dots i{width:4px;height:4px;border-radius:50%;background:var(--ink-soft);opacity:.7}
+.dots i.big{width:14px;height:14px;background:var(--buoy);opacity:1}
+.dots i.mid{width:8px;height:8px;background:var(--teal);opacity:1}
+/* calc */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:780px){.calc{grid-template-columns:1fr}}
+.row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px;flex-wrap:wrap}
+.row label{min-width:86px;color:var(--ink-soft)}
+.row input[type=number],.row select{background:var(--sea-deep);border:1px solid var(--grid2);border-radius:4px;padding:5px 8px}
+.row input[type=number]{width:96px;font-family:var(--mono)}
+.addon{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--grid);border-radius:4px;padding:8px 10px;margin-bottom:6px;cursor:pointer;font-size:14px;line-height:1.45}
+.addon input{margin-top:4px;accent-color:var(--buoy)}
+.addon small{display:block;color:var(--ink-soft);font-size:12.5px}
+.addon.on{border-color:var(--buoy);background:rgba(242,177,52,.06)}
+.addon.dis{opacity:.4;cursor:not-allowed}
+.gauge{margin-top:6px}
+.err{color:var(--acc-l);font-size:13px;min-height:1.2em}
+footer{padding:50px 0 80px;border-top:1px solid var(--grid);margin-top:40px;font-size:13.5px;color:var(--ink-soft)}
+footer ol{padding-left:20px}
+footer li{margin-bottom:4px}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:10px 0 0}
+.links div{border:1px dashed var(--grid2);border-radius:4px;padding:10px 12px;font-size:14px}
+.links span{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wide">
+  <a class="back" href="index.html#cardiorenal">← 回到群島</a>
+  <div class="prog"><i id="progbar"></i></div>
+  <span class="chapnav" id="chapnav">心腎島 · 午餐場</span>
+</div></div>
+
+<header class="hero"><div class="col">
+  <div class="coords">心腎島 · Lunch symposium 213 · 115.10.18 正心樓 2F</div>
+  <h1>為何 LDL-C <em>仍未達標</em>？</h1>
+  <p class="lede">一位心肌梗塞後的糖尿病病人，吃了兩年 statin，LDL 88。他達標了嗎？健保 115 年 9 月 1 日的新給付表怎麼看他？如果加藥還是不夠，下一步是什麼？</p>
+  <div class="speakers">
+    <div class="spk"><b>陳英杰</b><span>台大佳醫診所</span></div>
+    <div class="spk"><b>為何 LDL-C 仍未達標？</b><span>高風險患者的治療缺口與改善策略</span></div>
+  </div>
+  <div class="callout purple" style="margin-top:20px"><h4>閱讀提醒</h4><p class="soft" style="margin:0">本場為廠商贊助的午餐研討會（inclisiran）。頁面中標 <span class="src spk1">講者</span> 的是講者投影片內容，<span class="src ad">廠商資料</span> 是會場發放的產品手冊，<span class="src add">補充</span> 是另外查證的指引、健保公告與原始論文。</p></div>
+  <ul class="toc">
+    <li><a href="#c1"><span>01</span>門診實務：一路加藥</a></li>
+    <li><a href="#c2"><span>02</span>缺口有多大</a></li>
+    <li><a href="#c3"><span>03</span>指引：數字收斂了</a></li>
+    <li><a href="#c4"><span>04</span>健保新制：他是哪一級</a></li>
+    <li><a href="#c5"><span>05</span>新舊制對照</a></li>
+    <li><a href="#c6"><span>06</span>開藥前要注意的事</a></li>
+    <li><a href="#c7"><span>07</span>達標獎勵</a></li>
+    <li><a href="#c8"><span>08</span>藥物作用在哪裡</a></li>
+    <li><a href="#c9"><span>09</span>Inclisiran 試驗</a></li>
+    <li><a href="#c10"><span>10</span>加藥計算器</a></li>
+  </ul>
+</div></header>
+
+<!-- 01 CASE -->
+<section class="ch" id="c1" data-name="門診實務"><div class="wide">
+  <div class="chno">01 · 門診實務</div>
+  <h2>一位病人，三次回診</h2>
+  <p class="soft" style="max-width:44em">跟著這位病人走一遍：先判斷風險等級，再決定加什麼藥。每一次回診都有一個決定要做，最後會走到新藥的選擇。</p>
+  <div class="visits" id="visits">
+    <button class="on" data-v="0"><b>第 1 次</b>風險分級</button>
+    <button data-v="1"><b>第 1 次</b>第一步加藥</button>
+    <button data-v="2"><b>8 週後</b>還差一點</button>
+    <button data-v="3"><b>3 個月後</b>結果與追蹤</button>
+  </div>
+  <div class="case">
+    <div class="card">
+      <p class="who">62 歲男性，家醫科慢性病門診</p>
+      <ul>
+        <li>2 年前急性 STEMI，放了一支支架</li>
+        <li>第二型糖尿病 8 年，HbA1c 7.2%</li>
+        <li>高血壓，已用藥控制</li>
+        <li>目前降血脂藥：<span id="cRx">atorvastatin 20 mg（中強度）</span></li>
+      </ul>
+      <div class="lab">
+        <div><span>LDL-C</span><b id="cLDL" class="bad">88</b></div>
+        <div><span>non-HDL-C</span><b id="cNH">112</b></div>
+        <div><span>目標</span><b id="cTgt">?</b></div>
+      </div>
+      <small class="note" id="cNote">LDL-C 單位 mg/dL</small>
+    </div>
+    <div>
+      <div class="pane on" data-p="0">
+        <p class="q">依健保 115/9/1 新制表一，他屬於哪一級？</p>
+        <div class="btns" id="qTier">
+          <button class="chip" data-a="high">高風險</button>
+          <button class="chip" data-a="vhigh">非常高風險</button>
+          <button class="chip" data-a="ext">極高風險</button>
+        </div>
+        <div class="fb" id="fbTier"></div>
+      </div>
+      <div class="pane" data-p="1">
+        <p class="q">LDL 88 要降到 &lt;55，至少要再降 38%。第一步怎麼調？</p>
+        <div class="opt" id="qStep1">
+          <button class="optc" data-a="keep"><b>先不加藥，加強衛教</b><small>飲食運動、確認有沒有按時吃</small></button>
+          <button class="optc" data-a="hi"><b>改成高強度 statin</b><small>rosuvastatin 20 mg 或 atorvastatin 40–80 mg</small></button>
+          <button class="optc" data-a="hie"><b>高強度 statin＋ezetimibe</b><small>兩個機轉一起上</small></button>
+        </div>
+        <div class="fb" id="fbStep1"></div>
+      </div>
+      <div class="pane" data-p="2">
+        <p class="q">8 週後 LDL 63，還是 ≥55。他說小腿偶爾痠，CK 正常，不想再加 statin 劑量。下一步？</p>
+        <div class="opt" id="qStep2">
+          <button class="optc" data-a="bem"><b>加 bempedoic acid（口服）</b><small>ATP citrate lyase 抑制劑，每天一顆</small></button>
+          <button class="optc" data-a="mab"><b>PCSK9 單株抗體</b><small>evolocumab／alirocumab，每 2 週皮下注射</small></button>
+          <button class="optc" data-a="inc"><b>Inclisiran（siRNA）</b><small>第 0、3 個月各一針，之後每 6 個月一針</small></button>
+        </div>
+        <div class="fb" id="fbStep2"></div>
+      </div>
+      <div class="pane" data-p="3">
+        <div class="fb show" id="fbEnd"></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 02 GAP -->
+<section class="ch" id="c2" data-name="缺口"><div class="col">
+  <div class="chno">02 · 缺口有多大</div>
+  <h2>台灣 ASCVD 病人，六個裡面只有一個達標</h2>
+  <span class="src ad">廠商資料</span><span class="src add">補充</span>
+  <p>健保資料庫追蹤 2017–2023 年 ASCVD 出院病人，一年後 LDL-C &lt;55 的只有 16.7%，比歐洲兩個登錄研究還低。媒體引述的數據也類似：非常高、極高風險病人 LDL &lt;70 的達標率大約三分之一。</p>
+  <figure><div class="plate"><svg id="gapChart" viewBox="0 0 640 230" role="img" aria-label="LDL-C 小於 55 達標率比較"></svg></div>
+  <figcaption><span class="figno">圖 1</span><b>ASCVD 病人 LDL-C &lt;55 mg/dL 的比例。</b>台灣：Hsiao FY, Int J Cardiol Heart Vasc 2025（出院一年後）；DA VINCI：Ray KK, Eur J Prev Cardiol 2021；SANTORINI：Ray KK, Lancet Reg Health Eur 2023。</figcaption></figure>
+  <h3>為什麼卡住？</h3>
+  <div class="tw"><table class="t">
+    <tr><th>卡在哪</th><th>常見情況</th><th>這頁對應</th></tr>
+    <tr><td>風險低估</td><td>把 ACS＋糖尿病當成一般「冠心病 &lt;70」</td><td><a href="#c4">04 分級器</a></td></tr>
+    <tr><td>強度不夠</td><td>停在中強度 statin，沒有往上調</td><td><a href="#c10">10 計算器</a></td></tr>
+    <tr><td>臨床惰性</td><td>差一點就不加藥；VICTORION-INITIATE 的常規治療組一年只多降 7%</td><td><a href="#c9">09 試驗</a></td></tr>
+    <tr><td>病人停藥</td><td>肌肉痠痛、覺得「數字好了就不用吃」</td><td><a href="#c8">08 機轉</a></td></tr>
+    <tr><td>給付規則</td><td>表一、表二品項規則不同；PCSK9 單株抗體另有門檻</td><td><a href="#c6">06 注意事項</a></td></tr>
+  </table></div>
+</div></section>
+
+<!-- 03 GUIDELINES -->
+<section class="ch" id="c3" data-name="指引"><div class="col">
+  <div class="chno">03 · 指引</div>
+  <h2>三套指引，數字已經收斂</h2>
+  <span class="src spk1">講者</span><span class="src add">補充</span>
+  <p>ESC 2025 年的 focused update 沒有改目標，ACC/AHA 2026 年重新把 LDL-C 目標放回指引，台灣 2025 臨床路徑共識和健保新制也用同一組數字。差別主要在「怎麼分級」，不在「降到多少」。</p>
+  <div class="tw"><table class="t">
+    <tr><th>族群</th><th>台灣 2025 共識／健保表一</th><th>ESC/EAS 2025</th><th>ACC/AHA 2026</th></tr>
+    <tr><td>最高風險（ASCVD＋高風險條件）</td><td class="num">&lt;55</td><td class="num">&lt;55（2 年內再發可 &lt;40）</td><td class="num">&lt;55</td></tr>
+    <tr><td>已確診 ASCVD</td><td class="num">&lt;70</td><td class="num">&lt;55</td><td class="num">&lt;70</td></tr>
+    <tr><td>糖尿病、CKD 等高風險</td><td class="num">&lt;100</td><td class="num">&lt;70 或 &lt;55</td><td class="num">&lt;70（PREVENT ≥10%）</td></tr>
+    <tr><td>一般初級預防</td><td class="num">&lt;115／&lt;130／&lt;160</td><td class="num">&lt;100／&lt;116</td><td class="num">&lt;100</td></tr>
+  </table></div>
+  <small class="note">ESC 的分級用 SCORE2 和器官損傷；ACC/AHA 用 PREVENT 10 年風險。表格是概略對應，不是一對一換算。ESC/EAS 2025 另把 bempedoic acid 列入（statin 不耐受 class I；加在 statin ± ezetimibe 上 class IIa）。</small>
+</div></section>
+
+<!-- 04 CLASSIFIER -->
+<section class="ch" id="c4" data-name="健保分級"><div class="wide">
+  <div class="chno">04 · 健保 115/9/1 新制</div>
+  <h2>勾一勾，看他是哪一級</h2>
+  <span class="src spk1">講者</span><span class="src add">健保署 2.6.1 表一</span>
+  <p class="soft" style="max-width:46em">新制共六級，每一級的「給付入口門檻」就等於「治療目標」：沒達標就可以申請。先勾臨床條件，再輸入目前的 LDL。</p>
+  <div class="cls">
+    <div>
+      <div class="grp"><h5>動脈粥狀硬化疾病（ASCVD）</h5><div class="checks" id="gA"></div></div>
+      <div class="grp"><h5>極高風險條件（需合併冠狀動脈疾病或 PAD）</h5><div class="checks" id="gB"></div></div>
+      <div class="grp"><h5>高風險條件</h5><div class="checks" id="gC"></div></div>
+      <div class="grp"><h5>心血管危險因子（各算 1 項）</h5><div class="checks" id="gD"></div></div>
+      <button class="btn ghost" id="clsReset" type="button">清除</button>
+      <button class="btn ghost" id="clsCase" type="button">帶入開場病人</button>
+    </div>
+    <div class="result"><div class="tier" id="tierBox"></div></div>
+  </div>
+</div></section>
+
+<!-- 05 OLD vs NEW -->
+<section class="ch" id="c5" data-name="新舊對照"><div class="wide">
+  <div class="chno">05 · 新舊制對照</div>
+  <h2>哪些人門檻變了？</h2>
+  <span class="src add">健保署修訂對照表</span><span class="src add">劉漢文醫師整理</span>
+  <p class="soft" style="max-width:46em">舊制（108/2/1 起，適用到 115/8/31）分成五群，部分還用總膽固醇判斷；新制只看 LDL-C。下圖每一列是一群病人，灰點是舊的開始用藥門檻，紅點是新的。</p>
+  <figure><div class="plate"><svg id="dumb" viewBox="0 0 900 420" role="img" aria-label="新舊制 LDL-C 起始門檻對照"></svg></div>
+  <figcaption><span class="figno">圖 2</span><b>開始用藥的 LDL-C 門檻，舊制 → 新制。</b>舊制的「心血管疾病或糖尿病」為 TC ≥160 或 LDL ≥100；≥2 項危險因子為 TC ≥200 或 LDL ≥130；1 項為 TC ≥240 或 LDL ≥160。CKD、CAC ≥400 在舊制不是獨立類別，依危險因子數落在 130–190 之間（灰色帶）。</figcaption></figure>
+
+  <h3>不只門檻：其他改變</h3>
+  <div class="tw"><table class="t">
+    <tr><th>項目</th><th>舊制</th><th>新制（表一）</th></tr>
+    <tr><td>判斷指標</td><td><span class="old">TC 或 LDL-C</span></td><td>只看 LDL-C；達標後 non-HDL-C 為次要標的</td></tr>
+    <tr><td>最高一級</td><td>ACS／PCI／CABG 一律 &lt;70</td><td><b class="up">新增極高風險 &lt;55</b>：CAD 合併一年內 MI、≥2 次 MI、多支血管阻塞、ACS＋DM、PAD 或頸動脈狹窄</td></tr>
+    <tr><td>缺血性中風／TIA</td><td>歸在「心血管疾病」，LDL &lt;100</td><td>合併動脈硬化者為<b class="up">非常高風險 &lt;70</b></td></tr>
+    <tr><td>影像</td><td>—</td><td>影像證實 ≥50% 狹窄 → 非常高風險；CAC ≥400 → 高風險</td></tr>
+    <tr><td>CKD、LDL ≥190</td><td>依危險因子數</td><td>直接列<b class="up">高風險 &lt;100</b></td></tr>
+    <tr><td>危險因子定義</td><td>HDL &lt;40（不分性別）；女性 ≥55 或停經</td><td>HDL 男 &lt;40、女 &lt;50；女性 ≥55</td></tr>
+    <tr><td>中低風險起始</td><td>先生活型態調整</td><td>明訂先 3–6 個月生活型態調整與危險因子處置</td></tr>
+    <tr><td>追蹤頻率</td><td>第一年每 3–6 個月，之後每 6–12 個月</td><td>依風險等級與調藥時間（見下圖）</td></tr>
+    <tr><td>吸菸</td><td>舊表有「吸菸者拒絕戒菸須自費」的文字</td><td>新表一沒有這段（表二品項仍適用）</td></tr>
+  </table></div>
+
+  <h3>加藥要等多久？</h3>
+  <p class="soft">最實用的放寬在這裡：statin 單用沒達標，加 ezetimibe 的等待期從 3 個月縮短到 6–8 週。</p>
+  <figure><div class="plate">
+    <div class="tl" id="tlWrap"></div>
+  </div>
+  <figcaption><span class="figno">圖 3</span><b>從開始治療到可以合併 ezetimibe 的時間（週）。</b>極高、非常高、高風險：6–8 週追蹤，未達標可調高強度 statin 或合併 non-statin；調藥後 1–3 個月再追蹤，達標後每 6 個月。中低風險：先 3–6 個月生活型態，再中強度 statin。</figcaption></figure>
+</div></section>
+
+<!-- 06 PITFALLS -->
+<section class="ch" id="c6" data-name="注意事項"><div class="wide">
+  <div class="chno">06 · 開藥前要注意的事</div>
+  <h2>新制放寬了，但有幾個坑</h2>
+  <span class="src spk1">講者「重要提醒」</span><span class="src add">健保署條文</span>
+  <p class="soft" style="max-width:46em">新舊制會並行一段時間，同一個成分可能落在不同的表。點標籤可以篩選：<span class="tag n">新制放寬</span> <span class="tag s">仍要小心</span> <span class="tag x">常被誤會</span></p>
+  <div class="btns" id="pitFilter">
+    <button class="chip on" data-f="all">全部</button>
+    <button class="chip" data-f="n">新制放寬</button>
+    <button class="chip" data-f="s">仍要小心</button>
+    <button class="chip" data-f="x">常被誤會</button>
+  </div>
+  <div class="pits" id="pits"></div>
+</div></section>
+
+<!-- 07 REWARDS -->
+<section class="ch" id="c7" data-name="達標獎勵"><div class="wide">
+  <div class="chno">07 · 達標獎勵</div>
+  <h2>糖心腎整合照護：達標一項多 350 點</h2>
+  <span class="src spk1">講者</span>
+  <p class="soft" style="max-width:46em">年度結算的「糖心腎症候群整合照護提升費」，每人每年最高 1100 點，各項檢驗達標獎勵都調升 350 點。選病人的疾病組合，再勾達標的項目。</p>
+  <div class="rw">
+    <div class="card">
+      <div class="row"><label>疾病組合</label><select id="rwCombo"></select></div>
+      <div id="rwItems"></div>
+    </div>
+    <div class="card">
+      <div class="soft" style="font-size:13px">這位病人一年可多拿</div>
+      <div class="pts" id="rwPts">0</div>
+      <div class="soft" style="font-size:13px" id="rwOld"></div>
+      <div class="callout acc" style="margin-bottom:0"><h4>對不起來的數字</h4><p class="soft">CKD 在給付表一屬於高風險，LDL 目標 &lt;100；但這個獎勵方案的 CKD 標準是 &lt;130。拿到獎勵不等於達到給付表的目標。</p></div>
+    </div>
+  </div>
+  <small class="note" style="margin-top:10px">依講者投影片翻拍整理。DM＋CKD＋ASCVD 三項達標的點數在照片中被切到，以「—」表示；方案正式名稱與生效日以健保署公告為準。</small>
+</div></section>
+
+<!-- 08 MECHANISM -->
+<section class="ch" id="c8" data-name="藥物機轉"><div class="wide">
+  <div class="chno">08 · 藥物作用在哪裡</div>
+  <h2>五種藥，最後都讓 LDL 受體變多</h2>
+  <span class="src ad">廠商資料</span><span class="src add">補充</span>
+  <p class="soft" style="max-width:46em">點藥物標籤看它卡在哪一步。機轉不同，所以可以疊加；inclisiran 和 PCSK9 單株抗體打的是同一個目標，通常不會一起用。</p>
+  <div class="mech">
+    <figure style="margin:0"><div class="plate"><svg id="mechSvg" viewBox="0 0 640 560" role="img" aria-label="降 LDL 藥物作用位置圖">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#6f9aa3" stroke-width="1.5"/></marker></defs>
+      <rect x="10" y="60" width="150" height="220" rx="16" fill="none" stroke="#2a5662"/>
+      <text x="85" y="86" text-anchor="middle" fill="#e8efe9" font-size="15" font-weight="500">腸道</text>
+      <text x="85" y="110" text-anchor="middle" fill="#9fb9b8" font-size="12">膳食與膽汁膽固醇</text>
+      <g class="nd" id="nNPC"><rect x="35" y="130" width="100" height="34" rx="5"/><text x="85" y="152" text-anchor="middle">NPC1L1</text></g>
+      <text x="85" y="262" text-anchor="middle" fill="#9fb9b8" font-size="12">吸收 → 送往肝臟</text>
+      <rect x="190" y="40" width="440" height="330" rx="20" fill="none" stroke="#2a5662"/>
+      <text x="210" y="66" fill="#e8efe9" font-size="15" font-weight="500">肝細胞</text>
+      <g class="nd"><rect x="210" y="85" width="130" height="32" rx="5"/><text x="275" y="106" text-anchor="middle">Citrate</text></g>
+      <line x1="275" y1="117" x2="275" y2="153" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)"/>
+      <g class="nd"><rect x="210" y="155" width="130" height="32" rx="5"/><text x="275" y="176" text-anchor="middle">Acetyl-CoA</text></g>
+      <line x1="275" y1="187" x2="275" y2="223" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)"/>
+      <g class="nd" id="nChol"><rect x="210" y="225" width="130" height="32" rx="5"/><text x="275" y="246" text-anchor="middle">膽固醇合成</text></g>
+      <line x1="275" y1="257" x2="275" y2="281" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)"/>
+      <g class="nd" id="nSREBP"><rect x="210" y="283" width="130" height="32" rx="5"/><text x="275" y="304" text-anchor="middle">SREBP-2 活化</text></g>
+      <line x1="275" y1="315" x2="275" y2="356" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)"/>
+      <path d="M160 241 L208 241" fill="none" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)"/>
+      <rect x="490" y="80" width="125" height="60" rx="8" fill="none" stroke="#6f9aa3" stroke-dasharray="4 3"/>
+      <text x="552" y="98" text-anchor="middle" fill="#9fb9b8" font-size="12">細胞核</text>
+      <text x="552" y="124" text-anchor="middle" fill="#e8efe9" font-size="13.5">PCSK9 mRNA</text>
+      <line x1="505" y1="140" x2="505" y2="221" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)"/>
+      <g class="nd" id="nPCSK"><rect x="490" y="223" width="125" height="32" rx="5"/><text x="552" y="244" text-anchor="middle">PCSK9 蛋白</text></g>
+      <line x1="552" y1="255" x2="552" y2="436" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)" id="lPCSKout"/>
+      <g id="ldlrGroup"></g>
+      <text x="330" y="352" fill="#e8efe9" font-size="12.5" id="ldlrLbl">LDL 受體</text>
+      <rect x="190" y="395" width="440" height="130" rx="12" fill="none" stroke="#6f9aa3" stroke-dasharray="4 3"/>
+      <text x="210" y="418" fill="#e8efe9" font-size="15" font-weight="500">血液</text>
+      <g id="ldlParticles"></g>
+      <circle cx="552" cy="450" r="11" fill="#1d4d55" stroke="#5fa8a0" id="pcskCirc"/>
+      <text x="552" y="454" text-anchor="middle" fill="#cfe9e5" font-size="10">P9</text>
+      <path d="M540 450 L300 450 L300 380" fill="none" stroke="#6f9aa3" stroke-width="1.3" marker-end="url(#ah)" id="lPCSKbind"/>
+      <text x="420" y="440" text-anchor="middle" fill="#9fb9b8" font-size="12" id="pcskTxt">帶 LDL 受體去分解</text>
+      <g class="dtag" data-d="eze"><rect x="25" y="195" width="120" height="30" rx="5"/><text x="85" y="215" text-anchor="middle">Ezetimibe</text></g>
+      <line class="blk" x1="85" y1="195" x2="85" y2="170"/><line class="blk" x1="78" y1="170" x2="92" y2="170"/>
+      <g class="dtag" data-d="bem"><rect x="355" y="121" width="120" height="30" rx="5"/><text x="415" y="141" text-anchor="middle">Bempedoic acid</text></g>
+      <line class="blk" x1="355" y1="136" x2="281" y2="136"/><line class="blk" x1="281" y1="129" x2="281" y2="143"/>
+      <g class="dtag" data-d="sta"><rect x="355" y="190" width="120" height="30" rx="5"/><text x="415" y="210" text-anchor="middle">Statin</text></g>
+      <line class="blk" x1="355" y1="205" x2="281" y2="205"/><line class="blk" x1="281" y1="198" x2="281" y2="212"/>
+      <g class="dtag" data-d="inc"><rect x="522" y="165" width="96" height="30" rx="5"/><text x="570" y="185" text-anchor="middle">Inclisiran</text></g>
+      <line class="blk" x1="522" y1="180" x2="511" y2="180"/><line class="blk" x1="511" y1="173" x2="511" y2="187"/>
+      <g class="dtag" data-d="mab"><rect x="400" y="478" width="160" height="30" rx="5"/><text x="480" y="498" text-anchor="middle">PCSK9 單株抗體</text></g>
+      <line class="blk" x1="480" y1="478" x2="480" y2="457"/><line class="blk" x1="473" y1="457" x2="487" y2="457"/>
+      <text x="200" y="548" fill="#9fb9b8" font-size="12" id="mechCount">LDL 受體：基準</text>
+    </svg></div>
+    <figcaption><span class="figno">圖 4</span><b>降 LDL-C 藥物的作用位置。</b>黃色標籤為藥物，短橫線表示阻斷。點選後，受影響的步驟會變淡，肝細胞膜上的 LDL 受體數與血中 LDL 顆粒會跟著變化（示意，非比例）。</figcaption></figure>
+    <div class="card dinfo" id="dInfo"></div>
+  </div>
+</div></section>
+
+<!-- 09 INCLISIRAN -->
+<section class="ch" id="c9" data-name="Inclisiran"><div class="wide">
+  <div class="chno">09 · Inclisiran 試驗</div>
+  <h2>一年兩針，數據怎麼讀？</h2>
+  <span class="src spk1">講者重點</span><span class="src ad">廠商資料</span><span class="src add">原始論文</span>
+  <p class="soft" style="max-width:46em">Inclisiran（Leqvio 樂脂益，衛部藥輸字第 028761 號）是 siRNA，進入肝細胞後讓 PCSK9 mRNA 被分解，PCSK9 蛋白就做不出來。劑量 284 mg 皮下注射，第 0、3 個月各一針，之後每 6 個月一針，由醫療人員施打。</p>
+
+  <h3>降多少：ORION 第三期試驗</h3>
+  <div class="twocol">
+    <figure style="margin:8px 0"><div class="plate"><svg id="orionBars" viewBox="0 0 460 300" role="img" aria-label="ORION 試驗 LDL-C 相對安慰劑降幅"></svg></div>
+    <figcaption><span class="figno">圖 5</span><b>相對安慰劑的 LDL-C 降幅。</b>ORION-10（美國 ASCVD，n=1561）、ORION-11（歐洲 ASCVD 或等同風險，n=1617）為第 510 天，Ray KK, NEJM 2020；ORION-18（亞洲 4 國含台灣，n=345）為第 330 天，Huo Y, JACC Asia 2023。基線 LDL 約 105 mg/dL，背景為最大耐受 statin。</figcaption></figure>
+    <figure style="margin:8px 0"><div class="plate"><svg id="o18Bars" viewBox="0 0 460 300" role="img" aria-label="ORION-18 第 330 天達標比例"></svg></div>
+    <figcaption><span class="figno">圖 6</span><b>ORION-18 第 330 天，inclisiran 組達到各目標的比例。</b>Huo Y, JACC Asia 2023（數字取自廠商手冊）。</figcaption></figure>
+  </div>
+
+  <h3>早點加 vs 照常調藥：VICTORION-INITIATE</h3>
+  <p>ASCVD 病人在最大耐受 statin 下 LDL 仍 ≥70，隨機分到「直接加 inclisiran」或「照主治醫師判斷常規調藥」。</p>
+  <figure><div class="plate"><svg id="vicChart" viewBox="0 0 860 340" role="img" aria-label="VICTORION-INITIATE LDL-C 變化"></svg></div>
+  <figcaption><span class="figno">圖 7</span><b>LDL-C 自基線的平均變化（%）。</b>Koren MJ, JACC 2024；n=450。第 330 天差異 −53.0%（97.5% CI −60.0 至 −46.0）。</figcaption></figure>
+  <div class="callout purple"><h4>讀這張圖要注意</h4><p class="soft">常規治療組一年只多降 7%，代表對照組的醫師多半沒有加藥。這個試驗證明的是「有系統地加藥」比「臨床惰性」好，不是 inclisiran 比 ezetimibe 或單株抗體好。</p></div>
+
+  <h3>長期：ORION-8</h3>
+  <div class="stats">
+    <div class="stat"><b>6.8 年</b><span>最長累積追蹤（ORION-1/3/9/10/11 開放延伸）</span></div>
+    <div class="stat"><b>−49.4%</b><span>試驗結束時 LDL-C 平均變化（95% CI −50.4 至 −48.3）</span></div>
+    <div class="stat"><b>79.4%</b><span>ASCVD 病人（n=2205）達 LDL &lt;70</span></div>
+    <div class="stat"><b>74.3%</b><span>ASCVD 等同風險（n=526）達 LDL &lt;100</span></div>
+  </div>
+  <small class="note">Wright RS, Cardiovasc Res 2024。開放延伸試驗沒有對照組，留在試驗中的病人本身配合度較高。</small>
+
+  <h3>心血管事件：整合分析，不是結果試驗</h3>
+  <figure><div class="plate"><svg id="forest" viewBox="0 0 860 220" role="img" aria-label="ORION-9 10 11 整合分析 MACE 森林圖"></svg></div>
+  <figcaption><span class="figno">圖 8</span><b>ORION-9、10、11 病人層級整合分析（n=3655，18 個月）。</b>Ray KK, Eur Heart J 2023。MACE 是預先設定的探索性終點，以不良事件方式收集、未經判定。廠商手冊引用同一分析的 Cox HR 0.75（0.60–0.94）。</figcaption></figure>
+  <div class="callout acc"><h4>證據等級的差別</h4><ul class="soft">
+    <li>MACE 合併終點顯著下降，但心肌梗塞、中風單獨看都沒有達到統計顯著</li>
+    <li>專為心血管結果設計的 ORION-4（約 15,000 人）、VICTORION-2-PREVENT 仍在等結果</li>
+    <li>PCSK9 單株抗體已有 FOURIER、ODYSSEY OUTCOMES 兩個結果試驗</li>
+  </ul></div>
+
+  <h3>安全性</h3>
+  <div class="tw"><table class="t">
+    <tr><th>項目（ORION-9/10/11）</th><th>Inclisiran（n=1833）</th><th>安慰劑（n=1822）</th></tr>
+    <tr><td>ALT &gt;3×ULN</td><td class="num">0.5%</td><td class="num">0.4%</td></tr>
+    <tr><td>Bilirubin &gt;2×ULN</td><td class="num">0.8%</td><td class="num">0.8%</td></tr>
+    <tr><td>CK &gt;5×ULN</td><td class="num">1.3%</td><td class="num">1.2%</td></tr>
+    <tr><td>注射部位反應</td><td class="num up">5.0%</td><td class="num">0.7%</td></tr>
+  </table></div>
+  <small class="note">Wright RS, JACC 2021（取自廠商手冊）。注射部位反應多為輕微；ORION-18 為 2.9% vs 0.6%。</small>
+
+  <h3>為什麼「一年兩針」是重點</h3>
+  <div class="dose">
+    <div><div class="dots" id="dotsS"></div><b>365</b><span>口服 statin，一年幾顆</span></div>
+    <div><div class="dots" id="dotsM"></div><b>26</b><span>PCSK9 單株抗體，每 2 週一針</span></div>
+    <div><div class="dots" id="dotsI"></div><b>2</b><span>Inclisiran，第一年 3 針，之後每年 2 針</span></div>
+  </div>
+  <p class="soft" style="margin-top:14px">在門診打、不靠病人自己記得，對「數字好了就自己停藥」的病人特別有意義。代價是要排回診時間，以及健保給付狀態（本頁整理時查無給付公告，請以健保署藥品查詢為準）。</p>
+</div></section>
+
+<!-- 10 CALC -->
+<section class="ch" id="c10" data-name="計算器"><div class="wide">
+  <div class="chno">10 · 加藥計算器</div>
+  <h2>還差幾 %？哪個組合補得上？</h2>
+  <span class="src add">補充</span>
+  <p class="soft" style="max-width:46em">輸入目前（已在吃藥狀態下）的 LDL，選目標，再勾要加的藥。降幅用相乘計算，數字是試驗平均值的概略，實際個別差異很大。</p>
+  <div class="calc">
+    <div class="card">
+      <div class="row"><label for="kLDL">目前 LDL-C</label><input type="number" id="kLDL" value="88" min="20" max="400"> mg/dL</div>
+      <div class="err" id="kErr"></div>
+      <div class="row"><label for="kTgt">目標</label><select id="kTgt">
+        <option value="55">&lt;55 極高風險</option><option value="70">&lt;70 非常高風險</option><option value="100">&lt;100 高風險</option><option value="115">&lt;115 中風險</option><option value="130">&lt;130 低風險</option><option value="160">&lt;160 0 項危險因子</option>
+      </select></div>
+      <div id="addons"></div>
+    </div>
+    <div class="card">
+      <svg id="gauge" viewBox="0 0 420 210" class="gauge" role="img" aria-label="LDL-C 計算結果"></svg>
+      <div id="kOut" style="font-size:14.5px"></div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="col">
+  <h3 style="margin-top:0">延伸到其他島</h3>
+  <div class="links">
+    <div><span>心腎島 · 第三演講廳</span>林柏霖〈血脂治療新時代：全新機轉口服降血脂藥物〉</div>
+    <div><span>心腎島 · 第三演講廳</span>洪毓權〈橫跨光譜的血脂個體化管理策略〉</div>
+    <div><span>午餐場 212／221</span>SGLT2i 心腎初級預防與起始時機</div>
+  </div>
+  <h3>資料來源</h3>
+  <ol>
+    <li>陳英杰，115 秋季會 Lunch Symposium 213 投影片（會場拍攝）</li>
+    <li>健保署〈藥品給付規定修訂對照表 第 2 節〉，自 115/9/1 生效（2.6.1 表一、2.6.2、2.6.3）</li>
+    <li>劉漢文醫師〈健保降血脂藥物給付規定〉整理</li>
+    <li>2025 台灣血脂管理臨床路徑共識，Acta Cardiol Sin 2025;41:161–165</li>
+    <li>Mach F, et al. 2025 Focused Update of the 2019 ESC/EAS Dyslipidaemia Guidelines. Eur Heart J 2025</li>
+    <li>Blumenthal RS, et al. 2026 ACC/AHA Guideline on the Management of Dyslipidemia. JACC 2026</li>
+    <li>Ray KK, et al. Two phase 3 trials of inclisiran (ORION-10/11). NEJM 2020;382:1507–19</li>
+    <li>Huo Y, et al. ORION-18. JACC Asia 2023;4:123–134</li>
+    <li>Koren MJ, et al. VICTORION-INITIATE. JACC 2024;83:1939–1952</li>
+    <li>Wright RS, et al. ORION-8. Cardiovasc Res 2024</li>
+    <li>Ray KK, et al. Inclisiran and cardiovascular events. Eur Heart J 2023;44:129–138</li>
+    <li>Hsieh IC, et al. CLEAR Taiwan（bempedoic acid）. medRxiv 2026／JAHA 2026</li>
+    <li>Leqvio 產品手冊（Novartis，會場發放）</li>
+  </ol>
+  <p>整理：家醫群島 · 115 秋季會。本頁為學習筆記，給付規定請以健保署最新公告為準。</p>
+</div></footer>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+
+/* progress */
+const secs=$$('section.ch');
+function onScroll(){const h=document.documentElement;const p=h.scrollTop/(h.scrollHeight-h.clientHeight);$('#progbar').style.width=(p*100)+'%';let cur='心腎島 · 午餐場';secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s.querySelector('.chno').textContent;});$('#chapnav').textContent=cur;}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ===== CASE ===== */
+let caseState={tier:false,step1:null,step2:null};
+function showVisit(v){
+  $$('#visits button').forEach(b=>b.classList.toggle('on',+b.dataset.v===v));
+  $$('.pane').forEach(p=>p.classList.toggle('on',+p.dataset.p===v));
+  const L=[88,88,63,null][v];
+  const rx=['atorvastatin 20 mg（中強度）','atorvastatin 20 mg（中強度）','rosuvastatin 20 mg＋ezetimibe 10 mg','rosuvastatin 20 mg＋ezetimibe 10 mg＋'+({bem:'bempedoic acid 180 mg',mab:'PCSK9 單株抗體',inc:'inclisiran 284 mg'}[caseState.step2]||'（下一步）')][v];
+  $('#cRx').textContent=rx;
+  let ld=L, nh=[112,112,85,null][v];
+  if(v===3){const r={bem:.82,mab:.45,inc:.5}[caseState.step2]||.5;ld=Math.round(63*r);nh=Math.round(ld+24);}
+  $('#cLDL').textContent=ld;$('#cNH').textContent=nh;
+  $('#cLDL').className=ld<55?'good':'bad';
+  $('#cTgt').textContent=caseState.tier||v>0?'<55':'?';
+  $('#cNote').textContent=v===3?'LDL 為依試驗平均降幅推估的示意值':'LDL-C 單位 mg/dL';
+  if(v===3)renderEnd();
+}
+$$('#visits button').forEach(b=>b.addEventListener('click',()=>showVisit(+b.dataset.v)));
+$$('#qTier button').forEach(b=>b.addEventListener('click',()=>{
+  const a=b.dataset.a;$$('#qTier button').forEach(x=>x.className='chip'+(x.dataset.a==='ext'?' right':(x===b?' wrong':'')));
+  caseState.tier=true;$('#cTgt').textContent='<55';
+  const fb=$('#fbTier');fb.classList.add('show');
+  fb.innerHTML=(a==='ext'?'<h5>對，極高風險。</h5>':'<h5>再看一次：他是極高風險。</h5>')+
+  '<p style="margin:0 0 6px">關鍵是「<b>急性冠心症合併糖尿病</b>」。只看「放過支架」會停在非常高風險（&lt;70）；新制把 ACS＋DM 拉到極高風險，<b>入口門檻 ≥55、目標 &lt;55</b>，non-HDL-C 次要目標 &lt;85。</p>'+
+  '<p class="soft" style="margin:0">舊制下他屬於「ACS／PCI 病史」，門檻和目標都是 70，LDL 88 一樣沒達標，但現在差距從 18 變成 33。</p>'+
+  '<div class="btns"><button class="btn" data-go="1">下一步：第一步加藥 →</button></div>';
+  fb.querySelector('[data-go]').onclick=()=>showVisit(1);
+}));
+const fb1={
+  keep:['<h5>不夠。</h5><p style="margin:0">他已經吃 2 年 statin，生活型態調整大約只能再降 5–10%。極高風險病人新制要求「藥物治療同時處理可改變的危險因子」，不是先等。</p>'],
+  hi:['<h5>方向對，但可能不夠。</h5><p style="margin:0">中強度換高強度大約再降 20%：88 → 約 70，仍 ≥55。8 週後很可能還要再加一次藥。</p>'],
+  hie:['<h5>最可能一步到位的選擇。</h5><p style="margin:0">高強度 statin 再降約 20%、ezetimibe 再降約 20%：88 × 0.8 × 0.8 ≈ <b>56</b>，接近目標。新制下這樣的組合可以直接開始（表一：起始給予中至高強度 statin 或合併 ezetimibe）。</p>']
+};
+$$('#qStep1 .optc').forEach(b=>b.addEventListener('click',()=>{
+  $$('#qStep1 .optc').forEach(x=>x.classList.toggle('on',x===b));caseState.step1=b.dataset.a;
+  const fb=$('#fbStep1');fb.classList.add('show');
+  fb.innerHTML=fb1[b.dataset.a][0]+'<div class="callout" style="margin:10px 0 0"><h4>健保要確認的事</h4><p class="soft">他用的 atorvastatin、rosuvastatin 品項是落在<b>表一</b>還是<b>表二</b>？若是表二品項，合併 ezetimibe 前仍要 statin 單用滿 3 個月；若是表一品項，6–8 週追蹤未達標即可合併。開立前用健保代碼確認。</p></div>'+
+  '<div class="btns"><button class="btn" data-go="2">8 週後回診 →</button></div>';
+  fb.querySelector('[data-go]').onclick=()=>showVisit(2);
+}));
+const fb2={
+  bem:'<h5>口服、肌肉副作用少。</h5><p style="margin:0 0 6px">Bempedoic acid 的前驅藥只在肝臟活化，骨骼肌缺少活化酵素，所以對擔心肌肉痠痛的病人是合理選擇。台灣 CLEAR Taiwan 研究中位數再降 19%：63 → 約 <b>51</b>，剛好過線。</p><p class="soft" style="margin:0">ESC 2025：加在 statin ± ezetimibe 上為 class IIa。台灣健保給付狀態請查證。</p>',
+  mab:'<h5>降幅最大，但健保門檻是 100。</h5><p style="margin:0 0 6px">單株抗體再降約 55%：63 → 約 <b>28</b>。問題在給付：健保 PCSK9 單株抗體（114/9/1 修訂）有自己的條件，最大耐受 statin＋ezetimibe 後 LDL 仍 <b>≥100</b>、事前審查。他 63，<b>不符健保</b>，只能自費，每 2 週自己打一針。</p><p class="soft" style="margin:0">這就是新制的縫隙：表一說 ≥55 可以加 non-statin，但單株抗體的給付門檻沒有跟著降。</p>',
+  inc:'<h5>在門診打，一年兩針。</h5><p style="margin:0 0 6px">Inclisiran 再降約 50%：63 → 約 <b>32</b>。由醫療人員施打，不靠病人記得吃藥，適合「數字好了就想停」的病人。</p><p class="soft" style="margin:0">要和病人談清楚：費用（本頁整理時查無健保給付公告）、心血管結果試驗 ORION-4 尚未發表、注射部位反應約 5%。</p>'
+};
+$$('#qStep2 .optc').forEach(b=>b.addEventListener('click',()=>{
+  $$('#qStep2 .optc').forEach(x=>x.classList.toggle('on',x===b));caseState.step2=b.dataset.a;
+  const fb=$('#fbStep2');fb.classList.add('show');
+  fb.innerHTML=fb2[b.dataset.a]+'<div class="btns"><button class="btn" data-go="3">3 個月後 →</button></div>';
+  fb.querySelector('[data-go]').onclick=()=>showVisit(3);
+}));
+function renderEnd(){
+  const d=caseState.step2||'inc';
+  const name={bem:'bempedoic acid',mab:'PCSK9 單株抗體',inc:'inclisiran'}[d];
+  const ld=Math.round(63*({bem:.82,mab:.45,inc:.5}[d]));
+  const fu={inc:'下一針在第 3 個月，之後每 6 個月；可以把抽血排在打針同一天。',mab:'每 2 週自行注射；確認注射技巧與冷藏。',bem:'注意尿酸與痛風病史；持續每日服用。'}[d];
+  $('#fbEnd').innerHTML='<h5>加上 '+name+' 後，LDL 約 '+ld+'，'+(ld<55?'<b style="color:#a9d496">達標</b>':'<b>仍未達標</b>')+'。</h5>'+
+  '<ul style="margin:6px 0 10px;padding-left:20px"><li>新制追蹤：調藥後 1–3 個月追蹤，達標後每 6 個月</li><li>'+fu+'</li><li>達標後不停藥：降血脂藥是壓住，不是治好</li></ul>'+
+  '<p class="soft" style="margin:0 0 8px">'+(caseState.step2?'':'（尚未在上一步選藥，這裡以 inclisiran 示範。）')+'接下來的章節依序拆開：他為什麼是極高風險（04）、新舊制差在哪（05）、開藥前的坑（06），以及各藥物的機轉（08）與 inclisiran 的試驗數據（09）。</p>'+
+  '<div class="btns"><a class="btn" href="#c4" style="text-decoration:none">看健保分級 →</a><a class="btn ghost" href="#c9" style="text-decoration:none">直接看 inclisiran 試驗</a></div>';
+}
+showVisit(0);
+
+/* ===== GAP CHART ===== */
+(function(){
+  const s=$('#gapChart');const data=[['台灣健保資料庫','2017–2023',16.7,true],['DA VINCI（歐洲）','2017–2018',18,false],['SANTORINI（歐洲）','2020–2021',20.7,false]];
+  const x0=190,w=400;
+  [0,10,20,30].forEach(t=>{const x=x0+t/30*w;el('line',{x1:x,x2:x,y1:20,y2:200,stroke:'#1a4350'},s);el('text',{x:x,y:218,'text-anchor':'middle',fill:'#9fb9b8','font-size':12,'font-family':'IBM Plex Mono'},s,t+'%');});
+  data.forEach((d,i)=>{const y=40+i*55;
+    el('text',{x:x0-12,y:y+12,'text-anchor':'end',fill:'#e8efe9','font-size':14},s,d[0]);
+    el('text',{x:x0-12,y:y+30,'text-anchor':'end',fill:'#9fb9b8','font-size':11.5,'font-family':'IBM Plex Mono'},s,d[1]);
+    el('rect',{x:x0,y:y,width:d[2]/30*w,height:28,rx:3,fill:d[3]?'#d0715e':'#2f6672'},s);
+    el('text',{x:x0+d[2]/30*w+8,y:y+19,fill:d[3]?'#f0a291':'#cfe0df','font-size':14,'font-family':'IBM Plex Mono'},s,d[2]+'%');
+  });
+})();
+
+/* ===== CLASSIFIER ===== */
+const CK={
+  gA:[['acs','急性冠心症（ACS）病史'],['rev','PCI／CABG 血管再通術'],['cad','穩定型冠狀動脈疾病'],['str','缺血性中風／TIA（合併動脈硬化）'],['pad','周邊動脈疾病（PAD）'],['img','影像證實 ≥50% 狹窄']],
+  gB:[['mi1','一年內曾心肌梗塞'],['mi2','≥2 次心肌梗塞'],['mv','多支冠狀動脈阻塞'],['car','頸動脈狹窄']],
+  gC:[['dm','糖尿病'],['ckd','CKD（未透析；UACR ≥30 或 eGFR <60 持續 ≥3 個月）'],['l190','LDL-C ≥190'],['cac','CAC ≥400']],
+  gD:[['age','男 ≥45 歲／女 ≥55 歲'],['htn','高血壓或服用降壓藥'],['hdl','HDL 低（男 <40、女 <50）'],['smk','吸菸'],['fh','一等親早發冠心病（男 <55、女 <65）']]
+};
+const st={};
+for(const g in CK){CK[g].forEach(([k,l])=>{const lab=document.createElement('label');lab.className='check';lab.innerHTML='<input type="checkbox" data-k="'+k+'"><span>'+l+'</span>';$('#'+g).appendChild(lab);lab.querySelector('input').addEventListener('change',e=>{st[k]=e.target.checked;lab.classList.toggle('on',e.target.checked);renderTier();});});}
+const TIERS={
+  ext:{nm:'極高風險',c:'#d0715e',th:55,nh:85,plan:'藥物治療同時處理血壓、血糖、肥胖、吸菸等可改變因子；急性病人入院 24 小時內驗完整血脂。起始中至高強度 statin 或合併 ezetimibe，6–8 週追蹤。'},
+  vhigh:{nm:'非常高風險',c:'#e08a5e',th:70,nh:100,plan:'同極高風險：起始中至高強度 statin 或合併 ezetimibe，6–8 週追蹤；未達標調高強度或合併 non-statin。'},
+  high:{nm:'高風險',c:'#e0a24a',th:100,nh:130,plan:'生活型態調整同時用藥；6–8 週追蹤，之後每 6 個月。疑似家族性高膽固醇血症（肌腱黃色瘤、早發 CVD、家族史）要依台灣 FH 標準篩檢。'},
+  mid:{nm:'中風險',c:'#b8b07a',th:115,nh:145,plan:'先 3–6 個月生活型態調整與危險因子處置；未達標再開始中強度 statin，6–8 週追蹤，之後每 6–12 個月。'},
+  low:{nm:'低風險',c:'#7fb26a',th:130,nh:160,plan:'同中風險：先 3–6 個月生活型態調整。'},
+  zero:{nm:'0 項危險因子',c:'#5fa8a0',th:160,nh:null,plan:'舊制門檻 190，新制下修到 160；用藥前應有 3–6 個月生活型態調整。'}
+};
+let ldlInput=null;
+function classify(){
+  const cadAny=st.acs||st.rev||st.cad||st.mi1||st.mi2||st.mv;
+  const why=[];
+  if(cadAny&&(st.mi1||st.mi2||st.mv||(st.acs&&st.dm)||st.pad||st.car)){
+    if(st.mi1)why.push('一年內 MI');if(st.mi2)why.push('≥2 次 MI');if(st.mv)why.push('多支血管阻塞');if(st.acs&&st.dm)why.push('ACS 合併糖尿病');if(st.pad)why.push('合併 PAD');if(st.car)why.push('合併頸動脈狹窄');
+    return['ext','冠狀動脈疾病＋'+why.join('、')];}
+  if(st.pad&&st.car)return['ext','PAD 合併頸動脈狹窄'];
+  if(st.acs||st.rev||st.cad||st.str||st.pad||st.img||st.mi1||st.mi2||st.mv){return['vhigh','已確診 ASCVD 或影像顯著斑塊'];}
+  if(st.dm||st.ckd||st.l190||st.cac){const w=[];if(st.dm)w.push('糖尿病');if(st.ckd)w.push('CKD');if(st.l190)w.push('LDL ≥190');if(st.cac)w.push('CAC ≥400');return['high',w.join('、')];}
+  const n=['age','htn','hdl','smk','fh'].filter(k=>st[k]).length;
+  if(n>=2)return['mid',n+' 項危險因子'];if(n===1)return['low','1 項危險因子'];return['zero','沒有勾選任何條件'];
+}
+function renderTier(){
+  const [k,why]=classify();const t=TIERS[k];
+  const box=$('#tierBox');box.style.borderColor=t.c;
+  box.innerHTML='<div class="soft mono" style="font-size:11.5px">新制表一判定</div><div class="nm" style="color:'+t.c+'">'+t.nm+'</div><div class="why">'+why+'</div>'+
+  '<div class="nums"><div><span>給付入口門檻</span><b>≥'+t.th+'</b></div><div><span>LDL-C 目標</span><b>&lt;'+t.th+'</b></div><div><span>non-HDL-C 目標</span><b>'+(t.nh?'&lt;'+t.nh:'—')+'</b></div><div><span>單位</span><b style="font-size:14px">mg/dL</b></div></div>'+
+  '<div class="plan">'+t.plan+'</div>'+
+  '<div class="ldlin"><label for="ldlNow">目前 LDL-C</label><input type="number" id="ldlNow" min="10" max="500" placeholder="例 88" value="'+(ldlInput??'')+'"></div><div class="ldlv" id="ldlV"></div>';
+  const inp=$('#ldlNow');inp.addEventListener('input',()=>{ldlInput=inp.value;ldlVerdict(t);});ldlVerdict(t);
+}
+function ldlVerdict(t){
+  const v=parseFloat(ldlInput);const o=$('#ldlV');if(!o)return;
+  if(ldlInput===null||ldlInput===''){o.innerHTML='<span class="soft">輸入數值看是否符合給付入口。</span>';return;}
+  if(isNaN(v)||v<10||v>500){o.innerHTML='<span style="color:#f0a291">請輸入 10–500 之間的數字</span>';return;}
+  if(v>=t.th){const need=Math.ceil((1-(t.th-1)/v)*100);o.innerHTML='<span style="color:#f0a291">未達標，可申請給付。</span> 至少還要降 <b class="mono">'+need+'%</b>（到 '+(t.th-1)+' 以下）。';}
+  else o.innerHTML='<span style="color:#a9d496">已達標</span>：維持並每 6 個月追蹤（中低風險 6–12 個月）。';
+}
+$('#clsReset').addEventListener('click',()=>{$$('#c4 .check input').forEach(i=>{i.checked=false;i.parentElement.classList.remove('on');});for(const k in st)st[k]=false;ldlInput=null;renderTier();});
+$('#clsCase').addEventListener('click',()=>{$$('#c4 .check input').forEach(i=>{const on=['acs','rev','dm','age','htn'].includes(i.dataset.k);i.checked=on;i.parentElement.classList.toggle('on',on);st[i.dataset.k]=on;});ldlInput='88';renderTier();});
+renderTier();
+
+/* ===== DUMBBELL ===== */
+(function(){
+  const s=$('#dumb');const rows=[
+    ['CAD＋一年內 MI／多次 MI／多支／ACS＋DM','極高',70,55],
+    ['ACS 病史、PCI／CABG','非常高',70,70],
+    ['缺血性中風／TIA（動脈硬化）','非常高',100,70],
+    ['糖尿病','高',100,100],
+    ['CKD、CAC ≥400、LDL ≥190','高',null,100],
+    ['≥2 項危險因子','中',130,115],
+    ['1 項危險因子','低',160,130],
+    ['0 項危險因子','—',190,160]];
+  const x0=330,x1=870,lo=40,hi=200;const X=v=>x0+(v-lo)/(hi-lo)*(x1-x0);
+  [40,55,70,100,115,130,160,190].forEach(v=>{el('line',{x1:X(v),x2:X(v),y1:20,y2:385,stroke:'#1a4350','stroke-dasharray':v%10?'2 3':''},s);el('text',{x:X(v),y:405,'text-anchor':'middle',fill:'#9fb9b8','font-size':12,'font-family':'IBM Plex Mono'},s,v);});
+  rows.forEach((r,i)=>{const y=40+i*44;
+    el('text',{x:x0-16,y:y+4,'text-anchor':'end',fill:'#e8efe9','font-size':13.5},s,r[0]);
+    el('text',{x:x0-16,y:y+20,'text-anchor':'end',fill:'#9fb9b8','font-size':11.5},s,'新制：'+r[1]+(r[1]==='—'?'':'風險'));
+    if(r[2]===null){el('rect',{x:X(130),y:y-6,width:X(190)-X(130),height:12,rx:6,fill:'#6f8c92',opacity:.35},s);}
+    else if(r[2]!==r[3]){el('line',{x1:X(r[2]),x2:X(r[3])+7,y1:y,y2:y,stroke:'#d0715e','stroke-width':2,opacity:.6},s);el('circle',{cx:X(r[2]),cy:y,r:6,fill:'#6f8c92'},s);
+      el('text',{x:(X(r[2])+X(r[3]))/2,y:y-10,'text-anchor':'middle',fill:'#f0a291','font-size':11.5,'font-family':'IBM Plex Mono'},s,'−'+(r[2]-r[3]));}
+    else{el('circle',{cx:X(r[2]),cy:y,r:9,fill:'none',stroke:'#6f8c92','stroke-width':2},s);el('text',{x:X(r[3])+16,y:y+4,fill:'#9fb9b8','font-size':11.5},s,'不變');}
+    el('circle',{cx:X(r[3]),cy:y,r:6,fill:'#d0715e'},s);
+  });
+  el('circle',{cx:x0,cy:395,r:0},s);
+})();
+
+/* ===== TIMELINE ===== */
+(function(){
+  const W=28;const rows=[
+    ['舊制',[[0,12,'#2f6672','statin 單用 3 個月'],[12,17,'#6f8c92','可合併']]],
+    ['新制·表一品項',[[0,7,'#d0715e','statin 6–8 週'],[7,12,'#f2b134','未達標→合併'],[12,17,'#2f6672','1–3 月追蹤']]],
+    ['新制·表二品項',[[0,12,'#2f6672','仍要 statin 單用 3 個月'],[12,17,'#6f8c92','可合併']]],
+    ['中低風險',[[0,19,'#3d5a5f','先 3–6 個月生活型態'],[19,27,'#2f6672','中強度 statin']]]];
+  let h='';rows.forEach(r=>{h+='<div class="lbl">'+r[0]+'</div><div class="bar">'+r[1].map(s=>'<span style="left:'+(s[0]/W*100)+'%;width:'+((s[1]-s[0])/W*100)+'%;background:'+s[2]+';color:'+(s[2]==='#f2b134'?'#2a1d03':'#e8efe9')+'">'+s[3]+'</span>').join('')+'</div>';});
+  h+='<div></div><div class="mono soft" style="position:relative;height:18px;font-size:11.5px">'+[[0,'0'],[8,'8 週'],[12,'12 週'],[26,'26 週']].map(t=>'<span style="position:absolute;left:'+(t[0]/W*100)+'%;transform:translateX('+(t[0]?'-50%':'0')+')">'+t[1]+'</span>').join('')+'</div>';
+  $('#tlWrap').innerHTML=h;
+})();
+
+/* ===== PITFALLS ===== */
+const PITS=[
+  ['n','一張表變兩張','原本一張給付規定表拆成表一（新，六級）和表二（舊表內容不變）。條文列名的部分 statin 與複方品項仍適用表二，其餘適用表一，分批轉換中。'],
+  ['s','同成分不同規則：看健保代碼','同成分、同商品名可能因劑量或健保代碼不同而適用不同的表。開立前用健保代碼確認，不要只看成分。'],
+  ['s','表二品項：合併前仍要 3 個月','表二品項必須先 statin 單一治療滿 3 個月且未達標，才可申請合併使用，不適用新制的「6–8 週放寬」。'],
+  ['s','Ezetimibe 也有例外品項','2.6.2 單方 ezetimibe 有 4 個品項、2.6.3 statin＋ezetimibe 複方有 7 個品項，仍維持 3 個月。'],
+  ['s','不可併用 gemfibrozil','表二品項與 statin＋ezetimibe 複方不得與 gemfibrozil 併用（含單方與複方）。fenofibrate 不在此限。'],
+  ['n','只看 LDL-C','新表不再用總膽固醇當門檻。LDL-C 達標後，non-HDL-C（TC − HDL-C）作為次要標的，特別是高 TG、糖尿病、肥胖者。'],
+  ['x','PCSK9 單株抗體不是 ≥55 就能用','表一寫「可考慮合併 PCSK9 單株抗體、siRNA、ATP citrate lyase 抑制劑」，但單株抗體的健保給付有自己的條件（114/9/1：LDL ≥100、事前審查、每次核准 12 個月、續用須較基線降 ≥30%）。'],
+  ['x','表一列出藥名 ≠ 有給付','表一的治療原則提到 siRNA（inclisiran）與 ATP citrate lyase 抑制劑（bempedoic acid），是臨床建議的選項，不代表這些藥已有健保給付。'],
+  ['s','中低風險：先 3–6 個月生活型態','中、低風險病人用藥前要有 3–6 個月生活型態調整與危險因子處置；0 項危險因子也要先 3–6 個月。病歷要記得寫。'],
+  ['s','急性病人 24 小時內驗血脂','極高、非常高風險的急性病人，入院 24 小時內要有完整血脂檢查。'],
+  ['s','高風險要想到 FH','高風險合併嚴重高膽固醇、肌腱黃色瘤、早發心血管疾病或家族史，要依台灣家族性高膽固醇血症診斷標準篩檢。'],
+  ['x','病歷寫清楚分級依據','同一位病人新制可能比舊制高一級（例如 ACS＋DM 變極高風險）。申請時病歷要能看出符合哪一款，例如「ACS 病史＋糖尿病」。'],
+  ['n','危險因子定義微調','HDL 改為男 <40、女 <50；女性年齡 ≥55。CKD、CAC ≥400、LDL ≥190 不再算危險因子數，直接列高風險。']
+];
+function renderPits(f){$('#pits').innerHTML=PITS.filter(p=>f==='all'||p[0]===f).map((p,i)=>'<div class="pit"><div class="k">'+String(PITS.indexOf(p)+1).padStart(2,'0')+'</div><h4>'+p[1]+'</h4><p>'+p[2]+'</p><span class="tag '+p[0]+'">'+{n:'新制放寬',s:'仍要小心',x:'常被誤會'}[p[0]]+'</span></div>').join('');}
+$$('#pitFilter .chip').forEach(b=>b.addEventListener('click',()=>{$$('#pitFilter .chip').forEach(x=>x.classList.toggle('on',x===b));renderPits(b.dataset.f);}));
+renderPits('all');
+
+/* ===== REWARDS ===== */
+const RW=[
+  ['DM',[['HbA1c','<7%（≥80 歲 <8%）'],['LDL','<100']],[[150,500],[250,600],null]],
+  ['CKD',[['LDL','<130'],['UACR','<30 mg/g']],[[150,500],[250,600],null]],
+  ['ASCVD',[['LDL','非常高 <70／極高 <55']],[[250,600],null,null]],
+  ['DM＋CKD',[['HbA1c','<7%'],['LDL','<100'],['UACR','<30 mg/g']],[[150,500],[250,600],[550,900]]],
+  ['CKD＋ASCVD',[['LDL','<70／<55'],['UACR','<30 mg/g']],[[250,600],[550,900],null]],
+  ['DM＋ASCVD',[['HbA1c','<7%'],['LDL','<70／<55']],[[250,600],[550,900],null]],
+  ['DM＋CKD＋ASCVD',[['HbA1c','<7%'],['LDL','<70／<55'],['UACR','<30 mg/g']],[[250,600],[550,900],'?']]
+];
+$('#rwCombo').innerHTML=RW.map((r,i)=>'<option value="'+i+'"'+(i===5?' selected':'')+'>'+r[0]+'</option>').join('');
+function renderRW(){const r=RW[+$('#rwCombo').value];$('#rwItems').innerHTML=r[1].map((it,j)=>'<label class="addon"><input type="checkbox" data-j="'+j+'"><span><b>'+it[0]+'</b> 達標<small>'+it[1]+'</small></span></label>').join('');$$('#rwItems input').forEach(i=>i.addEventListener('change',()=>{i.parentElement.classList.toggle('on',i.checked);calcRW();}));calcRW();}
+function calcRW(){const r=RW[+$('#rwCombo').value];const n=$$('#rwItems input').filter(i=>i.checked).length;
+  if(n===0){$('#rwPts').textContent='0 點';$('#rwOld').textContent='勾選達標的項目';return;}
+  const v=r[2][n-1];if(v==='?'){$('#rwPts').textContent='—';$('#rwOld').textContent='照片中此格被切到，待確認';return;}
+  if(!v){$('#rwPts').textContent='—';$('#rwOld').textContent='此組合無此級距';return;}
+  $('#rwPts').textContent=v[1]+' 點';$('#rwOld').innerHTML='舊制 <span class="old">'+v[0]+' 點</span>，多 '+(v[1]-v[0])+' 點';}
+$('#rwCombo').addEventListener('change',renderRW);renderRW();
+
+/* ===== MECHANISM ===== */
+const DR={
+  eze:{nm:'Ezetimibe',how:'阻斷小腸 NPC1L1，減少膳食與膽汁膽固醇吸收；送到肝臟的膽固醇變少，肝細胞增加 LDL 受體。',drop:'加在 statin 上約再降 20%',freq:'口服，每天一次',ev:'IMPROVE-IT（ACS 後加在 simvastatin 上，MACE 下降）',nhi:'健保給付；新制 6–8 週未達標可合併（部分品項仍 3 個月）',dim:['nNPC'],r:1.25},
+  bem:{nm:'Bempedoic acid',how:'抑制 ATP citrate lyase，位置在 HMG-CoA 還原酶上游。前驅藥只在肝臟由 ACSVL1 活化，骨骼肌沒有這個酵素，肌肉副作用少。',drop:'約再降 18–20%（CLEAR Taiwan 中位數 −19%）',freq:'口服，每天一次',ev:'CLEAR Outcomes（statin 不耐受者 MACE 下降）；ESC 2025：不耐受 class I、加在 statin 上 class IIa',nhi:'台灣已核准；健保給付待查',dim:[],r:1.2},
+  sta:{nm:'Statin',how:'抑制 HMG-CoA 還原酶，肝細胞自行合成的膽固醇減少 → SREBP-2 活化 → LDL 受體增加。也會讓 PCSK9 增加，這是 statin 劑量加倍只多降約 6% 的原因之一。',drop:'中強度 30–49%、高強度 ≥50%',freq:'口服，每天一次',ev:'大量結果試驗，第一線',nhi:'健保給付；依表一或表二',dim:['nChol'],r:1.5},
+  inc:{nm:'Inclisiran',how:'siRNA 以 GalNAc 接上肝細胞的 ASGPR 進入細胞，裝進 RISC 後切斷 PCSK9 mRNA，PCSK9 蛋白做不出來 → LDL 受體不再被帶去分解。',drop:'相對安慰劑約 50–57%',freq:'皮下注射：第 0、3 個月，之後每 6 個月（醫療人員施打）',ev:'ORION-9/10/11/18；心血管結果試驗 ORION-4 進行中',nhi:'台灣已上市（衛部藥輸字第 028761 號）；健保給付待查',dim:['nPCSK','lPCSKout','pcskCirc','lPCSKbind','pcskTxt'],r:2.1},
+  mab:{nm:'PCSK9 單株抗體',how:'在血中直接抓住 PCSK9 蛋白，讓它無法和 LDL 受體結合，受體可以回收再用。',drop:'約 55–60%',freq:'皮下注射，每 2 週（或每月）一次，病人自行施打',ev:'FOURIER（evolocumab）、ODYSSEY OUTCOMES（alirocumab）',nhi:'健保給付（114/9/1）：最大耐受 statin＋ezetimibe 後 LDL ≥100、事前審查、每次 12 個月',dim:['pcskCirc','lPCSKbind','pcskTxt'],r:2.2}
+};
+let curD=null;
+function drawReceptors(r){const g=$('#ldlrGroup');g.innerHTML='';const n=Math.round(3*r);for(let i=0;i<n;i++){const x=210+i*15;if(x>320&&x<470){}el('rect',{x:x,y:362,width:9,height:14,rx:2,fill:'#5fa8a0'},g);}
+  $('#ldlrLbl').setAttribute('x',214+n*15);
+  const p=$('#ldlParticles');p.innerHTML='';const m=Math.max(2,Math.round(14/r));for(let i=0;i<m;i++){const cx=230+(i%7)*26+(i>6?13:0),cy=460+Math.floor(i/7)*28;if(cx>380)continue;el('circle',{cx:cx,cy:cy,r:8,fill:'#3a5560',stroke:'#9fb9b8','stroke-width':.8},p);}
+  $('#mechCount').textContent=r===1?'LDL 受體：基準（點藥物看變化）':'LDL 受體約 ×'+r.toFixed(1)+'，血中 LDL 顆粒減少（示意）';}
+function setDrug(d){
+  curD=curD===d?null:d;
+  $$('.dtag').forEach(t=>t.classList.toggle('on',t.dataset.d===curD));
+  ['nNPC','nChol','nPCSK','lPCSKout','pcskCirc','lPCSKbind','pcskTxt'].forEach(id=>$('#'+id).classList.remove('dimmed'));
+  if(!curD){drawReceptors(1);$('#dInfo').innerHTML='<h4>點一個藥物</h4><p class="soft" style="margin:0">黃色標籤是藥物。所有路徑的終點都是肝細胞表面的 LDL 受體：受體越多，血中的 LDL 被抓回肝臟越多。</p><p class="soft" style="margin:10px 0 0">Statin 讓細胞「缺膽固醇」而多做受體；PCSK9 路徑的藥讓已經做好的受體「不被拆掉」。所以 statin 加上 PCSK9 抑制有加乘效果。</p>';return;}
+  const x=DR[curD];x.dim.forEach(id=>$('#'+id).classList.add('dimmed'));drawReceptors(x.r);
+  $('#dInfo').innerHTML='<h4>'+x.nm+'</h4><p style="font-size:14.5px;margin:0">'+x.how+'</p><dl><dt>降幅</dt><dd>'+x.drop+'</dd><dt>用法</dt><dd>'+x.freq+'</dd><dt>證據</dt><dd>'+x.ev+'</dd><dt>健保</dt><dd>'+x.nhi+'</dd></dl>';
+}
+$$('.dtag').forEach(t=>{t.setAttribute('tabindex','0');t.setAttribute('role','button');t.addEventListener('click',()=>setDrug(t.dataset.d));t.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setDrug(t.dataset.d);}});});
+setDrug(null);
+
+/* ===== ORION BARS ===== */
+function hbars(svg,data,max,unit){
+  const x0=150,w=260;
+  for(let t=0;t<=max;t+=max/4){const x=x0+t/max*w;el('line',{x1:x,x2:x,y1:16,y2:262,stroke:'#1a4350'},svg);el('text',{x:x,y:282,'text-anchor':'middle',fill:'#9fb9b8','font-size':11.5,'font-family':'IBM Plex Mono'},svg,(unit==='-'&&t?'−':'')+t+'%');}
+  data.forEach((d,i)=>{const y=30+i*(230/data.length);const bh=Math.min(34,230/data.length-16);
+    el('text',{x:x0-10,y:y+bh/2-2,'text-anchor':'end',fill:'#e8efe9','font-size':13.5},svg,d[0]);
+    if(d[1])el('text',{x:x0-10,y:y+bh/2+14,'text-anchor':'end',fill:'#9fb9b8','font-size':11},svg,d[1]);
+    el('rect',{x:x0,y:y,width:d[2]/max*w,height:bh,rx:3,fill:d[3]||'#f2b134'},svg);
+    const end=d[4]?Math.max(d[2],d[4][1]):d[2];
+    if(d[4]){el('line',{x1:x0+d[4][0]/max*w,x2:x0+d[4][1]/max*w,y1:y+bh/2,y2:y+bh/2,stroke:'#e8efe9','stroke-width':1.2},svg);[d[4][0],d[4][1]].forEach(q=>el('line',{x1:x0+q/max*w,x2:x0+q/max*w,y1:y+bh/2-5,y2:y+bh/2+5,stroke:'#e8efe9','stroke-width':1.2},svg));}
+    el('text',{x:x0+end/max*w+8,y:y+bh/2+5,fill:'#f5cf7f','font-size':13,'font-family':'IBM Plex Mono'},svg,(unit==='-'?'−':'')+d[2]+'%');
+  });
+}
+hbars($('#orionBars'),[['ORION-10','第 510 天',52.3,'#f2b134',[48.8,55.7]],['ORION-11','第 510 天',49.9,'#f2b134',[46.6,53.1]],['ORION-18','亞洲，第 330 天',57.2,'#d0715e',[51.3,63.1]]],80,'-');
+hbars($('#o18Bars'),[['LDL 降幅 ≥50%','',72,'#5fa8a0'],['LDL <70','',81,'#5fa8a0'],['LDL <50','',64,'#5fa8a0']],100,'');
+
+/* ===== VICTORION ===== */
+(function(){
+  const s=$('#vicChart');const x0=80,x1=690,y0=30,y1=290;const X=d=>x0+d/330*(x1-x0);const Y=v=>y0+(-v)/70*(y1-y0);
+  [0,-10,-20,-30,-40,-50,-60,-70].forEach(v=>{el('line',{x1:x0,x2:x1,y1:Y(v),y2:Y(v),stroke:'#1a4350'},s);el('text',{x:x0-10,y:Y(v)+4,'text-anchor':'end',fill:'#9fb9b8','font-size':12,'font-family':'IBM Plex Mono'},s,v===0?'0':'−'+(-v)+'%');});
+  [0,90,180,270,330].forEach(d=>{el('text',{x:X(d),y:y1+22,'text-anchor':'middle',fill:'#9fb9b8','font-size':12,'font-family':'IBM Plex Mono'},s,d===0?'基線':'第 '+d+' 天');});
+  const inc=[[0,0],[90,-58.0],[180,-59.1],[270,-51.7],[330,-60.0]],uc=[[0,0],[90,-0.3],[180,-1.9],[270,-4.4],[330,-7.0]];
+  [[uc,'#6f8c92','常規治療'],[inc,'#f2b134','即早加 inclisiran']].forEach(([d,c,nm])=>{
+    el('polyline',{points:d.map(p=>X(p[0])+','+Y(p[1])).join(' '),fill:'none',stroke:c,'stroke-width':2.5},s);
+    d.forEach((p,i)=>{if(!i)return;el('circle',{cx:X(p[0]),cy:Y(p[1]),r:4.5,fill:c},s);el('text',{x:X(p[0]),y:Y(p[1])+(c==='#f2b134'?22:-10),'text-anchor':'middle',fill:c==='#f2b134'?'#f5cf7f':'#b5c6c8','font-size':12.5,'font-family':'IBM Plex Mono'},s,p[1].toFixed(1)+'%');});
+    const last=d[d.length-1];el('text',{x:X(last[0])+12,y:Y(last[1])+5,fill:c==='#f2b134'?'#f5cf7f':'#b5c6c8','font-size':13},s,nm);
+  });
+  [0,180].forEach(d=>{});
+  el('text',{x:X(0)+30,y:Y(-34),fill:'#9fb9b8','font-size':11.5},s,'注射：第 0、90 天（之後每 6 個月）');
+})();
+
+/* ===== FOREST ===== */
+(function(){
+  const s=$('#forest');const x0=330,x1=660;const lo=.3,hi=2;const X=v=>x0+(Math.log(v)-Math.log(lo))/(Math.log(hi)-Math.log(lo))*(x1-x0);
+  [.3,.5,.75,1,1.5,2].forEach(v=>{el('line',{x1:X(v),x2:X(v),y1:20,y2:170,stroke:v===1?'#9fb9b8':'#1a4350','stroke-dasharray':v===1?'':'2 3'},s);el('text',{x:X(v),y:190,'text-anchor':'middle',fill:'#9fb9b8','font-size':12,'font-family':'IBM Plex Mono'},s,v);});
+  el('text',{x:X(.55),y:210,'text-anchor':'middle',fill:'#9fb9b8','font-size':11.5},s,'← inclisiran 較少');el('text',{x:X(1.45),y:210,'text-anchor':'middle',fill:'#9fb9b8','font-size':11.5},s,'安慰劑較少 →');
+  const rows=[['MACE 合併終點','303 件（8.3%）',.74,.58,.94,true],['致死／非致死 MI','74 件（2.0%）',.80,.50,1.27,false],['致死／非致死中風','28 件（0.8%）',.86,.41,1.81,false]];
+  rows.forEach((r,i)=>{const y=50+i*45;el('text',{x:20,y:y+4,fill:'#e8efe9','font-size':14},s,r[0]);el('text',{x:190,y:y+4,fill:'#9fb9b8','font-size':12,'font-family':'IBM Plex Mono'},s,r[1]);
+    el('line',{x1:X(r[3]),x2:X(r[4]),y1:y,y2:y,stroke:r[5]?'#f2b134':'#9fb9b8','stroke-width':2},s);
+    el('rect',{x:X(r[2])-6,y:y-6,width:12,height:12,fill:r[5]?'#f2b134':'#9fb9b8'},s);
+    el('text',{x:x1+14,y:y+4,fill:r[5]?'#f5cf7f':'#cfe0df','font-size':12.5,'font-family':'IBM Plex Mono'},s,'OR '+r[2].toFixed(2)+' ('+r[3].toFixed(2)+'–'+r[4].toFixed(2)+')');});
+})();
+
+/* ===== DOTS ===== */
+(function(){let h='';for(let i=0;i<365;i++)h+='<i></i>';$('#dotsS').innerHTML=h;h='';for(let i=0;i<26;i++)h+='<i class="mid"></i>';$('#dotsM').innerHTML=h;$('#dotsI').innerHTML='<i class="big"></i><i class="big"></i>';})();
+
+/* ===== CALC ===== */
+const ADD=[
+  ['sta','statin 中強度 → 高強度',.20,'約再降 20%；同強度劑量加倍只多約 6%'],
+  ['eze','Ezetimibe',.20,'約再降 20%'],
+  ['bem','Bempedoic acid',.19,'約再降 18–20%'],
+  ['mab','PCSK9 單株抗體',.55,'約再降 55–60%；健保門檻 LDL ≥100'],
+  ['inc','Inclisiran',.50,'約再降 50%；健保給付待查']
+];
+$('#addons').innerHTML=ADD.map(a=>'<label class="addon" data-k="'+a[0]+'"><input type="checkbox" value="'+a[0]+'"><span><b>'+a[1]+'</b><small>'+a[3]+'</small></span></label>').join('');
+function calc(){
+  const v=parseFloat($('#kLDL').value),t=+$('#kTgt').value;
+  if(isNaN(v)||v<20||v>400){$('#kErr').textContent='請輸入 20–400 之間的 LDL-C';$('#kOut').innerHTML='';$('#gauge').innerHTML='';return;}
+  $('#kErr').textContent='';
+  const sel=$$('#addons input').filter(i=>i.checked).map(i=>i.value);
+  const hasM=sel.includes('mab'),hasI=sel.includes('inc');
+  $$('#addons .addon').forEach(a=>{const k=a.dataset.k;const dis=(k==='mab'&&hasI)||(k==='inc'&&hasM);a.classList.toggle('dis',dis);a.querySelector('input').disabled=dis;a.classList.toggle('on',sel.includes(k));});
+  let r=1;sel.forEach(k=>{r*=1-ADD.find(a=>a[0]===k)[2];});
+  const after=v*r;const need=v<t?0:(1-(t-1)/v)*100;const got=(1-r)*100;
+  const g=$('#gauge');g.innerHTML='';const x0=30,x1=390,max=Math.max(v,t)*1.1;const X=q=>x0+q/max*(x1-x0);
+  el('rect',{x:x0,y:70,width:x1-x0,height:26,rx:4,fill:'#0f3540'},g);
+  el('rect',{x:x0,y:70,width:X(t)-x0,height:26,rx:4,fill:'rgba(127,178,106,.25)'},g);
+  el('line',{x1:X(t),x2:X(t),y1:56,y2:108,stroke:'#7fb26a','stroke-width':2},g);
+  el('text',{x:X(t),y:48,'text-anchor':'middle',fill:'#a9d496','font-size':12.5,'font-family':'IBM Plex Mono'},g,'目標 <'+t);
+  el('circle',{cx:X(v),cy:83,r:8,fill:'#6f8c92'},g);el('text',{x:X(v),y:130,'text-anchor':'middle',fill:'#b5c6c8','font-size':12.5,'font-family':'IBM Plex Mono'},g,'現在 '+Math.round(v));
+  if(sel.length){el('line',{x1:X(v)-9,x2:X(after)+10,y1:83,y2:83,stroke:'#f2b134','stroke-width':2},g);el('circle',{cx:X(after),cy:83,r:8,fill:'#f2b134'},g);el('text',{x:X(after),y:156,'text-anchor':'middle',fill:'#f5cf7f','font-size':12.5,'font-family':'IBM Plex Mono'},g,'加藥後 ≈'+Math.round(after));}
+  el('text',{x:x0,y:190,fill:'#9fb9b8','font-size':12},g,'需降 '+need.toFixed(0)+'%　已選組合 ≈ '+got.toFixed(0)+'%');
+  let msg='';
+  if(v<t)msg='<p style="color:#a9d496">目前已達標，維持並定期追蹤。</p>';
+  else if(!sel.length)msg='<p>距離目標還要降 <b class="mono">'+need.toFixed(0)+'%</b>。勾選左邊的藥物看看哪個組合補得上。</p>';
+  else if(after<t)msg='<p style="color:#a9d496">這個組合估計可以達標（≈'+Math.round(after)+'）。</p>';
+  else msg='<p>估計 ≈'+Math.round(after)+'，還差一點。再加一個不同機轉的藥，或確認服藥順從性。</p>';
+  if(hasM&&v<100)msg+='<p class="soft" style="font-size:13px">提醒：PCSK9 單株抗體健保門檻為 LDL ≥100（最大耐受 statin＋ezetimibe 後），目前數值不符健保給付。</p>';
+  if(hasM||hasI)msg+='<p class="soft" style="font-size:13px">Inclisiran 與 PCSK9 單株抗體打同一個目標，不一起使用。</p>';
+  $('#kOut').innerHTML=msg;
+}
+$('#kLDL').addEventListener('input',calc);$('#kTgt').addEventListener('change',calc);$('#addons').addEventListener('change',calc);
+$('#kTgt').value='55';calc();
+})();
+</script>
+</body>
+</html>

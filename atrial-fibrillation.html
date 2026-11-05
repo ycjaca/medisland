@@ -1,0 +1,1099 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>心房顫動中風預防深入探索</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: 夜間航海圖的延伸。主軸是一條不規則的 AF 心電圖，章節依門診決策順序往下走。 */
+:root{
+  --sea:#0d2a33;--sea-deep:#082028;--panel:#0a252d;--grid:#1a4350;--grid2:#2a5662;
+  --ink:#e8efe9;--ink-soft:#9fb9b8;--buoy:#f2b134;--acc:#d0715e;--acc-l:#f0a291;
+  --ok:#7fb26a;--ok-l:#a9d496;--warn:#e0a24a;--teal:#5fa8a0;--old:#6f8c92;--purple:#8f86c9;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:60px}
+body{background:var(--sea);color:var(--ink);font-family:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:16.5px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--sea-deep)}
+a{color:var(--buoy)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--buoy);outline-offset:3px}
+svg text{font-family:var(--body)}
+.mono{font-family:var(--mono)}
+.col,.wide{margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:780px}.wide{max-width:1060px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(8,32,40,.95);border-bottom:1px solid var(--grid)}
+.topbar .wide{display:flex;align-items:center;gap:14px;height:48px}
+.back{font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--buoy)}
+.prog{flex:1;height:3px;background:var(--grid);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--acc)}
+.chapnav{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap;max-width:45vw;overflow:hidden;text-overflow:ellipsis}
+header.hero{padding:44px 0 26px}
+.coords{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,6vw,62px);line-height:1.14;margin:8px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--acc);display:inline-block}
+.lede{color:var(--ink-soft);margin:0 0 18px;max-width:38em}
+.ecg{display:block;width:100%;height:auto;background:var(--sea-deep);border:1px solid var(--grid);border-radius:4px;margin:14px 0 6px}
+.ecgcap{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.scan{animation:scan 9s linear infinite}
+@keyframes scan{from{transform:translateX(-140px)}to{transform:translateX(1000px)}}
+@media (prefers-reduced-motion:reduce){.scan{animation:none;opacity:0}}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:22px 0 0;padding:0;list-style:none}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14.5px;padding:8px 10px;border:1px solid var(--grid);border-radius:4px}
+.toc a:hover{border-color:var(--acc)}
+.toc a span{font-family:var(--mono);font-size:11px;color:var(--acc)}
+section.ch{padding:56px 0 20px;border-top:1px solid var(--grid)}
+.chno{font-family:var(--mono);font-size:12px;color:var(--acc);letter-spacing:.1em}
+h2{font-family:var(--display);font-size:clamp(27px,4.2vw,38px);line-height:1.22;margin:4px 0 8px;font-weight:700;text-wrap:balance}
+h3{font-family:var(--display);font-size:22px;margin:34px 0 8px;font-weight:700;text-wrap:balance}
+.src{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);border:1px solid var(--grid);border-radius:20px;padding:1px 9px;margin:0 6px 6px 0}
+.src.g{border-color:var(--teal);color:#9ed4cd}
+.src.nhi{border-color:var(--buoy);color:#f5cf7f}
+.src.calc{border-style:dashed}
+p{margin:0 0 14px}
+.soft{color:var(--ink-soft)}
+.lim{max-width:46em}
+small.note{display:block;font-size:13px;color:var(--ink-soft);line-height:1.6}
+figure{margin:22px 0 26px;padding:0;min-width:0}
+.plate{background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px;padding:16px;min-width:0}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+figcaption b{color:var(--ink);font-weight:500}
+.figno{font-family:var(--mono);font-size:11px;color:var(--acc);margin-right:6px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--grid);background:transparent;border-radius:20px;padding:5px 13px;font-size:13.5px;cursor:pointer;color:var(--ink-soft);transition:border-color .2s,background .2s}
+.chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+.chip.on{border-color:var(--acc);background:rgba(208,113,94,.16);color:var(--ink)}
+.btn{border:1px solid var(--acc);background:rgba(208,113,94,.12);border-radius:4px;padding:7px 16px;cursor:pointer;font-size:14px;color:var(--ink);text-decoration:none;display:inline-block}
+.btn:hover{background:rgba(208,113,94,.25)}
+.btn.ghost{border-color:var(--grid);background:transparent;color:var(--ink-soft)}
+.callout{border-left:3px solid var(--buoy);background:rgba(242,177,52,.06);padding:12px 16px;margin:18px 0}
+.callout.acc{border-left-color:var(--acc);background:rgba(208,113,94,.07)}
+.callout.purple{border-left-color:var(--purple);background:rgba(143,134,201,.08)}
+.callout h4{margin:0 0 4px;font-size:15px;font-weight:500}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.callout ul{margin:4px 0 0;padding-left:20px}
+.tw{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0 20px;min-width:560px}
+table.t th,table.t td{border-bottom:1px solid var(--grid);padding:8px;text-align:left;vertical-align:top}
+table.t th{font-weight:500;color:var(--ink-soft);font-size:13px}
+table.t td.num{font-family:var(--mono);white-space:nowrap}
+.card{background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:18px;min-width:0}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+.tool{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:20px;align-items:start}
+@media (max-width:820px){.two,.tool{grid-template-columns:minmax(0,1fr)}}
+.visits{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.visits button{border:1px solid var(--grid);background:transparent;border-radius:4px;padding:6px 12px;cursor:pointer;font-size:13.5px;color:var(--ink-soft);text-align:left;line-height:1.35}
+.visits button b{display:block;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--acc)}
+.visits button.on{border-color:var(--acc);background:rgba(208,113,94,.14);color:var(--ink)}
+.who{font-family:var(--display);font-size:21px;margin:0 0 6px}
+.card ul{margin:0;padding-left:20px}
+.lab{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+.lab div{border:1px solid var(--grid);border-radius:4px;padding:6px 10px;min-width:92px}
+.lab span{display:block;font-size:11.5px;color:var(--ink-soft)}
+.lab b{font-family:var(--mono);font-size:18px;font-weight:500}
+.q{font-weight:500;margin:4px 0 6px}
+.opt{display:grid;gap:8px;margin-top:8px}
+.optc{border:1px solid var(--grid);border-radius:4px;padding:10px 12px;background:transparent;text-align:left;cursor:pointer;font-size:14px;line-height:1.5}
+.optc:hover{border-color:var(--ink-soft)}
+.optc.on{border-color:var(--buoy);background:rgba(242,177,52,.07)}
+.fb{border:1px solid var(--grid);border-radius:4px;padding:12px 14px;font-size:14.5px;margin-top:10px}
+.fb h5{margin:0 0 4px;font-size:15px;font-weight:500}
+.fb p:last-child{margin-bottom:0}
+.pane{display:none}.pane.on{display:block}
+.grp{margin-bottom:12px}
+.grp h5{margin:0 0 6px;font-size:13px;font-weight:500;color:var(--ink-soft);font-family:var(--mono)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px}
+.check{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--grid);border-radius:4px;padding:7px 10px;cursor:pointer;font-size:13.5px;line-height:1.45}
+.check input{margin-top:4px;accent-color:var(--acc)}
+.check.on{border-color:var(--acc);background:rgba(208,113,94,.08)}
+.check .pt{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);white-space:nowrap}
+.row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px;flex-wrap:wrap}
+.row label{min-width:78px;color:var(--ink-soft)}
+.row input[type=number],.row select{background:var(--sea-deep);border:1px solid var(--grid2);border-radius:4px;padding:5px 8px}
+.row input[type=number]{width:92px;font-family:var(--mono)}
+.row input[type=range]{flex:1;min-width:150px;accent-color:var(--acc)}
+.err{color:var(--acc-l);font-size:13px;min-height:1.2em}
+.sticky{position:sticky;top:64px}
+@media (max-width:820px){.sticky{position:static}}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.score div{border:1px solid var(--grid);border-radius:4px;padding:8px 12px}
+.score span{display:block;font-size:12px;color:var(--ink-soft)}
+.score b{font-family:var(--mono);font-size:30px;font-weight:500;color:var(--buoy);line-height:1.2}
+.vl{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;font-size:14px;align-items:baseline;border-top:1px solid var(--grid);padding:6px 0}
+.pill{font-size:12.5px;border-radius:3px;padding:1px 8px;white-space:nowrap}
+.pill.y{background:rgba(127,178,106,.2);color:var(--ok-l)}
+.pill.m{background:rgba(242,177,52,.16);color:#f5cf7f}
+.pill.n{background:rgba(111,140,146,.2);color:var(--ink-soft)}
+.pill.x{background:rgba(208,113,94,.22);color:var(--acc-l)}
+.gapgrid{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:4px;min-width:560px;font-size:13px}
+.gapgrid th{font-weight:500;color:var(--ink-soft);text-align:left;padding:4px}
+.gapgrid td{padding:0}
+.gapgrid button{width:100%;min-height:58px;border:1px solid var(--grid);border-radius:4px;background:transparent;cursor:pointer;line-height:1.35;padding:5px;font-size:12.5px}
+.gapgrid button:hover{border-color:var(--buoy)}
+.gapgrid button b{display:block;font-family:var(--mono);font-weight:500;font-size:12px;color:var(--ink-soft)}
+.c-all{background:rgba(127,178,106,.42)!important}
+.c-riva{background:rgba(242,177,52,.4)!important}
+.c-none{background:rgba(208,113,94,.34)!important}
+.gapgrid button b{color:var(--ink)}
+.c-na{background:transparent}
+.key{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft);margin-top:10px}
+.key i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:5px;vertical-align:-1px;border:1px solid var(--grid)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.stat{border:1px solid var(--grid);border-radius:6px;padding:10px 12px}
+.stat b{display:block;font-family:var(--mono);font-size:25px;font-weight:500;color:var(--buoy);line-height:1.25}
+.stat span{font-size:12.5px;color:var(--ink-soft);line-height:1.45;display:block}
+.dotwrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:560px){.dotwrap{grid-template-columns:minmax(0,1fr)}}
+.dose{display:grid;gap:6px}
+.dcard{border:1px solid var(--grid);border-radius:4px;padding:8px 12px;display:grid;grid-template-columns:96px minmax(0,1fr);gap:2px 10px;align-items:baseline}
+.dcard b{font-weight:500}
+.dcard .d{font-family:var(--mono);color:var(--buoy);font-size:17px}
+.dcard .d.stop{color:var(--acc-l)}
+.dcard small{grid-column:2;color:var(--ink-soft);font-size:12.5px;line-height:1.5}
+.tline{display:grid;gap:8px;margin:10px 0}
+.step{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;border:1px solid var(--grid);border-radius:4px;padding:10px 12px;font-size:14px;background:transparent;text-align:left;cursor:pointer;width:100%}
+.step b{font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--acc-l)}
+.step.on{border-color:var(--acc);background:rgba(208,113,94,.08)}
+.bars{display:grid;gap:12px}
+.barrow .bl{font-size:13.5px;margin-bottom:3px}
+.bart{display:grid;grid-template-columns:70px minmax(0,1fr) 70px;gap:8px;align-items:center;font-size:12.5px;margin-bottom:3px}
+.bart i{display:block;height:14px;border-radius:2px;transition:width .35s}
+.bart span:last-child{font-family:var(--mono)}
+.bart .tr{background:rgba(26,67,80,.45);border-radius:2px}
+@media (prefers-reduced-motion:reduce){.bart i{transition:none}}
+.dtag{cursor:pointer}
+.nodebox{fill:#0f3540;stroke:#2a5662;transition:fill .2s,stroke .2s}
+.nodebox.hit{fill:var(--acc);stroke:var(--acc-l)}
+.take{counter-reset:t;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;list-style:none;padding:0;margin:14px 0}
+.take li{border:1px solid var(--grid);border-radius:6px;padding:12px 14px;font-size:14.5px;background:var(--panel)}
+.take b{font-weight:500;display:block;margin-bottom:2px}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin:10px 0 0}
+.links a{border:1px solid var(--grid2);border-radius:4px;padding:10px 12px;font-size:14px;text-decoration:none;color:var(--ink)}
+.links a:hover{border-color:var(--acc)}
+.links span{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.ev{margin:14px 0;border:1px solid var(--grid);border-radius:6px;background:rgba(8,32,40,.35)}
+.ev>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;min-height:44px;padding:9px 14px;font-size:14px;color:var(--ink-soft)}
+.ev>summary::-webkit-details-marker{display:none}
+.ev>summary::before{content:'+';font-family:var(--mono);font-size:17px;color:var(--buoy);width:12px;flex:none}
+.ev[open]>summary::before{content:'−'}
+.ev>summary:hover{color:var(--ink)}
+.ev>summary b{font-weight:500}
+.ev-b{padding:2px 14px 12px;min-width:0}
+.typebar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px}
+.scn{display:grid;gap:6px}
+.scn button{border:1px solid var(--grid);border-radius:4px;background:transparent;text-align:left;cursor:pointer;padding:8px 11px;font-size:14px;line-height:1.45;color:var(--ink-soft)}
+.scn button:hover{border-color:var(--ink-soft)}
+.scn button.on{border-color:var(--acc);background:rgba(208,113,94,.12);color:var(--ink)}
+.lanes{display:grid;gap:10px}
+.lane{border:1px solid var(--grid);border-left:4px solid var(--c,var(--teal));border-radius:4px;padding:10px 13px;font-size:14.5px;background:var(--sea-deep)}
+.lane h5{margin:0 0 3px;font-size:13px;font-weight:500;color:var(--c,var(--teal));font-family:var(--mono)}
+.lane b{font-weight:500}
+.lane p{margin:0 0 5px}.lane p:last-child{margin:0}
+.lane .soft{font-size:13.5px}
+.opts{display:grid;gap:9px}
+.opts .ol{font-size:13px;color:var(--ink-soft);margin-bottom:3px}
+.opts .btns{margin:0}
+.rx{display:grid;gap:7px}
+.rxi{border:1px solid var(--grid);border-radius:4px;padding:9px 12px;font-size:14px;line-height:1.55}
+.rxi b{font-weight:500}
+.rxi.good{border-left:4px solid var(--ok)}
+.rxi.care{border-left:4px solid var(--warn)}
+.rxi.no{border-left:4px solid var(--acc);opacity:.86}
+.rxi .pill{float:right;margin-left:8px}
+.rxi small{display:block;color:var(--ink-soft);font-size:13px;margin-top:2px}
+.rangechart text{fill:var(--ink-soft);font-size:12px}
+.cv{display:grid;grid-template-columns:3fr 1fr 4fr;gap:3px;margin:8px 0 4px;font-size:12.5px;text-align:center}
+.cv div{padding:8px 4px;border-radius:3px;background:rgba(95,168,160,.28)}
+.cv div:nth-child(2){background:rgba(242,177,52,.34)}
+footer{padding:50px 0 80px;border-top:1px solid var(--grid);margin-top:40px;font-size:13.5px;color:var(--ink-soft)}
+footer ol{padding-left:20px}footer li{margin-bottom:4px}
+</style>
+
+<div class="topbar"><div class="wide">
+  <a class="back" href="index.html#cardiorenal">← 回到群島</a>
+  <div class="prog"><i id="progbar"></i></div>
+  <span class="chapnav" id="chapnav">心腎島</span>
+</div></div>
+
+<header class="hero"><div class="col">
+  <div class="coords">心腎島 · 國際會議廳 09:35 · 115.10.18</div>
+  <h1>從進展到守護：<em>心房顫動</em>中風預防</h1>
+  <p class="lede">手錶跳出警示的 58 歲男性、吃 aspirin 的 78 歲女性、抗凝血劑治療中發生腦出血的同一位病人。從分類、Holter、抗凝、DOAC 劑量，到心率與節律控制的選藥，一次走完基層門診會遇到的決定。</p>
+  <svg class="ecg" id="ecg" viewBox="0 0 900 130" role="img" aria-label="心房顫動心電圖示意：R-R 間隔不規則，基線為顫動波"></svg>
+  <div class="ecgcap">Lead II 示意 · R-R 間隔完全不規則 · 沒有 P 波</div>
+  <div class="callout purple" style="margin-top:18px"><h4>閱讀提醒</h4><p class="soft" style="margin:0">本頁沒有講者投影片，內容依指引與試驗原文整理，不代表廖若男醫師（臺北榮總心臟內科）的演講內容。標 <span class="src nhi">健保</span> 的來自健保署現行給付規定，標 <span class="src calc">自算</span> 的是由公開數字換算。</p></div>
+  <div class="callout acc"><h4>尚未核對的部分</h4><p class="soft" style="margin:0">2026 APHRS Part II（中風預防）的出版社網頁擋下自動讀取，本頁只用到看得到的摘錄，分數門檻等級先以 2021 APHRS 版本呈現。ESC 2024 的抗心律不整藥建議表也只讀到部分內容，抗心律不整藥的等級取自非官方彙整，APHRS 2026 Part III 則查不到全文，相關位置都有標示。</p></div>
+  <ul class="toc">
+    <li><a href="#c1"><span>01</span>三個門診決定</a></li>
+    <li><a href="#c2"><span>02</span>找到 AF</a></li>
+    <li><a href="#c12"><span>03</span>分類與 Holter</a></li>
+    <li><a href="#c3"><span>04</span>算風險：指引與健保</a></li>
+    <li><a href="#c5"><span>05</span>出血風險怎麼用</a></li>
+    <li><a href="#c13"><span>06</span>抗凝、心率、節律的時機</a></li>
+    <li><a href="#c6"><span>07</span>四種 DOAC 劑量</a></li>
+    <li><a href="#c14"><span>08</span>心率控制選藥</a></li>
+    <li><a href="#c15"><span>09</span>節律控制選藥</a></li>
+    <li><a href="#c9"><span>10</span>電燒適應症</a></li>
+    <li><a href="#c7"><span>11</span>合併冠心病</a></li>
+    <li><a href="#c8"><span>12</span>顱內出血之後</a></li>
+    <li><a href="#c10"><span>13</span>下一代：Factor XI</a></li>
+    <li><a href="#c11"><span>14</span>帶走八件事</a></li>
+  </ul>
+</div></header>
+
+<section class="ch" id="c1"><div class="wide">
+  <div class="chno">01 · 門診實務</div>
+  <h2>三個門診決定</h2>
+  <p class="soft lim">前兩位是不同的病人，第三幕回到第二位。每一幕選完都可以往下看，後面的章節會拆開每個判斷。</p>
+  <div class="visits" id="visits">
+    <button class="on" data-v="0"><b>第一幕</b>手錶跳警示</button>
+    <button data-v="1"><b>第二幕</b>瘦小的阿嬤</button>
+    <button data-v="2"><b>第三幕</b>兩年後</button>
+  </div>
+  <div class="two">
+    <div class="card" id="caseCard"></div>
+    <div id="casePane"></div>
+  </div>
+</div></section>
+
+<section class="ch" id="c2"><div class="wide">
+  <div class="chno">02 · 找到 AF</div>
+  <h2>篩檢陽性，不等於有 AF</h2>
+  <span class="src g">APHRS 2026 Part I</span>
+  <p class="soft lim">先決定要篩誰，陽性後一定要確認。</p>
+  <div class="tw"><table class="t">
+    <tr><th>APHRS 2026 建議</th><th>等級</th></tr>
+    <tr><td>≥75 歲，或 ≥65 歲合併 CHA₂DS₂-VA 危險因子或 OSA：目標篩檢</td><td class="num">I / A</td></tr>
+    <tr><td>基層或社區以摸脈、單導程 ECG 做伺機篩檢，城鄉都要涵蓋</td><td class="num">I / A</td></tr>
+    <tr><td>經驗證的穿戴裝置做消費者自發篩檢</td><td class="num">IIa / B</td></tr>
+    <tr><td>AI 結合穿戴裝置，提升判讀與長期追蹤 AF 負荷</td><td class="num">IIa / C</td></tr>
+  </table></div>
+  <div class="callout"><h4>陽性之後</h4><p class="soft">非 ECG 工具（摸脈、PPG 手錶）一定要做 ECG 確認。APHRS 接受醫師判讀過的單導程 ECG 作為篩檢時的 AF 診斷。</p></div>
+  <h3>裝置偵測到的 AF 是另一回事</h3>
+  <p class="soft lim">APHRS 2025 的 4S-DDAF 看四件事：心電圖條帶與最長時間（Strip）、症狀（Symptoms）、缺血性中風史（Stroke）、風險分數（Score）。單次 ≥24 小時、中風或 TIA 病史、CHA₂DS₂-VASc ≥4 或有血管疾病時，建議抗凝。</p>
+<details class="ev"><summary><b>證據：盛行率、篩檢效益與陽性預測值計算器</b></summary><div class="ev-b">
+  <p class="soft lim">台灣 AF 盛行率從 2000 年 0.46% 升到 2011 年 1.07%，推估 2050 年約 4.01%。未抗凝時，台灣病人每年缺血性中風約 3.4%。問題是要篩誰，以及陽性之後怎麼辦。</p>
+  <div class="stats">
+    <div class="stat"><b>83 人</b><span>≥65 歲，單次篩檢找到 1 例可治療新 AF 需篩的人數</span></div>
+    <div class="stat"><b>1089 人</b><span>&lt;60 歲的同一指標</span></div>
+    <div class="stat"><b>45 例</b><span>台灣模型：75 歲一次性手持篩檢，每萬人預防的缺血性中風</span></div>
+  </div>
+  <p class="soft lim">延長篩檢確實找到更多 AF，但 AMALFI、LOOP、STROKESTOP II 都沒有證明能減少中風。APHRS 也寫明，消費型篩檢目前還沒有證實改善中風結果。</p>
+  <h3>同一個裝置，陽性預測值差很多</h3>
+  <figure class="tool">
+    <div class="card">
+      <div class="row"><label for="ppvTool">工具</label><select id="ppvTool"></select></div>
+      <div class="row"><label for="ppvPrev">受檢族群盛行率</label><input type="range" id="ppvPrev" min="0.2" max="10" step="0.1" value="3"><span class="mono" id="ppvPrevV"></span></div>
+      <div class="btns" id="ppvPre">
+        <button class="chip" data-p="0.4">年輕穿戴族群 0.4%</button>
+        <button class="chip" data-p="3">社區 ≥65 歲 3%</button>
+        <button class="chip" data-p="8">≥75 歲高風險 8%</button>
+      </div>
+      <small class="note">盛行率預設值僅供示範，不是實測值。</small>
+    </div>
+    <div class="plate">
+      <div id="ppvOut"></div>
+    </div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 1</span><b>陽性預測值計算。</b>敏感度與特異度取自 APHRS 2026 Part I 表 2 的各研究。這些研究的族群不同，把特異度帶到其他盛行率是簡化假設。STROKESTOP 使用 Zenicor 的實際篩檢陽性預測值為 2.8%。</figcaption>
+  </figure>
+  <p class="soft lim">節律器或植入式記錄器看到的短暫 AF，中風風險比臨床 AF 低。NOAH-AFNET 6 與 ARTESiA 合併分析：抗凝使中風相對風險約降 32%、大出血約增 62%，絕對值約每 100 人年少 0.3 例中風，多 0.7 至 1.6 例大出血。</p>
+
+</div></details>
+</div></section>
+
+<section class="ch" id="c12"><div class="wide">
+  <div class="chno">03 · 分類與 Holter</div>
+  <h2>分類看的是時間，抗凝看的是風險</h2>
+  <span class="src g">ESC 2024 表 5</span><span class="src g">ACC/AHA 2023</span>
+  <p class="soft lim">AF 的臨床分類依發作型態，決定的是心率與節律策略。抗凝不看這個分類：陣發性、持續性、永久性、有沒有症狀，都用同一套風險評估。</p>
+  <div class="typebar btns" id="afType"></div>
+  <figure>
+    <div class="plate"><svg id="afStrip" viewBox="0 0 860 92" role="img" aria-label="AF 發作型態時間軸示意"></svg><div id="afTypeOut" style="margin-top:10px;font-size:14.5px"></div></div>
+    <figcaption><span class="figno">圖 2</span><b>AF 型態示意。</b>紅色是 AF，藍綠色是竇性節律。時間軸為示意，不是比例尺。</figcaption>
+  </figure>
+  <div class="tw"><table class="t">
+    <tr><th>類型</th><th>定義</th><th>ACC/AHA 2023 分期</th></tr>
+    <tr><td>首次診斷</td><td>過去沒有診斷，不論症狀、型態、時間</td><td>—</td></tr>
+    <tr><td>陣發性</td><td>7 天內自行或經介入終止；多數自行終止者 &lt;48 小時</td><td>3A</td></tr>
+    <tr><td>持續性</td><td>不會自行終止；多數試驗以 7 天為界</td><td>3B</td></tr>
+    <tr><td>長期持續性</td><td>連續 ≥12 個月，仍考慮節律控制</td><td>3C</td></tr>
+    <tr><td>電燒成功後</td><td>介入後沒有復發</td><td>3D</td></tr>
+    <tr><td>永久性</td><td>醫病共同決定不再嘗試恢復竇律</td><td>4</td></tr>
+  </table></div>
+  <div class="two">
+    <div class="callout"><h4>診斷門檻</h4><ul class="soft">
+      <li>12 導程 ECG 看到 AF 就成立（標準紀錄 10 秒）</li>
+      <li>單導程或多導程裝置：一般以 ≥30 秒為共識，證據有限</li>
+      <li>ACC/AHA 另有第 1 期「有風險」、第 2 期「AF 前期」</li>
+    </ul></div>
+    <div class="callout"><h4>另外兩種情境</h4><ul class="soft">
+      <li>裝置偵測 AF：無症狀，由連續監測發現，要由專業人員確認。ESC：高血栓風險且非高出血風險時可考慮 DOAC（IIb, B）</li>
+      <li>誘發性 AF：緊鄰可逆因子發生。高血栓風險者應考慮長期抗凝（IIa, C）</li>
+    </ul></div>
+  </div>
+  <h3>新診斷 AF 的基本檢查</h3>
+  <div class="tw"><table class="t">
+    <tr><th>對象</th><th>項目</th></tr>
+    <tr><td>所有病人</td><td>病史（型態、家族史、共病、血栓與出血風險）、12 導程 ECG、動態心電圖看 AF 負荷與心室速率、症狀與功能評估、腎功能、電解質、肝功能、CBC、血糖或 HbA1c、甲狀腺功能</td></tr>
+    <tr><td>會影響處置時</td><td>經胸心臟超音波（I, C）；評估心率控制或 IC 類藥物時做運動心電圖</td></tr>
+    <tr><td>特定病人</td><td>經食道超音波、心臟 MRI、冠狀動脈 CT 或血管攝影、NT-proBNP、腦部影像與認知評估</td></tr>
+  </table></div>
+  <h3>什麼時候安排 24 小時 Holter</h3>
+  <p class="soft lim">Holter 適合症狀每天出現，或要看一整天的心率。症狀越少見，24 小時越容易錯過。點情境看建議。</p>
+  <figure class="tool">
+    <div class="scn" id="hoScn"></div>
+    <div class="card sticky" id="hoOut"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 3</span><b>監測工具選擇。</b>依 ESC 2024、ACC 動態心電圖回顧、ISHNE/HRS 2017、ESO 整理。台灣各院可取得的工具與健保給付不同，本頁未查證。</figcaption>
+  </figure>
+<details class="ev"><summary><b>證據：監測時間與偵測率</b></summary><div class="ev-b">
+  <figure>
+    <div class="plate"><div class="btns" id="yieldBtn" style="margin-top:0"><button class="chip on" data-k="0">心悸找原因</button><button class="chip" data-k="1">隱源性中風找 AF</button></div><svg id="yieldChart" class="rangechart" viewBox="0 0 760 210" role="img" aria-label="不同監測時間的偵測率"></svg></div>
+    <figcaption><span class="figno">圖 4</span><b>監測時間與偵測率。</b>ISHNE/HRS 2017 表 2。中風欄除 Holter 外，原表都加註問號，只能當粗略估計。</figcaption>
+  </figure>
+
+</div></details>
+</div></section>
+
+<section class="ch" id="c3"><div class="wide">
+  <div class="chno">04 · 算風險</div>
+  <h2>四套指引，加上健保的第五種答案</h2>
+  <span class="src g">指引</span><span class="src nhi">健保 2.1.4、2.1.5</span>
+  <p class="soft lim">勾選病人條件，右邊同時顯示分數、各指引建議，以及四種 DOAC 的健保判定。歐洲拿掉性別分，亞太仍用 CHA₂DS₂-VASc；健保則完全不用分數。</p>
+  <figure class="tool">
+    <div>
+      <div class="row"><label for="rAge">年齡</label><input type="number" id="rAge" value="58" min="18" max="110"><span class="soft">歲</span>
+        <span class="btns" id="rSex" style="margin:0"><button class="chip on" data-s="M">男</button><button class="chip" data-s="F">女</button></span></div>
+      <div class="err" id="rErr"></div>
+      <div class="grp"><h5>計分項目</h5><div class="checks" id="rA"></div></div>
+      <div class="grp"><h5>分數以外的條件</h5><div class="checks" id="rB"></div></div>
+      <button class="btn ghost" id="rCase1" type="button">帶入第一幕</button>
+      <button class="btn ghost" id="rCase2" type="button">帶入第二幕</button>
+    </div>
+    <div class="card sticky" id="rOut"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 5</span><b>風險與給付判定器。</b>APHRS 欄暫用 2021 版文字；2026 Part II 確定使用 CHA₂DS₂-VASc，門檻等級待核對。健保「有增加出血風險的情況」等排除條件未納入判定。</figcaption>
+  </figure>
+
+  <h3>指引和健保的縫在哪裡</h3>
+  <p class="soft lim">指引看分數，健保看年齡和是哪一種共病。下表每格是一個年齡層加一種共病，顏色是健保結果。點一下會用該年齡層的代表值（45、58、70、78 歲）帶入上面的判定器。</p>
+  <div class="btns" id="gapSex"><button class="chip on" data-s="M">男性</button><button class="chip" data-s="F">女性</button></div>
+  <figure>
+    <div class="plate tw"><table class="gapgrid" id="gapGrid"></table>
+      <div class="key"><span><i class="c-all"></i>四種 DOAC 都符合</span><span><i class="c-riva"></i>只有 rivaroxaban</span><span><i class="c-none"></i>都不符合</span></div>
+    </div>
+    <figcaption><span class="figno">圖 6</span><b>年齡層與共病的給付地圖。</b>格內 VA 是 CHA₂DS₂-VA 分數，含年齡分，同一年齡層分數相同。Rivaroxaban 的年齡條件是 50 歲以上未滿 75 歲（112/3/1 修訂），其他三藥是 65 歲以上未滿 75 歲。</figcaption>
+  </figure>
+  <div class="callout"><h4>門診上的實際意義</h4><ul class="soft">
+    <li>58 歲高血壓：指引應考慮抗凝；健保只有 rivaroxaban 符合</li>
+    <li>70 歲沒有共病的男性：年齡算 1 分，但健保四藥都不符合</li>
+    <li>單純 PAD：健保條文寫冠狀動脈疾病，未滿 75 歲不算</li>
+  </ul></div>
+  <div class="tw"><table class="t">
+    <tr><th>指引</th><th>工具</th><th>抗凝建議</th><th>新在哪裡</th></tr>
+    <tr><td>APHRS 2026</td><td>CHA₂DS₂-VASc</td><td>先找低風險者，有 ≥1 個危險因子就提供預防，再選藥。門檻等級待核對</td><td>第一份完整 APHRS AF 指引，四部</td></tr>
+    <tr><td>ESC/EACTS 2024</td><td>CHA₂DS₂-VA</td><td>≥2：I；1：IIa</td><td>AF-CARE 架構；拿掉性別</td></tr>
+    <tr><td>ACC/AHA 2023</td><td>CHA₂DS₂-VASc</td><td>男 ≥2、女 ≥3：I；男 1、女 2：IIa</td><td>2026 年更新績效與品質指標，非新指引</td></tr>
+    <tr><td>台灣腦中風學會 2024</td><td>CHA₂DS₂-VASc</td><td>男 ≥2、女 ≥3：I, A；男 ≥1、女 ≥2：IIa, B-NR</td><td>依台灣與亞洲資料更新</td></tr>
+  </table></div>
+<details class="ev"><summary><b>討論：要不要拿掉性別分</b></summary><div class="ev-b">
+  <div class="callout purple"><h4>要不要拿掉性別分</h4><p class="soft">ESC 拿掉性別是為了簡化。台灣 Chao 團隊的分析發現，女性只在 CHA₂DS₂-VA ≥2 時中風風險較高，低分時反而較低，支持性別是風險修飾因子；保留 Sc 也讓亞洲族群的預測略好。APHRS 2026 仍用 CHA₂DS₂-VASc。</p></div>
+
+</div></details>
+</div></section>
+
+<section class="ch" id="c5"><div class="wide">
+  <div class="chno">05 · 出血風險</div>
+  <h2>HAS-BLED 是修正清單，不是不開藥的理由</h2>
+  <span class="src g">ESC 2020／2024、APHRS</span>
+  <p class="soft lim">分數 ≥3 代表要提早追蹤。在沒有絕對禁忌時，出血分數本身不應用來決定不給抗凝血劑。勾選後看哪些項目可以處理。</p>
+  <figure class="tool">
+    <div class="checks" id="hbList"></div>
+    <div class="card sticky" id="hbOut"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 7</span><b>HAS-BLED 與可處理的項目。</b>評分定義採原始 HAS-BLED；處置為整理性建議。</figcaption>
+  </figure>
+  <div class="callout acc"><h4>Aspirin 不是比較安全的替代品</h4><p class="soft">APHRS 2026 明確寫抗血小板藥不能取代 DOAC。ACC/AHA 2023 把用 aspirin 取代抗凝列為 Class III：有害。</p></div>
+</div></section>
+
+<section class="ch" id="c13"><div class="wide">
+  <div class="chno">06 · 三個獨立的問題</div>
+  <h2>抗凝、心率、節律，分開決定</h2>
+  <span class="src g">ESC 2024</span><span class="src g">ACC/AHA 2023</span>
+  <p class="soft lim">這三件事不是三選一。抗凝看中風風險，心率控制幾乎人人需要，節律控制看症狀、心衰與發病時間。恢復竇律以後，也不能因此自動停抗凝。</p>
+  <figure class="tool">
+    <div class="card opts" id="plIn"></div>
+    <div class="lanes" id="plOut"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 8</span><b>三線決策。</b>這是教學用的簡化流程，不能取代臨床判斷。</figcaption>
+  </figure>
+  <h3>電擊或藥物整流前後的抗凝</h3>
+  <p class="soft lim">電擊和藥物整流都適用同一套抗凝原則。Amiodarone 轉律較慢，也要當成可能整流的藥。</p>
+  <div class="plate"><div class="cv"><div>整流前 ≥3 週有效抗凝，或 TEE 排除血栓</div><div>整流</div><div>整流後至少 4 週，之後依風險長期使用</div></div></div>
+  <div class="tw" style="margin-top:12px"><table class="t">
+    <tr><th>情境</th><th>做法</th><th>等級</th></tr>
+    <tr><td>血行動力不穩定</td><td>立即電擊，不等抗凝準備</td><td class="num">I</td></tr>
+    <tr><td>AF &gt;24 小時</td><td>≥3 週抗凝或 TEE；沒有準備就不要提早整流</td><td class="num">I；III, C</td></tr>
+    <tr><td>抗凝未就緒，需要控制心率</td><td>依 LVEF 選 β 阻斷劑、diltiazem、verapamil 或 digoxin；這些藥不會把 AF 轉回竇律</td><td class="num">I, B</td></tr>
+    <tr><td>抗凝未就緒，其他心率藥不能用</td><td>重症或 LVEF 嚴重下降時可用 amiodarone，並盡快開始抗凝；若轉回竇律，按整流後處理</td><td class="num">實務原則</td></tr>
+    <tr><td>整流後</td><td>至少 4 週，有危險因子者長期</td><td class="num">I</td></tr>
+    <tr><td>&lt;24 小時且無血栓危險因子</td><td>整流後抗凝可不用</td><td class="num">IIa</td></tr>
+    <tr><td>發作 48 小時內、穩定</td><td>可先等待自行轉回</td><td class="num">IIa, B</td></tr>
+    <tr><td>選藥</td><td>可用 DOAC 者優先於 warfarin</td><td class="num">I, A</td></tr>
+  </table></div>
+  <small class="note">ESC 2024 以 24 小時為界，ACC/AHA 2023 與較舊教材常用 48 小時。部分等級取自非官方彙整，待核對原文。</small>
+  <h3>什麼時候早一點想到節律控制</h3>
+  <p class="soft lim">確診 12 個月內且有血栓風險的特定病人，應考慮節律策略（ESC IIa, B）。心率目標先設靜止 &lt;110；有症狀或疑似心搏過速心肌病時再更嚴格。</p>
+<details class="ev"><summary><b>證據：EAST-AFNET 4、RACE II</b></summary><div class="ev-b">
+  <p class="soft"><b>EAST-AFNET 4：</b>確診 1 年內早期節律控制，心血管複合終點 3.9 vs 5.0／100 人年，HR 0.79（0.66–0.94）。收的是風險較高的新診斷病人，開放標籤、終點盲性判定，因療效提前終止。節律組主要靠藥物，電燒一開始 8%，5 年約 20%；治療相關不良事件 4.9% vs 1.4%。</p>
+  <p class="soft"><b>RACE II：</b>614 位永久性 AF，3 年主要終點寬鬆控制（&lt;110）12.9%、嚴格控制（&lt;80）14.9%，寬鬆不劣於嚴格。</p>
+</div></details>
+  <div class="tw"><table class="t">
+    <tr><th>什麼時候轉介</th><th>原因</th></tr>
+    <tr><td>症狀明顯，心率控制後仍不舒服</td><td>討論整流、抗心律不整藥或電燒</td></tr>
+    <tr><td>LVEF 下降，懷疑心搏過速心肌病</td><td>節律控制可能逆轉；特定 HFrEF 電燒為 Class I（轉述）</td></tr>
+    <tr><td>症狀性陣發性 AF 想根治</td><td>第一線電燒是選項，見第 10 章</td></tr>
+    <tr><td>心跳快慢交替、AF 終止時停頓</td><td>可能需要電燒或節律器，先不要再加藥</td></tr>
+    <tr><td>預激症候群</td><td>不要用房室結阻斷藥</td></tr>
+  </table></div>
+</div></section>
+
+<section class="ch" id="c6"><div class="wide">
+  <div class="chno">07 · 選藥與劑量</div>
+  <h2>四種 DOAC，四套減量規則</h2>
+  <span class="src g">台灣仿單</span><span class="src g">EHRA 2021</span><span class="src nhi">健保排除值</span>
+  <p class="soft lim">DOAC 優於 warfarin，機械瓣與中重度二尖瓣狹窄除外。真正常出錯的是劑量。亞洲研究中有 20–56% 病人用到低於建議的劑量，2021 APHRS 指出仿單外低劑量與較高缺血性中風風險有關，應該避免。</p>
+  <div class="tw"><table class="t">
+    <tr><th></th><th>Apixaban</th><th>Rivaroxaban</th><th>Edoxaban</th><th>Dabigatran</th></tr>
+    <tr><td>一般劑量</td><td class="num">5 mg bid</td><td>台灣 15–20 mg qd<br><small class="soft">國際 20 mg</small></td><td class="num">60 mg qd</td><td>150 或 110 mg bid</td></tr>
+    <tr><td>減量</td><td>2.5 mg bid：年齡 ≥80、體重 ≤60、Cr ≥1.5 中符合 2 項；或 CrCl 15–29</td><td>台灣 CrCl 30–50：10–15 mg；15–30：10–15 mg 並小心<br><small class="soft">國際 CrCl 15–49：15 mg</small></td><td>30 mg：CrCl 15–50、體重 ≤60，或併用 cyclosporine、dronedarone、erythromycin、ketoconazole，任一項</td><td>110 mg：&gt;80 歲。75–80 歲依血栓與出血風險選。出血風險高時也用 110 mg</td></tr>
+    <tr><td>不適用</td><td>CrCl &lt;15 或透析不建議</td><td>CrCl &lt;15 禁用</td><td>末期腎病、透析不建議；CrCl &gt;95 沒有建議劑量</td><td>CrCl &lt;30 禁用</td></tr>
+    <tr><td>服用</td><td>每日兩次</td><td>15、20 mg 隨餐</td><td>每日一次</td><td>每日兩次</td></tr>
+    <tr><td>腎排泄比例</td><td class="num">約 27%</td><td class="num">約 35%</td><td class="num">約 50%</td><td class="num">約 80%</td></tr>
+    <tr><td>仿單版本</td><td class="num">2026-03-27</td><td class="num">2023-05-24</td><td class="num">2025-06-10</td><td class="num">2023-08-21</td></tr>
+  </table></div>
+  <small class="note">Rivaroxaban 列的是 15 mg 錠仿單的腎功能分級。</small>
+  <figure class="tool">
+    <div class="card">
+      <div class="row"><label for="dAge">年齡</label><input type="number" id="dAge" value="78" min="18" max="110"> 歲</div>
+      <div class="row"><label for="dWt">體重</label><input type="number" id="dWt" value="52" min="25" max="200"> kg</div>
+      <div class="row"><label for="dCr">血清肌酸酐</label><input type="number" id="dCr" value="1.1" min="0.3" max="12" step="0.1"> mg/dL</div>
+      <div class="row"><label for="dSex">性別</label><select id="dSex"><option value="F">女</option><option value="M">男</option></select></div>
+      <label class="check" style="margin-bottom:6px"><input type="checkbox" id="dPgp"><span>併用 cyclosporine、dronedarone、erythromycin 或 ketoconazole</span></label>
+      <label class="check" style="margin-bottom:6px"><input type="checkbox" id="dVer"><span>併用 verapamil</span></label>
+      <label class="check"><input type="checkbox" id="dGI"><span>曾腸胃道出血或出血風險高</span></label>
+      <div class="err" id="dErr"></div>
+      <div class="btns"><button class="btn ghost" id="d80" type="button">她到 80 歲</button><button class="btn ghost" id="dMan" type="button">65 kg 男性 CKD</button></div>
+    </div>
+    <div class="plate">
+      <div class="score"><div><span>CrCl（Cockcroft-Gault）</span><b id="dCl"></b></div><div><span>Apixaban 減量條件</span><b id="dCt"></b></div></div>
+      <div class="soft" style="font-size:13.5px;margin-bottom:10px" id="dFu"></div>
+      <div class="dose" id="dOut"></div>
+    </div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 9</span><b>DOAC 劑量檢核（學習用）。</b>依上表台灣仿單摘錄，並疊加健保 CrCl 排除值與 EHRA 腎功能追蹤間隔。開藥請以最新仿單全文為準。</figcaption>
+  </figure>
+  <div class="tw"><table class="t">
+    <tr><th>情境</th><th>要點</th><th>來源</th></tr>
+    <tr><td>腎功能</td><td>用 Cockcroft-Gault 算 CrCl；MDRD、CKD-EPI 在高齡或 &lt;50 kg 可能高估</td><td>APHRS 2021</td></tr>
+    <tr><td>≥75 歲</td><td>Apixaban、edoxaban 可優先考慮</td><td>APHRS 2026</td></tr>
+    <tr><td>高齡且出血風險高</td><td>標準劑量不適合或病人拒絕時，應考慮 edoxaban 15 mg（ELDERCARE：對安慰劑 HR 0.34；大出血 HR 1.87，p=0.09）。台灣仿單對單獨使用 15 mg 的文字需看全文確認</td><td>APHRS 2026</td></tr>
+    <tr><td>追蹤腎功能</td><td>多數每年；≥75 歲或衰弱每 4 個月；CrCl ≤60 時，間隔月數約為 CrCl ÷ 10；生病、脫水、用 NSAID 時提早</td><td>EHRA 2021</td></tr>
+  </table></div>
+  <h3>心率與節律藥物遇上 DOAC</h3>
+  <div class="tw"><table class="t">
+    <tr><th>併用藥</th><th>Apixaban</th><th>Rivaroxaban</th><th>Edoxaban</th><th>Dabigatran</th></tr>
+    <tr><td>Amiodarone</td><td>無藥動資料</td><td>影響小</td><td>↑ 約 40%</td><td>↑ 12–60%；台灣仿單 AF 不需調整</td></tr>
+    <tr><td>Dronedarone</td><td>小心；觀察性資料未見出血增加</td><td>EHRA 建議避免</td><td>↑ 約 85%，30 mg</td><td>↑ 70–100%；台灣仿單不建議</td></tr>
+    <tr><td>Verapamil</td><td>無藥動資料</td><td>↑ 約 40%</td><td>↑ 約 53%，不需改</td><td>↑ 12–180%；EHRA 110 mg，台灣仿單 AF 不需調整</td></tr>
+    <tr><td>Diltiazem</td><td>↑ 約 40%</td><td>無影響</td><td>無資料</td><td>無影響</td></tr>
+  </table></div>
+  <small class="note">EHRA 2021 Key Messages 與各台灣仿單。兩者不一致的地方已並列，EHRA 也提醒，超出試驗條件的減量屬仿單外使用。</small>
+</div></section>
+
+<section class="ch" id="c14"><div class="wide">
+  <div class="chno">08 · 心率控制</div>
+  <h2>先看 LVEF，再看共病</h2>
+  <span class="src g">ESC 2024 表 12</span><span class="src g">NICE</span>
+  <p class="soft lim">LVEF &gt;40%：β 阻斷劑、diltiazem、verapamil、digoxin 都是第一線選項（I, B）。LVEF ≤40%：不用 diltiazem 和 verapamil。選條件看建議順序。</p>
+  <figure class="tool">
+    <div class="card opts" id="rcIn"></div>
+    <div class="rx" id="rcOut"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 10</span><b>心率控制選藥器。</b>依 ESC 2024 與 NICE 摘要整理，排序是教學簡化。</figcaption>
+  </figure>
+  <div class="tw"><table class="t">
+    <tr><th>藥物</th><th>急性靜脈</th><th>口服維持</th><th>注意</th></tr>
+    <tr><td>Metoprolol tartrate</td><td>2.5–5 mg，2 分鐘；累積最多 15 mg</td><td>25–100 mg bid</td><td>急性心衰竭禁用</td></tr>
+    <tr><td>Metoprolol succinate</td><td>—</td><td>50–200 mg qd</td><td></td></tr>
+    <tr><td>Bisoprolol</td><td>—</td><td>1.25–20 mg qd</td><td></td></tr>
+    <tr><td>Carvedilol</td><td>—</td><td>3.125–50 mg bid</td><td>非選擇性，氣喘避免</td></tr>
+    <tr><td>Nebivolol</td><td>—</td><td>2.5–10 mg qd</td><td></td></tr>
+    <tr><td>Diltiazem</td><td>0.25 mg/kg，5 分鐘；之後 5–15 mg/h</td><td>60 mg tid 至 360 mg ER qd</td><td>LVEF ≤40% 不用</td></tr>
+    <tr><td>Verapamil</td><td>2.5–10 mg，5 分鐘</td><td>40 mg bid 至 480 mg ER qd</td><td>LVEF ≤40% 禁用</td></tr>
+    <tr><td>Digoxin</td><td>0.5 mg；24 小時內分次 0.75–1.5 mg</td><td>0.0625–0.25 mg qd</td><td>依腎功能調整；濃度高與不良事件相關</td></tr>
+    <tr><td>Amiodarone</td><td>300 mg，30–60 分鐘；之後 24 小時 900–1200 mg</td><td>負荷後 200 mg qd</td><td>最後選項；可能轉律，抗凝未就緒時要小心；碘過敏禁用</td></tr>
+  </table></div>
+  <div class="two">
+    <div class="callout"><h4>原則</h4><ul class="soft">
+      <li>先找並處理誘因：感染、脫水、甲狀腺、貧血</li>
+      <li>單藥不夠：加 digoxin；NICE 可合併 β 阻斷劑、diltiazem、digoxin 任兩種</li>
+      <li>β 阻斷劑合併 diltiazem／verapamil 只在密切監測下使用</li>
+    </ul></div>
+    <div class="callout acc"><h4>不要這樣用</h4><ul class="soft">
+      <li>Dronedarone 不用於永久性 AF 的心率控制</li>
+      <li>Amiodarone 不作常規長期心率控制</li>
+      <li>預激症候群：所有心率控制藥都禁用</li>
+      <li>藥物無效且症狀嚴重：房室結電燒加節律器；曾因心衰住院的永久性 AF 應考慮合併 CRT（IIa, B）</li>
+    </ul></div>
+  </div>
+  <small class="note">Atenolol、esmolol、landiolol、digitoxin 也列在 ESC 表 12，本表省略或併入急性選項。台灣各院品項不同。</small>
+</div></section>
+
+<section class="ch" id="c15"><div class="wide">
+  <div class="chno">09 · 節律控制</div>
+  <h2>抗心律不整藥先看心臟結構</h2>
+  <span class="src g">ESC 2024 原則</span><span class="src g">台灣仿單</span><span class="src nhi">健保 2.10.1</span>
+  <p class="soft lim">選藥的第一步是有沒有結構性心臟病。錯用 IC 類藥物可能致命；CAST 試驗後，心肌梗塞病人不再用這類藥物。長期用藥的目標是改善症狀，不是把 AF 完全消滅。</p>
+  <figure class="tool">
+    <div class="card opts" id="aaIn"></div>
+    <div class="rx" id="aaOut"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 11</span><b>節律藥物選擇器。</b>Class 等級取自非官方彙整與摘要，未逐條對照 ESC 建議表 18。藥物起始通常由心臟科決定，這張圖的用途是看懂處方與避開禁忌。</figcaption>
+  </figure>
+  <div class="tw"><table class="t">
+    <tr><th>藥物</th><th>台灣資料或常用劑量</th><th>追蹤與禁忌</th></tr>
+    <tr><td>Propafenone</td><td>IR 150 mg tid（台灣試驗）；SR 225 mg q12h，間隔 ≥5 天可到 325、425 mg</td><td>QRS 變寬或 AV block 要減量。禁用：Brugada、3 個月內 MI、明顯結構性心臟病、嚴重傳導異常</td></tr>
+    <tr><td>Dronedarone</td><td>400 mg bid 隨早晚餐</td><td>QTc ≥500 或 PR &gt;280 ms 禁用；永久性 AF、NYHA IV 或近期心衰代償失調禁用；digoxin 減半</td></tr>
+    <tr><td>Amiodarone</td><td>負荷後 200 mg qd</td><td>甲狀腺、肝、肺、眼、皮膚毒性；交互作用多</td></tr>
+    <tr><td>Sotalol</td><td>依腎功能，住院起始</td><td>QT、腎功能、鉀、鎂</td></tr>
+    <tr><td>Flecainide</td><td>台灣供應未查證</td><td>僅用於無結構性心臟病者</td></tr>
+  </table></div>
+  <div class="two">
+    <div class="callout"><h4>IC 類藥物的搭檔</h4><p class="soft">Flecainide、propafenone 應考慮併用 β 阻斷劑或 non-DHP CCB，避免轉成心房撲動時 1:1 傳導（IIa）。Pill-in-the-pocket 只用於發作不頻繁、院內驗證過安全的病人（IIa）。</p></div>
+    <div class="callout"><h4>健保的 dronedarone 條件</h4><p class="soft">近 6 個月有 AF 或 AFL，目前為竇律或即將轉回：≥70 歲；或 65–69 歲合併高血壓、糖尿病、腦血管意外、左心房 ≥50 mm。<b>有心衰竭診斷史不得使用</b>，比 ESC 的適用範圍更嚴格。</p></div>
+  </div>
+  <div class="callout acc"><h4>吃藥或電燒後仍要抗凝</h4><p class="soft">抗凝依風險分數決定，與目前是竇律或 AF 無關。電燒後 ESC 建議至少抗凝 2 個月，之後依風險長期使用；完整適應症見第 10 章。</p></div>
+</div></section>
+
+<section class="ch" id="c9"><div class="wide">
+  <div class="chno">10 · 電燒</div>
+  <h2>電燒：誰該轉介，做完能不能停抗凝</h2>
+  <span class="src g">ESC 2024</span><span class="src g">ACC/AHA 2023</span>
+  <p class="soft lim">電燒是為了減少症狀與 AF 負荷。先問三件事：有沒有症狀、LVEF 如何、是陣發性還是持續性。點情境看適應症。</p>
+  <figure class="tool">
+    <div class="scn" id="abScn"></div>
+    <div class="card sticky" id="abOut"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 12</span><b>電燒適應症。</b>ACC/AHA 等級由 ACC 摘要的建議用語對應；標「待核對」者未讀到 ESC 建議表原文。</figcaption>
+  </figure>
+  <div class="tw"><table class="t">
+    <tr><th>階段</th><th>做法</th><th>等級</th></tr>
+    <tr><td>電燒前後</td><td>不中斷口服抗凝</td><td class="num">I, A</td></tr>
+    <tr><td>電燒後</td><td>至少 2 個月，之後依中風風險決定，不看手術是否成功</td><td class="num">ESC</td></tr>
+    <tr><td>成功後</td><td>目前指引仍依風險分數長期抗凝</td><td class="num">ESC、ACC/AHA</td></tr>
+  </table></div>
+<details class="ev"><summary><b>證據：電燒成功後可以停藥嗎（ALONE-AF、OCEAN、PVI-SHAM-AF）</b></summary><div class="ev-b">
+  <div class="tw"><table class="t">
+    <tr><th></th><th>ALONE-AF（JAMA 2025）</th><th>OCEAN（NEJM 2026）</th></tr>
+    <tr><td>人數</td><td class="num">840</td><td class="num">1284</td></tr>
+    <tr><td>族群</td><td>韓國，電燒後 ≥1 年無復發，平均分數 2.1，平均 64 歲</td><td>電燒成功 ≥1 年，≥1 個危險因子，平均 66 歲</td></tr>
+    <tr><td>比較</td><td>停藥 vs 繼續 DOAC</td><td>Aspirin vs rivaroxaban 15 mg</td></tr>
+    <tr><td>結果</td><td>停藥組複合終點較少，主要是大出血少</td><td>無顯著差異，含 MRI 隱性栓塞</td></tr>
+  </table></div>
+  <p class="soft">兩個試驗以低至中風險者為主，事件少，節律監測只有兩次 24 小時 Holter。ESC 2026 的 PVI-SHAM-AF 也提醒：電燒減少 AF 復發（Holter 21% vs 41%），但生活品質改善沒有明顯勝過假手術。</p>
+</div></details>
+</div></section>
+
+<section class="ch" id="c7"><div class="wide">
+  <div class="chno">11 · 合併冠心病</div>
+  <h2>抗血小板藥要減，而且要減得早</h2>
+  <span class="src g">EPIDAURUS · AQUATIC · EPIC-CAD</span>
+  <p class="soft lim">點每個時間點看目前的原則。慢性期最常見的問題，是多年前的支架讓 aspirin 一直開著。</p>
+  <div class="tline" id="cadSteps"></div>
+  <div class="callout"><h4>家醫科可以做的事</h4><p class="soft">慢性病連處箋上同時看到 DOAC 和 aspirin 時，查一次支架時間與當初的理由，再和心臟科確認能否停掉 aspirin。</p></div>
+<details class="ev"><summary><b>證據：EPIDAURUS、AQUATIC、EPIC-CAD</b></summary><div class="ev-b">
+  <div class="tw"><table class="t">
+    <tr><th>試驗</th><th>族群</th><th>結果</th></tr>
+    <tr><td>EPIDAURUS<br><small class="soft">Nat Med 2026</small></td><td>AF＋MI，PCI 後 5 天內</td><td>DOAC 配 prasugrel／ticagrelor 比配 clopidogrel，BARC ≥3 出血增加（HR 3.54，95% CI 1.15–10.85），缺血事件沒有減少，提前終止</td></tr>
+    <tr><td>AQUATIC<br><small class="soft">NEJM 2025;393:1578</small></td><td>慢性冠心症、支架 &gt;6 個月、高動脈硬化風險，長期 OAC</td><td>再加 aspirin 增加心血管事件、死亡與大出血，因死亡過多提前終止</td></tr>
+    <tr><td>EPIC-CAD<br><small class="soft">NEJM 2024;391:2075</small></td><td>AF＋穩定冠心病</td><td>Edoxaban 單用的淨臨床結果優於合併抗血小板藥，1 年 NNT 約 10.6</td></tr>
+  </table></div>
+
+</div></details>
+</div></section>
+
+<section class="ch" id="c8"><div class="wide">
+  <div class="chno">12 · 顱內出血之後</div>
+  <h2>顱內出血後要不要再抗凝</h2>
+  <span class="src g">ESC 2026 · World Stroke Congress 2026</span>
+  <p class="soft lim">結論是「個別化」：出血部位、原因、影像上的小血管疾病都要納入，和神經科一起決定。不適用「出血過一次就永遠不用」，也不適用「時間到就回到原劑量」。</p>
+<details class="ev"><summary><b>證據：ENRICH-AF 結果</b></summary><div class="ev-b">
+  <p class="soft lim">948 人，平均 77 歲，平均追蹤 28 個月。Edoxaban 60 mg（符合條件降 30 mg）對比不抗凝（無抗栓藥或單一抗血小板藥，由研究者決定）。本頁查到的是會議報告與新聞稿，尚未讀到正式論文。</p>
+  <figure>
+    <div class="plate"><div class="btns" id="enBtn" style="margin-top:0">
+      <button class="chip on" data-k="0">全體結果</button>
+      <button class="chip" data-k="1">依出血部位</button>
+    </div><div class="bars" id="enBars"></div></div>
+    <figcaption id="enCap"></figcaption>
+  </figure>
+  <div class="two">
+    <div class="callout acc"><h4>主要發現</h4><ul class="soft">
+      <li>主要終點沒有達到統計顯著</li>
+      <li>缺血性中風、心肌梗塞減少，出血性中風增加近三倍</li>
+      <li>葉性出血與 convexity SAH 因安全疑慮，2023 年起停止收案</li>
+    </ul></div>
+    <div class="callout purple"><h4>假說階段</h4><ul class="soft">
+      <li>超額大出血集中在 60 mg，30 mg 組未見（次分析，主持人報告）</li>
+      <li>雙盲的 ASPIRE（apixaban vs aspirin）仍在進行</li>
+    </ul></div>
+  </div>
+
+</div></details>
+</div></section>
+
+<section class="ch" id="c10"><div class="wide">
+  <div class="chno">13 · 下一代</div>
+  <h2>Factor XI：能不能只擋血栓、不擋止血</h2>
+  <span class="src g">OCEANIC-AF · LIBREXIA-AF · LILAC-TIMI 76</span>
+  <p class="soft lim">還沒有可以用於 AF 門診的藥物。Factor XI 的假說是只擋血栓、較少影響止血，目前第三期結果仍未定。</p>
+<details class="ev"><summary><b>展開：凝血路徑圖與試驗現況</b></summary><div class="ev-b">
+  <p class="soft lim">目前的抗凝藥都作用在共同路徑或更廣的位置。Factor XI 主要參與血栓擴大，對止血的重要性較低，所以才有這個假說。點藥物看作用位置。</p>
+  <figure class="tool">
+    <div class="plate"><svg id="casc" viewBox="0 0 560 330" role="img" aria-label="凝血路徑與抗凝藥物作用位置"></svg></div>
+    <div class="card" id="cascInfo"></div>
+    <figcaption style="grid-column:1/-1"><span class="figno">圖 14</span><b>凝血路徑簡圖。</b>為教學簡化，省略輔因子與回饋路徑。</figcaption>
+  </figure>
+  <div class="tw"><table class="t">
+    <tr><th>藥物</th><th>試驗</th><th>狀態</th></tr>
+    <tr><td>Asundexian</td><td>OCEANIC-AF，對 apixaban</td><td>提前終止：中風與全身栓塞 1.3% vs 0.4%；大出血 0.2% vs 0.7%</td></tr>
+    <tr><td>Milvexian 100 mg bid</td><td>LIBREXIA-AF，對 apixaban，約 2 萬人</td><td>登錄主要完成日 2026-12，結果尚未公布</td></tr>
+    <tr><td>Abelacimab 每月皮下</td><td>LILAC-TIMI 76，對安慰劑，不適合 OAC 者</td><td>進行中</td></tr>
+  </table></div>
+  <small class="note">LIBREXIA-ACS 以 25 mg bid 用於急性冠心症，因無效提前終止，適應症與劑量都與 LIBREXIA-AF 不同。</small>
+
+</div></details>
+</div></section>
+
+<section class="ch" id="c11"><div class="wide">
+  <div class="chno">14 · 帶走</div>
+  <h2>帶走八件事</h2>
+  <ul class="take">
+    <li><b>分類不決定抗凝</b>型態決定節律策略。Holter 用在每天有症狀或評估心率，偶發症狀要監測更久。</li>
+    <li><b>三件事分開想</b>抗凝看風險，心率人人評估，節律看症狀、心衰與確診時間。LVEF ≤40% 不用 diltiazem、verapamil；有結構性心臟病不用 IC 類。</li>
+    <li><b>陽性先確認</b>篩檢對象看年齡與共病，手錶 PPG 警示要有 ECG 才算診斷。</li>
+    <li><b>分數和健保分開看</b>健保不看 CHA₂DS₂-VASc。50–64 歲合併 DM、HTN 或 CAD 只有 rivaroxaban 符合。</li>
+    <li><b>電燒看症狀與心衰</b>藥物無效、不想長期吃藥或疑似心搏過速心肌病都可討論。成功電燒後，抗凝仍看風險分數。</li>
+    <li><b>Aspirin 不是退路</b>沒有冠心病就不該拿它防 AF 中風；穩定冠心病加在 OAC 上也有害。</li>
+    <li><b>劑量每次回診重算</b>瘦小不等於減量，滿 80 歲、腎功能變化可能改變劑量。</li>
+    <li><b>出血後要個別化</b>ENRICH-AF 不支持一律重新開始，出血部位是關鍵。</li>
+  </ul>
+  <h3>延伸到其他島</h3>
+  <div class="links">
+    <a href="obesity.html"><span>代謝體重島</span>減重：AF 危險因子管理的一部分（ESC 目標 ≥10%）</a>
+    <a href="ldl-c.html"><span>心腎島</span>LDL-C 未達標與 ASCVD 風險分級</a>
+    <a href="sleep.html#c8"><span>腦與睡眠島</span>睡眠呼吸中止：APHRS 篩檢對象之一</a>
+  </div>
+</div></section>
+
+<footer><div class="col">
+  <h3 style="margin-top:0">資料來源</h3>
+  <ol>
+    <li>Joung B, et al. 2026 APHRS Guidelines Part I. J Arrhythm 2026;42(5):e70495</li>
+    <li>Chao TF, et al. 2026 APHRS Guidelines Part II. J Arrhythm 2026;42(5). doi:10.1002/joa3.70491（僅讀摘錄）</li>
+    <li>Chao TF, et al. 2021 APHRS focused update. J Arrhythm 2021;37:1389–1426</li>
+    <li>Chao TF, et al. APHRS 4S-DDAF. Lancet Reg Health West Pac 2025</li>
+    <li>Van Gelder IC, et al. 2024 ESC/EACTS AF Guidelines. Eur Heart J 2024;45:3314–3414</li>
+    <li>Joglar JA, et al. 2023 ACC/AHA/ACCP/HRS AF Guideline</li>
+    <li>2024 台灣腦中風學會 NOAC 用於心房纖維顫動腦中風預防治療指引更新</li>
+    <li>健保署藥品給付規定第 2 節，2.1.4.2–2.1.4.4、2.1.5（文件最新修訂標註 115/10/1；NVAF 條文最後修訂 111/2/1、112/3/1）</li>
+    <li>Shoamanesh A. ENRICH-AF. ESC Congress 2026；ESC 新聞稿、HCPLive 2026</li>
+    <li>Rizas KD, et al. EPIDAURUS. Nat Med 2026</li>
+    <li>Lemesle G, et al. AQUATIC. NEJM 2025;393:1578–88</li>
+    <li>Cho MS, et al. EPIC-CAD. NEJM 2024;391:2075–86</li>
+    <li>Kim D, et al. ALONE-AF. JAMA 2025;334:1246–54</li>
+    <li>Verma A, et al. OCEAN. NEJM 2026;394:323–32</li>
+    <li>Wachter R, et al. PVI-SHAM-AF. Lancet 2026;408:999–1009</li>
+    <li>Okumura K, et al. ELDERCARE-AF. NEJM 2020;383:1735–45</li>
+    <li>Europace 2023 stroke prevention review, Table 1（DOAC 劑量）</li>
+    <li>ESC CardioPractice review of ESC Congress 2026</li>
+    <li>Steffel J, et al. 2021 EHRA Practical Guide on NOACs, Key Messages</li>
+    <li>台灣仿單：Eliquis 2026-03-27、Xarelto 15 mg 2023-05-24、Lixiana 60 mg 2025-06-10、Pradaxa 150 mg 2023-08-21、Multaq 2025-07-22、Rytmonorm SR 2025-06-17</li>
+    <li>健保署藥品給付規定 2.10.1 Dronedarone（112/12/1）</li>
+    <li>Steinberg JS, et al. 2017 ISHNE/HRS Expert Consensus on Ambulatory ECG. Heart Rhythm 2017</li>
+    <li>ACC Journal Scan. Ambulatory External ECG Monitoring: Focus on AF. 2011</li>
+    <li>ESO 隱源性中風心律監測建議（European Stroke Journal 2023 引述）</li>
+    <li>Kirchhof P, et al. EAST-AFNET 4. NEJM 2020;383:1305–16</li>
+    <li>Van Gelder IC, et al. RACE II. NEJM 2010;362:1363–73；數字取自 ACC 試驗摘要</li>
+    <li>NICE AF 指引摘要（GPnotebook，2021）</li>
+    <li>Atrial Fibrillation Guidelines Compendium（afguidelines.com，非官方）；OpiCalc ESC 2024 摘要（非官方）</li>
+    <li>Lin WS, et al. Propafenone 學名藥試驗. J Chin Med Assoc 2023;86:472</li>
+  </ol>
+  <p>整理：家醫群島 · 115 秋季會。本頁為學習筆記，不能取代仿單與健保署最新公告。</p>
+</div></footer>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+function single(sel,fn){$$(sel+' button').forEach(b=>b.addEventListener('click',()=>{$$(sel+' button').forEach(x=>x.classList.toggle('on',x===b));fn(b);}));}
+
+/* progress */
+const secs=$$('section.ch');
+function onScroll(){const h=document.documentElement;const max=h.scrollHeight-h.clientHeight;$('#progbar').style.width=(max>0?h.scrollTop/max*100:0)+'%';let cur='心腎島';secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s.querySelector('.chno').textContent;});$('#chapnav').textContent=cur;}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* hero ECG */
+(function(){
+  const s=$('#ecg');let seed=7;const r=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+  for(let x=0;x<=900;x+=30)el('line',{x1:x,x2:x,y1:0,y2:130,stroke:'#12333d','stroke-width':1},s);
+  for(let y=10;y<=130;y+=30)el('line',{x1:0,x2:900,y1:y,y2:y,stroke:'#12333d','stroke-width':1},s);
+  const base=88,beats=[];let x=30;while(x<880){beats.push(x);x+=34+r()*96;}
+  const pts=[];
+  for(let i=0;i<=900;i+=2){let y=base+3.2*Math.sin(i*.31)+2.4*Math.sin(i*.53+1)+1.8*Math.sin(i*.87+2)+(r()-.5)*1.6;
+    for(const b of beats){const d=i-b;if(d>=-4&&d<0)y+=d*-1.4*-1;if(d>=0&&d<4)y-=62*(1-d/4)*(d<2?1:.6);if(d>=4&&d<9)y+=11*(1-(d-4)/5);if(d>=22&&d<46)y-=9*Math.sin((d-22)/24*Math.PI);}
+    pts.push(i+','+y.toFixed(1));}
+  el('polyline',{points:pts.join(' '),fill:'none',stroke:'#f0a291','stroke-width':1.5,'stroke-linejoin':'round'},s);
+  el('rect',{class:'scan',x:0,y:0,width:90,height:130,fill:'#f2b134',opacity:.07},s);
+})();
+
+/* CASES */
+const CASES=[
+ {who:'58 歲男性，物流公司主管',items:['高血壓，血壓 132/80','手錶通知「可能為心房顫動」三次','12 導程 ECG：AF，心室速率 96','心臟超音波：LVEF 60%，無瓣膜病'],lab:[['CHA₂DS₂-VASc','1'],['CHA₂DS₂-VA','1'],['HAS-BLED','0']],
+  q:'你和他討論中風預防，最接近哪一個？',opts:[
+   ['asp','先開 aspirin，比較安全'],['none','分數低，不用任何藥物，定期追蹤'],['doac','共同決策，傾向 DOAC，同時控制血壓與其他危險因子']],
+  fb:{asp:['Aspirin 不是選項','抗血小板藥不能取代抗凝血劑，指引把它列為不建議。出血風險仍在，中風預防效果卻不足。'],
+      none:['可以討論，但要說得完整','分數 1 分不是低風險，指引建議應考慮抗凝。如果病人選擇不用藥，要記錄討論內容，並定期重新評估。'],
+      doac:['符合目前指引','ESC 與 ACC/AHA 都是 IIa。開藥時要注意健保：他 58 歲合併高血壓，只有 <b>rivaroxaban</b> 符合 50 歲以上的條件，其他三藥要 65 歲。']}},
+ {who:'78 歲女性，瘦小，獨居',items:['高血壓','體重 52 kg，肌酸酐 1.1 mg/dL','五年前起吃 aspirin 100 mg，沒有冠心病','因頭暈就診，ECG：AF'],lab:[['CHA₂DS₂-VASc','4'],['CrCl','35'],['HAS-BLED','2']],
+  q:'你想開 apixaban。劑量和 aspirin 怎麼處理？',opts:[
+   ['low','Apixaban 2.5 mg bid，保留 aspirin'],['lowstop','Apixaban 2.5 mg bid，停 aspirin'],['std','Apixaban 5 mg bid，停 aspirin']],
+  fb:{low:['兩個地方都要改','她沒有冠心病，aspirin 沒有理由留著。Apixaban 減量要符合三項中的兩項，她只有體重一項。'],
+      lowstop:['Aspirin 停對了，劑量仍偏低','年齡 ≥80、體重 ≤60、肌酸酐 ≥1.5 三項中，她只符合一項，CrCl 35 也不在 15–29 的範圍。依條件應是 5 mg bid。'],
+      std:['正確','她只符合體重一項，所以用標準劑量；aspirin 停掉，HAS-BLED 從 2 降到 1。到第 07 章可以用檢核器驗算。']}},
+ {who:'同一位女性，現在 80 歲',items:['仍服 apixaban 5 mg bid','體重 51 kg，肌酸酐 1.1 mg/dL','血壓在家常常 150 以上','突發頭痛，CT：左側頂葉葉性出血'],lab:[['年齡 ≥80','符合'],['體重 ≤60','符合'],['Cr ≥1.5','不符合']],
+  q:'出院前家屬問：「之後還要吃抗凝血劑嗎？」',opts:[
+   ['same','時間到了就恢復原本的 5 mg bid'],['never','絕對不能再用，也不用再討論'],['sdm','先控制血壓，與神經科共同評估，討論不用藥或低劑量']],
+  fb:{same:['目前證據不支持','ENRICH-AF 在未篩選的腦出血存活者看到大出血加倍。葉性出血的次族群更因安全疑慮停止收案。另外她滿 80 歲時已符合兩項，5 mg 本來就該調整。'],
+      never:['太早下結論','ENRICH-AF 中 edoxaban 確實減少缺血性中風與心肌梗塞，只是被出血抵銷。需要個別討論風險與效益。'],
+      sdm:['最符合現有證據','血壓是最先能處理的事。葉性出血要想到類澱粉血管病變，風險高於深部出血。<br><br>這一幕也有回診教訓：她滿 80 歲那天，apixaban 減量條件就成立了。']}}
+];
+const picks=[null,null,null];
+function showCase(v){
+  $$('#visits button').forEach(b=>b.classList.toggle('on',+b.dataset.v===v));
+  const c=CASES[v];
+  $('#caseCard').innerHTML='<p class="who">'+c.who+'</p><ul>'+c.items.map(i=>'<li>'+i+'</li>').join('')+'</ul><div class="lab">'+c.lab.map(l=>'<div><span>'+l[0]+'</span><b>'+l[1]+'</b></div>').join('')+'</div>';
+  const p=$('#casePane');
+  p.innerHTML='<p class="q">'+c.q+'</p><div class="opt">'+c.opts.map(o=>'<button type="button" class="optc'+(picks[v]===o[0]?' on':'')+'" data-a="'+o[0]+'">'+o[1]+'</button>').join('')+'</div>'+(picks[v]?'<div class="fb"><h5>'+c.fb[picks[v]][0]+'</h5><p>'+c.fb[picks[v]][1]+'</p>'+(v<2?'<div class="btns"><button type="button" class="btn" id="nextCase">下一幕 →</button></div>':'')+'</div>':'');
+  p.querySelectorAll('.optc').forEach(b=>b.addEventListener('click',()=>{picks[v]=b.dataset.a;showCase(v);}));
+  const n=$('#nextCase');if(n)n.addEventListener('click',()=>showCase(v+1));
+}
+$$('#visits button').forEach(b=>b.addEventListener('click',()=>showCase(+b.dataset.v)));
+showCase(0);
+
+/* PPV */
+const TOOLS=[['摸脈（Taggar）',92,82],['AliveCor 單導程（Chan）',75,98],['Zenicor II 手持 ECG（Svennberg）',98,88.2],['Apple Watch＋Kardia Band（Bumgarner）',93,84],['Microlife WatchBP Home A（Chan）',83,99],['Huawei 手錶 PPG（Fan）',95,99],['Samsung Gear Fit 2 PPG（Dörr）',94,98]];
+const pT=$('#ppvTool');TOOLS.forEach((t,i)=>{const o=document.createElement('option');o.value=i;o.textContent=t[0];pT.appendChild(o);});
+function ppv(){
+  const t=TOOLS[+pT.value],p=+$('#ppvPrev').value/100,se=t[1]/100,sp=t[2]/100;
+  $('#ppvPrevV').textContent=(p*100).toFixed(1)+'%';
+  const tp=1000*p*se,fp=1000*(1-p)*(1-sp),v=tp/(tp+fp);
+  const w=(tp+fp)>0?tp/(tp+fp)*100:0;
+  $('#ppvOut').innerHTML='<div class="soft" style="font-size:13px">陽性預測值</div><div class="mono" style="font-size:42px;color:var(--buoy);line-height:1.2">'+(v*100).toFixed(1)+'%</div><div style="display:flex;height:16px;border-radius:2px;overflow:hidden;margin:10px 0"><i style="display:block;width:'+w+'%;background:var(--teal)"></i><i style="display:block;flex:1;background:var(--acc)"></i></div><p class="soft" style="font-size:14px;margin:0">每 1000 人篩檢：<b style="color:var(--ink)">'+tp.toFixed(1)+'</b> 人真陽性，<b style="color:var(--acc-l)">'+fp.toFixed(1)+'</b> 人假陽性。敏感度 '+t[1]+'%、特異度 '+t[2]+'%。</p>';
+}
+pT.addEventListener('change',ppv);$('#ppvPrev').addEventListener('input',ppv);
+$$('#ppvPre button').forEach(b=>b.addEventListener('click',()=>{$('#ppvPrev').value=b.dataset.p;ppv();}));
+ppv();
+
+/* RISK */
+const RA=[['chf','心衰竭（LVEF <40% 或 NYHA ≥II）','1'],['htn','高血壓','1'],['dm','糖尿病','1'],['stroke','中風／TIA／全身栓塞','2'],['cad','冠狀動脈疾病（含 MI）','1'],['pad','PAD 或主動脈斑塊','1']];
+const RB=[['valve','機械瓣或中重度二尖瓣狹窄',''],['hcm','肥厚性心肌病或心臟類澱粉沉積','']];
+const R={age:58,sex:'M',chf:false,htn:true,dm:false,stroke:false,cad:false,pad:false,valve:false,hcm:false};
+function score(s){const v=(s.cad||s.pad)?1:0;const a=s.age>=75?2:s.age>=65?1:0;const va=(s.chf?1:0)+(s.htn?1:0)+(s.dm?1:0)+(s.stroke?2:0)+v+a;return{va,vasc:va+(s.sex==='F'?1:0)};}
+function nhi(s){const b=s.stroke||s.chf||s.age>=75,c=s.dm||s.htn||s.cad;if(s.valve||s.age<18)return{r:false,o:false};return{r:b||(s.age>=50&&s.age<75&&c),o:b||(s.age>=65&&s.age<75&&c)};}
+function mk(host,list){list.forEach(([k,l,p])=>{const lab=document.createElement('label');lab.className='check';lab.innerHTML='<input type="checkbox" id="r_'+k+'"><span>'+l+'</span>'+(p?'<span class="pt">+'+p+'</span>':'');host.appendChild(lab);const i=lab.querySelector('input');i.addEventListener('change',()=>{R[k]=i.checked;renderR();});});}
+mk($('#rA'),RA);mk($('#rB'),RB);
+function pill(t,c){return '<span class="pill '+c+'">'+t+'</span>';}
+function renderR(){
+  const raw=$('#rAge').value,n=parseFloat(raw);
+  if(raw===''||isNaN(n)||n<18||n>110){$('#rErr').textContent='請輸入 18–110 歲';return;}
+  $('#rErr').textContent='';R.age=n;
+  [...RA,...RB].forEach(([k])=>{const i=$('#r_'+k);i.checked=!!R[k];i.parentElement.classList.toggle('on',!!R[k]);});
+  $$('#rSex button').forEach(b=>b.classList.toggle('on',b.dataset.s===R.sex));
+  const {va,vasc}=score(R),f=R.sex==='F',hi=f?vasc>=3:vasc>=2,mid=f?vasc===2:vasc===1;
+  let h='<div class="score"><div><span>CHA₂DS₂-VASc</span><b>'+vasc+'</b></div><div><span>CHA₂DS₂-VA</span><b>'+va+'</b></div></div>';
+  if(R.valve){h+='<div class="callout acc" style="margin:0 0 10px"><h4>這些分數不適用</h4><p class="soft">機械瓣或中重度二尖瓣狹窄用 warfarin，不用 DOAC。</p></div>';}
+  else{
+    const esc=R.hcm?pill('不看分數，建議抗凝','y'):va>=2?pill('I 建議','y'):va===1?pill('IIa 應考慮','m'):pill('不建議','n');
+    const us=hi?pill('I 建議','y'):mid?pill('IIa 合理','m'):pill('不建議','n');
+    const tw=hi?pill('I, A','y'):mid?pill('IIa, B-NR','m'):pill('不建議','n');
+    const ap=hi?pill('建議','y'):mid?pill('應考慮','m'):pill('不提供抗栓','n');
+    h+='<div class="vl"><span>ESC 2024</span>'+esc+'</div><div class="vl"><span>ACC/AHA 2023</span>'+us+'</div><div class="vl"><span>台灣腦中風學會 2024</span>'+tw+'</div><div class="vl"><span>APHRS 2021（2026 待核對）</span>'+ap+'</div>';
+    if(mid)h+='<small class="note" style="margin-top:4px">APHRS 2021 對單一危險因子另列年齡參考：心衰 35、高血壓或糖尿病 50、血管疾病 55 歲。</small>';
+  }
+  const m=nhi(R);
+  h+='<div class="soft mono" style="font-size:12px;margin:12px 0 4px">健保 NVAF 條件</div><div class="vl"><span>Rivaroxaban</span>'+(m.r?pill('符合','y'):pill('不符合','x'))+'</div><div class="vl"><span>Apixaban、edoxaban、dabigatran</span>'+(m.o?pill('符合','y'):pill('不符合','x'))+'</div>';
+  $('#rOut').innerHTML=h;
+}
+$('#rAge').addEventListener('input',renderR);
+single('#rSex',b=>{R.sex=b.dataset.s;renderR();});
+function load(o){Object.assign(R,{chf:false,htn:false,dm:false,stroke:false,cad:false,pad:false,valve:false,hcm:false},o);$('#rAge').value=R.age;renderR();}
+$('#rCase1').addEventListener('click',()=>load({age:58,sex:'M',htn:true}));
+$('#rCase2').addEventListener('click',()=>load({age:78,sex:'F',htn:true}));
+renderR();
+
+/* GAP GRID */
+const ROWS=[['無其他因子',{}],['高血壓',{htn:true}],['糖尿病',{dm:true}],['冠狀動脈疾病',{cad:true}],['PAD／主動脈斑塊',{pad:true}]];
+const COLS=[['&lt;50 歲',45],['50–64 歲',58],['65–74 歲',70],['≥75 歲',78]];
+let gapSex='M';
+function renderGap(){
+  const t=$('#gapGrid');t.innerHTML='<tr><th></th>'+COLS.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>';
+  ROWS.forEach(([n,o])=>{const tr=document.createElement('tr');tr.innerHTML='<th>'+n+'</th>';
+    COLS.forEach(([,age])=>{const s=Object.assign({chf:false,htn:false,dm:false,stroke:false,cad:false,pad:false,valve:false,hcm:false},o,{age,sex:gapSex});
+      const m=nhi(s),{va}=score(s),c=m.o?'c-all':m.r?'c-riva':'c-none',lbl=m.o?'四藥':m.r?'僅 rivaroxaban':'不符合';
+      const td=document.createElement('td');td.innerHTML='<button type="button" class="'+c+'"><b>VA '+va+'</b>'+lbl+'</button>';
+      td.querySelector('button').addEventListener('click',()=>{load(Object.assign({age,sex:gapSex},o));$('#c3 h2').scrollIntoView({behavior:'smooth'});});
+      tr.appendChild(td);});t.appendChild(tr);});
+}
+single('#gapSex',b=>{gapSex=b.dataset.s;renderGap();});renderGap();
+
+/* HAS-BLED */
+const HB=[['h','收縮壓 >160 未控制',1,'把血壓控制下來'],['r','腎功能異常',1,'監測 CrCl，調整劑量'],['l','肝功能異常',1,'評估肝病與凝血功能'],['s','中風病史',0,''],['b','出血病史或出血傾向',1,'找出血來源，評估貧血'],['i','INR 不穩定',1,'warfarin 改 DOAC'],['e','年齡 >65',0,''],['d','併用抗血小板藥或 NSAID',1,'檢討 aspirin 與 NSAID 的必要性'],['a','飲酒過量',1,'減少飲酒']];
+const hb={h:false,r:false,l:false,s:false,b:false,i:false,e:true,d:true,a:false};
+HB.forEach(([k,l])=>{const lab=document.createElement('label');lab.className='check';lab.innerHTML='<input type="checkbox" id="hb_'+k+'"'+(hb[k]?' checked':'')+'><span>'+l+'</span><span class="pt">+1</span>';lab.classList.toggle('on',hb[k]);$('#hbList').appendChild(lab);lab.querySelector('input').addEventListener('change',e=>{hb[k]=e.target.checked;lab.classList.toggle('on',hb[k]);renderHB();});});
+function renderHB(){
+  const n=HB.filter(x=>hb[x[0]]).length,act=HB.filter(x=>hb[x[0]]&&x[2]);
+  $('#hbOut').innerHTML='<div class="score" style="grid-template-columns:1fr"><div><span>HAS-BLED</span><b>'+n+'</b></div></div><p style="font-size:14.5px">'+(n>=3?'高出血風險：提早並增加回診頻率。':'未達 3 分：仍要處理可改變的項目。')+'</p>'+(act.length?'<div class="soft mono" style="font-size:12px">可以處理</div><ul style="font-size:14px">'+act.map(a=>'<li>'+a[3]+'</li>').join('')+'</ul>':'<p class="soft" style="font-size:14px">目前沒有勾到可處理的項目。</p>');
+}
+renderHB();
+
+/* DOSE */
+function doseCalc(i){
+  const cr=(140-i.age)*i.wt/(72*i.cr)*(i.sex==='F'?.85:1);
+  const ct=(i.wt<=60?1:0)+(i.age>=80?1:0)+(i.cr>=1.5?1:0),out={};
+  if(cr<15)out.apix=['不建議','stop','CrCl <15 或透析不建議；健保排除'];
+  else if(ct>=2)out.apix=['2.5 mg bid','','符合 '+ct+' 項減量條件'];
+  else if(cr<30)out.apix=['2.5 mg bid','','CrCl 15–29'];
+  else out.apix=['5 mg bid','','減量條件只有 '+ct+' 項，需 2 項'];
+  if(cr<15)out.riva=['禁用','stop','CrCl <15；健保排除'];
+  else if(cr<30)out.riva=['15 mg qd','','台灣仿單 10–15 mg，需小心；隨餐'];
+  else if(cr<=50)out.riva=['15 mg qd','','台灣仿單 10–15 mg；隨餐'];
+  else out.riva=['20 mg qd','','台灣仿單 15–20 mg；隨餐'];
+  const why=[];if(i.wt<=60)why.push('體重 ≤60');if(cr>=15&&cr<=50)why.push('CrCl 15–50');if(i.pgp)why.push('併用藥物');
+  if(cr<15)out.edox=['不建議','stop','CrCl <15：健保排除，末期腎病不建議'];
+  else if(cr>95)out.edox=['無建議劑量','stop','CrCl >95：仿單未提供，健保排除'];
+  else if(why.length)out.edox=['30 mg qd','','符合 '+why.join('、')];
+  else out.edox=['60 mg qd','','無減量條件'];
+  const w2=[];if(cr>=30&&cr<=50)w2.push('CrCl 30–50');if(i.wt<50)w2.push('體重 <50');if(i.gi)w2.push('出血風險');
+  if(cr<30)out.dabi=['禁用','stop','CrCl <30；健保排除'];
+  else if(i.age>80)out.dabi=['110 mg bid','','>80 歲'];
+  else if(w2.length||i.age>=75)out.dabi=['考慮 110 mg bid','',(i.age>=75?['≥75 歲'].concat(w2):w2).join('、')+'；依血栓與出血風險選'];
+  else out.dabi=['150 mg bid','','或依風險用 110 mg bid'];
+  if(i.ver&&cr>=30)out.dabi[2]+='；併用 verapamil：EHRA 建議 110 mg，台灣仿單 AF 不需調整';
+  const fu=(i.age>=75)?Math.min(4,cr<=60?Math.max(1,Math.round(cr/10)):4):(cr<=60?Math.max(1,Math.round(cr/10)):12);
+  return{cr,ct,out,fu};
+}
+window.__doseCalc=doseCalc;window.__riskFns={score,nhi};window.__x={};
+function renderD(){
+  const i={age:+$('#dAge').value,wt:+$('#dWt').value,cr:+$('#dCr').value,sex:$('#dSex').value,pgp:$('#dPgp').checked,ver:$('#dVer').checked,gi:$('#dGI').checked};
+  if(!(i.age>=18&&i.age<=110&&i.wt>=25&&i.wt<=200&&i.cr>=.3&&i.cr<=12)){$('#dErr').textContent='請確認年齡、體重與肌酸酐在合理範圍';return;}
+  $('#dErr').textContent='';const r=doseCalc(i);
+  $('#dCl').textContent=r.cr.toFixed(0);$('#dCt').textContent=r.ct+' / 3';$('#dFu').textContent='腎功能建議約每 '+r.fu+' 個月追蹤一次（EHRA）';
+  const N={apix:'Apixaban',riva:'Rivaroxaban',edox:'Edoxaban',dabi:'Dabigatran'};
+  $('#dOut').innerHTML=Object.keys(N).map(k=>'<div class="dcard"><b>'+N[k]+'</b><span class="d'+(r.out[k][1]?' stop':'')+'">'+r.out[k][0]+'</span><small>'+r.out[k][2]+'</small></div>').join('');
+}
+['dAge','dWt','dCr','dSex','dPgp','dVer','dGI'].forEach(id=>{$('#'+id).addEventListener('input',renderD);$('#'+id).addEventListener('change',renderD);});
+function setD(a,w,c,s){$('#dAge').value=a;$('#dWt').value=w;$('#dCr').value=c;$('#dSex').value=s;renderD();}
+$('#d80').addEventListener('click',()=>setD(80,51,1.1,'F'));
+$('#dMan').addEventListener('click',()=>setD(72,65,2.0,'M'));
+renderD();
+
+/* CAD timeline */
+const STEPS=[['PCI 住院期間','Aspirin＋clopidogrel＋DOAC','Aspirin 只留在圍術期，通常最多約一週。'],['出院到 12 個月','DOAC＋clopidogrel','ACS 約到 12 個月，慢性冠心症的 PCI 約 6 個月。EPIDAURUS 不支持換成 prasugrel 或 ticagrelor。'],['12 個月之後','DOAC 單用','AQUATIC、EPIC-CAD 都支持停掉抗血小板藥。例外要有明確理由，由心臟科決定。']];
+let cs=2;function renderS(){const h=$('#cadSteps');h.innerHTML='';STEPS.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.className='step'+(i===cs?' on':'');b.innerHTML='<b>'+s[0]+'</b><span><span style="font-weight:500">'+s[1]+'</span>'+(i===cs?'<br><span class="soft">'+s[2]+'</span>':'')+'</span>';b.addEventListener('click',()=>{cs=i;renderS();});h.appendChild(b);});}
+renderS();
+
+/* bars */
+function bars(id,rows,a,b,unit,max){$(id).innerHTML=rows.map(r=>{const m=max||Math.max(...rows.flatMap(x=>[x[1],x[2]]));return '<div class="barrow"><div class="bl">'+r[0]+'</div><div class="bart"><span>'+a+'</span><div class="tr"><i style="width:'+r[1]/m*100+'%;background:var(--acc)"></i></div><span>'+r[1]+unit+'</span></div><div class="bart"><span>'+b+'</span><div class="tr"><i style="width:'+r[2]/m*100+'%;background:var(--teal)"></i></div><span>'+r[2]+unit+'</span></div></div>';}).join('');}
+const EN=[{r:[['中風或全身栓塞（HR 0.88，0.61–1.26，p=0.48）',11.8,12.8],['ISTH 大出血（HR 2.23，1.39–3.59，p<0.001）',11.6,5.2]],u:'%',c:'<span class="figno">圖 13</span><b>ENRICH-AF 全體結果。</b>平均追蹤 28 個月。'},
+ {r:[['葉性或 convexity 出血：再次顱內出血',7.5,3.5],['非葉性出血：再次顱內出血',2.5,1.2]],u:'%/年',c:'<span class="figno">圖 13</span><b>再次顱內出血年化率，依原出血部位。</b>主持人於 ESC 2026 報告，HCPLive 整理。兩組倍數相近，但葉性組的絕對風險高得多。'}];
+function renderEn(k){bars('#enBars',EN[k].r,'Edoxaban','未抗凝',EN[k].u);$('#enCap').innerHTML=EN[k].c;}
+single('#enBtn',b=>renderEn(+b.dataset.k));renderEn(0);
+/* AF types */
+const AFT=[
+ ['首次診斷',[[120,40]],'第一次被記錄到。後面的型態要追蹤才知道，這時先評估中風風險與誘因。'],
+ ['陣發性',[[60,28],[210,16],[350,36],[560,22],[720,30]],'7 天內自行或經介入終止。會反覆，發作之間是竇性節律。'],
+ ['持續性',[[60,20],[210,430]],'不會自行停止，要藥物或電擊才回竇律。'],
+ ['長期持續性',[[40,780]],'連續 ≥12 個月，但醫病仍想恢復竇律，例如考慮電燒。'],
+ ['永久性',[[20,820]],'這是一個決定，不是時間長度：雙方同意不再嘗試節律控制，只做心率控制與抗凝。']
+];
+function renderType(k){
+  const s=$('#afStrip');s.innerHTML='';
+  el('rect',{x:20,y:26,width:820,height:30,rx:3,fill:'#2f6672'},s);
+  AFT[k][1].forEach(([x,w])=>el('rect',{x,y:26,width:w,height:30,rx:2,fill:'#d0715e'},s));
+  el('text',{x:20,y:16,fill:'#9fb9b8','font-size':13},s,'時間 →');
+  el('text',{x:840,y:78,'text-anchor':'end',fill:'#9fb9b8','font-size':13},s,AFT[k][0]);
+  $('#afTypeOut').textContent=AFT[k][2];
+}
+$('#afType').innerHTML=AFT.map((t,i)=>'<button type="button" class="chip'+(i===1?' on':'')+'" data-k="'+i+'">'+t[0]+'</button>').join('');
+single('#afType',b=>renderType(+b.dataset.k));renderType(1);
+
+/* Holter scenarios */
+const HO=[
+ ['每天都有心悸，ECG 正常','24–48 小時 Holter','y','症狀常出現時，Holter 最容易抓到症狀當下的節律。','ISHNE/HRS 2017'],
+ ['每週或每月才心悸一次','7–14 天貼片或事件記錄器','m','24 小時容易錯過。ISHNE/HRS 認為約兩週的監測在偵測率與成本間最平衡。','ISHNE/HRS 2017'],
+ ['新診斷 AF，要看負荷與平均心率','24 小時 Holter','y','ESC 把動態心電圖列入診斷時的基本評估，也能看出夜間心率與停頓。','ESC 2024'],
+ ['吃心率控制藥，症狀還在','24 小時 Holter','y','確認心率是否真的控制住。若擔心控制不足或過慢，ESC 建議重複檢查。','ESC 2024'],
+ ['吃藥後頭暈、昏厥或心跳很慢','24 小時 Holter，依頻率延長','y','找心跳過慢與 AF 終止時的停頓。昏厥要同時評估急性風險，必要時轉介，不要只等 Holter。','ACC 2011'],
+ ['分不清是陣發性或持續性','24 小時以上 Holter','m','連續紀錄有助於區分，尤其病人沒有症狀時。','ACC 2011'],
+ ['缺血性中風或 TIA，原因不明','住院監測後，延長到數週或植入式記錄器','m','Holter 偵測率只有 1–5%。ESO 建議 >48 小時，可再延長；常用 21–30 天外部監測或 ILR。','ESO、ISHNE/HRS'],
+ ['電燒後有殘餘症狀','Holter 或延長監測','y','找症狀原因，也可發現無症狀 AF。','ACC 2011'],
+ ['想看抗心律不整藥有沒有效','通常不必靠 Holter','n','節律控制的目標是改善症狀，不是完全消除 AF，所以價值有限；有新症狀或要查藥物副作用時再做。','ACC 2011'],
+ ['無症狀，想用 Holter 當健檢','不建議單次短時間篩檢','n','單一時間點篩檢的效益有限。符合目標族群時，摸脈或單導程 ECG 是較實際的第一步。','APHRS 2026'],
+ ['HCM，左心房 ≥45 mm','48 小時，每 6–12 個月','m','即使沒有症狀也要找 AF。這類病人一有 AF 就要抗凝。','ESC HCM，引自 ISHNE/HRS']
+];
+function renderHo(k){
+  const o=HO[k],c={y:['建議','y'],m:['視情況','m'],n:['不優先','n']}[o[2]];
+  $$('#hoScn button').forEach((b,i)=>b.classList.toggle('on',i===k));
+  $('#hoOut').innerHTML='<div class="soft mono" style="font-size:12px">工具</div><p style="font-family:var(--display);font-size:23px;line-height:1.3;margin:2px 0 8px">'+o[1]+'</p>'+pill(c[0],c[1])+'<p style="font-size:14.5px;margin:10px 0 6px">'+o[3]+'</p><small class="note">來源：'+o[4]+'</small>';
+}
+$('#hoScn').innerHTML=HO.map(o=>'<button type="button">'+o[0]+'</button>').join('');
+$$('#hoScn button').forEach((b,i)=>b.addEventListener('click',()=>renderHo(i)));renderHo(0);
+
+const YD=[[['24–48 小時 Holter',10,15],['3–7 天貼片',50,70],['1–4 週',70,85],['ILR ≤36 個月',80,90]],[['24–48 小時 Holter',1,5],['3–7 天貼片',5,10],['1–4 週',10,15],['ILR ≤36 個月',15,20]]];
+function renderY(k){
+  const s=$('#yieldChart');s.innerHTML='';const x0=170,w=540,sc=v=>x0+v/100*w;
+  [0,25,50,75,100].forEach(t=>{el('line',{x1:sc(t),x2:sc(t),y1:14,y2:178,stroke:'#1a4350'},s);el('text',{x:sc(t),y:198,'text-anchor':'middle'},s,t+'%');});
+  YD[k].forEach((d,i)=>{const y=24+i*38;el('text',{x:x0-12,y:y+15,'text-anchor':'end',style:'fill:#e8efe9;font-size:13.5px'},s,d[0]);
+    el('rect',{x:sc(d[1]),y,width:Math.max(6,sc(d[2])-sc(d[1])),height:22,rx:3,fill:i===0?'#d0715e':'#5fa8a0'},s);
+    el('text',{x:sc(d[2])+8,y:y+16,style:'fill:#e8efe9;font-size:12.5px;font-family:IBM Plex Mono,monospace'},s,d[1]+'–'+d[2]+'%');});
+}
+single('#yieldBtn',b=>renderY(+b.dataset.k));renderY(0);
+
+/* generic option group */
+function optGroup(host,key,label,opts,state,cb){
+  const d=document.createElement('div');d.innerHTML='<div class="ol">'+label+'</div><div class="btns">'+opts.map(o=>'<button type="button" class="chip'+(state[key]===o[0]?' on':'')+'" data-v="'+o[0]+'">'+o[1]+'</button>').join('')+'</div>';
+  host.appendChild(d);
+  d.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state[key]=b.dataset.v;d.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));cb();}));
+}
+
+/* Plan */
+const P={stable:'y',dur:'long',oac:'n',risk:'1',sym:'few',ef:'high',early:'y',perm:'n'};
+function plan(p){
+  const o={oac:[],rate:[],rhy:[]};
+  if(p.stable==='n')o.rhy.push(['<b>立即電擊整流</b>（I）。不用等 3 週抗凝。','']);
+  if(p.risk==='2')o.oac.push(['<b>建議長期抗凝</b>（CHA₂DS₂-VA ≥2，I）','']);
+  else if(p.risk==='1')o.oac.push(['<b>應考慮長期抗凝</b>（1 分，IIa），共同決策','']);
+  else o.oac.push(['<b>不需長期抗凝</b>（0 分），定期重算','']);
+  o.oac.push(['抗凝和 AF 型態、症狀、是否恢復竇律無關。','soft']);
+  o.rate.push([p.ef==='low'?'<b>β 阻斷劑或 digoxin</b>；不用 diltiazem、verapamil':'<b>β 阻斷劑、diltiazem、verapamil 或 digoxin</b>','']);
+  o.rate.push(['初始目標：靜止心率 <110；症狀持續或疑似心搏過速心肌病時更嚴格。','soft']);
+  if(p.stable==='n')o.rate.push(['不穩定或嚴重心衰：amiodarone、landiolol 或 digoxin。','soft']);
+  if(p.stable==='y'&&p.dur!=='short'&&p.oac==='n')o.rate.push(['抗凝未就緒：amiodarone 可能轉律，只留給重症且其他藥不能用時，並盡快開始抗凝。','soft']);
+  if(p.perm==='y'){if(p.stable==='y')o.rhy.push(['<b>不做節律控制</b>：永久性 AF 只做心率控制與抗凝','']);}
+  else if(p.stable==='y'){
+    if(p.dur!=='long')o.rhy.push(['穩定且 48 小時內發作，可先<b>等待自行轉回</b>（IIa, B），或依症狀處理。','']);
+    if(p.ef==='low')o.rhy.push(['<b>討論節律控制與電燒</b>：特定 HFrEF 是電燒的 Class I 族群（轉述），懷疑心搏過速心肌病時尤其要轉介。','']);
+    else if(p.sym==='many')o.rhy.push(['<b>建議嘗試節律控制</b>：症狀是最主要的理由。陣發性 AF 可討論第一線電燒（I, A）。','']);
+    if(p.early==='y'&&p.risk==='2')o.rhy.push(['<b>確診 12 個月內且有血栓風險</b>：應考慮早期節律控制（IIa, B），即使症狀不多。','']);
+    else if(p.early==='y'&&p.risk!=='2')o.rhy.push(['確診 12 個月內，但 EAST 收的是風險較高者，這位病人要個別討論。','soft']);
+    if(!o.rhy.some(x=>x[0].includes('<b>')))o.rhy.push(['<b>可以只做心率控制</b>，症狀或 LVEF 改變時再評估。','']);
+    if(p.dur!=='short'&&p.oac==='n')o.rhy.push(['AF >24 小時或時間不明，還沒抗凝：<b>現在不要整流</b>。先抗凝 ≥3 週或做 TEE（不做為 III, C）。','warn']);
+    if(p.dur!=='short'&&p.oac==='y')o.rhy.push(['已有效抗凝 ≥3 週，可安排整流，整流後至少再 4 週。','soft']);
+  }
+  return o;
+}
+window.__x.plan=plan;
+function renderPlan(){
+  const o=plan(P),f=l=>l.map(([t,c])=>'<p class="'+(c==='soft'?'soft':'')+'"'+(c==='warn'?' style="color:var(--acc-l)"':'')+'>'+t+'</p>').join('');
+  $('#plOut').innerHTML='<div class="lane" style="--c:#f2b134"><h5>抗凝</h5>'+f(o.oac)+'</div><div class="lane" style="--c:#5fa8a0"><h5>心率</h5>'+f(o.rate)+'</div><div class="lane" style="--c:#d0715e"><h5>節律</h5>'+f(o.rhy)+'</div>';
+}
+[['stable','血行動力',[['y','穩定'],['n','不穩定']]],['dur','這次 AF 持續',[['short','<24 小時'],['mid','24–48 小時'],['long','更久或不明']]],['oac','已有效抗凝 ≥3 週',[['n','否'],['y','是']]],['risk','CHA₂DS₂-VA',[['0','0'],['1','1'],['2','≥2']]],['sym','症狀',[['few','少或沒有'],['many','明顯']]],['ef','LVEF',[['high','>40%'],['low','≤40%']]],['early','確診 12 個月內',[['y','是'],['n','否']]],['perm','已決定不再恢復竇律',[['n','否'],['y','是']]]].forEach(([k,l,o])=>optGroup($('#plIn'),k,l,o,P,renderPlan));
+renderPlan();
+
+/* Rate control */
+const RC={set:'long',ef:'high',lung:'n',low:'n',ckd:'n',pre:'n',sed:'n'};
+function rateRx(r){
+  if(r.pre==='y')return[['no','所有房室結阻斷藥','β 阻斷劑、diltiazem、verapamil、digoxin、amiodarone 都不用於預激合併 AF','禁用'],['care','緊急處理','不穩定時電擊，穩定時也要立即找心臟科。','轉介']];
+  const L=[];
+  if(r.set==='acute'&&r.ef==='low'){L.push(['good','β 阻斷劑','Metoprolol IV 2.5–5 mg。急性心衰竭惡化時不用','優先']);L.push(['care','Amiodarone、landiolol 或 digoxin','不穩定或 LVEF 嚴重下降時使用。Amiodarone 可能轉律，抗凝未就緒時要盡快開始抗凝','備選']);}
+  else if(r.set==='acute'){L.push(['good','β 阻斷劑','Metoprolol IV 2.5–5 mg，或依共病選擇','優先']);L.push(['good','Diltiazem 或 verapamil','優先於 digoxin。diltiazem 0.25 mg/kg，verapamil 2.5–10 mg','優先']);L.push(['care','Digoxin','反應較慢，常作合併使用','備選']);}
+  else{
+    if(r.ef==='low'){L.push(['good','β 阻斷劑','Bisoprolol、metoprolol succinate 或 carvedilol，同時是 HFrEF 治療','優先']);L.push(['care','Digoxin','單藥不夠時加上，依腎功能調整','加上']);}
+    else{L.push(['good','β 阻斷劑','Bisoprolol 或 metoprolol','優先']);L.push(['good','Diltiazem 或 verapamil','','優先']);L.push(['care','Digoxin',r.sed==='y'?'活動量少時可作單藥':'合併使用；NICE 建議單藥只用於活動量少或其他藥不適合者',r.sed==='y'?'可單藥':'備選']);}
+  }
+  if(r.ef==='low')L.push(['no','Diltiazem、verapamil','LVEF ≤40% 不用','避免']);
+  if(r.lung==='y'){L.forEach(x=>{if(/β 阻斷劑/.test(x[1])){x[0]='care';x[2]+='。氣喘避免非選擇性藥物，選心臟選擇性並留意';x[3]='小心';}});if(r.ef==='high')L.sort((a,b)=>(a[1].startsWith('Diltiazem')?-1:0)-(b[1].startsWith('Diltiazem')?-1:0));}
+  if(r.low==='y')L.forEach(x=>{if(/β 阻斷劑|Diltiazem/.test(x[1])&&x[0]!=='no'){x[2]+='。血壓低時要小劑量開始';x[0]='care';x[3]='小心';}});
+  if(r.ckd==='y')L.forEach(x=>{if(x[1]==='Digoxin'){x[2]+='。CKD 要減量並監測濃度';x[0]='care';}});
+  if(r.set==='long')L.push(['no','Dronedarone','不用於永久性 AF 的心率控制','避免']);
+  return L;
+}
+window.__x.rateRx=rateRx;
+function rx(host,L){$(host).innerHTML=L.map(x=>'<div class="rxi '+x[0]+'">'+pill(x[3],x[0]==='good'?'y':x[0]==='care'?'m':'x')+'<b>'+x[1]+'</b><small>'+x[2]+'</small></div>').join('');}
+function renderRc(){rx('#rcOut',rateRx(RC));}
+[['set','情境',[['long','門診長期'],['acute','急性']]],['ef','LVEF',[['high','>40%'],['low','≤40%']]],['lung','氣喘或嚴重 COPD',[['n','否'],['y','是']]],['low','血壓偏低',[['n','否'],['y','是']]],['ckd','CKD',[['n','否'],['y','是']]],['sed','活動量很少',[['n','否'],['y','是']]],['pre','預激症候群',[['n','否'],['y','是']]]].forEach(([k,l,o])=>optGroup($('#rcIn'),k,l,o,RC,renderRc));
+renderRc();
+
+/* AAD */
+const AA={sh:'none',cond:'n',perm:'n',qt:'n',bru:'n'};
+function aadRx(a){
+  if(a.perm==='y')return[['no','所有抗心律不整藥','永久性 AF 不做節律控制；dronedarone 明確禁用','不用']];
+  const L=[];
+  if(a.cond==='y'&&a.bru!=='y')L.push(['no','未裝節律器不開抗心律不整藥','進階傳導疾病，ESC III, C','先處理']);
+  const ic=['Propafenone、flecainide'];
+  if(a.sh==='none'&&a.cond==='n'&&a.bru==='n')L.push(['good',ic[0],'無結構性心臟病時的選項，併用房室結阻斷藥（I；併用 IIa）','優先']);
+  else L.push(['no',ic[0],a.bru==='y'?'Brugada 禁用':a.cond==='y'?'傳導異常禁用':a.sh==='hfref'||a.sh==='hf'?'心衰竭不用':a.sh==='lvh'?'嚴重 LVH 不用':'冠心病不用，CAST 顯示死亡增加','避免']);
+  if(a.sh==='hfref')L.push(['no','Dronedarone','HFrEF 或 NYHA IV、近期代償失調禁用','避免']);
+  else if(a.sh==='hf')L.push(['care','Dronedarone','ESC 可用於 HFmrEF、HFpEF；但健保有心衰竭診斷史不給付','健保不符']);
+  else if(a.cond==='n'&&a.qt==='n')L.push(['good','Dronedarone','LVEF >40% 含冠心病可用（I）。健保 ≥65 歲才有條件','可用']);
+  else L.push(['no','Dronedarone','QTc ≥500、心跳過慢或傳導異常禁用','避免']);
+  if(a.sh==='cad')L.push(['care','Sotalol','正常 LV 的缺血性心臟病可考慮（IIb）。要看 QT、腎功能、鉀、鎂；台灣供應待查',a.qt==='y'?'避免':'可考慮']);
+  if(a.qt==='y'&&a.sh==='cad')L[L.length-1][0]='no';
+  if(a.cond==='y')L.push(['no','Amiodarone','也會抑制竇房結與房室傳導，先處理傳導問題','避免']);
+  else L.push([a.sh==='hfref'||a.sh==='hf'?'good':'care','Amiodarone',(a.sh==='hfref'||a.sh==='hf'?'心衰竭合併 AF 的主要藥物（I），長期監測器官毒性':'效果最好但毒性多，留到其他藥不適合時')+(a.qt==='y'?'。QTc 延長要小心':''),a.sh==='hfref'||a.sh==='hf'?'優先':'最後']);
+  if(a.sh==='hfref')L.push(['good','電燒','特定 HFrEF 症狀性 AF 或疑似心搏過速心肌病：Class I（轉述）','轉介']);
+  else L.push(['care','電燒','藥物失敗或不想吃藥時討論；陣發性 AF 可第一線（I, A）','討論']);
+  return L;
+}
+window.__x.aadRx=aadRx;
+function renderAa(){rx('#aaOut',aadRx(AA));}
+[['sh','心臟結構',[['none','無明顯異常'],['cad','冠心病'],['lvh','嚴重 LVH'],['hf','HFmrEF／HFpEF'],['hfref','HFrEF']]],['cond','進階傳導異常或病竇症候群，無節律器',[['n','否'],['y','是']]],['qt','QTc 延長',[['n','否'],['y','是']]],['bru','Brugada',[['n','否'],['y','是']]],['perm','永久性 AF',[['n','否'],['y','是']]]].forEach(([k,l,o])=>optGroup($('#aaIn'),k,l,o,AA,renderAa));
+renderAa();
+
+/* ablation */
+const AB=[
+ ['症狀性 AF，抗心律不整藥無效或不耐受','建議電燒','y','陣發性與持續性都適用。ACC/AHA 也包含藥物禁忌或病人不想用藥。','ESC I, A；ACC/AHA Class 1'],
+ ['症狀性陣發性 AF，還沒用過節律藥','可作第一線','y','與藥物一起放進共同決策。ACC/AHA 特別點名年輕、共病少者，也可能減少進展成持續性。','ESC I, A；ACC/AHA Class 1（年輕、共病少）、2a（其他病人）'],
+ ['症狀性持續性 AF，還沒用過節律藥','可討論','m','部分病人可作第一線，但復發率較高。要評估左心房大小、AF 持續時間、肥胖與 OSA。','ESC IIb, C（待核對）；ACC/AHA 2a'],
+ ['LVEF 下降，高度懷疑心搏過速心肌病','建議轉介','y','恢復竇律後 LVEF 可能回升，這類病人不要只控制心率。','ESC Class I（轉述）'],
+ ['HFrEF 合併 AF','特定病人建議','y','目標是減少心衰住院並改善存活，要選擇適合的病人，不一定要先試過藥物。','ACC/AHA Class 1；ESC 應考慮，IIa（待核對）'],
+ ['AF 相關心搏過緩或 AF 終止時停頓','應考慮','m','快慢症候群可能先電燒，避免馬上裝節律器。先停掉會加重心搏過緩的藥。','ESC IIa, C'],
+ ['電燒後症狀性復發','可考慮再做','m','前次電燒後症狀有改善者較適合。','ESC IIa, B'],
+ ['無症狀，LVEF 正常','不優先','n','目前適應症的核心是症狀與心衰，先做好抗凝與危險因子。','主要指引適應症整理'],
+ ['不能接受抗凝，或左心房有血栓','暫不適合','x','電燒前後都需要抗凝。血栓要先處理。','ESC 圍術期原則']
+];
+function renderAb(k){const o=AB[k],c={y:'y',m:'m',n:'n',x:'x'}[o[2]];
+  $$('#abScn button').forEach((b,i)=>b.classList.toggle('on',i===k));
+  $('#abOut').innerHTML='<div class="soft mono" style="font-size:12px">建議</div><p style="font-family:var(--display);font-size:23px;line-height:1.3;margin:2px 0 8px">'+o[1]+'</p>'+pill(o[4],c)+'<p style="font-size:14.5px;margin:10px 0 0">'+o[3]+'</p>';}
+$('#abScn').innerHTML=AB.map(o=>'<button type="button">'+o[0]+'</button>').join('');
+$$('#abScn button').forEach((b,i)=>b.addEventListener('click',()=>renderAb(i)));renderAb(0);
+
+/* cascade */
+(function(){
+  const s=$('#casc'),N={xii:[50,40,'XII'],xi:[150,40,'XI'],ix:[250,40,'IX'],vii:[50,150,'TF＋VII'],x:[350,95,'X'],ii:[350,190,'凝血酶原 II'],fib:[350,285,'纖維蛋白']},box={};
+  const L=(a,b,c,d)=>el('line',{x1:a,y1:b,x2:c,y2:d,stroke:'#6f9aa3','stroke-width':1.4},s);
+  L(100,40,120,40);L(200,40,220,40);L(280,48,330,84);L(110,150,310,105);L(350,110,350,174);L(350,206,350,268);
+  el('text',{x:150,y:15,'text-anchor':'middle',fill:'#9fb9b8','font-size':12},s,'血栓擴大');
+  el('text',{x:150,y:190,'text-anchor':'middle',fill:'#9fb9b8','font-size':12},s,'止血起始（組織受傷）');
+  for(const k in N){const [x,y,t]=N[k],w=k==='ii'||k==='fib'||k==='vii'?100:64;box[k]=el('rect',{class:'nodebox',x:x-w/2,y:y-17,width:w,height:34,rx:5},s);el('text',{x,y:y+5,'text-anchor':'middle',fill:'#e8efe9','font-size':13},s,t);}
+  el('text',{x:430,y:40,fill:'#9fb9b8','font-size':12},s,'紅色＝藥物作用位置');
+  const D=[['war','Warfarin',['vii','ix','x','ii'],'抑制維生素 K 依賴因子的合成，範圍最廣，需要監測 INR。亞洲族群顱內出血風險較高。'],['xa','Xa 抑制劑',['x'],'Apixaban、rivaroxaban、edoxaban。作用在共同路徑，療效確立，出血仍是主要限制。'],['dab','Dabigatran',['ii'],'直接抑制凝血酶，有專一反轉劑 idarucizumab。'],['fxi','Factor XI 抑制劑',['xi'],'只擋放大路徑，理論上保留止血。OCEANIC-AF 顯示出血較少但療效不足，抑制程度或劑量可能是關鍵，要等 LIBREXIA-AF。']];
+  const wrap=document.createElement('div');wrap.className='btns';wrap.id='cascBtn';wrap.innerHTML=D.map((d,i)=>'<button type="button" class="chip'+(i===3?' on':'')+'" data-k="'+i+'">'+d[1]+'</button>').join('');
+  const info=$('#cascInfo');info.appendChild(wrap);const t=document.createElement('p');t.style.fontSize='14.5px';t.style.margin='8px 0 0';info.appendChild(t);
+  function go(i){for(const k in box)box[k].classList.toggle('hit',D[i][2].includes(k));t.textContent=D[i][3];}
+  single('#cascBtn',b=>go(+b.dataset.k));go(3);
+})();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>肌筋膜疼痛症深入探索</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one shoulder patient walked chapter by chapter down the pain island's coast; sticky figures beside scrolling notes, anatomy drawn as night-chart plates. */
+:root{
+  --sea:#0d2a33;
+  --sea-deep:#082028;
+  --panel:#0a252d;
+  --grid:#1a4350;
+  --ink:#e8efe9;
+  --ink-soft:#9fb9b8;
+  --buoy:#f2b134;
+  --pain:#c77fa0;
+  --muscle:#b8505f;
+  --muscle-d:#7e2f3d;
+  --bone:#e6dcc4;
+  --bone-d:#a9997a;
+  --ok:#7fb26a;
+  --warn:#e0a24a;
+  --stop:#d0715e;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--sea);color:var(--ink);font-family:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:16.5px}
+a{color:var(--buoy)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--buoy);outline-offset:3px}
+svg text{font-family:var(--body)}
+.mono{font-family:var(--mono)}
+
+.col{max-width:720px;margin:0 auto;padding:0 20px}
+.wide{max-width:1040px;margin:0 auto;padding:0 20px}
+
+.topbar{position:sticky;top:0;z-index:30;background:rgba(8,32,40,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--grid)}
+.topbar .wide{display:flex;align-items:center;gap:14px;height:48px}
+.back{font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--buoy)}
+.prog{flex:1;height:3px;background:var(--grid);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--pain)}
+.chapnav{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+
+header.hero{padding:48px 0 26px}
+.coords{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(38px,6.4vw,66px);line-height:1.1;margin:8px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--pain)}
+.lede{color:var(--ink-soft);margin:0 0 18px;max-width:36em}
+.speakers{display:flex;flex-wrap:wrap;gap:10px}
+.spk{border:1px solid var(--grid);border-radius:4px;padding:8px 12px;font-size:14px;line-height:1.5}
+.spk b{font-weight:500}
+.spk span{display:block;color:var(--ink-soft);font-size:12.5px}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:22px;padding:0;list-style:none;counter-reset:c}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14.5px;padding:8px 10px;border:1px solid var(--grid);border-radius:4px}
+.toc a:hover{border-color:var(--pain)}
+.toc a span{font-family:var(--mono);font-size:11px;color:var(--pain)}
+
+section.ch{padding:56px 0 20px;border-top:1px solid var(--grid)}
+.chhead{display:flex;gap:14px;align-items:baseline;margin-bottom:6px}
+.chno{font-family:var(--mono);font-size:12px;color:var(--pain);letter-spacing:.1em}
+h2{font-family:var(--display);font-size:clamp(28px,4.4vw,40px);line-height:1.2;margin:0 0 6px;font-weight:700;text-wrap:balance}
+h3{font-family:var(--display);font-size:23px;margin:34px 0 8px;font-weight:700;text-wrap:balance}
+.src{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);border:1px solid var(--grid);border-radius:20px;padding:1px 9px;margin:0 6px 6px 0}
+.src.spk1{border-color:var(--pain);color:var(--pain)}
+.src.add{border-style:dashed}
+p{margin:0 0 14px}
+.soft{color:var(--ink-soft)}
+small.note{display:block;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+figure{margin:22px 0 26px;padding:0}
+figure .plate{background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px;padding:14px;position:relative}
+figure svg{display:block;width:100%;height:auto}
+figure svg.cap{max-width:580px;margin:0 auto}
+figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+figcaption b{color:var(--ink);font-weight:500}
+.figno{font-family:var(--mono);font-size:11px;color:var(--pain);margin-right:6px}
+
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--grid);background:transparent;border-radius:20px;padding:5px 13px;font-size:13.5px;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+.chip.on{border-color:var(--pain);background:rgba(199,127,160,.16);color:var(--ink)}
+.btn{border:1px solid var(--pain);background:rgba(199,127,160,.12);border-radius:4px;padding:7px 16px;cursor:pointer;font-size:14px}
+.btn:hover{background:rgba(199,127,160,.25)}
+.btn.ghost{border-color:var(--grid);background:transparent;color:var(--ink-soft)}
+
+.callout{border-left:3px solid var(--buoy);background:rgba(242,177,52,.06);padding:12px 16px;margin:18px 0;border-radius:0}
+.callout.pink{border-left-color:var(--pain);background:rgba(199,127,160,.07)}
+.callout h4{margin:0 0 4px;font-size:15px;font-weight:500}
+.callout p:last-child{margin:0}
+
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0 20px}
+table.t th,table.t td{border-bottom:1px solid var(--grid);padding:8px 8px;text-align:left;vertical-align:top}
+table.t th{font-weight:500;color:var(--ink-soft);font-size:13px}
+.tw{overflow-x:auto}
+
+/* case */
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.casecard{background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:18px}
+.casecard .who{font-family:var(--display);font-size:22px;margin:0 0 4px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
+.panel{display:none}
+.panel.on{display:block}
+.panel ul{margin:0;padding-left:20px}
+.panel li{margin-bottom:4px}
+@media (max-width:760px){.case{grid-template-columns:1fr}}
+
+/* cause cards */
+.causes{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:6px}
+.cause{position:relative;min-height:190px;perspective:900px;cursor:pointer;background:none;border:0;padding:0;text-align:left}
+.cause .face{position:absolute;inset:0;border:1px solid var(--grid);border-radius:6px;padding:14px;backface-visibility:hidden;transition:transform .55s cubic-bezier(.2,.8,.2,1);background:var(--panel);display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.cause .back{transform:rotateY(180deg)}
+.cause.flip .front{transform:rotateY(-180deg)}
+.cause.flip .back{transform:rotateY(0)}
+.cause.hl .face{border-color:var(--pain)}
+.cause .n{font-family:var(--mono);font-size:11px;color:var(--pain)}
+.cause h4{margin:0;font-family:var(--display);font-size:19px;font-weight:700;line-height:1.3}
+.cause p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+.cause .flipnote{margin-top:auto;font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.badge{display:inline-block;font-size:12px;border-radius:3px;padding:1px 8px;font-weight:500;align-self:flex-start}
+.badge.ok{background:rgba(127,178,106,.18);color:#a9d496}
+.badge.warn{background:rgba(224,162,74,.18);color:#f0c27e}
+.badge.stop{background:rgba(208,113,94,.2);color:#f0a291}
+@media (prefers-reduced-motion:reduce){.cause .face{transition:none}}
+
+/* checklist */
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.check{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--grid);border-radius:4px;padding:9px 11px;cursor:pointer;font-size:14px;line-height:1.5;background:transparent;text-align:left}
+.check input{margin-top:4px;accent-color:var(--stop)}
+.check small{display:block;color:var(--ink-soft);font-size:12.5px}
+.check.on{border-color:var(--stop);background:rgba(208,113,94,.08)}
+.verdict{margin-top:10px;padding:10px 14px;border-radius:4px;font-size:14.5px;border:1px solid var(--grid)}
+.verdict.go{border-color:var(--ok);color:#bfe3ae}
+.verdict.stop{border-color:var(--stop);color:#f5b6a8}
+
+/* SOP timeline */
+.sop{display:flex;gap:4px;margin:8px 0 6px}
+.sop button{border:0;cursor:pointer;padding:10px 8px;text-align:left;border-radius:3px;background:rgba(199,127,160,.14);font-size:13px;line-height:1.35;min-width:0}
+.sop button b{display:block;font-family:var(--mono);font-size:11px;color:var(--pain);font-weight:500}
+.sop button.on{background:var(--pain);color:#1b0d14}
+.sop button.on b{color:#1b0d14}
+.sopdetail{border:1px solid var(--grid);border-radius:4px;padding:12px 16px;font-size:14.5px;min-height:120px}
+.sopdetail ul{margin:6px 0 0;padding-left:20px}
+
+/* scrolly */
+.scrolly{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:34px;margin:20px auto 0}
+.scrolly .stick{position:sticky;top:64px;align-self:start;height:calc(100vh - 84px);display:flex;flex-direction:column;justify-content:center}
+.scrolly .steps{padding:10vh 0 30vh}
+.step{min-height:62vh;display:flex;align-items:center}
+.step .box{background:var(--panel);border:1px solid var(--grid);border-left:3px solid var(--grid);padding:16px 18px;border-radius:4px;opacity:.5;transition:opacity .35s,border-color .35s}
+.step.on .box{opacity:1;border-left-color:var(--pain)}
+.step .box h4{margin:0 0 6px;font-size:16px;font-weight:500}
+.step .box p{font-size:15px;margin:0 0 8px}
+.step .box p:last-child{margin:0}
+.step .k{font-family:var(--mono);font-size:11px;color:var(--pain);display:block;margin-bottom:2px}
+@media (max-width:820px){
+  .scrolly{grid-template-columns:1fr;gap:0}
+  .scrolly .stick{top:48px;height:auto;z-index:5;background:var(--sea);padding:8px 0 10px;border-bottom:1px solid var(--grid)}
+  .scrolly .stick svg{max-height:44vh}
+  .scrolly .steps{padding:4vh 0 24vh}
+  .step{min-height:58vh;align-items:flex-end}
+}
+
+/* flow svg states */
+.fl .nd rect{fill:#0f3540;stroke:#2a5662;stroke-width:1.2;transition:all .4s}
+.fl .nd text{fill:var(--ink-soft);font-size:13px;transition:fill .4s}
+.fl .nd.dash rect{stroke-dasharray:4 4}
+.fl .ed{stroke:#2a5662;stroke-width:1.5;fill:none;transition:stroke .4s}
+.fl .on rect{fill:#3a1f2c;stroke:var(--pain)}
+.fl .on text{fill:var(--ink)}
+.fl .ed.on{stroke:var(--pain)}
+.fl .nd.hot rect{fill:#5a2a3c;stroke:#f0a7c6;stroke-width:2}
+
+/* stepper */
+.cycle{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.cycle span{border:1px solid var(--grid);border-radius:4px;padding:6px 10px;font-size:14px;transition:all .35s}
+.cycle span.on{border-color:var(--buoy);background:rgba(242,177,52,.14)}
+.cycle i{font-style:normal;color:var(--ink-soft);font-family:var(--mono);font-size:12px}
+
+/* compare */
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:700px){.duo{grid-template-columns:1fr}}
+.duo h4{margin:0 0 4px;font-family:var(--display);font-size:20px}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.pillar{border:1px solid var(--grid);border-radius:6px;padding:14px;background:var(--panel)}
+.pillar h4{margin:4px 0 2px;font-family:var(--display);font-size:21px}
+.pillar .en{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.pillar svg{margin:10px 0;background:var(--sea-deep);border-radius:4px}
+.pillar ul{margin:0;padding-left:18px;font-size:14px}
+.pillar .key{margin-top:8px;font-size:14px;color:var(--pain)}
+
+.minis{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.mini{border:1px dashed var(--grid);border-radius:6px;padding:12px 14px}
+.mini h4{margin:0 0 4px;font-size:16px;font-weight:500}
+.mini p{font-size:14px;margin:0;color:var(--ink-soft)}
+.mini .src{margin-top:8px}
+
+.six{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-width:520px}
+.six div{border:1px solid var(--grid);border-radius:4px;padding:10px;text-align:center}
+.six b{font-family:var(--display);font-size:26px;color:var(--buoy);display:block;line-height:1.2}
+.six span{font-size:13px;color:var(--ink-soft)}
+
+.factors{display:grid;grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr);gap:12px;align-items:center}
+.factors .side h4{margin:0 0 6px;font-size:15px;font-weight:500}
+.factors .side .chip{display:block;width:100%;text-align:left;margin-bottom:6px;border-radius:4px}
+.factors .core{text-align:center}
+.fdetail{margin-top:12px;border:1px solid var(--grid);border-radius:4px;padding:10px 14px;font-size:14.5px;min-height:56px}
+@media (max-width:640px){.factors{grid-template-columns:1fr}.factors .core{order:-1}}
+
+.ex{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.ex div{border:1px solid var(--grid);border-radius:4px;padding:9px 12px;font-size:14px}
+.ex b{font-weight:500}
+.ex span{display:block;font-family:var(--mono);font-size:12px;color:var(--buoy)}
+
+.take{counter-reset:t;list-style:none;padding:0;margin:0}
+.take li{counter-increment:t;display:grid;grid-template-columns:36px 1fr;gap:6px;padding:10px 0;border-bottom:1px dashed var(--grid)}
+.take li::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);color:var(--pain);font-size:13px;padding-top:3px}
+
+.sources{font-size:13.5px;color:var(--ink-soft);padding-left:20px}
+.sources li{margin-bottom:6px}
+footer{border-top:1px solid var(--grid);padding:22px 0 40px;margin-top:40px;font-size:12px;color:var(--ink-soft);font-family:var(--mono)}
+
+/* svg anims */
+@media (prefers-reduced-motion:no-preference){
+  .pulse{animation:pulse 1.3s ease-in-out infinite alternate}
+  @keyframes pulse{from{opacity:.45}to{opacity:1}}
+  .twitch{animation:tw .16s ease-in-out 6 alternate}
+  @keyframes tw{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+  .a-press{animation:press 3.2s ease-in-out infinite}
+  @keyframes press{0%,15%{transform:translateY(0)}35%,75%{transform:translateY(20px)}95%,100%{transform:translateY(0)}}
+  .a-ring{animation:ring 3.2s ease-in-out infinite}
+  @keyframes ring{0%,30%{opacity:0}40%,75%{opacity:1}90%,100%{opacity:0}}
+  .a-squeezeL{animation:sqL 3.2s ease-in-out infinite}
+  @keyframes sqL{0%,15%{transform:translateX(0)}35%,75%{transform:translateX(14px)}95%,100%{transform:translateX(0)}}
+  .a-squeezeR{animation:sqR 3.2s ease-in-out infinite}
+  @keyframes sqR{0%,15%{transform:translateX(0)}35%,75%{transform:translateX(-14px)}95%,100%{transform:translateX(0)}}
+  .a-roll{animation:roll 3.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes roll{0%,40%{transform:translateY(0)}55%{transform:translateY(-6px)}70%{transform:translateY(5px)}85%,100%{transform:translateY(0)}}
+  .a-perf{animation:perf 4s ease-in-out infinite}
+  @keyframes perf{0%,10%{fill:#b8505f}35%,60%{fill:#d9b3b8}80%,100%{fill:#d8455c}}
+  .a-slide{animation:slide 3s ease-in-out infinite alternate}
+  @keyframes slide{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+  .a-cut{animation:cut 3s ease-in-out infinite alternate}
+  @keyframes cut{0%,30%{opacity:1}70%,100%{opacity:.08}}
+  .a-arm{animation:arm 4s ease-in-out infinite;transform-origin:150px 84px}
+  @keyframes arm{0%,10%{transform:rotate(0)}55%,70%{transform:rotate(-115deg)}95%,100%{transform:rotate(0)}}
+  .a-glide{animation:glide 4s ease-in-out infinite}
+  @keyframes glide{0%,10%{opacity:.25}25%,75%{opacity:1}95%,100%{opacity:.25}}
+  .a-met{animation:met 4.5s ease-in-out infinite;transform-origin:110px 96px}
+  @keyframes met{0%,10%{transform:rotate(0)}30%,55%{transform:rotate(0)}75%,100%{transform:rotate(-14deg)}}
+  .a-metpush{animation:metpush 4.5s ease-in-out infinite}
+  @keyframes metpush{0%,12%{opacity:0}20%,52%{opacity:1}60%,100%{opacity:0}}
+  .a-ekg{animation:ekg 2.4s linear infinite}
+  @keyframes ekg{from{transform:translateX(0)}to{transform:translateX(-160px)}}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wide">
+  <a class="back" href="index.html#pain">← 回到群島</a>
+  <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+  <span class="chapnav" id="chapnow">疼痛島</span>
+</div></div>
+
+<header class="hero"><div class="col">
+  <div class="coords">疼痛島 · 115.10.18 · 第一演講廳 10:30–12:00 · 與台灣復健醫學會合辦</div>
+  <h1>肌筋膜疼痛症<br><em>從一位肩痛病人開始</em></h1>
+  <p class="lede">兩場講題串成一次門診：先看病人、鑑別肩痛，再往下鑽到激痛點的機轉，最後回到診間的徒手治療，以及為什麼總是會復發。</p>
+  <div class="speakers">
+    <div class="spk"><b>肌筋膜疼痛症及激痛點簡介</b><span>官大紳｜成大醫院復健部</span></div>
+    <div class="spk"><b>肌筋膜疼痛症的徒手治療</b><span>許宏志｜嘉義長庚醫院復健部</span></div>
+  </div>
+  <ol class="toc">
+    <li><a href="#c1"><span>01</span>肩痛門診病例</a></li>
+    <li><a href="#c2"><span>02</span>肩痛常見原因</a></li>
+    <li><a href="#c3"><span>03</span>評估與紅旗</a></li>
+    <li><a href="#c4"><span>04</span>激痛點怎麼形成</a></li>
+    <li><a href="#c5"><span>05</span>激痛點評估</a></li>
+    <li><a href="#c6"><span>06</span>徒手治療</a></li>
+    <li><a href="#c7"><span>07</span>其他治療</a></li>
+    <li><a href="#c8"><span>08</span>治本：持續因子</a></li>
+  </ol>
+  <p style="margin-top:16px"><span class="src spk1">講者內容</span><span class="src add">補充：文獻與一般臨床知識</span><small class="note">標籤區分講者在會場說的，以及整理時補充的資料；補充處附出處。</small></p>
+</div></header>
+
+<!-- CH1 -->
+<section class="ch" id="c1" data-name="01 病例"><div class="col">
+  <div class="chhead"><span class="chno">CH 01 / 08</span></div>
+  <h2>週一早上的肩痛門診</h2>
+  <p class="soft">先看病人。下面的病例是為了串起兩場演講而設計的教學病例，切換分頁一步步打開資訊。</p>
+</div>
+<div class="wide"><div class="case">
+  <div class="casecard">
+    <p class="who">陳小姐，52 歲，會計</p>
+    <p class="soft" style="margin:0">「右邊肩膀痛了三個月，晚上側睡壓到會痛醒。」</p>
+    <div class="tabs" role="tablist">
+      <button class="chip on" data-tab="t1" role="tab">病史</button>
+      <button class="chip" data-tab="t2" role="tab">理學檢查</button>
+      <button class="chip" data-tab="t3" role="tab">先想想</button>
+      <button class="chip" data-tab="t4" role="tab">判讀</button>
+    </div>
+    <div class="panel on" id="t1"><ul>
+      <li>痛在肩膀前外側，有時延伸到上臂外側</li>
+      <li>扣內衣、梳頭髮越來越困難</li>
+      <li>每天打電腦 8 小時，最近結帳季很忙、睡不好</li>
+      <li>第二型糖尿病 8 年，HbA1c 7.8%</li>
+      <li>沒有外傷、沒有發燒、體重穩定、手不麻</li>
+    </ul></div>
+    <div class="panel" id="t2"><ul>
+      <li>神經學檢查：肌力、感覺、反射正常；Spurling test 陰性</li>
+      <li>肩關節<b>主動與被動外旋</b>都受限，約少了三成</li>
+      <li>Apley scratch test：右手往背後只到薦椎</li>
+      <li>棘下肌觸診：摸到緊束帶，按壓時她說「就是這個痛」，痛傳到肩膀前方</li>
+    </ul></div>
+    <div class="panel" id="t3"><p>她的疼痛地圖（右圖）比較像哪一個？</p>
+      <div class="btns"><button class="chip" data-guess="a">旋轉肌腱病變</button><button class="chip" data-guess="b">五十肩</button><button class="chip" data-guess="c">棘下肌激痛點</button></div>
+      <p id="guessOut" class="soft" style="font-size:14.5px">選一個，再看「判讀」。</p></div>
+    <div class="panel" id="t4"><p><b>五十肩（冰凍進展期）合併棘下肌 active MTrP。</b></p>
+      <ul>
+        <li>被動外旋也受限，指向關節囊問題，也就是五十肩</li>
+        <li>按壓棘下肌重現「熟悉的痛」並轉位到肩前方，是 active MTrP</li>
+        <li>糖尿病和五十肩高度共病，也是第 8 章的持續因子</li>
+      </ul>
+      <p class="soft" style="font-size:14px;margin-top:8px">兩條線要一起處理：五十肩依分期決定手法強度，棘下肌的激痛點另外處理。</p></div>
+  </div>
+  <figure style="margin:0">
+    <div class="plate"><svg id="caseMap" viewBox="0 0 420 350" role="img" aria-label="病人的疼痛地圖：右肩前外側到上臂外側"></svg></div>
+    <figcaption><span class="figno">FIG 1</span><b>疼痛地圖。</b>請病人一指指出最痛點、再畫出範圍。左為背面、右為正面；粉紅色是她畫的範圍，記住這個形狀，第 5 章會再見到它。</figcaption>
+  </figure>
+</div></div>
+</section>
+
+<!-- CH2 -->
+<section class="ch" id="c2" data-name="02 肩痛原因"><div class="col">
+  <div class="chhead"><span class="chno">CH 02 / 08</span></div>
+  <h2>肩膀痛，可能是哪裡壞了</h2>
+  <span class="src spk1">許宏志</span>
+  <p>講者整理肩痛的七大常見原因。點圖上的號碼或直接點卡片，卡片翻過來是<b>徒手治療適用度</b>和<b>常合併的激痛點</b>。</p>
+</div>
+<div class="wide">
+  <figure>
+    <div class="plate"><svg id="shoulderSvg" class="cap" viewBox="0 0 420 300" role="img" aria-label="右肩正面示意圖，標出七個常見疼痛來源">
+      <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="#b8505f" stroke-width="2"/></pattern></defs>
+      <g fill="#e6dcc4" stroke="#a9997a" stroke-width="1">
+        <rect x="30" y="28" width="36" height="20" rx="4"/><rect x="30" y="54" width="36" height="20" rx="4"/><rect x="30" y="80" width="36" height="20" rx="4"/><rect x="30" y="106" width="36" height="20" rx="4"/><rect x="30" y="132" width="36" height="20" rx="4"/>
+      </g>
+      <g fill="#5fa8a0" opacity=".55"><rect x="32" y="48" width="32" height="6" rx="2"/><rect x="32" y="74" width="32" height="6" rx="2"/><rect x="32" y="100" width="32" height="6" rx="2"/><rect x="32" y="126" width="32" height="6" rx="2"/></g>
+      <path d="M66,118 Q120,126 176,150" fill="none" stroke="#f2b134" stroke-width="2.5" stroke-dasharray="5 4"/>
+      <path d="M232,100 L204,96 L168,252 L208,246 L234,182 Z" fill="#a9997a" opacity=".45"/>
+      <path d="M70,64 Q150,40 238,58" fill="none" stroke="#e6dcc4" stroke-width="15" stroke-linecap="round"/>
+      <path d="M180,86 Q240,74 288,92 Q308,100 316,114" fill="none" stroke="url(#hatch)" stroke-width="13" stroke-linecap="round"/>
+      <path d="M180,86 Q240,74 288,92 Q308,100 316,114" fill="none" stroke="#b8505f" stroke-width="13" stroke-linecap="round" opacity=".55"/>
+      <ellipse cx="276" cy="80" rx="26" ry="6" fill="#5fa8a0" opacity=".6"/>
+      <path d="M226,52 Q270,38 320,56 Q326,70 302,72 Q268,64 236,70 Z" fill="#e6dcc4" stroke="#a9997a"/>
+      <ellipse cx="268" cy="142" rx="58" ry="52" fill="none" stroke="#9fb9b8" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <path d="M232,104 Q248,140 232,180" fill="none" stroke="#e6dcc4" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="279" cy="140" r="38" fill="#e6dcc4" stroke="#a9997a"/>
+      <path d="M248,116 Q238,140 248,164" fill="none" stroke="#8fd0de" stroke-width="5" stroke-linecap="round"/>
+      <path d="M260,172 L254,296 L294,296 L300,172 Z" fill="#e6dcc4" stroke="#a9997a"/>
+      <path d="M240,104 Q264,96 286,112 Q298,130 292,180 L288,296" fill="none" stroke="#d9b38c" stroke-width="5" stroke-linecap="round"/>
+      <g font-size="11" fill="#9fb9b8">
+        <text x="74" y="22">頸椎</text><text x="120" y="40">鎖骨</text><text x="330" y="52">肩峰</text><text x="330" y="244">肱骨</text><text x="150" y="268">肩胛骨</text>
+      </g>
+      <g id="markers" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="500"></g>
+    </svg></div>
+    <figcaption><span class="figno">FIG 2</span><b>右肩正面示意。</b>紅色斜線是旋轉肌腱（棘上肌腱）、青色是肩峰下滑囊、淺藍是關節軟骨、虛線是關節囊、棕色是肱二頭肌長頭腱、黃色虛線是頸神經根。</figcaption>
+  </figure>
+  <div class="causes" id="causes"></div>
+  <div class="callout" style="margin-top:22px"><h4>不是骨骼肌肉的問題，先排除</h4>
+    <p>心肌缺血（尤其左肩）、肺尖腫瘤（Pancoast tumor）、膽囊或脾臟等膈下病變的轉移痛、化膿性關節炎、骨折、風濕性多肌痛（PMR）。這些都不是徒手治療的範圍。</p></div>
+  <p class="soft" style="font-size:14px">肩痛病人身上激痛點很常見：肩峰下夾擠的病人，棘上肌、棘下肌、肩胛下肌的活躍激痛點明顯比健康人多（McEvoy &amp; Dommerholt）；非外傷性單側肩痛中，棘下肌是最容易出現激痛點的肌肉之一（Shahid 2023）。<span class="src add">補充</span></p>
+</div>
+</section>
+
+<!-- CH3 -->
+<section class="ch" id="c3" data-name="03 評估"><div class="col">
+  <div class="chhead"><span class="chno">CH 03 / 08</span></div>
+  <h2>評估：先排除危險，再找肌肉</h2>
+  <span class="src spk1">許宏志</span>
+  <p>講者的門診流程叫「診間 9 分鐘痛症處置 SOP」：評估、徒手、衛教一次到位。點時間軸看每段要做什麼。</p>
+  <div class="sop" id="sop">
+    <button data-k="0" class="on" style="flex:2"><b>0–2 分</b>問診＋紅旗</button>
+    <button data-k="1" style="flex:2"><b>2–4 分</b>觸診定位</button>
+    <button data-k="2" style="flex:3"><b>4–7 分</b>PIR／MWM</button>
+    <button data-k="3" style="flex:2"><b>7–9 分</b>居家運動</button>
+  </div>
+  <div class="sopdetail" id="sopdetail"></div>
+
+  <h3>紅旗勾選練習</h3>
+  <p>先排除危險訊號，再進入徒手處置。勾選病人符合的項目：</p>
+  <div class="checks" id="checks"></div>
+  <div class="verdict go" id="verdict">沒有勾選紅旗：可以進入觸診與徒手評估。</div>
+  <p class="soft" style="font-size:14px;margin-top:10px">陳小姐沒有任何紅旗，神經學檢查正常，可以往下評估。</p>
+
+  <h3>肩膀不是孤立的關節</h3>
+  <p>講者用<b>張拉整體學（tensegrity）</b>解釋：人體不是一節一節堆疊的磚塊，而是由肌筋膜、韌帶等張力網絡互相牽引的帳篷。力量從軀幹經肩胛胸廓、肩關節傳到上肢，所以肩胛胸廓穩定不足或筋膜張力失衡，肩膀活動度就會受限。</p>
+</div>
+<div class="wide">
+  <div class="duo">
+    <figure style="margin:8px 0">
+      <div class="plate"><svg viewBox="0 0 420 170" role="img" aria-label="堆疊的磚塊與拉緊的帳篷對照">
+        <g fill="#0f3540" stroke="#2a5662"><rect x="40" y="118" width="44" height="22"/><rect x="86" y="118" width="44" height="22"/><rect x="132" y="118" width="44" height="22"/><rect x="62" y="94" width="44" height="22"/><rect x="108" y="94" width="44" height="22"/><rect x="86" y="70" width="44" height="22"/></g>
+        <path d="M96,64 L118,52" stroke="#d0715e" stroke-width="2" marker-end="url(#ah)"/>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1,1 L9,5 L1,9" fill="none" stroke="context-stroke" stroke-width="1.6"/></marker></defs>
+        <text x="108" y="160" text-anchor="middle" font-size="12" fill="#9fb9b8">堆疊：受力集中，容易失衡</text>
+        <g stroke="#c77fa0" stroke-width="1.2" fill="none"><path d="M250,140 L300,40 L350,140"/><path d="M270,140 L330,46"/><path d="M300,40 L380,120 M330,46 L240,118 M250,140 L380,120 M240,118 L350,140"/></g>
+        <g stroke="#e6dcc4" stroke-width="5" stroke-linecap="round"><line x1="250" y1="140" x2="330" y2="46"/><line x1="350" y1="140" x2="300" y2="40"/><line x1="240" y1="118" x2="380" y2="120"/></g>
+        <text x="310" y="160" text-anchor="middle" font-size="12" fill="#9fb9b8">張拉結構：張力網分散力量</text>
+      </svg></div>
+      <figcaption><span class="figno">FIG 3</span>磚塊與帳篷。白色桿件是骨頭，粉紅色細線是肌筋膜張力網。</figcaption>
+    </figure>
+    <figure style="margin:8px 0">
+      <div class="plate"><svg viewBox="0 0 300 200" role="img" aria-label="Apley scratch test 背面示意">
+        <circle cx="150" cy="30" r="17" fill="#0f3540" stroke="#9fb9b8"/>
+        <path d="M118,62 Q150,52 182,62 L192,180 L108,180 Z" fill="#0f3540" stroke="#9fb9b8"/>
+        <path d="M128,74 Q150,104 172,74" fill="none" stroke="#c77fa0" stroke-width="1" stroke-dasharray="3 3"/>
+        <path d="M184,64 L204,20 L170,96" fill="none" stroke="#e8efe9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M118,64 L94,130 L136,140" fill="none" stroke="#e8efe9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="166" y1="102" x2="140" y2="134" stroke="#f2b134" stroke-width="1.5" stroke-dasharray="3 3" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#f2b134" stroke-width="1.6"/></marker></defs>
+        <text x="208" y="120" font-size="11" fill="#f2b134">指尖距離</text>
+        <circle cx="132" cy="118" r="9" fill="#c77fa0" opacity=".35"/><circle cx="160" cy="88" r="8" fill="#c77fa0" opacity=".35"/>
+        <text x="16" y="196" font-size="11" fill="#9fb9b8">往後內旋受限：想到肩胛下肌、胸小肌、後背筋膜</text>
+      </svg></div>
+      <figcaption><span class="figno">FIG 4</span><b>Apley scratch test。</b>一手過肩往下、一手從背後往上，比較兩側指尖距離。講者用它感受肩胛下肌、胸小肌與後背筋膜的緊繃限制。</figcaption>
+    </figure>
+  </div>
+  <div class="col" style="padding:0">
+    <div class="cycle" aria-label="上肢動力鏈"><span>軀幹</span><i>→</i><span>肩胛胸廓</span><i>→</i><span>肩關節</span><i>→</i><span>上肢</span></div>
+    <small class="note">上肢動力鏈：力量由軀幹傳到肩胛胸廓，再延續到肩關節與上肢。肩胛胸廓穩定肌群包括斜方肌、提肩胛肌、大小菱形肌、胸小肌與前鋸肌。</small>
+  </div>
+</div>
+</section>
+
+<!-- CH4 -->
+<section class="ch" id="c4" data-name="04 機轉"><div class="col">
+  <div class="chhead"><span class="chno">CH 04 / 08</span></div>
+  <h2>激痛點是怎麼形成的</h2>
+  <span class="src spk1">官大紳</span>
+  <p>講者用一張流程圖串起整個機轉。往下捲動，圖會一段一段亮起來。</p>
+</div>
+<div class="wide"><div class="scrolly" id="flowScrolly">
+  <div class="stick"><svg id="flow" class="fl" viewBox="0 0 720 620" role="img" aria-label="激痛點形成機轉流程圖"></svg>
+    <small class="note" style="margin-top:6px">依官大紳投影片〈Pathogenesis of Myofascial Trigger Points〉重繪</small></div>
+  <div class="steps">
+    <div class="step" data-s="1"><div class="box"><span class="k">STEP 1</span><h4>起點：重複的小傷</h4><p>慢性重複性創傷（有時是急性創傷），透過化學介質與力學因子，同時打到兩個地方：感覺神經末梢和神經肌肉接合處。</p></div></div>
+    <div class="step" data-s="2"><div class="box"><span class="k">STEP 2 · 感覺端</span><h4>痛覺受器被敏化</h4><p>敏化的痛覺受器就是 <b>sensitive loci</b>。在這裡按壓或針刺，會誘發局部痛、轉位痛（ReP）和局部抽搐反應（LTR）。</p><p>人與兔子骨骼肌的電生理研究都指出：ReP 和 LTR 和脊髓機轉有關。</p></div></div>
+    <div class="step" data-s="3"><div class="box"><span class="k">STEP 3 · 運動端</span><h4>終板失控放電</h4><p>功能異常的終板就是 <b>active loci</b>，會記錄到自發電活動（SEA），現在也叫終板雜訊（EPN）。這是 ACh 釋放過多造成的異常終板電位，讓肌纖維持續收縮，形成<b>緊束帶</b>。</p><p>持續收縮又引發 energy crisis（下方循環）。</p></div></div>
+    <div class="step" data-s="4"><div class="box"><span class="k">STEP 4</span><h4>潛伏性激痛點（latent MTrP）</h4><p>一個 sensitive locus 加一個 active locus 組成 MTrP locus；許多 loci 聚集、加上緊束帶，就是 latent MTrP：壓了才痛，平常不痛。</p></div></div>
+    <div class="step" data-s="5"><div class="box"><span class="k">STEP 5</span><h4>轉成活躍性激痛點（active MTrP）</h4><p>重複創傷累積到一定程度、急性創傷，或纖維肌痛，會讓潛伏點活化，變成會自己痛、會造成病人主訴的 active MTrP。</p></div></div>
+    <div class="step" data-s="6"><div class="box"><span class="k">STEP 6</span><h4>擴散</h4><p>一個 active MTrP 會讓其他 latent MTrPs 也跟著活化。這就是第 5 章「關鍵點與衛星點」的由來。</p></div></div>
+  </div>
+</div></div>
+
+<div class="col">
+  <h3>Energy crisis：停不下來的循環</h3>
+  <span class="src spk1">官大紳</span><span class="src">Simons 整合假說</span>
+  <p>Simons 提出的整合激痛點假說（integrated trigger point hypothesis）。最後一格會接回第一格，所以叫惡性循環。</p>
+  <div class="cycle" id="ecycle"><span>ACh 釋放過多</span><i>→</i><span>肌節持續收縮</span><i>→</i><span>局部缺血、耗能增加</span><i>→</i><span>釋出致敏物質</span><i>→</i><span>痛覺受器敏化、ACh 更多</span><i>↻</i></div>
+  <small class="note">徒手治療的缺血性加壓（第 6 章）就是瞄準這個循環：先壓、再讓血流回來，帶走代謝物。</small>
+
+  <h3>Hong 的 Multiple Loci Theory</h3>
+  <span class="src spk1">官大紳</span>
+  <p>一個激痛點區域裡不是只有一個點，而是有很多 loci。sensitive loci 廣泛分布在整塊肌肉，但集中在 MTrP 區域。EPN 在一個區域出現得越多，這個激痛點就越敏感。</p>
+</div>
+<div class="wide"><figure>
+  <div class="plate">
+    <svg id="loci" viewBox="0 0 640 300" role="img" aria-label="激痛點區域內多個 loci 的互動示意，點擊進針">
+      <rect x="10" y="20" width="620" height="230" rx="10" fill="#2a1219" stroke="#7e2f3d"/>
+      <g id="lociFib" stroke="#7e2f3d" stroke-width="1" opacity=".7"></g>
+      <ellipse cx="320" cy="135" rx="150" ry="70" fill="#c77fa0" opacity=".08" stroke="#c77fa0" stroke-dasharray="5 5"/>
+      <text x="320" y="56" text-anchor="middle" font-size="12" fill="#c77fa0">MTrP 區域</text>
+      <g id="lociDots"></g>
+      <g id="needle"></g>
+      <g id="lociTrace" transform="translate(10,262)"></g>
+    </svg>
+  </div>
+  <div class="btns"><span class="chip on" style="cursor:default"><span style="color:#f0a7c6">●</span> sensitive locus</span><span class="chip on" style="cursor:default;border-color:#f2b134;background:rgba(242,177,52,.12)"><span style="color:#f2b134">●</span> active locus</span><button class="btn ghost" id="lociReset">重置</button><span class="mono" id="lociCount" style="font-size:13px;align-self:center;color:var(--ink-soft)">進針 0 次 · LTR 0 次</span></div>
+  <figcaption><span class="figno">FIG 6</span><b>點肌肉任何地方進針。</b>針尖碰到 sensitive locus 會誘發局部抽搐反應（肌束抽一下）；靠近 active locus 時，下方肌電圖會出現終板雜訊。越靠近粉紅區，命中率越高。這也是第 7 章乾針「快進快出」要多點進針的原因。</figcaption>
+</figure></div>
+
+<div class="col">
+  <div class="callout pink"><h4>active locus ≠ active MTrP</h4>
+    <div class="tw"><table class="t" style="margin:6px 0 0">
+      <tr><th>名詞</th><th>層次</th><th>怎麼評估</th></tr>
+      <tr><td>active locus</td><td>顯微的運動端：終板自發放電</td><td>肌電圖針極</td></tr>
+      <tr><td>sensitive locus</td><td>顯微的感覺端：敏化痛覺受器</td><td>按壓或針刺</td></tr>
+      <tr><td>active MTrP</td><td>臨床分類：造成病人主訴</td><td>觸診重現「熟悉的痛」</td></tr>
+      <tr><td>latent MTrP</td><td>臨床分類：壓了才痛</td><td>觸診</td></tr>
+    </table></div>
+  </div>
+</div>
+</section>
+
+<!-- CH5 -->
+<section class="ch" id="c5" data-name="05 激痛點評估"><div class="col">
+  <div class="chhead"><span class="chno">CH 05 / 08</span></div>
+  <h2>評估激痛點：手摸得到什麼</h2>
+  <span class="src spk1">官大紳</span><span class="src spk1">許宏志</span>
+  <p>回到陳小姐的棘下肌。切換圖層，看哪些東西門診手指摸得到、哪些只有肌電圖看得到。</p>
+</div>
+<div class="wide"><figure>
+  <div class="btns" id="infraLayers">
+    <button class="chip on" data-l="anat">解剖</button>
+    <button class="chip" data-l="palp">門診觸診看得到</button>
+    <button class="chip" data-l="emg">肌電圖才看得到</button>
+  </div>
+  <div class="plate">
+    <svg id="infra" class="cap" viewBox="0 0 420 380" role="img" aria-label="右肩胛骨背面，棘上肌、棘下肌、小圓肌與激痛點位置">
+      <path d="M110,58 Q170,62 232,72 L262,108 Q276,128 270,160 Q230,250 152,342 Q138,348 134,336 Q112,230 98,118 Q100,80 110,58 Z" fill="#e6dcc4" stroke="#a9997a"/>
+      <path d="M282,168 L272,372 L314,372 L322,168 Z" fill="#e6dcc4" stroke="#a9997a"/>
+      <circle cx="300" cy="140" r="34" fill="#e6dcc4" stroke="#a9997a"/>
+      <path d="M112,66 Q170,68 226,76 L258,94 Q240,98 200,102 Q150,106 104,110 Z" fill="#b8505f" opacity=".9"/>
+      <g id="supFib" stroke="#7e2f3d" stroke-width="1" fill="none"></g>
+      <path d="M226,92 Q280,96 322,112" fill="none" stroke="#e9d7c9" stroke-width="7" stroke-linecap="round"/>
+      <path d="M104,124 Q170,110 258,102 Q300,106 326,128 L324,150 Q282,152 264,166 Q222,214 170,262 Q142,282 124,270 Q110,200 104,124 Z" fill="#b8505f"/>
+      <g id="infFib" stroke="#7e2f3d" stroke-width="1" fill="none"></g>
+      <path d="M170,262 Q228,212 266,170 L322,158 L320,174 Q278,186 242,226 Q208,264 184,278 Z" fill="#a2475a"/>
+      <g id="tmFib" stroke="#6e2834" stroke-width="1" fill="none"></g>
+      <path d="M296,124 Q318,128 334,140" fill="none" stroke="#e9d7c9" stroke-width="8" stroke-linecap="round"/>
+      <path d="M102,112 Q190,96 262,84 Q300,76 322,86" fill="none" stroke="#e6dcc4" stroke-width="13" stroke-linecap="round"/>
+      <path d="M102,112 Q190,96 262,84 Q300,76 322,86" fill="none" stroke="#a9997a" stroke-width="1" transform="translate(0,7)"/>
+      <ellipse cx="320" cy="84" rx="28" ry="12" fill="#e6dcc4" stroke="#a9997a"/>
+      <g id="L-anat" font-size="12">
+        <line x1="150" y1="84" x2="150" y2="30" stroke="#9fb9b8" stroke-width=".6" stroke-dasharray="3 3"/><text x="150" y="24" text-anchor="middle" fill="#e8efe9">棘上肌</text>
+        <line x1="200" y1="150" x2="370" y2="200" stroke="#9fb9b8" stroke-width=".6" stroke-dasharray="3 3"/><text x="372" y="204" fill="#e8efe9">棘下肌</text>
+        <line x1="230" y1="228" x2="372" y2="240" stroke="#9fb9b8" stroke-width=".6" stroke-dasharray="3 3"/><text x="374" y="244" fill="#e8efe9">小圓肌</text>
+        <line x1="210" y1="92" x2="300" y2="30" stroke="#9fb9b8" stroke-width=".6" stroke-dasharray="3 3"/><text x="304" y="26" fill="#e8efe9">肩胛棘</text>
+        <text x="350" y="120" fill="#9fb9b8">肱骨頭</text>
+        <text x="40" y="200" fill="#9fb9b8">內側緣</text>
+        <text x="108" y="364" fill="#9fb9b8">下角</text>
+      </g>
+      <g id="L-palp" opacity="0">
+        <path id="bandPath" d="M114,192 Q220,172 318,140" fill="none" stroke="#f0a7c6" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="177" cy="180" r="8" fill="#f2b134" class="pulse"/>
+        <circle cx="177" cy="180" r="16" fill="none" stroke="#f2b134" stroke-width="1" opacity=".6"/>
+        <path d="M185,176 Q290,190 344,268" fill="none" stroke="#c77fa0" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#pk)"/>
+        <defs><marker id="pk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#c77fa0" stroke-width="1.6"/></marker></defs>
+        <g transform="translate(330,268)">
+          <rect x="0" y="0" width="82" height="102" rx="6" fill="#082028" stroke="#2a5662"/>
+          <path d="M18,22 Q40,8 62,22 L66,96 L50,96 L46,40 L34,40 L30,96 L14,96 Z" fill="#0f3540" stroke="#9fb9b8" stroke-width=".8"/>
+          <ellipse cx="24" cy="30" rx="10" ry="10" fill="#c77fa0" opacity=".7"/>
+          <ellipse cx="20" cy="56" rx="6" ry="16" fill="#c77fa0" opacity=".45"/>
+          <text x="41" y="14" text-anchor="middle" font-size="10" fill="#9fb9b8">正面·右肩</text>
+        </g>
+        <g font-size="12" fill="#e8efe9">
+          <text x="60" y="152">緊束帶</text><line x1="96" y1="156" x2="130" y2="186" stroke="#f0a7c6" stroke-width=".7"/>
+          <text x="196" y="300">過度敏感點</text><line x1="210" y1="288" x2="180" y2="192" stroke="#f2b134" stroke-width=".7"/>
+          <text x="250" y="216" fill="#c77fa0">轉位痛 → 前肩</text>
+        </g>
+      </g>
+      <g id="L-emg" opacity="0">
+        <circle cx="177" cy="180" r="6" fill="none" stroke="#f2b134" stroke-width="1.5"/>
+        <line x1="172" y1="186" x2="92" y2="268" stroke="#f2b134" stroke-width=".8" stroke-dasharray="3 3"/>
+        <circle cx="60" cy="304" r="48" fill="#1a0c11" stroke="#f2b134"/>
+        <g stroke="#7e2f3d" stroke-width="5" stroke-linecap="round"><line x1="22" y1="286" x2="98" y2="286"/><line x1="18" y1="304" x2="102" y2="304"/><line x1="22" y1="322" x2="98" y2="322"/></g>
+        <g fill="#f2b134"><circle cx="44" cy="286" r="4"/><circle cx="72" cy="304" r="4"/><circle cx="54" cy="322" r="4"/></g>
+        <g stroke="#f2b134" stroke-width="1"><path d="M44,280 l2,-6 l2,6"/><path d="M72,298 l2,-6 l2,6"/><path d="M54,316 l2,-6 l2,6"/></g>
+        <text x="60" y="368" text-anchor="middle" font-size="11" fill="#f2b134">終板放電</text>
+      </g>
+    </svg>
+    <svg id="emgTrace" class="cap" viewBox="0 0 400 54" style="margin-top:6px;display:none" role="img" aria-label="肌電圖終板雜訊示意">
+      <rect x="0" y="0" width="400" height="54" fill="#061a20" rx="4"/>
+      <g class="a-ekg"><polyline id="emgLine" fill="none" stroke="#f2b134" stroke-width="1.2"/></g>
+      <text x="8" y="14" font-size="10" fill="#9fb9b8" font-family="IBM Plex Mono, monospace">EMG · SEA / EPN</text>
+    </svg>
+  </div>
+  <figcaption id="infraCap"><span class="figno">FIG 7</span><b>右肩胛骨背面。</b>棘下肌從肩胛骨內側緣往外收攏，止於肱骨大結節後方；上方是棘上肌，下方是小圓肌。示意圖為自繪，比例經過簡化。</figcaption>
+</figure></div>
+
+<div class="col">
+  <h3>五步驟觸診</h3>
+  <p>往下捲，手指會沿著講者的 Delphi 標準一步步找到激痛點。</p>
+</div>
+<div class="wide"><div class="scrolly" id="palpScrolly">
+  <div class="stick"><svg id="palp" viewBox="0 0 380 270" role="img" aria-label="俯視肌肉的觸診動畫">
+    <rect x="22" y="40" width="250" height="170" rx="14" fill="#2a1219" stroke="#b8505f" stroke-width="1"/>
+    <g id="palpFib" stroke="#b8505f" stroke-width="1.6" opacity=".55"></g>
+    <g id="palpBandG"><line id="palpBand" x1="34" y1="125" x2="260" y2="125" stroke="#b8505f" stroke-width="1.6" opacity=".55"/></g>
+    <circle id="palpSpot" cx="148" cy="125" r="8" fill="#f2b134" opacity="0"/>
+    <g id="palpRef" opacity="0" style="transition:opacity .5s">
+      <ellipse cx="324" cy="92" rx="44" ry="36" fill="#c77fa0" opacity=".45" stroke="#c77fa0" stroke-dasharray="4 3"/>
+      <path d="M158,118 Q240,64 282,86" fill="none" stroke="#c77fa0" stroke-width="1.2" stroke-dasharray="3 3"/>
+      <text x="324" y="148" text-anchor="middle" font-size="12" fill="#c77fa0">轉位痛區</text>
+    </g>
+    <g id="palpFinger" style="transition:transform .9s ease-in-out;transform:translate(148px,14px)">
+      <ellipse rx="15" ry="18" fill="#e9c3a5" opacity=".92"/><ellipse cy="-8" rx="8" ry="6" fill="#f5e3d3"/>
+    </g>
+    <g id="palpArrow" opacity="0"><line x1="148" y1="40" x2="148" y2="208" stroke="#f2b134" stroke-width="1" stroke-dasharray="4 4"/></g>
+    <text x="147" y="234" text-anchor="middle" font-size="12" fill="#9fb9b8">肌纖維方向 ←→</text>
+    <text x="147" y="256" text-anchor="middle" font-size="13" fill="#e8efe9" id="palpLabel">定方向</text>
+  </svg></div>
+  <div class="steps">
+    <div class="step" data-s="0"><div class="box"><span class="k">1 · 定方向</span><h4>先確認肌纖維走向</h4><p>手指放在肌肉上，準備<b>垂直纖維方向</b>觸診。順著纖維摸，緊束帶會從指腹下溜走。</p></div></div>
+    <div class="step" data-s="1"><div class="box"><span class="k">2 · 滑過纖維</span><h4>摸到緊束帶（taut band）</h4><p>手指垂直纖維滑過，會在某處摸到像繃緊吉他弦的一條。這是 active loci 讓肌纖維持續收縮的結果。</p></div></div>
+    <div class="step" data-s="2"><div class="box"><span class="k">3 · 沿帶找點</span><h4>過度敏感點（hypersensitive spot）</h4><p>沿著緊束帶移動，找最敏感的一點。病人常會縮一下（jump sign）。</p></div></div>
+    <div class="step" data-s="3"><div class="box"><span class="k">4 · 持續按壓</span><h4>轉位痛（referred pain）</h4><p>按住幾秒，痛如果傳到遠處，就是轉位痛。問病人：「是不是平常那個痛？」重現主訴，才是 active MTrP。</p></div></div>
+    <div class="step" data-s="4"><div class="box"><span class="k">5 · 快速撥動</span><h4>局部抽搐反應（LTR）</h4><p>垂直緊束帶快速撥一下，肌束會短暫抽動。這是刺激 sensitive locus、經脊髓反射造成的，屬於確認徵象。</p></div></div>
+  </div>
+</div></div>
+
+<div class="col">
+  <h3>平壓法與捏法</h3>
+  <p>兩種觸診手法，依肌肉能不能被捏起來決定。</p>
+</div>
+<div class="wide"><div class="duo">
+  <figure style="margin:6px 0">
+    <h4 style="font-family:var(--display);font-size:20px;margin:0 0 6px">平壓法 <span class="mono soft" style="font-size:12px">flat palpation</span></h4>
+    <div class="plate"><svg viewBox="0 0 360 230" role="img" aria-label="平壓法切面：手指把肌肉壓向下方骨頭">
+      <rect x="20" y="52" width="320" height="10" fill="#e9c3a5"/>
+      <rect x="20" y="62" width="320" height="18" fill="#d9c27a" opacity=".45"/>
+      <line x1="20" y1="81" x2="340" y2="81" stroke="#d9cfe6" stroke-width="2"/>
+      <rect x="20" y="82" width="320" height="70" fill="#b8505f"/>
+      <g id="fpFasc" fill="#7e2f3d" opacity=".55"></g>
+      <circle cx="180" cy="116" r="11" fill="#5a1d29" stroke="#f0a7c6" stroke-width="1.5"/>
+      <circle class="a-ring" cx="180" cy="116" r="22" fill="none" stroke="#f2b134" stroke-width="1.5"/>
+      <rect x="20" y="156" width="320" height="44" rx="10" fill="#e6dcc4" stroke="#a9997a"/>
+      <g class="a-press"><path d="M160,-6 L160,30 Q160,50 180,50 Q200,50 200,30 L200,-6 Z" fill="#e9c3a5" stroke="#a9846a"/><path d="M168,6 Q180,0 192,6 L192,22 Q180,26 168,22 Z" fill="#f5e3d3"/></g>
+      <g font-size="11" fill="#9fb9b8"><text x="344" y="60" text-anchor="end">皮膚</text><text x="344" y="76" text-anchor="end">皮下脂肪</text><text x="26" y="96">筋膜</text><text x="26" y="146" fill="#e8efe9">肌肉</text><text x="26" y="184">骨頭（肩胛骨）</text><text x="196" y="102" fill="#f0a7c6">緊束帶</text></g>
+    </svg></div>
+    <figcaption>指腹垂直纖維，把肌肉<b>壓向下方骨頭</b>，在骨頭上「擀」過去。適合扁平、貼著骨頭的肌肉：<b>棘下肌</b>、棘上肌、臀中肌。</figcaption>
+  </figure>
+  <figure style="margin:6px 0">
+    <h4 style="font-family:var(--display);font-size:20px;margin:0 0 6px">捏法 <span class="mono soft" style="font-size:12px">pincer palpation</span></h4>
+    <div class="plate"><svg viewBox="0 0 360 230" role="img" aria-label="捏法切面：拇指與食指捏起肌腹滾動">
+      <path d="M60,170 Q70,70 180,62 Q290,70 300,170 Z" fill="#e9c3a5"/>
+      <path d="M72,170 Q82,82 180,74 Q278,82 288,170 Z" fill="#d9c27a" opacity=".45"/>
+      <path d="M86,170 Q96,94 180,88 Q264,94 274,170 Z" fill="#b8505f" stroke="#d9cfe6" stroke-width="2"/>
+      <g id="ppFasc" fill="#7e2f3d" opacity=".55"></g>
+      <g class="a-roll"><circle cx="180" cy="128" r="11" fill="#5a1d29" stroke="#f0a7c6" stroke-width="1.5"/></g>
+      <line x1="20" y1="172" x2="340" y2="172" stroke="#2a5662" stroke-dasharray="4 4"/>
+      <g class="a-squeezeL"><rect x="10" y="100" width="62" height="44" rx="22" fill="#e9c3a5" stroke="#a9846a"/><rect x="14" y="108" width="20" height="28" rx="8" fill="#f5e3d3"/></g>
+      <g class="a-squeezeR"><rect x="288" y="100" width="62" height="44" rx="22" fill="#e9c3a5" stroke="#a9846a"/><rect x="326" y="108" width="20" height="28" rx="8" fill="#f5e3d3"/></g>
+      <g font-size="11" fill="#9fb9b8"><text x="40" y="94">拇指</text><text x="300" y="94">食指</text><text x="180" y="200" text-anchor="middle">肌腹被捏離深層組織，不需要骨頭當墊底</text><text x="196" y="122" fill="#f0a7c6">緊束帶</text></g>
+    </svg></div>
+    <figcaption>拇指和食指<b>捏起肌腹</b>，在指間來回滾動找緊束帶。適合能被捏起的肌肉：<b>上斜方肌</b>、胸鎖乳突肌、胸大肌外緣、闊背肌。</figcaption>
+  </figure>
+</div></div>
+
+<div class="col">
+  <h3>診斷標準：勾勾看</h3>
+  <span class="src spk1">許宏志</span><span class="src add">補充：Delphi 2018 原文</span>
+  <p>講者投影片把緊束帶、過度敏感點、轉位痛、LTR 四項並列為「依 Delphi 標準」。2018 年 60 位專家的 Delphi 共識原文是：<b>前三項中至少兩項</b>即可診斷，LTR 是確認徵象，不是必要條件（Fernández-de-las-Peñas &amp; Dommerholt 2018）。</p>
+  <div class="checks" id="delphi"></div>
+  <div class="verdict" id="delphiOut"></div>
+
+  <h3>關鍵點與衛星點、轉位痛地圖</h3>
+  <span class="src spk1">官大紳</span><span class="src add">轉位痛範圍：依 Travell &amp; Simons 描述重繪</span>
+  <p>關鍵激痛點活化後，它的轉位痛區裡會長出衛星激痛點。<b>先處理關鍵點，衛星點常會跟著消退。</b>點選肌肉，看它的激痛點位置、轉位痛範圍和衛星點。</p>
+</div>
+<div class="wide"><figure>
+  <div class="btns" id="mchips"></div>
+  <div class="plate"><svg id="muscleMap" class="cap" viewBox="0 0 420 350" role="img" aria-label="背面與正面人體圖，顯示激痛點與轉位痛範圍"></svg></div>
+  <div class="sopdetail" id="mdetail" style="margin-top:10px;min-height:0"></div>
+  <figcaption><span class="figno">FIG 8</span>× 是常見激痛點位置，粉紅色是轉位痛範圍，深淺代表常見程度。皆以病人右側示意；範圍為簡化示意，個體差異很大。</figcaption>
+</figure>
+<div class="col" style="padding:0">
+  <div class="callout pink"><h4>回到陳小姐</h4><p>點選「棘下肌」，轉位痛範圍和第 1 章她畫的疼痛地圖幾乎一樣：肩膀前方深處、延伸到上臂前外側。她的肩前痛不只是五十肩，有一部分來自棘下肌。衛星點表也把肱二頭肌列為棘下肌的衛星點，這是「假性肱二頭肌腱炎」常見的原因。</p></div>
+</div></div>
+</section>
+
+<!-- CH6 -->
+<section class="ch" id="c6" data-name="06 徒手治療"><div class="col">
+  <div class="chhead"><span class="chno">CH 06 / 08</span></div>
+  <h2>徒手治療：三本柱</h2>
+  <span class="src spk1">許宏志</span>
+  <p>講者稱為「診間三得力」，實證指引參考 AAOMPT（美國骨科徒手物理治療學會）與 Cochrane。門診要求三個字：<b>精準、溫和、有效</b>。</p>
+</div>
+<div class="wide"><div class="pillars">
+  <div class="pillar">
+    <span class="mono" style="font-size:11px;color:var(--pain)">01</span>
+    <h4>缺血性加壓</h4><span class="en">Ischemic Compression · IC</span>
+    <svg viewBox="0 0 240 120" role="img" aria-label="缺血性加壓：壓住激痛點，先缺血再再灌流">
+      <rect x="20" y="60" width="200" height="44" rx="8" fill="#2a1219" stroke="#7e2f3d"/>
+      <circle class="a-perf" cx="120" cy="82" r="14" fill="#b8505f"/>
+      <g class="a-press"><path d="M104,0 L104,28 Q104,44 120,44 Q136,44 136,28 L136,0 Z" fill="#e9c3a5" stroke="#a9846a"/></g>
+      <g font-size="10" fill="#9fb9b8"><text x="26" y="54">缺血</text><text x="98" y="116">→ 加壓 →</text><text x="176" y="54">再灌流</text></g>
+    </svg>
+    <ul><li>持續定點加壓</li><li>降低局部敏感化</li><li>打破能量危機</li></ul>
+    <p class="key">「壓」→ 激痛點去敏感化</p>
+    <small class="note">適合鎖定激痛點</small>
+  </div>
+  <div class="pillar">
+    <span class="mono" style="font-size:11px;color:var(--pain)">02</span>
+    <h4>肌筋膜鬆弛術</h4><span class="en">Myofascial Release · MFR</span>
+    <svg viewBox="0 0 240 120" role="img" aria-label="肌筋膜鬆弛術：筋膜層與肌肉層之間恢復滑動">
+      <rect x="20" y="68" width="200" height="38" rx="6" fill="#b8505f" opacity=".85"/>
+      <g class="a-cut" stroke="#f2b134" stroke-width="1.5"><line x1="60" y1="58" x2="64" y2="68"/><line x1="100" y1="58" x2="96" y2="68"/><line x1="140" y1="58" x2="144" y2="68"/><line x1="180" y1="58" x2="176" y2="68"/></g>
+      <g class="a-slide"><rect x="20" y="40" width="200" height="16" rx="4" fill="#d9cfe6" opacity=".85"/><g stroke="#8f86c9" stroke-width="1"><line x1="30" y1="44" x2="210" y2="44"/><line x1="30" y1="52" x2="210" y2="52"/></g></g>
+      <g font-size="10" fill="#9fb9b8"><text x="24" y="34">筋膜層</text><text x="24" y="118">肌肉層</text><text x="150" y="34" fill="#f2b134">交聯鬆開</text></g>
+    </svg>
+    <ul><li>筋膜持續牽張鬆解</li><li>破壞筋膜交聯</li><li>促進玻尿酸流動</li></ul>
+    <p class="key">「鬆」→ 恢復筋膜滑動性</p>
+    <small class="note">適合筋膜緊繃、滑動受限</small>
+  </div>
+  <div class="pillar">
+    <span class="mono" style="font-size:11px;color:var(--pain)">03</span>
+    <h4>肌肉能量技術</h4><span class="en">Muscle Energy Technique · MET</span>
+    <svg viewBox="0 0 240 120" role="img" aria-label="肌肉能量技術：等長收縮後放鬆，進入新的伸展範圍">
+      <path d="M110,96 L210,96" stroke="#2a5662" stroke-width="2" stroke-dasharray="4 4"/>
+      <path d="M110,96 L205,72" stroke="#2a5662" stroke-width="1" stroke-dasharray="2 4"/>
+      <g class="a-met"><line x1="110" y1="96" x2="200" y2="96" stroke="#e8efe9" stroke-width="7" stroke-linecap="round"/></g>
+      <circle cx="110" cy="96" r="7" fill="#e6dcc4"/>
+      <g class="a-metpush"><path d="M190,58 L186,78" stroke="#f2b134" stroke-width="2" marker-end="url(#ahy)"/><text x="120" y="48" font-size="10" fill="#f2b134">20% 等長收縮</text></g>
+      <defs><marker id="ahy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#f2b134" stroke-width="1.6"/></marker></defs>
+      <g font-size="10" fill="#9fb9b8"><text x="24" y="100">關節</text><text x="136" y="116">放鬆 → 新屏障</text></g>
+    </svg>
+    <ul><li>主動收縮結合伸展</li><li>改善關節與肌肉張力</li><li>重置肌梭張力</li></ul>
+    <p class="key">「收＋放」→ 重整神經肌肉控制</p>
+    <small class="note">適合重整張力與動作控制。講者以高基氏肌腱器抑制解釋；近年研究認為伸展耐受度提高也是重要機轉。<span class="src add">補充</span></small>
+  </div>
+</div></div>
+
+<div class="col">
+  <h3>PIR 練習器</h3>
+  <span class="src spk1">許宏志</span>
+  <p>等長後放鬆（post-isometric relaxation）是 MET 的一種，也是 9 分鐘 SOP 第 3 步的主力。以上斜方肌、頸部側彎為例，按「做一個循環」：</p>
+</div>
+<div class="wide"><figure>
+  <div class="duo" style="align-items:center">
+    <div class="plate"><svg id="pir" viewBox="0 0 320 250" role="img" aria-label="PIR 頸部側彎練習示意">
+      <path d="M40,240 Q60,186 120,180 L200,180 Q260,186 280,240 Z" fill="#0f3540" stroke="#9fb9b8"/>
+      <path id="pirArc" fill="none" stroke="#f2b134" stroke-width="2"/>
+      <g id="pirHead" style="transition:transform 1.2s ease-in-out;transform-origin:160px 176px">
+        <rect x="148" y="128" width="24" height="52" rx="8" fill="#e9c3a5" stroke="#a9846a"/>
+        <circle cx="160" cy="100" r="32" fill="#e9c3a5" stroke="#a9846a"/>
+        <path d="M120,92 Q114,100 120,110" fill="none" stroke="#a9846a" stroke-width="3"/>
+        <g id="pirHand" opacity="0" style="transition:opacity .3s"><rect x="186" y="74" width="26" height="40" rx="12" fill="#f5e3d3" stroke="#a9846a"/><path d="M206,94 L232,94" stroke="#f2b134" stroke-width="2.5" marker-end="url(#ahy2)"/></g>
+      </g>
+      <defs><marker id="ahy2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#f2b134" stroke-width="1.6"/></marker></defs>
+      <path d="M120,182 Q100,170 92,150" fill="none" stroke="#c77fa0" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+      <text x="64" y="138" font-size="11" fill="#c77fa0">上斜方肌</text>
+      <text x="16" y="24" font-size="12" fill="#9fb9b8" font-family="IBM Plex Mono, monospace" id="pirAngle">側彎 25°</text>
+    </svg></div>
+    <div>
+      <div class="cycle" id="pirPhases" style="flex-direction:column;align-items:stretch">
+        <span>① 擺位到屏障：慢慢側彎到剛有緊繃感</span>
+        <span>② 約 20% 力量等長收縮 5–7 秒（往回頂治療者的手）</span>
+        <span>③ 吐氣、完全放鬆</span>
+        <span>④ 隨吐氣把頭帶到新的屏障</span>
+      </div>
+      <div class="btns"><button class="btn" id="pirGo">做一個循環</button><button class="btn ghost" id="pirReset">重來</button></div>
+      <p class="mono" id="pirTimer" style="font-size:13px;color:var(--ink-soft);margin:0">通常重複 3–5 個循環</p>
+    </div>
+  </div>
+  <figcaption><span class="figno">FIG 9</span>每個循環後，可伸展的角度會往前推一點。收縮只用約 20% 力量，過程在無痛或輕微不適的範圍內。</figcaption>
+</figure></div>
+
+<div class="col">
+  <h3>MWM：關節鬆動合併主動動作</h3>
+  <span class="src spk1">許宏志</span><span class="src add">補充：實證</span>
+</div>
+<div class="wide"><div class="duo" style="align-items:center">
+  <figure style="margin:6px 0"><div class="plate"><svg viewBox="0 0 300 220" role="img" aria-label="MWM 示意：治療者推動肱骨頭滑動，病人同時主動抬手">
+    <path d="M60,60 Q100,44 150,62 L160,200 L52,200 Z" fill="#0f3540" stroke="#9fb9b8"/>
+    <circle cx="100" cy="30" r="20" fill="#0f3540" stroke="#9fb9b8"/>
+    <g class="a-arm"><line x1="150" y1="84" x2="156" y2="190" stroke="#e8efe9" stroke-width="16" stroke-linecap="round"/></g>
+    <circle cx="150" cy="84" r="15" fill="#e6dcc4" stroke="#a9997a"/>
+    <g class="a-glide"><rect x="170" y="56" width="30" height="22" rx="10" fill="#f5e3d3" stroke="#a9846a"/><path d="M172,70 L156,84" stroke="#f2b134" stroke-width="2.5" marker-end="url(#ahy2)"/></g>
+    <g font-size="11" fill="#9fb9b8"><text x="204" y="62">治療者推動肱骨頭滑動</text><text x="182" y="210">病人同時主動抬手</text></g>
+  </svg></div>
+  <figcaption><span class="figno">FIG 10</span>以手法引導關節滑動，同時讓病人做原本會痛的動作。原則是<b>動作中無痛</b>。</figcaption></figure>
+  <div>
+    <p>對陳小姐這類五十肩病人，MWM 和關節鬆動術在冰凍進展期、冰凍期可能改善疼痛與活動度；發炎期是否適用還沒有定論（Saka &amp; Muraki 2023）。統合分析也顯示 MWM 對第二期五十肩的效果優於運動、被動手法或電療（Satpute 2021）。<span class="src add">補充</span></p>
+    <div class="tw"><table class="t">
+      <tr><th>臨床狀況</th><th>首選技法</th></tr>
+      <tr><td>激痛點本身（任何診斷合併）</td><td>IC、PIR</td></tr>
+      <tr><td>動作時痛、活動受限（夾擠、五十肩）</td><td>MWM</td></tr>
+      <tr><td>肌肉張力高、活動度差</td><td>MET</td></tr>
+      <tr><td>筋膜緊繃、滑動受限</td><td>MFR</td></tr>
+    </table></div>
+  </div>
+</div></div>
+
+<div class="col">
+  <h3>最後 2 分鐘：開居家運動處方</h3>
+  <span class="src spk1">許宏志</span>
+  <div class="callout"><h4>提肩胛肌伸展（講者示範）</h4><p>每次 10–15 秒（每側）· 3–5 回 · 每日 2–3 次。處方要<b>簡單、可行、可追蹤</b>，並在診間示範一次。</p></div>
+</div>
+</section>
+
+<!-- CH7 -->
+<section class="ch" id="c7" data-name="07 其他治療"><div class="col">
+  <div class="chhead"><span class="chno">CH 07 / 08</span></div>
+  <h2>其他治療方式</h2>
+  <p class="soft">講者在會中有提到，但沒有深入講解。這裡只簡單說明是什麼。</p>
+  <div class="minis">
+    <div class="mini"><h4>乾針</h4><p>不打藥，用針直接刺激激痛點。Hong 的「快進快出」技術在激痛點區域多方向進針，目標是誘發局部抽搐反應（對照 FIG 6）。</p><span class="src">講者提及</span></div>
+    <div class="mini"><h4>筋膜剝離術</h4><p>把沾黏或增厚的筋膜層分開，常在超音波導引下注入液體進行（水剝離）。</p><span class="src">講者提及</span></div>
+    <div class="mini"><h4>激痛點注射</h4><p>在激痛點注射局部麻醉劑。Hong 1994 比較 lidocaine 注射與乾針，兩者短期效果相近，乾針術後痠痛較明顯。</p><span class="src">講者提及</span></div>
+    <div class="mini"><h4>物理治療</h4><p>熱療、經皮神經電刺激（TENS）、治療性超音波、體外震波，搭配運動治療。</p><span class="src">講者提及</span></div>
+  </div>
+</div></section>
+
+<!-- CH8 -->
+<section class="ch" id="c8" data-name="08 治本"><div class="col">
+  <div class="chhead"><span class="chno">CH 08 / 08</span></div>
+  <h2>治本：為什麼一直復發？</h2>
+  <span class="src spk1">許宏志</span>
+  <p>肌筋膜疼痛反覆發作，常不是治療不夠，而是<b>持續活化因子</b>沒處理。講者依 Travell &amp; Simons 的持續因子（perpetuating factors）模型，分成系統性與力學性兩類。</p>
+  <h3>疼痛原因「六不」</h3>
+  <div class="six">
+    <div><b>不良</b><span>姿勢</span></div><div><b>不當</b><span>動力鏈</span></div><div><b>不動</b><span>失能</span></div>
+    <div><b>不足</b><span>肌耐力</span></div><div><b>不停</b><span>使用</span></div><div><b>不夠</b><span>修復</span></div>
+  </div>
+
+  <h3>持續活化因子</h3>
+  <p>點選各因子看說明。陳小姐的那一項已經標出來了。</p>
+</div>
+<div class="wide"><figure>
+  <div class="plate"><div class="factors">
+    <div class="side"><h4>系統性因子</h4>
+      <button class="chip" data-f="dm">糖尿病 ← 陳小姐</button>
+      <button class="chip" data-f="thy">甲狀腺疾病</button>
+      <button class="chip" data-f="hsd">鬆筋症候群</button>
+      <button class="chip" data-f="vit">維生素 D、鋅缺乏</button>
+      <button class="chip" data-f="ele">電解質不足</button>
+    </div>
+    <div class="core"><svg viewBox="0 0 120 120" role="img" aria-label="肌筋膜激痛點">
+      <circle cx="60" cy="60" r="44" fill="#2a1219" stroke="#c77fa0"/>
+      <circle cx="60" cy="60" r="12" fill="#f2b134" class="pulse"/>
+      <g stroke="#c77fa0" stroke-width="1.2"><line x1="60" y1="36" x2="60" y2="22"/><line x1="60" y1="84" x2="60" y2="98"/><line x1="36" y1="60" x2="22" y2="60"/><line x1="84" y1="60" x2="98" y2="60"/></g>
+      <text x="60" y="114" text-anchor="middle" font-size="11" fill="#9fb9b8">激痛點</text>
+    </svg></div>
+    <div class="side"><h4>力學性因子</h4>
+      <button class="chip" data-f="fhp">前頭姿</button>
+      <button class="chip" data-f="rs">圓肩</button>
+      <button class="chip" data-f="imp">肩盂肱關節夾擠</button>
+      <button class="chip" data-f="c12">C1–C2 錯位</button>
+      <button class="chip" data-f="desk">工作姿勢、重複動作</button>
+    </div>
+  </div>
+  <div class="fdetail" id="fdetail"></div></div>
+  <figcaption><span class="figno">FIG 11</span>講者流程：①辨識持續因子 → ②矯正系統性與力學問題 → ③降低疼痛復發與慢性化。</figcaption>
+</figure></div>
+
+<div class="col">
+  <h3>頸痛的惡性循環</h3>
+  <span class="src spk1">許宏志</span>
+  <p>頸痛往往不是單一結構的問題，而是四個結構互相影響：</p>
+  <div class="cycle" id="ncycle"><span>小面關節不穩</span><i>→</i><span>周圍肌肉代償性緊繃、痙攣</span><i>→</i><span>神經／椎間盤反覆牽拉發炎</span><i>→</i><span>韌帶負荷增加、關節磨損</span><i>↻</i></div>
+  <small class="note">臨床意義：找出疼痛主因、改善肌力失衡與姿勢控制、打破循環。只放鬆肌肉，循環很快又會轉回來。</small>
+
+  <h3>五十肩居家復健 8 式</h3>
+  <span class="src spk1">許宏志</span>
+  <p>給陳小姐帶回家的運動。原則：動作溫和規律、不強迫用力、在無劇痛範圍內進行、持續 6–12 週。</p>
+  <div class="ex">
+    <div><b>鐘擺運動</b><span>各方向 10 次 × 2 組</span></div>
+    <div><b>桌面滑動－前屈</b><span>10 次 × 2 組</span></div>
+    <div><b>桌面滑動－肩胛面抬舉</b><span>10 次 × 2 組</span></div>
+    <div><b>毛巾輔助外旋</b><span>10 次 × 2 組</span></div>
+    <div><b>爬牆運動－前屈</b><span>10 次 × 2 組</span></div>
+    <div><b>毛巾輔助背後拉伸</b><span>15–30 秒 × 3 組</span></div>
+    <div><b>手杖輔助外展</b><span>10 次 × 2 組</span></div>
+    <div><b>肩胛骨後縮</b><span>5 秒 × 10 次 × 2 組</span></div>
+  </div>
+
+  <h3>帶走五件事</h3>
+  <ol class="take">
+    <li>肩痛先過紅旗與神經學檢查，再找肌肉；激痛點常是配角，和五十肩、旋轉肌腱病變同時存在。</li>
+    <li>激痛點有感覺端（sensitive loci）和運動端（active loci）；手摸得到的是壓痛點、轉位痛和緊束帶。</li>
+    <li>Delphi 2018：緊束帶、過度敏感點、轉位痛至少兩項；重現病人主訴才是 active MTrP。</li>
+    <li>徒手三本柱：IC 壓、MFR 鬆、MET 收放；門診 9 分鐘 SOP 最後 2 分鐘留給居家運動。</li>
+    <li>反覆復發時，回頭找持續因子：糖尿病、甲狀腺、營養缺乏，以及姿勢與動力鏈。</li>
+  </ol>
+
+  <h3>參考資料</h3>
+  <ul class="sources">
+    <li>官大紳〈肌筋膜疼痛症及激痛點簡介〉、許宏志〈肌筋膜疼痛症的徒手治療〉，台灣家庭醫學醫學會 115 年度秋季學術研討會手冊與投影片（現場拍攝）</li>
+    <li>Fernández-de-las-Peñas C, Dommerholt J. International consensus on diagnostic criteria and clinical considerations of myofascial trigger points: a Delphi study. <i>Pain Med</i> 2018;19:142–150. <a href="https://dx.doi.org/10.1093%2Fpm%2Fpnx207">doi</a></li>
+    <li>Bron C, et al. High prevalence of shoulder girdle muscles with myofascial trigger points in patients with shoulder pain. <i>BMC Musculoskelet Disord</i> 2011;12:139. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3146907">PMC</a></li>
+    <li>McEvoy J, Dommerholt J. Myofascial trigger points of the shoulder. <a href="https://www.chirocredit.com/downloads/shoulderrehab/shldrrehab110.pdf">PDF</a></li>
+    <li>Shahid J, et al. Prevalence of myofascial trigger points in patients with non-traumatic unilateral shoulder pain. <i>RADS J Biol Res Appl Sci</i> 2023;14:48–55. <a href="https://jbas.juw.edu.pk/index.php/JBAS/article/view/517">連結</a></li>
+    <li>Desjardins-Charbonneau A, et al. The efficacy of manual therapy for rotator cuff tendinopathy. <i>JOSPT</i> 2015. <a href="https://www.epistemonikos.org/en/documents/b79a9ec4fccfce7c9405c1e7ea3b4943fbf52f20">摘要</a></li>
+    <li>Page MJ, et al. Manual therapy and exercise for rotator cuff disease. <i>Cochrane Database Syst Rev</i> 2016. <a href="https://search.pedro.org.au/search-results/record-detail/46685">PEDro</a></li>
+    <li>Saka M, Muraki T. Effectiveness of manual therapy for frozen shoulder. <i>J Manual Phys Ther</i> 2023. <a href="https://www.jstage.jst.go.jp/article/jmpt/23/1/23_51/_article">J-STAGE</a></li>
+    <li>Satpute K, et al. Efficacy of mobilization with movement for shoulder conditions. <i>J Man Manip Ther</i> 2022;30:13–32. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8865120">PMC</a></li>
+    <li>Donnelly JM, et al. <i>Travell, Simons &amp; Simons' Myofascial Pain and Dysfunction: The Trigger Point Manual</i>, 3rd ed. 2018（轉位痛範圍、持續因子）</li>
+    <li>Hong CZ. Lidocaine injection versus dry needling to myofascial trigger point. <i>Am J Phys Med Rehabil</i> 1994;73:256–263.</li>
+  </ul>
+</div>
+<div class="col"><footer>家醫群島 · 疼痛島深入頁 · 病例為教學設計，非真實病人 · 示意圖為自繪簡化圖，不能取代臨床判斷</footer></div>
+</section>
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const el=(n,a={},p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* progress + chapter name */
+const bar=$("#progbar"),now=$("#chapnow"),chs=$$("section.ch");
+function onScroll(){const h=document.documentElement;const p=h.scrollTop/(h.scrollHeight-h.clientHeight);bar.style.width=(p*100).toFixed(1)+"%";
+  let cur="疼痛島";for(const c of chs){if(c.getBoundingClientRect().top<120)cur=c.dataset.name}now.textContent=cur}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+/* generic scrolly */
+function scrolly(root,cb){const steps=[...root.querySelectorAll(".step")];
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){steps.forEach(s=>s.classList.toggle("on",s===e.target));cb(+e.target.dataset.s)}})},{rootMargin:"-45% 0px -45% 0px"});
+  steps.forEach(s=>io.observe(s));}
+
+/* auto cycle stepper */
+function autoCycle(sel,ms){const box=$(sel);if(!box)return;const sp=[...box.querySelectorAll("span")];let i=0;
+  if(reduce){sp.forEach(s=>s.classList.add("on"));return}
+  let t=null;const tick=()=>{sp.forEach((s,k)=>s.classList.toggle("on",k===i));i=(i+1)%sp.length};
+  new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!t){tick();t=setInterval(tick,ms)}else if(!e.isIntersecting&&t){clearInterval(t);t=null}})}).observe(box);}
+
+/* ---------- body map ---------- */
+function figurePath(cx){return `M${cx-10},60 L${cx-10},80 Q${cx-40},84 ${cx-60},95 Q${cx-72},100 ${cx-74},118 L${cx-84},215 L${cx-90},300 Q${cx-91},322 ${cx-82},322 L${cx-78},300 L${cx-68},215 L${cx-60},150 L${cx-56},240 L${cx-52},334 L${cx+52},334 L${cx+56},240 L${cx+60},150 L${cx+68},215 L${cx+78},300 L${cx+82},322 Q${cx+91},322 ${cx+90},300 L${cx+84},215 L${cx+74},118 Q${cx+72},100 ${cx+60},95 Q${cx+40},84 ${cx+10},80 L${cx+10},60 Z`}
+function bodyMap(svg){
+  [["b",105,"背面"],["f",315,"正面"]].forEach(([v,cx,lab])=>{
+    el("path",{d:figurePath(cx),fill:"#0f3540",stroke:"#3f6f7a","stroke-width":1.2},svg);
+    el("circle",{cx,cy:40,r:21,fill:"#0f3540",stroke:"#3f6f7a","stroke-width":1.2},svg);
+    if(v==="b"){el("path",{d:`M${cx},84 L${cx},250`,stroke:"#2a5662","stroke-dasharray":"3 4"},svg);
+      el("path",{d:`M${cx+18},104 L${cx+44},100 L${cx+30},150 Z`,fill:"none",stroke:"#2a5662"},svg);el("path",{d:`M${cx-18},104 L${cx-44},100 L${cx-30},150 Z`,fill:"none",stroke:"#2a5662"},svg);}
+    else{el("path",{d:`M${cx-30},92 Q${cx},100 ${cx+30},92`,fill:"none",stroke:"#2a5662"},svg);}
+    const t=el("text",{x:cx,y:348,"text-anchor":"middle","font-size":12,fill:"#9fb9b8"},svg);t.textContent=lab;
+  });
+  const sideB=el("text",{x:190,y:20,"text-anchor":"middle","font-size":10,fill:"#3f6f7a"},svg);sideB.textContent="右 →";
+  const sideF=el("text",{x:232,y:20,"text-anchor":"middle","font-size":10,fill:"#3f6f7a"},svg);sideF.textContent="← 右";
+  return el("g",{},svg);
+}
+const VX={b:0,f:0};
+function zone(g,[x,y,rx,ry,o]){el("ellipse",{cx:x,cy:y,rx,ry,fill:"#c77fa0",opacity:o},g)}
+function xmark(g,x,y){const m=el("g",{stroke:"#f2b134","stroke-width":2.4,"stroke-linecap":"round"},g);el("line",{x1:x-5,y1:y-5,x2:x+5,y2:y+5},m);el("line",{x1:x-5,y1:y+5,x2:x+5,y2:y-5},m)}
+
+/* case map */
+const cm=$("#caseMap");if(cm){const g=bodyMap(cm);
+  [[252,108,13,12,.8],[247,148,8,26,.6],[176,136,8,12,.35]].forEach(z=>zone(g,z));
+  const p=el("g",{},g);el("circle",{cx:252,cy:106,r:4,fill:"#f2b134"},p);
+  const t=el("text",{x:206,y:92,"font-size":11,fill:"#f2b134","text-anchor":"end"},g);t.textContent="最痛點";
+  el("line",{x1:208,y1:95,x2:247,y2:104,stroke:"#f2b134","stroke-width":.7},g);}
+
+/* tabs + guess */
+$$(".tabs .chip").forEach(b=>b.addEventListener("click",()=>{$$(".tabs .chip").forEach(x=>x.classList.toggle("on",x===b));$$(".panel").forEach(p=>p.classList.toggle("on",p.id===b.dataset.tab))}));
+const GU={a:"旋轉肌腱病變會痛在肩外側、上舉時痛，但通常只有主動活動受限，被動外旋不太受限。",b:"很接近！被動外旋受限是五十肩的線索。但按壓棘下肌能重現她的痛，還少了一塊。",c:"很接近！棘下肌激痛點確實會轉位到肩前方。但被動外旋也受限，關節囊同樣有問題。"};
+$$("[data-guess]").forEach(b=>b.addEventListener("click",()=>{$$("[data-guess]").forEach(x=>x.classList.toggle("on",x===b));$("#guessOut").textContent=GU[b.dataset.guess]+" 打開「判讀」看答案。"}));
+
+/* ---------- shoulder causes ---------- */
+const CAUSES=[
+ {n:1,name:"旋轉肌腱病變",f:"過度使用、重複動作；與年齡相關的退化或撕裂；肩上舉時痛。",lvl:"ok",lt:"可以，當輔助",b:"運動治療加上徒手治療，疼痛多降約 1 分（VAS 10 分制）；Cochrane 認為效果可能和類固醇注射相近，證據品質低。",tp:"棘上肌、棘下肌",m:[316,106]},
+ {n:2,name:"五十肩",f:"沾黏性關節囊炎；肩關節僵硬與疼痛、主動與被動活動都受限；好發 40–60 歲。",lvl:"warn",lt:"可以，看分期",b:"MWM、關節鬆動術在冰凍進展期、冰凍期可能有效；發炎期以控制疼痛為主，手法溫和、不硬扳。",tp:"肩胛下肌、棘下肌",m:[334,176]},
+ {n:3,name:"肩峰下夾擠",f:"旋轉肌腱在肩峰下受壓；肩上舉時痛；常見於運動員或重複性工作。",lvl:"ok",lt:"可以，當輔助",b:"MWM 處理疼痛弧，IC 或 PIR 處理激痛點；搭配肩胛穩定運動。",tp:"棘上肌、棘下肌、肩胛下肌",m:[262,62]},
+ {n:4,name:"肩關節脫位",f:"外傷或運動傷害；劇烈疼痛、腫脹、變形；有不穩定感。",lvl:"stop",lt:"急性期不行",b:"先復位、等穩定後才進入復健；不要往會引發不穩感的姿勢牽拉。",tp:"不適用",m:[222,212]},
+ {n:5,name:"肩關節炎",f:"退化性（OA）軟骨磨損，或類風濕性（RA）發炎；疼痛、僵硬、活動度下降。",lvl:"warn",lt:"OA 可溫和做；RA 發作期避免",b:"OA：改善活動度與周邊肌肉張力，不改變結構。RA 發作期不做關節鬆動；頸部手法注意寰樞椎不穩。",tp:"周邊肌群代償",m:[250,140]},
+ {n:6,name:"肱二頭肌肌腱炎",f:"肩前側疼痛；提重物或旋轉動作時加劇。",lvl:"ok",lt:"可以，當輔助",b:"先想到「假性」肱二頭肌痛：棘下肌激痛點會轉位痛到肩前方，衛星點表也把肱二頭肌列為棘下肌的衛星點。",tp:"棘下肌（關鍵點）",m:[310,214]},
+ {n:7,name:"頸椎轉移痛",f:"頸椎問題、神經壓迫；疼痛可能放射到肩部。",lvl:"warn",lt:"看是哪一種",b:"非神經根性的頸肩肌筋膜痛可以做；神經根病變小心處理；脊髓病變不做頸部手法。",tp:"上斜方肌、提肩胛肌、斜角肌",m:[104,104]}];
+const cwrap=$("#causes"),mk=$("#markers");
+CAUSES.forEach(c=>{
+  const b=document.createElement("button");b.className="cause";b.id="cause"+c.n;b.setAttribute("aria-label",c.name+"，點擊翻面");
+  b.innerHTML=`<div class="face front"><span class="n">0${c.n}</span><h4>${c.name}</h4><p>${c.f}</p><span class="flipnote">翻面 ↻</span></div>
+   <div class="face back"><span class="n">0${c.n} · 徒手治療</span><span class="badge ${c.lvl}">${c.lt}</span><p>${c.b}</p><p><b style="color:var(--ink);font-weight:500">常合併激痛點：</b>${c.tp}</p></div>`;
+  b.addEventListener("click",()=>{b.classList.toggle("flip");hl(c.n)});cwrap.appendChild(b);
+  const g=el("g",{tabindex:0,role:"button","aria-label":c.name,style:"cursor:pointer"},mk);
+  el("circle",{cx:c.m[0],cy:c.m[1],r:11,fill:"#082028",stroke:"#f2b134","stroke-width":1.5},g);
+  const t=el("text",{x:c.m[0],y:c.m[1]+4,"text-anchor":"middle",fill:"#f2b134"},g);t.textContent=c.n;
+  const go=()=>{const card=$("#cause"+c.n);card.classList.add("flip");hl(c.n);card.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"})};
+  g.addEventListener("click",go);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});
+});
+function hl(n){$$(".cause").forEach(x=>x.classList.toggle("hl",x.id==="cause"+n))}
+
+/* ---------- SOP ---------- */
+const SOP=[
+ `<b>① 問診＋排除紅旗（2 分鐘）</b><ul><li>外傷、癌症病史、脊椎感染、馬尾症候群、壓迫性骨折、僵直性脊椎炎、神經根病變、脊椎狹窄、脊髓病變</li><li>神經學檢查：肌力、感覺、反射</li><li>先排除危險訊號，再進入徒手處置</li></ul>`,
+ `<b>② 依 Delphi 標準觸診定位激痛點（2 分鐘）</b><ul><li>緊束帶、過度敏感壓痛點、特異轉位痛、局部抽搐反應</li><li>先找關鍵激痛點；示範肌肉：提肩胛肌、胸鎖乳突肌、棘上肌</li><li>詳見第 5 章</li></ul>`,
+ `<b>③ 執行 PIR 或 MWM 徒手處置（3 分鐘）</b><ul><li>PIR：擺位到屏障 → 約 20% 力量等長收縮 5–7 秒 → 吐氣放鬆，進入新屏障</li><li>MWM：關節鬆動合併主動動作，在動作中逐漸改善疼痛與活動範圍；動作中無痛為原則</li><li>詳見第 6 章</li></ul>`,
+ `<b>④ 居家運動示範＋處方（2 分鐘）</b><ul><li>例：提肩胛肌伸展，每次 10–15 秒（每側）、3–5 回、每日 2–3 次</li><li>簡單、可行、可追蹤，開立個人化運動處方</li><li>衛教與運動降低復發</li></ul>`];
+const sd=$("#sopdetail");sd.innerHTML=SOP[0];
+$$("#sop button").forEach(b=>b.addEventListener("click",()=>{$$("#sop button").forEach(x=>x.classList.toggle("on",x===b));sd.innerHTML=SOP[+b.dataset.k]}));
+
+/* ---------- red flags ---------- */
+const RF=[["外傷","明顯外傷史、嚴重持續疼痛"],["癌症病史","不明原因體重減輕、夜間痛、持續惡化"],["脊椎感染","發燒、近期感染、靜脈注射藥物、手術史"],["馬尾症候群","尿滯留、大小便失禁、鞍區麻木"],["椎體壓迫性骨折","骨質疏鬆、長期類固醇、年長、輕微外傷"],["僵直性脊椎炎","晨僵、運動後改善、夜間痛、年輕族群"],["神經根病變","放射痛超過 1 個月、進行性神經學缺損"],["脊椎狹窄","行走後下肢痛、久站加劇、坐下緩解"],["脊髓病變","頸部僵硬、步態不穩、手部精細動作變差"]];
+const ck=$("#checks"),vd=$("#verdict");
+RF.forEach(([a,b],i)=>{const l=document.createElement("label");l.className="check";l.innerHTML=`<input type="checkbox" id="rf${i}"><span>${a}<small>${b}</small></span>`;ck.appendChild(l);
+  l.querySelector("input").addEventListener("change",e=>{l.classList.toggle("on",e.target.checked);const n=$$("#checks input:checked").length;
+   vd.className="verdict "+(n?"stop":"go");vd.textContent=n?`勾選 ${n} 項紅旗：先處理這個問題（影像、抽血或轉介），暫不進行徒手處置。`:"沒有勾選紅旗：可以進入觸診與徒手評估。"})});
+
+/* ---------- pathogenesis flow ---------- */
+const flow=$("#flow");
+if(flow){
+ const defs=el("defs",{},flow);const mkr=el("marker",{id:"fa",viewBox:"0 0 10 10",refX:8,refY:5,markerWidth:6,markerHeight:6,orient:"auto-start-reverse"},defs);el("path",{d:"M1,1 L9,5 L1,9",fill:"none",stroke:"context-stroke","stroke-width":1.6},mkr);
+ const E=[["M360,62 L360,92 L256,92 L256,122",1],["M360,92 L474,92 L474,122",1],["M256,168 L256,202",2],["M474,168 L474,202",3],
+  ["M178,224 L154,224",2],["M166,224 L166,280 L154,280",2],["M256,244 L256,262 L330,262 L330,280",4],["M474,244 L474,262 L370,262 L370,280",4],
+  ["M552,224 L576,224",3],["M643,244 L643,364",3],["M578,386 L430,386",4],["M350,322 L350,360",4],["M350,408 L350,446",5],["M350,498 L350,566",6],["M192,568 L518,568",6]];
+ const ED=[["M152,146 L166,146 L166,224",2],["M500,244 L500,270",3],["M470,467 L360,428",5],["M478,89 L380,89",1]];
+ const edges=[];
+ E.forEach(([d,g])=>edges.push([el("path",{d,class:"ed","marker-end":"url(#fa)"},flow),g]));
+ ED.forEach(([d,g])=>edges.push([el("path",{d,class:"ed","stroke-dasharray":"4 4"},flow),g]));
+ const N={tr:[255,16,210,46,["慢性重複性創傷","（急性創傷）"],[1]],cm:[478,72,150,34,["化學介質・力學因子"],[1],1],
+  noc:[178,124,156,44,["敏化痛覺受器"],[2]],end:[396,124,156,44,["功能異常終板"],[3]],
+  sl:[178,204,156,40,["Sensitive loci"],[2,4]],al:[396,204,156,40,["Active loci"],[3,4]],
+  sc:[12,124,140,44,["脊髓機轉"],[2],1],rp:[12,204,140,40,["轉位痛"],[2]],ltr:[12,262,140,40,["局部抽搐反應"],[2]],
+  tf:[578,204,130,40,["緊繃肌纖維"],[3]],ec:[420,272,130,34,["Energy crisis"],[3],1],loc:[290,282,120,40,["MTrP locus"],[4]],
+  tb:[578,366,130,40,["緊束帶"],[3,4]],lat:[272,362,156,46,["Latent MTrP"],[4,5]],
+  trg:[470,440,238,54,["累積的重複創傷・急性創傷","纖維肌痛"],[5],1],act:[272,448,156,50,["Active MTrP"],[5,6]],
+  oth:[12,548,180,40,["其他 latent MTrPs"],[6]],acts:[518,548,190,40,["Active MTrPs"],[6]]};
+ const lab=(x,y,t,c)=>{const e=el("text",{x,y,"font-size":11,fill:c||"#9fb9b8","font-family":"IBM Plex Mono, monospace"},flow);e.textContent=t};
+ lab(196,118,"SENSORY","#c77fa0");lab(414,118,"MOTOR","#f2b134");
+ const nodes=[];
+ for(const k in N){const [x,y,w,h,t,g,dash]=N[k];const G=el("g",{class:"nd"+(dash?" dash":"")},flow);el("rect",{x,y,width:w,height:h,rx:5},G);
+  t.forEach((s,i)=>{const e=el("text",{x:x+w/2,y:y+h/2+(t.length>1?(i?12:-6):0)+4,"text-anchor":"middle"},G);e.textContent=s});nodes.push([G,g])}
+ const setS=s=>{nodes.forEach(([G,g])=>{G.classList.toggle("on",g.some(v=>v<=s));G.classList.toggle("hot",g.includes(s))});edges.forEach(([e,g])=>e.classList.toggle("on",g<=s))};
+ setS(6);scrolly($("#flowScrolly"),setS);
+}
+autoCycle("#ecycle",1500);autoCycle("#ncycle",1800);
+
+/* ---------- multiple loci ---------- */
+const lsv=$("#loci");
+if(lsv){
+ const fib=$("#lociFib");for(let y=30;y<250;y+=12)el("line",{x1:16,y1:y,x2:624,y2:y},fib);
+ let s=7;const r=()=>{s=(s*16807)%2147483647;return s/2147483647};
+ const L=[];const add=(n,inside,type)=>{let c=0;while(c<n){const x=20+r()*600,y=30+r()*215;const d=((x-320)/150)**2+((y-135)/70)**2;if((d<1)===inside){L.push({x,y,type});c++}}};
+ add(12,true,"s");add(10,true,"a");add(5,false,"s");add(2,false,"a");
+ const dots=$("#lociDots");L.forEach(l=>{l.el=el("circle",{cx:l.x,cy:l.y,r:4.5,fill:l.type==="s"?"#f0a7c6":"#f2b134",opacity:.9},dots)});
+ const tr=$("#lociTrace");el("rect",{x:0,y:0,width:620,height:30,rx:3,fill:"#061a20"},tr);
+ const trLine=el("polyline",{fill:"none",stroke:"#f2b134","stroke-width":1},tr);
+ const trTxt=el("text",{x:6,y:11,"font-size":9,fill:"#9fb9b8","font-family":"IBM Plex Mono, monospace"},tr);trTxt.textContent="EMG";
+ const flat=()=>{let p=[];for(let x=40;x<=614;x+=6)p.push(`${x},${15+(r()-.5)*2}`);return p.join(" ")};trLine.setAttribute("points",flat());
+ let nIn=0,nL=0;const cnt=$("#lociCount"),nd=$("#needle");
+ function insert(x,y){nIn++;nd.innerHTML="";el("line",{x1:x+40,y1:2,x2:x,y2:y,stroke:"#d6dde0","stroke-width":2,"stroke-linecap":"round"},nd);el("circle",{cx:x,cy:y,r:3,fill:"#fff"},nd);
+  let ns=1e9,na=1e9,hit=null;L.forEach(l=>{const d=Math.hypot(l.x-x,l.y-y);if(l.type==="s"&&d<ns){ns=d;hit=l}if(l.type==="a"&&d<na)na=d});
+  if(ns<18){nL++;fib.classList.remove("twitch");void fib.getBBox();fib.classList.add("twitch");el("circle",{cx:hit.x,cy:hit.y,r:9,fill:"none",stroke:"#f0a7c6"},nd)}
+  if(na<22){let p=[];for(let X=40;X<=614;X+=4){const sp=r()<.18?(r()-.5)*24:(r()-.5)*3;p.push(`${X},${15+sp}`)}trLine.setAttribute("points",p.join(" "))}else trLine.setAttribute("points",flat());
+  cnt.textContent=`進針 ${nIn} 次 · LTR ${nL} 次`}
+ lsv.style.cursor="crosshair";
+ lsv.addEventListener("click",e=>{const pt=lsv.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const q=pt.matrixTransform(lsv.getScreenCTM().inverse());if(q.y>20&&q.y<250&&q.x>10&&q.x<630)insert(q.x,q.y)});
+ const rb=document.createElement("button");rb.className="btn";rb.textContent="隨機進針";rb.addEventListener("click",()=>{const a=r()*Math.PI*2,d=Math.sqrt(r());insert(320+Math.cos(a)*d*170,135+Math.sin(a)*d*80)});
+ $("#lociReset").before(rb);
+ $("#lociReset").addEventListener("click",()=>{nIn=0;nL=0;nd.innerHTML="";trLine.setAttribute("points",flat());cnt.textContent="進針 0 次 · LTR 0 次"});
+}
+
+/* ---------- infraspinatus plate ---------- */
+const inf=$("#infra");
+if(inf){
+ const sf=$("#supFib");for(let y=72;y<=104;y+=8)el("path",{d:`M114,${y} Q210,${(y+96)/2} 300,104`},sf);
+ const ifb=$("#infFib");[[106,132],[108,152],[110,172],[114,192],[117,212],[120,232],[124,252]].forEach(([x,y])=>el("path",{d:`M${x},${y} Q220,${y-20} 318,140`},ifb));
+ const tf=$("#tmFib");[[176,266],[188,256],[200,246],[212,236]].forEach(([x,y])=>el("path",{d:`M${x},${y} Q250,198 318,166`},tf));
+ const pts=[];for(let x=0;x<=560;x+=4){const sp=Math.random()<.2?(Math.random()-.5)*26:(Math.random()-.5)*3;pts.push(`${x},${34+sp}`)}$("#emgLine").setAttribute("points",pts.join(" "));
+ const CAP={anat:'<span class="figno">FIG 7</span><b>右肩胛骨背面。</b>棘下肌從肩胛骨內側緣往外收攏，止於肱骨大結節後方；上方是棘上肌，下方是小圓肌。示意圖為自繪，比例經過簡化。',
+  palp:'<span class="figno">FIG 7</span><b>門診手指摸得到的：</b>粉紅色的緊束帶（運動端造成的結果）、黃色的過度敏感點（感覺端），按壓後轉位痛到肩膀前方（右下小圖）。',
+  emg:'<span class="figno">FIG 7</span><b>手摸不到、肌電圖才看得到的：</b>active loci 的終板自發放電（SEA／EPN）。左下放大圖是終板，下方是肌電圖示意。'};
+ $$("#infraLayers .chip").forEach(b=>b.addEventListener("click",()=>{const l=b.dataset.l;$$("#infraLayers .chip").forEach(x=>x.classList.toggle("on",x===b));
+  $("#L-anat").setAttribute("opacity",l==="anat"?1:0);$("#L-palp").setAttribute("opacity",l==="palp"?1:0);$("#L-emg").setAttribute("opacity",l==="emg"?1:0);
+  $("#emgTrace").style.display=l==="emg"?"block":"none";$("#infraCap").innerHTML=CAP[l]}));
+}
+
+/* ---------- palpation scrolly ---------- */
+const pf=$("#palpFib");if(pf){for(let y=54;y<=200;y+=12){if(Math.abs(y-125)<6)continue;el("line",{x1:34,y1:y,x2:260,y2:y},pf)}
+ const LAB=["定方向","滑過纖維：緊束帶","沿帶找最痛點","持續按壓：轉位痛","快速撥動：LTR"];
+ const set=s=>{$("#palpFinger").style.transform=`translate(148px,${s===0?14:125}px)`;const b=$("#palpBand");
+  b.setAttribute("stroke",s>=1?"#f0a7c6":"#b8505f");b.setAttribute("stroke-width",s>=1?5:1.6);b.setAttribute("opacity",s>=1?1:.55);
+  $("#palpArrow").setAttribute("opacity",s===1?1:0);const sp=$("#palpSpot");sp.setAttribute("opacity",s>=2?1:0);sp.classList.toggle("pulse",s===2);
+  $("#palpRef").setAttribute("opacity",s>=3?1:0);const g=$("#palpBandG");g.classList.remove("twitch");if(s===4){void g.getBBox();g.classList.add("twitch")}
+  $("#palpLabel").textContent=LAB[s]};
+ set(0);scrolly($("#palpScrolly"),set);}
+
+/* fascicle dots */
+const fp=$("#fpFasc");if(fp)for(let x=30;x<340;x+=16)for(let y=90;y<150;y+=14){if(Math.hypot(x-180,y-116)<18)continue;el("circle",{cx:x,cy:y,r:3},fp)}
+const pp=$("#ppFasc");if(pp)for(let x=104;x<260;x+=14)for(let y=100;y<166;y+=13){if(((x-180)/82)**2+((y-150)/58)**2>1||Math.hypot(x-180,y-128)<18)continue;el("circle",{cx:x,cy:y,r:3},pp)}
+
+/* ---------- Delphi ---------- */
+const DL=[["tb","緊束帶","核心標準",1,1],["hs","過度敏感點","核心標準",1,1],["rp","轉位痛","核心標準",1,1],["ltr","局部抽搐反應（LTR）","確認徵象",0,0],["rec","按壓重現病人的主訴","區分 active／latent",0,1]];
+const dw=$("#delphi"),dout=$("#delphiOut");
+DL.forEach(([id,a,b,core,def])=>{const l=document.createElement("label");l.className="check"+(def?" on":"");l.innerHTML=`<input type="checkbox" id="d-${id}" ${def?"checked":""}><span>${a}<small>${b}</small></span>`;dw.appendChild(l);
+ l.querySelector("input").addEventListener("change",e=>{l.classList.toggle("on",e.target.checked);dcalc()})});
+function dcalc(){const c=["tb","hs","rp"].filter(k=>$("#d-"+k).checked).length,ltr=$("#d-ltr").checked,rec=$("#d-rec").checked;
+ if(c>=2){dout.className="verdict go";dout.textContent=`符合激痛點診斷（核心 3 項中有 ${c} 項）${ltr?"，LTR 進一步確認":""}；${rec?"重現主訴 → active MTrP":"沒有重現主訴 → latent MTrP"}。`}
+ else{dout.className="verdict stop";dout.textContent=`核心標準只有 ${c} 項，未達診斷（至少需要 2 項）${ltr?"；單有 LTR 不足以診斷":""}。`}}
+dcalc();
+const dnote=document.createElement("small");dnote.className="note";dnote.style.marginTop="6px";dnote.textContent="預設勾選的是陳小姐的棘下肌。";dout.after(dnote);
+
+/* ---------- muscle map ---------- */
+const MM=[
+ {id:"inf",name:"棘下肌",trp:[["b",134,128],["b",140,146]],z:[[252,108,12,12,.8],[247,148,7,26,.6],[236,244,5,22,.35]],loc:"棘下窩、肩胛棘下方偏內側（平壓法）",ref:"肩膀前方深處 → 上臂前外側，有時到前臂橈側",sat:"肱二頭肌"},
+ {id:"sup",name:"棘上肌",trp:[["b",138,104]],z:[[172,118,10,14,.7],[188,214,7,8,.55],[257,118,7,11,.45]],loc:"棘上窩，隔著斜方肌（平壓法）",ref:"肩膀外側三角肌中段深處，可到手肘外上髁",sat:"三角肌、橈側伸腕肌"},
+ {id:"ut",name:"上斜方肌",trp:[["b",138,90]],z:[[120,68,6,14,.7],[124,44,7,8,.5],[298,34,7,9,.75],[303,56,6,5,.6]],loc:"上緣游離緣中段（捏法）",ref:"頸部後外側 → 乳突 → 太陽穴，像一個問號；有時到下顎角",sat:"顳肌、咬肌、頭夾肌、半棘肌、提肩胛肌、小菱形肌"},
+ {id:"lev",name:"提肩胛肌",trp:[["b",117,96]],z:[[120,92,13,8,.75],[124,122,6,22,.55],[156,104,10,8,.45]],loc:"頸肩交界、肩胛骨上角附近（平壓法）",ref:"頸肩交界 → 肩胛骨內緣、肩膀後方；往同側轉頭受限",sat:"講者表格未列（它本身是上斜方肌的衛星點）"},
+ {id:"scm",name:"胸鎖乳突肌",trp:[["f",306,72]],z:[[306,36,8,5,.7],[318,26,14,5,.5],[302,48,6,6,.55],[293,42,4,6,.6],[105,24,12,8,.55]],loc:"沿著肌腹（捏法）",ref:"頭頂、枕部、眼眶周圍、額頭、臉頰、耳朵深部；可能合併流淚、頭暈",sat:"顳肌、咬肌、二腹肌"},
+ {id:"spl",name:"頭夾肌",trp:[["b",112,66]],z:[[105,22,12,7,.75]],loc:"頸後、枕骨下方",ref:"頭頂",sat:"顳肌、半棘肌"},
+ {id:"sca",name:"斜角肌",trp:[["f",300,78]],z:[[296,124,14,18,.5],[248,150,8,24,.55],[234,262,6,28,.5],[122,124,6,20,.5]],loc:"頸側、鎖骨上方",ref:"胸前、上臂前後側、前臂橈側到拇指與食指、肩胛骨內緣",sat:"三角肌、橈側伸腕肌、伸指總肌、尺側伸腕肌"},
+ {id:"pm",name:"胸小肌",trp:[["f",292,112]],z:[[254,106,11,11,.6],[290,126,16,14,.5],[251,200,4,48,.45],[232,316,5,9,.45]],loc:"胸前、喙突下方",ref:"三角肌前方、胸前，沿上臂內側（尺側）到第 3–5 指",sat:"橈側屈腕肌、尺側屈腕肌、第一背側骨間肌"}];
+const msv=$("#muscleMap");if(msv){const g=bodyMap(msv);const chips=$("#mchips"),md=$("#mdetail");
+ const show=m=>{g.innerHTML="";m.z.forEach(z=>zone(g,z));m.trp.forEach(([v,x,y])=>xmark(g,x,y));
+  md.innerHTML=`<b>${m.name}</b><ul><li><b style="font-weight:500">激痛點位置：</b>${m.loc}</li><li><b style="font-weight:500">轉位痛：</b>${m.ref}</li><li><b style="font-weight:500">衛星激痛點：</b>${m.sat}</li></ul>`;
+  $$("#mchips .chip").forEach(c=>c.classList.toggle("on",c.dataset.m===m.id))};
+ MM.forEach(m=>{const b=document.createElement("button");b.className="chip";b.dataset.m=m.id;b.textContent=m.name;b.addEventListener("click",()=>show(m));chips.appendChild(b)});
+ show(MM[0]);}
+
+/* ---------- PIR trainer ---------- */
+const head=$("#pirHead");if(head){
+ let ang=25,busy=false;const ph=[...$$("#pirPhases span")],hand=$("#pirHand"),tm=$("#pirTimer"),arc=$("#pirArc");
+ const setA=a=>{head.style.transform=`rotate(${a}deg)`;$("#pirAngle").textContent=`側彎 ${Math.round(a)}°`;const rad=a*Math.PI/180;
+  arc.setAttribute("d",`M160,56 A120,120 0 0 1 ${(160+120*Math.sin(rad)).toFixed(1)},${(176-120*Math.cos(rad)).toFixed(1)}`)};
+ const lit=i=>ph.forEach((s,k)=>s.classList.toggle("on",k===i));
+ const wait=ms=>new Promise(r=>setTimeout(r,reduce?Math.min(ms,300):ms));
+ setA(ang);
+ $("#pirGo").addEventListener("click",async()=>{if(busy)return;if(ang>=50){tm.textContent="已接近正常活動範圍，按「重來」再練一次";return}busy=true;
+  lit(0);tm.textContent="慢慢側彎到剛有緊繃感";await wait(1200);
+  lit(1);hand.setAttribute("opacity",1);for(let s=6;s>0;s--){tm.textContent=`約 20% 力量往回頂……${s}`;await wait(1000)}
+  lit(2);hand.setAttribute("opacity",0);tm.textContent="吐氣，完全放鬆";await wait(1400);
+  lit(3);ang=Math.min(50,ang+7);setA(ang);tm.textContent=`進入新的屏障：${ang}°`;await wait(1300);busy=false});
+ $("#pirReset").addEventListener("click",()=>{if(busy)return;ang=25;setA(ang);lit(-1);tm.textContent="通常重複 3–5 個循環"});
+ const handG=hand;handG.innerHTML='<rect x="100" y="72" width="26" height="42" rx="12" fill="#f5e3d3" stroke="#a9846a"/><path d="M128,64 L100,64" stroke="#f2b134" stroke-width="2.5" marker-end="url(#ahy2)"/>';
+}
+
+/* ---------- factors ---------- */
+const FD={dm:"<b>糖尿病</b>：和五十肩高度共病。陳小姐 HbA1c 7.8%，控制血糖本身就是治本的一環。",
+ thy:"<b>甲狀腺疾病</b>：講者同樣列為和五十肩高度共病；甲狀腺低下也會造成肌肉痠痛與抽筋。",
+ hsd:"<b>鬆筋症候群</b>（hypermobile spectrum disorder）：關節與軟組織穩定性較差，肌肉長期代償。",
+ vit:"<b>維生素 D、鋅缺乏</b>：影響肌肉與筋膜修復。",
+ ele:"<b>電解質不足</b>（鈉、鉀、鎂、鈣）：容易引發抽筋。",
+ fhp:"<b>前頭姿</b>：頭往前伸，頸後肌群與上斜方肌長期負荷增加。",
+ rs:"<b>圓肩</b>：胸小肌縮短、肩胛骨前傾，影響肩關節活動。",
+ imp:"<b>肩盂肱關節夾擠</b>：旋轉肌群持續受刺激，激痛點反覆活化。",
+ c12:"<b>第一、二節頸椎錯位</b>：講者列為力學因子；這一項的研究證據相對較少。",
+ desk:"<b>工作姿勢、重複動作</b>：陳小姐每天打電腦 8 小時，對應「六不」裡的不良姿勢與不停使用。"};
+const fdt=$("#fdetail");$$(".factors .chip").forEach(b=>b.addEventListener("click",()=>{$$(".factors .chip").forEach(x=>x.classList.toggle("on",x===b));fdt.innerHTML=FD[b.dataset.f]}));
+const first=$('.factors .chip[data-f="dm"]');if(first){first.classList.add("on");fdt.innerHTML=FD.dm}
+})();
+</script>
+</body></html>

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>肌少症深入探索</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one 58-year-old patient walked through the AWGS 2025 algorithm on the aging island; the flowchart lights up as you scroll, then each new element gets its own small instrument. */
+:root{
+  --sea:#0d2a33;
+  --sea-deep:#082028;
+  --panel:#0a252d;
+  --grid:#1a4350;
+  --ink:#e8efe9;
+  --ink-soft:#9fb9b8;
+  --buoy:#f2b134;
+  --age:#b8b07a;
+  --muscle:#b8505f;
+  --ok:#7fb26a;
+  --warn:#e0a24a;
+  --stop:#d0715e;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--sea);color:var(--ink);font-family:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:16.5px}
+a{color:var(--buoy)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--buoy);outline-offset:3px}
+svg text{font-family:var(--body)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.col{max-width:720px;margin:0 auto;padding:0 20px}
+.wide{max-width:1040px;margin:0 auto;padding:0 20px}
+
+.topbar{position:sticky;top:0;z-index:30;background:rgba(8,32,40,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--grid)}
+.topbar .wide{display:flex;align-items:center;gap:14px;height:48px}
+.back{font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--buoy)}
+.prog{flex:1;height:3px;background:var(--grid);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--age)}
+.chapnav{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+
+header.hero{padding:48px 0 26px}
+.coords{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(38px,6.4vw,66px);line-height:1.1;margin:8px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--age)}
+.lede{color:var(--ink-soft);margin:0 0 18px;max-width:36em}
+.speakers{display:flex;flex-wrap:wrap;gap:10px}
+.spk{border:1px solid var(--grid);border-radius:4px;padding:8px 12px;font-size:14px;line-height:1.5}
+.spk b{font-weight:500}
+.spk span{display:block;color:var(--ink-soft);font-size:12.5px}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:22px;padding:0;list-style:none}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14.5px;padding:8px 10px;border:1px solid var(--grid);border-radius:4px}
+.toc a:hover{border-color:var(--age)}
+.toc a span{font-family:var(--mono);font-size:11px;color:var(--age)}
+.toc li.todo a{border-style:dashed;color:var(--ink-soft);pointer-events:none}
+
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0 0;max-width:560px}
+.stats div{border:1px solid var(--grid);border-radius:4px;padding:10px 12px}
+.stats b{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--age);display:block;line-height:1.2}
+.stats span{font-size:13px;color:var(--ink-soft)}
+
+section.ch{padding:56px 0 20px;border-top:1px solid var(--grid)}
+.chhead{display:flex;gap:14px;align-items:baseline;margin-bottom:6px}
+.chno{font-family:var(--mono);font-size:12px;color:var(--age);letter-spacing:.1em}
+h2{font-family:var(--display);font-size:clamp(28px,4.4vw,40px);line-height:1.2;margin:0 0 6px;font-weight:700;text-wrap:balance}
+h3{font-family:var(--display);font-size:23px;margin:38px 0 8px;font-weight:700;text-wrap:balance}
+h3 .new{font-family:var(--mono);font-size:11px;color:#1d1606;background:var(--buoy);border-radius:3px;padding:1px 6px;vertical-align:4px;margin-left:8px;font-weight:500}
+.src{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);border:1px solid var(--grid);border-radius:20px;padding:1px 9px;margin:0 6px 6px 0}
+.src.gl{border-color:var(--age);color:var(--age)}
+.src.add{border-style:dashed}
+p{margin:0 0 14px}
+.soft{color:var(--ink-soft)}
+small.note{display:block;font-size:13px;color:var(--ink-soft);line-height:1.6}
+
+figure{margin:22px 0 26px;padding:0}
+figure .plate{background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px;padding:14px;position:relative}
+figure svg{display:block;width:100%;height:auto}
+figure svg.cap{max-width:600px;margin:0 auto}
+figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+figcaption b{color:var(--ink);font-weight:500}
+.figno{font-family:var(--mono);font-size:11px;color:var(--age);margin-right:6px}
+
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--grid);background:transparent;border-radius:20px;padding:5px 13px;font-size:13.5px;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+.chip.on{border-color:var(--age);background:rgba(184,176,122,.16);color:var(--ink)}
+
+.callout{border-left:3px solid var(--buoy);background:rgba(242,177,52,.06);padding:12px 16px;margin:18px 0}
+.callout.olive{border-left-color:var(--age);background:rgba(184,176,122,.07)}
+.callout h4{margin:0 0 4px;font-size:15px;font-weight:500}
+.callout p:last-child{margin:0}
+
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0 20px;font-variant-numeric:tabular-nums}
+table.t th,table.t td{border-bottom:1px solid var(--grid);padding:8px;text-align:left;vertical-align:top}
+table.t th{font-weight:500;color:var(--ink-soft);font-size:13px}
+table.t td.n{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
+table.t tr.chg td{background:rgba(242,177,52,.05)}
+table.t td .tag{font-family:var(--mono);font-size:10.5px;color:var(--buoy);border:1px solid var(--buoy);border-radius:3px;padding:0 4px;margin-left:4px}
+.tw{overflow-x:auto}
+
+/* case */
+.case{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.casecard{background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:18px}
+.casecard .who{font-family:var(--display);font-size:22px;margin:0 0 4px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
+.panel{display:none}
+.panel.on{display:block}
+.panel ul{margin:0;padding-left:20px}
+.panel li{margin-bottom:4px}
+.meas{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14.5px}
+.meas dt{color:var(--ink-soft)}
+.meas dd{margin:0;font-family:var(--mono);font-size:14px}
+@media (max-width:760px){.case{grid-template-columns:1fr}}
+
+.verdict{margin-top:10px;padding:10px 14px;border-radius:4px;font-size:14.5px;border:1px solid var(--grid)}
+.verdict.go{border-color:var(--ok);color:#bfe3ae}
+.verdict.mid{border-color:var(--warn);color:#f0c27e}
+.verdict.stop{border-color:var(--stop);color:#f5b6a8}
+
+/* scrolly */
+.scrolly{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:34px;margin:20px auto 0}
+.scrolly .stick{position:sticky;top:64px;align-self:start;height:calc(100vh - 84px);display:flex;flex-direction:column;justify-content:center}
+.scrolly .stick svg{max-height:calc(100vh - 120px)}
+.scrolly .steps{padding:10vh 0 30vh}
+.step{min-height:62vh;display:flex;align-items:center}
+.step .box{background:var(--panel);border:1px solid var(--grid);border-left:3px solid var(--grid);padding:16px 18px;border-radius:4px;opacity:.55;transition:opacity .35s,border-color .35s}
+.step.on .box{opacity:1;border-left-color:var(--age)}
+.step .box h4{margin:0 0 6px;font-size:16px;font-weight:500}
+.step .box p{font-size:15px;margin:0 0 8px}
+.step .box p:last-child{margin:0}
+.step .k{font-family:var(--mono);font-size:11px;color:var(--age);display:block;margin-bottom:2px}
+.step .lin{font-size:13.5px;color:var(--buoy);border-top:1px dashed var(--grid);padding-top:8px;margin-top:8px}
+@media (max-width:820px){
+  .scrolly{grid-template-columns:1fr;gap:0}
+  .scrolly .stick{top:48px;height:auto;z-index:5;background:var(--sea);padding:8px 0 10px;border-bottom:1px solid var(--grid)}
+  .scrolly .stick svg{max-height:46vh}
+  .scrolly .steps{padding:4vh 0 24vh}
+  .step{min-height:58vh;align-items:flex-end}
+}
+
+/* flow */
+.fl .nd rect{fill:#0f3540;stroke:#2a5662;stroke-width:1.2;transition:all .4s}
+.fl .nd text{fill:var(--ink-soft);font-size:13px;transition:fill .4s}
+.fl .nd text.sub{font-size:11.5px}
+.fl .nd.dash rect{stroke-dasharray:4 4}
+.fl .ed{stroke:#2a5662;stroke-width:1.5;fill:none;transition:stroke .4s}
+.fl .elab{font-size:11px;fill:#6f8f90;font-family:var(--mono);transition:fill .4s}
+.fl .on rect{fill:#2f3220;stroke:var(--age)}
+.fl .on text{fill:var(--ink)}
+.fl .ed.on{stroke:var(--age)}
+.fl .elab.on{fill:var(--age)}
+.fl .nd.hot rect{fill:#4a4824;stroke:#e6dca0;stroke-width:2}
+.fl .newb{font-family:var(--mono);font-size:10px;fill:var(--buoy);font-weight:500}
+.fl .strike{stroke:var(--stop);stroke-width:2;opacity:0;transition:opacity .4s}
+.fl .strike.on{opacity:1}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:20px;background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:18px}
+@media (max-width:760px){.calc{grid-template-columns:1fr}}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.fields label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--ink-soft)}
+.fields .full{grid-column:1/-1}
+.fields input[type=number],.fields select{background:var(--sea-deep);border:1px solid var(--grid);border-radius:4px;padding:6px 8px;font-family:var(--mono);font-size:14px;color:var(--ink);width:100%}
+.fields .seg{display:flex;gap:6px}
+.fields .chk{flex-direction:row;align-items:flex-start;gap:8px;color:var(--ink);font-size:13.5px}
+.fields .chk input{margin-top:5px;accent-color:var(--age)}
+.trace{list-style:none;margin:0;padding:0;font-size:14px}
+.trace li{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:7px 0;border-bottom:1px dashed var(--grid)}
+.trace li::before{content:"";width:10px;height:10px;border-radius:50%;margin-top:7px;background:var(--grid)}
+.trace li.ok::before{background:var(--ok)}
+.trace li.low::before{background:var(--stop)}
+.trace li.mid::before{background:var(--warn)}
+.trace li.na::before{background:transparent;border:1px solid var(--ink-soft)}
+.trace b{font-weight:500}
+.trace .mono{font-size:12.5px;color:var(--ink-soft)}
+.result{margin-top:12px;padding:12px 14px;border-radius:4px;border:1px solid var(--grid)}
+.result .lab{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.result .cat{font-family:var(--display);font-size:26px;line-height:1.3}
+.result.r-s{border-color:var(--stop)}.result.r-s .cat{color:#f5b6a8}
+.result.r-p{border-color:var(--warn)}.result.r-p .cat{color:#f0c27e}
+.result.r-r{border-color:var(--age)}.result.r-r .cat{color:#e6dca0}
+.result.r-n{border-color:var(--ok)}.result.r-n .cat{color:#bfe3ae}
+.cmp19{margin-top:8px;font-size:13.5px;color:var(--ink-soft)}
+
+/* compare equation */
+.eq{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:700px){.eq{grid-template-columns:1fr}}
+.eqbox{border:1px solid var(--grid);border-radius:6px;padding:14px;background:var(--panel)}
+.eqbox h4{margin:0 0 10px;font-family:var(--mono);font-size:13px;color:var(--ink-soft);font-weight:500}
+.eqrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14.5px}
+.pill{border:1px solid var(--age);border-radius:20px;padding:3px 11px;background:rgba(184,176,122,.12)}
+.pill.off{border-color:var(--grid);background:transparent;color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--stop)}
+.op{font-family:var(--mono);color:var(--ink-soft);font-size:13px}
+
+/* ladder */
+.ladder{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:end}
+@media (max-width:640px){.ladder{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rung{border:1px solid var(--grid);border-radius:4px;padding:10px;background:var(--panel)}
+.rung b{display:block;font-family:var(--display);font-size:19px;font-weight:700}
+.rung span{font-size:13px;color:var(--ink-soft);display:block;line-height:1.5}
+.rung .mono{font-size:12px;color:var(--age);margin-top:4px}
+.rung.gone{border-style:dashed;opacity:.6}
+.rung.gone b{text-decoration:line-through;text-decoration-color:var(--stop)}
+
+/* slider demo */
+.slider{background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:16px}
+.slider input[type=range]{width:100%;accent-color:var(--age)}
+.srow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:14px}
+.srow .mono{font-size:14px}
+
+/* ring test */
+.rings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.rings{grid-template-columns:1fr}}
+.ring{border:1px solid var(--grid);border-radius:6px;padding:10px;background:var(--panel);text-align:center}
+.ring b{display:block;font-size:15px;font-weight:500;margin-top:4px}
+.ring span{font-size:13px;color:var(--ink-soft)}
+
+.cycle{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.cycle span{border:1px solid var(--grid);border-radius:4px;padding:6px 10px;font-size:14px;transition:all .35s}
+.cycle span.on{border-color:var(--age);background:rgba(184,176,122,.16)}
+.cycle i{font-style:normal;color:var(--ink-soft);font-family:var(--mono);font-size:12px}
+
+.domains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:600px){.domains{grid-template-columns:1fr}}
+.domains div{border:1px solid var(--grid);border-radius:4px;padding:10px 12px;font-size:14px}
+.domains b{font-weight:500;display:block}
+.domains span{color:var(--ink-soft);font-size:13px}
+
+.take{counter-reset:t;list-style:none;padding:0;margin:0}
+.take li{counter-increment:t;display:grid;grid-template-columns:36px 1fr;gap:6px;padding:10px 0;border-bottom:1px dashed var(--grid)}
+.take li::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);color:var(--age);font-size:13px;padding-top:3px}
+.sources{font-size:13.5px;color:var(--ink-soft);padding-left:20px}
+.sources li{margin-bottom:6px}
+footer{border-top:1px solid var(--grid);padding:22px 0 40px;margin-top:40px;font-size:12px;color:var(--ink-soft);font-family:var(--mono)}
+
+@media (prefers-reduced-motion:no-preference){
+  .a-squeeze{animation:sq 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes sq{0%,20%{transform:scaleX(1)}45%,70%{transform:scaleX(.9)}90%,100%{transform:scaleX(1)}}
+  .a-needle{animation:nd 2.6s ease-in-out infinite;transform-origin:60px 60px}
+  @keyframes nd{0%,20%{transform:rotate(-60deg)}45%,70%{transform:rotate(40deg)}90%,100%{transform:rotate(-60deg)}}
+}
+
+.badge{display:inline-block;font-size:12px;border-radius:3px;padding:1px 8px;font-weight:500}
+.badge.ok{background:rgba(127,178,106,.18);color:#a9d496}
+.badge.warn{background:rgba(224,162,74,.18);color:#f0c27e}
+.badge.mute{background:rgba(159,185,184,.12);color:var(--ink-soft)}
+.fitt{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+@media (max-width:820px){.fitt{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fitt div{border:1px solid var(--grid);border-top:3px solid var(--age);border-radius:4px;padding:10px 12px;background:var(--panel);display:flex;flex-direction:column;gap:2px}
+.fitt .k{font-family:var(--mono);font-size:11px;color:var(--age)}
+.fitt b{font-family:var(--display);font-size:20px;font-weight:700;line-height:1.3}
+.fitt span:last-child{font-size:13px;color:var(--ink-soft);line-height:1.5}
+.exs{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.ex{border:1px solid var(--grid);border-radius:6px;padding:10px 12px;background:var(--panel)}
+.ex svg{display:block;width:100%;height:auto;background:var(--sea-deep);border-radius:4px;margin-bottom:8px}
+.ex h4{margin:0;font-family:var(--display);font-size:19px}
+.ex .mono{font-size:11.5px;color:var(--ink-soft)}
+.ex p{margin:4px 0 0;font-size:13.5px;line-height:1.55}
+.ex p b{font-weight:500;color:var(--age);margin-right:6px;font-size:12px;font-family:var(--mono)}
+.wrow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wd{border:1px solid var(--grid);border-radius:4px;padding:8px 4px;cursor:pointer;background:transparent;text-align:center;line-height:1.3}
+.wd b{display:block;font-family:var(--display);font-size:18px}
+.wd span{font-size:12px;color:var(--ink-soft)}
+.wd.r{background:rgba(184,176,122,.16)}
+.wd.a{background:rgba(95,168,160,.12)}
+.wd.on{border-color:var(--buoy);box-shadow:inset 0 0 0 1px var(--buoy)}
+.wdet{margin-top:8px;border:1px solid var(--grid);border-radius:4px;padding:10px 14px;font-size:14.5px}
+.wdet b{font-weight:500}
+.meals{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.meal{display:grid;grid-template-columns:40px 1fr 52px;gap:10px;align-items:center;font-size:13.5px}
+.mbar{position:relative;height:12px;background:#0f3540;border-radius:3px}
+.mbar i{position:absolute;left:0;top:0;bottom:0;background:var(--age);border-radius:3px}
+.mbar em{position:absolute;top:-3px;bottom:-3px;width:1.5px;background:var(--buoy)}
+.rx{border:1px solid var(--age);border-radius:6px;background:var(--panel);overflow:hidden}
+.rxh{padding:8px 14px;border-bottom:1px dashed var(--grid);font-size:12px;color:var(--age)}
+.rxg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+@media (max-width:760px){.rxg{grid-template-columns:1fr}}
+.rxg>div{padding:12px 14px;border-right:1px dashed var(--grid);font-size:14px}
+.rxg>div:last-child{border-right:0}
+.rxg b{font-family:var(--display);font-size:19px}
+.rxg ul{margin:6px 0 0;padding-left:18px}
+.rxg li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wide">
+  <a class="back" href="index.html#aging">← 回到群島</a>
+  <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+  <span class="chapnav" id="chapnow">高齡島</span>
+</div></div>
+
+<header class="hero"><div class="col">
+  <div class="coords">高齡島 · 115.10.18 · 第一演講廳 09:35–10:20</div>
+  <h1>肌少症<br><em>AWGS 2025 新標準</em></h1>
+  <p class="lede">亞洲肌少症工作小組（AWGS）2025 年 11 月更新共識，把評估年齡往下延伸到 50 歲、診斷簡化成兩個條件，並把重點從「診斷疾病」轉向「促進肌肉健康」。這一頁從一位 58 歲的門診病人開始，走一遍新的評估流程。</p>
+  <div class="speakers">
+    <div class="spk"><b>2025 肌少症診斷標準與基層門診介入策略</b><span>周明岳｜高雄榮總高齡醫學中心</span></div>
+  </div>
+  <div class="stats" aria-label="亞洲世代研究盛行率">
+    <div><b>16.5%</b><span>肌少症</span></div>
+    <div><b>28.7%</b><span>可能肌少症</span></div>
+    <div><b>4.4%</b><span>嚴重肌少症</span></div>
+  </div>
+  <small class="note" style="margin-top:6px">亞洲 8 個大型世代、近 3 萬 5 千人的分析（陳亮恭，依舊版分類）。</small>
+  <ol class="toc">
+    <li><a href="#c1"><span>01</span>肌少症門診評估</a></li>
+    <li><a href="#c2"><span>02</span>評估流程圖</a></li>
+    <li><a href="#c3"><span>03</span>2025 新增的評估內容</a></li>
+    <li><a href="#c4"><span>04</span>介入</a></li>
+  </ol>
+  <p style="margin-top:16px"><span class="src gl">AWGS 2025 共識</span><span class="src add">補充：其他文獻與一般臨床知識</span><small class="note">講者以新指引為主軸；本頁依共識原文（Nature Aging 2025）與解讀文獻整理，補充處附出處。</small></p>
+</div></header>
+
+<!-- CH1 -->
+<section class="ch" id="c1" data-name="01 門診評估"><div class="col">
+  <div class="chhead"><span class="chno">CH 01 / 04</span></div>
+  <h2>週三下午的慢性病門診</h2>
+  <p class="soft">下面是為了串起新指引而設計的教學病例。切換分頁一步步打開資訊。</p>
+</div>
+<div class="wide"><div class="case">
+  <div class="casecard">
+    <p class="who">林先生，58 歲，物流公司主管</p>
+    <p class="soft" style="margin:0">「最近爬樓梯腿很沒力，搬貨也比以前吃力。是不是老了？」</p>
+    <div class="tabs" role="tablist">
+      <button class="chip on" data-tab="t1" role="tab">病史</button>
+      <button class="chip" data-tab="t2" role="tab">門診量測</button>
+      <button class="chip" data-tab="t3" role="tab">先想想</button>
+      <button class="chip" data-tab="t4" role="tab">判讀</button>
+    </div>
+    <div class="panel on" id="t1"><ul>
+      <li>第二型糖尿病 6 年，metformin 控制，HbA1c 7.4%</li>
+      <li>每天開車、坐辦公室，幾乎沒有運動習慣</li>
+      <li>健檢報告 BMI 27，正在考慮用減重藥</li>
+      <li>沒有跌倒、體重這一年沒有變化</li>
+      <li>SARC-F 自填 2 分（≥4 才算陽性）</li>
+    </ul></div>
+    <div class="panel" id="t2"><dl class="meas">
+      <dt>身高／體重</dt><dd>168 cm／76 kg（BMI 26.9）</dd>
+      <dt>小腿圍</dt><dd>37 cm</dd>
+      <dt>指環測試</dt><dd>圍不住</dd>
+      <dt>握力（慣用手 3 次最大值）</dt><dd>31 kg</dd>
+      <dt>BIA 四肢骨骼肌量 ASM</dt><dd>21.8 kg</dd>
+      <dt>　ASM／身高²</dt><dd>7.72 kg/m²</dd>
+      <dt>　ASM／BMI</dt><dd>0.81 m²</dd>
+      <dt>5 次起立坐下</dt><dd>11.2 秒</dd>
+      <dt>6 公尺步速</dt><dd>1.15 m/s</dd>
+    </dl></div>
+    <div class="panel" id="t3"><p>小腿圍正常、指環圍不住、SARC-F 陰性。用新舊兩版標準來看，他分別是什麼？</p>
+      <div class="btns"><button class="chip" data-guess="a">兩版都正常</button><button class="chip" data-guess="b">2025 才算可能肌少症</button><button class="chip" data-guess="c">2025 才算肌少症</button></div>
+      <p id="guessOut" class="soft" style="font-size:14.5px">選一個，再看「判讀」。</p></div>
+    <div class="panel" id="t4"><p><b>AWGS 2019：不在評估範圍，就算套用也「正常」。AWGS 2025：肌少症。</b></p>
+      <ul>
+        <li><b>入口</b>：篩檢工具全陰性，但他是有肌肉疑慮的 50–64 歲，又有糖尿病這個危險因子，所以照樣要量</li>
+        <li><b>握力</b> 31 kg：舊切點 28 kg 算正常；50–64 歲新切點 34 kg，算低下</li>
+        <li><b>肌肉量</b>：ASM/身高² 7.72，高於 50–64 歲 BIA 切點 7.6；但 ASM/BMI 0.81，低於切點 0.90</li>
+        <li><b>起坐 11.2 秒、步速 1.15 m/s</b>：都低於中年人的標準，但 2025 不用它們診斷，記錄下來當之後追蹤的基準</li>
+      </ul>
+      <p class="soft" style="font-size:14px;margin-top:8px">脂肪把小腿撐粗、把 BMI 拉高，篩檢工具和身高校正的肌肉量都被「騙過」了。第 3 章會逐項拆解。</p></div>
+  </div>
+  <figure style="margin:0">
+    <div class="plate"><svg viewBox="0 0 420 360" role="img" aria-label="門診三項量測：小腿圍、握力計、生物電阻抗">
+      <!-- calf -->
+      <g transform="translate(18,18)">
+        <rect width="120" height="200" rx="6" fill="#0a252d" stroke="#1a4350"/>
+        <path d="M44,20 Q30,70 36,110 Q40,150 50,190 L70,190 Q80,150 84,110 Q90,70 76,20 Z" fill="#e9c3a5" stroke="#a9846a"/>
+        <path d="M34,92 Q60,104 86,92" fill="none" stroke="#f2b134" stroke-width="3"/>
+        <path d="M34,92 Q60,80 86,92" fill="none" stroke="#f2b134" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text x="60" y="226" text-anchor="middle" font-size="12" fill="#e8efe9">小腿圍</text>
+        <text x="60" y="244" text-anchor="middle" font-size="13" fill="#f2b134" font-family="IBM Plex Mono, monospace">37 cm</text>
+        <text x="60" y="262" text-anchor="middle" font-size="11" fill="#9fb9b8">切點 男 &lt;34</text>
+      </g>
+      <!-- dynamometer -->
+      <g transform="translate(150,18)">
+        <rect width="120" height="200" rx="6" fill="#0a252d" stroke="#1a4350"/>
+        <circle cx="60" cy="60" r="36" fill="#082028" stroke="#9fb9b8"/>
+        <g stroke="#3f6f7a" stroke-width="1.2"><line x1="60" y1="28" x2="60" y2="34"/><line x1="28" y1="60" x2="34" y2="60"/><line x1="86" y1="60" x2="92" y2="60"/></g>
+        <path d="M88,46 A32,32 0 0 1 90,74" fill="none" stroke="#d0715e" stroke-width="3"/>
+        <line class="a-needle" x1="60" y1="60" x2="60" y2="32" stroke="#f2b134" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="60" cy="60" r="4" fill="#f2b134"/>
+        <rect x="46" y="98" width="28" height="22" rx="4" fill="#3f6f7a"/>
+        <rect class="a-squeeze" x="34" y="122" width="52" height="58" rx="12" fill="#e9c3a5" stroke="#a9846a"/>
+        <text x="60" y="226" text-anchor="middle" font-size="12" fill="#e8efe9">握力</text>
+        <text x="60" y="244" text-anchor="middle" font-size="13" fill="#d0715e" font-family="IBM Plex Mono, monospace">31 kg</text>
+        <text x="60" y="262" text-anchor="middle" font-size="11" fill="#9fb9b8">50–64 歲 男 &lt;34</text>
+      </g>
+      <!-- BIA -->
+      <g transform="translate(282,18)">
+        <rect width="120" height="200" rx="6" fill="#0a252d" stroke="#1a4350"/>
+        <circle cx="60" cy="38" r="12" fill="#0f3540" stroke="#9fb9b8"/>
+        <path d="M44,54 L76,54 L80,120 L70,120 L68,176 L52,176 L50,120 L40,120 Z" fill="#0f3540" stroke="#9fb9b8"/>
+        <g fill="#b8505f" opacity=".85"><rect x="34" y="60" width="8" height="54" rx="3"/><rect x="78" y="60" width="8" height="54" rx="3"/><rect x="51" y="122" width="7" height="52" rx="3"/><rect x="62" y="122" width="7" height="52" rx="3"/></g>
+        <rect x="28" y="178" width="64" height="8" rx="2" fill="#3f6f7a"/>
+        <text x="60" y="226" text-anchor="middle" font-size="12" fill="#e8efe9">四肢肌肉量</text>
+        <text x="60" y="244" text-anchor="middle" font-size="13" fill="#f2b134" font-family="IBM Plex Mono, monospace">21.8 kg</text>
+        <text x="60" y="262" text-anchor="middle" font-size="11" fill="#9fb9b8">紅色 = 四肢 ASM</text>
+      </g>
+      <text x="18" y="312" font-size="12" fill="#9fb9b8">篩檢看起來都正常，</text>
+      <text x="18" y="330" font-size="12" fill="#9fb9b8">真正的訊號藏在握力與 BMI 校正後的肌肉量。</text>
+    </svg></div>
+    <figcaption><span class="figno">FIG 1</span><b>門診三件工具。</b>皮尺量小腿最粗處、握力計測 2–3 次取最大值、生物電阻抗（BIA）估四肢骨骼肌量（ASM）。紅色弧線是握力計上 34 kg 以下的範圍。</figcaption>
+  </figure>
+</div></div>
+</section>
+
+<!-- CH2 -->
+<section class="ch" id="c2" data-name="02 流程圖"><div class="col">
+  <div class="chhead"><span class="chno">CH 02 / 04</span></div>
+  <h2>AWGS 2025 評估流程</h2>
+  <span class="src gl">AWGS 2025</span>
+  <p>往下捲動，流程圖會一段一段亮起來。黃色 <span class="mono" style="color:var(--buoy);font-size:12px">NEW</span> 是 2025 新增或改變的地方；每一步最後一行是林先生走到哪裡。</p>
+</div>
+<div class="wide"><div class="scrolly" id="flowScrolly">
+  <div class="stick"><svg id="flow" class="fl" viewBox="0 0 720 720" role="img" aria-label="AWGS 2025 肌少症評估流程圖"></svg>
+    <small class="note" style="margin-top:6px">依 AWGS 2025 共識與 Bi 等 2026 解讀文獻重繪</small></div>
+  <div class="steps">
+    <div class="step" data-s="1"><div class="box"><span class="k">STEP 1 · 誰該評估</span><h4>兩條入口並行</h4><p><b>基層／社區</b>：65 歲以上，或有肌肉健康疑慮的 50–64 歲，用小腿圍、SARC-F、SARC-CalF、指環測試篩檢。</p><p><b>醫院／臨床</b>：有心衰竭、COPD、糖尿病、慢性腎臟病、反覆跌倒、非意願體重下降、營養不良、憂鬱、認知障礙等狀況。</p><p class="lin">林先生：篩檢全陰性，但有糖尿病 → 從右邊進來。</p></div></div>
+    <div class="step" data-s="2"><div class="box"><span class="k">STEP 2 · 肌力</span><h4>先量握力</h4><p>握力計左右手各測 2–3 次，取最大值。65 歲以上切點沿用 2019（男 &lt;28、女 &lt;18 kg）；50–64 歲是新的切點（男 &lt;34、女 &lt;20 kg）。</p><p class="lin">林先生：31 kg，低於 34 → 走中間。</p></div></div>
+    <div class="step" data-s="3"><div class="box"><span class="k">STEP 3 · 分流</span><h4>風險 vs 可能肌少症</h4><p>握力正常但篩檢陽性或有危險因子，歸為<b>肌少症風險</b>，每年再測一次握力。握力低下就是<b>可能肌少症</b>：基層沒有儀器時，到這一步就可以開始介入。</p><p class="lin">林先生：可能肌少症。</p></div></div>
+    <div class="step" data-s="4"><div class="box"><span class="k">STEP 4 · 肌肉量</span><h4>DXA 或 BIA，兩種校正</h4><p>四肢骨骼肌量除以身高²，或除以 BMI（新增）。兩種指標互補，過重或肥胖的人特別需要看 BMI 校正值。</p><p>低肌力＋低肌肉量 → <b>肌少症</b>。</p><p class="lin">林先生：ASM/BMI 0.81 &lt; 0.90 → 肌少症。</p></div></div>
+    <div class="step" data-s="5"><div class="box"><span class="k">STEP 5 · 拿掉的東西</span><h4>身體功能退到旁邊，嚴重度取消</h4><p>步速、5 次起立坐下、SPPB 不再用來診斷，改成追蹤的<b>結果指標</b>。「嚴重肌少症」這一類也移除了（和 GLIS 一致）。</p><p class="lin">林先生：起坐 11.2 秒記錄下來，當介入後的對照。</p></div></div>
+    <div class="step" data-s="6"><div class="box"><span class="k">STEP 6 · 之後</span><h4>介入，並接上 ICOPE</h4><p>所有分類都要開始介入：多元運動加營養。之後依 WHO ICOPE 流程追蹤：有風險者每年測握力；住院或新診斷疾病後，所有人都要重新評估。</p><p class="lin">林先生：進入第 4 章。</p></div></div>
+  </div>
+</div></div>
+
+<div class="col">
+  <h3>拿病人跑一次流程</h3>
+  <p>預設是林先生的數值。改任何一格，右邊會即時重算，並和 AWGS 2019 的判定並列。</p>
+</div>
+<div class="wide"><div class="calc">
+  <div class="fields">
+    <label>年齡<input type="number" id="fAge" value="58" min="18" max="110"></label>
+    <label>性別<select id="fSex"><option value="m" selected>男</option><option value="f">女</option></select></label>
+    <label>身高 cm<input type="number" id="fH" value="168" step="0.5"></label>
+    <label>體重 kg<input type="number" id="fW" value="76" step="0.5"></label>
+    <label>握力 kg（最大值）<input type="number" id="fG" value="31" step="0.5"></label>
+    <label>量測方式<select id="fM"><option value="bia" selected>BIA</option><option value="dxa">DXA</option></select></label>
+    <label class="full">四肢骨骼肌量 ASM kg（留空＝還沒量）<input type="number" id="fA" value="21.8" step="0.1"></label>
+    <label class="chk full"><input type="checkbox" id="fR" checked><span>篩檢陽性，或有臨床危險因子<small class="note">小腿圍、SARC-F、指環測試，或糖尿病、CKD、心衰竭、跌倒等</small></span></label>
+  </div>
+  <div>
+    <ul class="trace" id="trace"></ul>
+    <div class="result" id="result"><div class="lab">AWGS 2025</div><div class="cat" id="cat"></div><div id="catnote" class="soft" style="font-size:13.5px"></div></div>
+    <p class="cmp19" id="cmp19"></p>
+  </div>
+</div>
+<small class="note" style="margin-top:8px">教學用簡化工具，未納入所有臨床情境；ASM/身高² 與 ASM/BMI 判定不一致時，共識建議參考 BMI 並及早介入。</small>
+</div>
+</section>
+
+<!-- CH3 -->
+<section class="ch" id="c3" data-name="03 2025 新增"><div class="col">
+  <div class="chhead"><span class="chno">CH 03 / 04</span></div>
+  <h2>2025 到底改了什麼</h2>
+  <span class="src gl">AWGS 2025</span><span class="src add">Bi 等 2026 解讀</span>
+  <p>先看一張總表，再逐項拆解。黃底列是這次改變的項目。</p>
+  <div class="tw"><table class="t">
+    <tr><th>項目</th><th>AWGS 2019</th><th>AWGS 2025</th></tr>
+    <tr class="chg"><td>定義</td><td>低肌肉量＋低肌力<b>及／或</b>低身體功能</td><td>低肌肉量＋低肌力</td></tr>
+    <tr class="chg"><td>年齡</td><td>60 或 65 歲以上</td><td>新增 50–64 歲切點</td></tr>
+    <tr><td>握力（≥65 歲）</td><td class="n">男 &lt;28 · 女 &lt;18 kg</td><td class="n">不變</td></tr>
+    <tr class="chg"><td>肌肉量校正</td><td>身高²</td><td>身高²＋BMI</td></tr>
+    <tr class="chg"><td>篩檢工具</td><td>小腿圍、SARC-F、SARC-CalF</td><td>再加指環測試</td></tr>
+    <tr class="chg"><td>身體功能</td><td>診斷條件之一</td><td>結果指標</td></tr>
+    <tr class="chg"><td>分類</td><td>可能／肌少症／嚴重</td><td>風險／可能／肌少症</td></tr>
+    <tr class="chg"><td>框架</td><td>疾病診斷</td><td>全生命週期肌肉健康、接軌 ICOPE</td></tr>
+  </table></div>
+
+  <h3>年齡往下：50–64 歲<span class="new">NEW</span></h3>
+  <p>亞洲人的握力從 45 歲開始加速下降，肌肉量在 55 歲開始明顯減少，所以 50 歲已經是肌肉功能退化的關鍵期。中年人的正常值本來就比較高，用老人的切點會漏掉很多人。切換年齡層，比較兩組切點：</p>
+  <div class="btns" id="ageTog"><button class="chip on" data-a="mid">50–64 歲</button><button class="chip" data-a="old">≥65 歲</button></div>
+  <div class="tw"><table class="t" id="cutTable"></table></div>
+  <small class="note">身體功能的切點只用於追蹤結果，不用於診斷。50–64 歲的 SPPB 切點共識未訂。</small>
+
+  <h3>肌肉量多一個除數：ASM/BMI<span class="new">NEW</span></h3>
+  <p>四肢肌肉量只除以身高²，BMI 24 以上的人幾乎不會被判成低肌肉量：體重越重，肌肉通常也跟著多一點，指標就被撐高了。改用 BMI 校正，看的是「以這個體型來說，肌肉夠不夠」。</p>
+  <p>拉動下面的體重滑桿。身高和四肢肌肉量固定在林先生的數值，只有體重在變：</p>
+</div>
+<div class="wide">
+  <div class="slider">
+    <div class="srow"><label for="wSl">體重</label><span class="mono" id="wOut">76.0 kg · BMI 26.9</span></div>
+    <input type="range" id="wSl" min="50" max="100" step="0.5" value="76">
+    <svg id="gauges" viewBox="0 0 640 170" role="img" aria-label="ASM/身高² 與 ASM/BMI 兩條量尺" style="display:block;width:100%;height:auto;margin-top:8px"></svg>
+    <p class="soft" style="font-size:14px;margin:6px 0 0" id="wNote"></p>
+  </div>
+  <figcaption><span class="figno">FIG 3</span>上排 ASM/身高² 與體重無關，永遠停在 7.72；下排 ASM/BMI 隨體重增加而下降，大約在 BMI 24 跨過切點。示意固定肌肉量，現實中增重也會帶來一些肌肉。</figcaption>
+</div>
+<div class="col">
+  <div class="tw"><table class="t">
+    <tr><th>方法</th><th>指標</th><th>≥65 歲 男／女</th><th>50–64 歲 男／女</th></tr>
+    <tr><td>DXA</td><td>ASM/身高² (kg/m²)</td><td class="n">7.0 / 5.4</td><td class="n">7.2 / 5.5</td></tr>
+    <tr class="chg"><td>DXA</td><td>ASM/BMI (m²)<span class="tag">NEW</span></td><td class="n">0.73 / 0.52</td><td class="n">0.80 / 0.55</td></tr>
+    <tr><td>BIA</td><td>ASM/身高² (kg/m²)</td><td class="n">7.0 / 5.7</td><td class="n">7.6 / 5.7</td></tr>
+    <tr class="chg"><td>BIA</td><td>ASM/BMI (m²)<span class="tag">NEW</span></td><td class="n">0.83 / 0.57</td><td class="n">0.90 / 0.63</td></tr>
+  </table></div>
+  <div class="callout olive"><h4>兩個指標不一致時</h4><p>兩種校正是互補的，特別是過重或肥胖、身材矮小、體重過輕的人。判定不一致時，共識建議參考病人的 BMI，並及早介入。林先生 BMI 26.9，就看 ASM/BMI。</p></div>
+
+  <h3>篩檢多一招：指環測試<span class="new">NEW</span></h3>
+  <p>雙手拇指與食指圍成一個環，套在小腿最粗的地方。不需要工具、可以自己做，日本的社區研究顯示，結果和失能、死亡風險相關，這次正式列入篩檢工具。</p>
+</div>
+<div class="wide"><figure>
+  <div class="rings">
+    <div class="ring"><svg viewBox="0 0 160 120" role="img" aria-label="圍不住"><path d="M58,10 Q40,60 50,110 L110,110 Q120,60 102,10 Z" fill="#e9c3a5" stroke="#a9846a"/><ellipse cx="80" cy="56" rx="40" ry="11" fill="none" stroke="#f2b134" stroke-width="5" stroke-dasharray="58 30" transform="rotate(-4 80 56)"/></svg><b>圍不住</b><span>肌肉量足夠，風險低</span></div>
+    <div class="ring"><svg viewBox="0 0 160 120" role="img" aria-label="剛好圍住"><path d="M64,10 Q50,60 58,110 L102,110 Q110,60 96,10 Z" fill="#e9c3a5" stroke="#a9846a"/><ellipse cx="80" cy="56" rx="30" ry="10" fill="none" stroke="#f2b134" stroke-width="5"/></svg><b>剛好圍住</b><span>中間地帶，留意</span></div>
+    <div class="ring"><svg viewBox="0 0 160 120" role="img" aria-label="圍住且有空隙"><path d="M70,10 Q60,60 66,110 L94,110 Q100,60 90,10 Z" fill="#e9c3a5" stroke="#a9846a"/><ellipse cx="80" cy="56" rx="30" ry="10" fill="none" stroke="#f2b134" stroke-width="5"/><g fill="#d0715e"><circle cx="58" cy="56" r="3"/><circle cx="102" cy="56" r="3"/></g></svg><b>有空隙</b><span>小腿太細，風險高</span></div>
+  </div>
+  <figcaption><span class="figno">FIG 4</span><b>指環測試（Yubi-wakka）。</b>圈住且還有空隙的人，肌少症與後續失能的風險最高（Tanaka 2018）。<span class="src add">補充</span></figcaption>
+</figure></div>
+<div class="col">
+  <div class="tw"><table class="t">
+    <tr><th>篩檢工具</th><th>陽性標準</th><th>可自評</th></tr>
+    <tr><td>小腿圍</td><td class="n">男 &lt;34 · 女 &lt;33 cm</td><td>否</td></tr>
+    <tr><td>SARC-F</td><td class="n">≥4 分</td><td>是</td></tr>
+    <tr><td>SARC-CalF</td><td class="n">≥11 分</td><td>否</td></tr>
+    <tr class="chg"><td>指環測試<span class="tag">NEW</span></td><td>圍住（尤其有空隙）</td><td>是</td></tr>
+  </table></div>
+  <small class="note">SARC-F、SARC-CalF 切點為 AWGS 2019 數值，解讀文獻未見 2025 修改。</small>
+  <div class="callout"><h4>篩檢工具的盲點</h4><p>林先生的小腿圍 37 cm、指環圍不住：脂肪讓小腿看起來夠粗。肥胖或有慢性病的病人，篩檢陰性不代表沒事，這也是為什麼臨床危險因子要當作第二條入口。</p></div>
+
+  <h3>身體功能：從診斷條件變成結果指標</h3>
+  <p>步速、起坐反映的是肌肉退化的「後果」，也會受到關節炎、神經疾病、心肺功能影響。2025 把它從診斷式裡拿出來，專心量肌肉本身，身體功能改用來看介入有沒有效。</p>
+</div>
+<div class="wide"><div class="eq">
+  <div class="eqbox"><h4>AWGS 2019</h4><div class="eqrow"><span class="pill">低肌肉量</span><span class="op">＋</span><span class="pill">低肌力</span><span class="op">及／或</span><span class="pill">低身體功能</span></div><small class="note" style="margin-top:10px">三者都有 → 嚴重肌少症</small></div>
+  <div class="eqbox" style="border-color:var(--age)"><h4>AWGS 2025</h4><div class="eqrow"><span class="pill">低肌肉量</span><span class="op">＋</span><span class="pill">低肌力</span><span class="op">｜</span><span class="pill off">低身體功能</span></div><small class="note" style="margin-top:10px">身體功能：步速、5 次起坐、SPPB，記錄作為追蹤結果</small></div>
+</div></div>
+
+<div class="col">
+  <h3>分類：多了「風險」，少了「嚴重」</h3>
+  <p>2025 的三個分類都是要開始介入的訊號，差別在證據多到哪一步。「可能肌少症」保留給醫療資源有限的場所，提早警示、提早介入。</p>
+</div>
+<div class="wide"><div class="ladder">
+  <div class="rung"><b>肌少症風險</b><span>握力正常，但篩檢陽性或有危險因子</span><div class="mono">每年測握力</div></div>
+  <div class="rung"><b>可能肌少症</b><span>握力低下，肌肉量未量或正常</span><div class="mono">開始介入</div></div>
+  <div class="rung"><b>肌少症</b><span>低握力＋低肌肉量</span><div class="mono">介入＋追蹤身體功能</div></div>
+  <div class="rung gone"><b>嚴重肌少症</b><span>2019 加上低身體功能</span><div class="mono" style="color:var(--stop)">2025 移除</div></div>
+</div></div>
+
+<div class="col">
+  <h3>接上 ICOPE：從疾病到肌肉健康</h3>
+  <p>AWGS 2025 把肌少症的評估放進 WHO「長者整合照護」（ICOPE）流程。國健署推動的 ICOPE 長者功能評估本來就有行動能力、營養等項目，正好和肌肉健康重疊，可以順勢找出需要評估的人。</p>
+  <div class="cycle" id="icope"><span>基本評估</span><i>→</i><span>詳細評估</span><i>→</i><span>個別化照護計畫</span><i>→</i><span>執行與監測</span><i>→</i><span>再評估</span><i>↻</i></div>
+  <div class="domains" style="margin-top:12px">
+    <div><b>活力 vitality</b><span>營養、能量代謝</span></div>
+    <div><b>行動 locomotion</b><span>身體功能、移動能力</span></div>
+    <div><b>認知 cognition</b><span>肌肉與大腦的交互作用</span></div>
+  </div>
+  <small class="note" style="margin-top:8px">共識同時強調肌肉和大腦、骨骼、脂肪組織、免疫系統之間的交互作用（muscle–organ cross-talk），所以肌肉被視為健康長壽的核心器官。</small>
+
+</div>
+</section>
+
+<!-- CH4 -->
+<section class="ch" id="c4" data-name="04 介入"><div class="col">
+  <div class="chhead"><span class="chno">CH 04 / 04</span></div>
+  <h2>介入：運動是主角，營養是隊友</h2>
+  <span class="src gl">AWGS 2025</span><span class="src add">ICFSR 2018 · PROT-AGE · NSCA</span>
+  <p>不管是風險、可能肌少症還是肌少症，只要被分到其中一類，都要開始介入。AWGS 2025 建議<b>多元運動</b>（以阻力訓練為核心，搭配有氧），再加上<b>足夠的蛋白質</b>，必要時才使用補充品。</p>
+  <div class="tw"><table class="t">
+    <tr><th>介入</th><th>ICFSR 2018 建議強度</th><th>AWGS 2025</th></tr>
+    <tr><td>阻力運動</td><td><span class="badge ok">強烈建議</span></td><td>多元運動的核心</td></tr>
+    <tr><td>蛋白質補充／高蛋白飲食</td><td><span class="badge warn">有條件建議</span></td><td>阻力訓練期間提高攝取量</td></tr>
+    <tr><td>維生素 D</td><td><span class="badge mute">不給建議</span></td><td>證據極低至低</td></tr>
+    <tr><td>同化荷爾蒙</td><td><span class="badge mute">不給建議</span></td><td>全球尚無核准的肌少症藥物</td></tr>
+  </table></div>
+
+  <h3>運動處方：多元，但以阻力為核心</h3>
+  <p>AWGS 2025 只寫「多元運動、中高強度阻力訓練」，頻率和強度要個別化，沒有給具體數字。下面的處方參考美國肌力與體能協會（NSCA）對高齡者阻力訓練的建議。<span class="src add">補充</span></p>
+</div>
+<div class="wide">
+  <div class="fitt">
+    <div><span class="k">F 頻率</span><b>每週 2–3 次</b><span>非連續日，讓肌肉恢復</span></div>
+    <div><span class="k">I 強度</span><b>70–85% 1RM</b><span>門診沒有 1RM：做 8–12 下就很吃力、最後幾下要咬牙</span></div>
+    <div><span class="k">T 類型</span><b>多關節大肌群</b><span>每個大肌群 1–2 個動作，下肢優先</span></div>
+    <div><span class="k">V 份量</span><b>2–3 組</b><span>組間休息 1–2 分鐘</span></div>
+    <div><span class="k">P 漸進</span><b>變輕鬆就加</b><span>能多做 2 下以上，就加重量或換更難的版本</span></div>
+  </div>
+  <small class="note" style="margin-top:8px">起步時強度可以從中等開始，2–4 週內逐步加到中高強度；有氧運動另外安排在非阻力訓練日。</small>
+
+  <h3 style="max-width:720px;margin-left:auto;margin-right:auto">居家阻力運動：不用器材也能開始</h3>
+  <div class="exs" id="exs"></div>
+  <figcaption><span class="figno">FIG 5</span>每個動作附起步劑量與進階方式。示意圖為自繪簡化圖。</figcaption>
+
+  <h3 style="max-width:720px;margin-left:auto;margin-right:auto">一週怎麼排</h3>
+  <div class="week" id="week"></div>
+  <small class="note" style="margin-top:6px">點一天看當天內容。有氧以每週累積約 150 分鐘中等強度為目標（WHO 身體活動建議）。<span class="src add">補充</span></small>
+</div>
+
+<div class="col">
+  <h3>蛋白質：吃夠，而且三餐平均</h3>
+  <span class="src gl">AWGS 2025</span><span class="src add">PROT-AGE 2013</span>
+  <p>高齡者對蛋白質的合成反應變差，需要的量比年輕人多。AWGS 2025 建議，阻力訓練期間 65 歲以上約 1.2–1.59 g/kg/天，65 歲以下 ≥1.6 g/kg/天。PROT-AGE 另外提醒：每一餐要達到 25–30 g 才會有效刺激肌肉合成，所以重點不只是總量，還要三餐平均分配。</p>
+</div>
+<div class="wide"><div class="calc">
+  <div class="fields">
+    <label>體重 kg<input type="number" id="pW" value="76" step="0.5"></label>
+    <label>身高 cm<input type="number" id="pH" value="168" step="0.5"></label>
+    <label>年齡<input type="number" id="pAge" value="58"></label>
+    <label>計算基準<select id="pBase"><option value="act">實際體重</option><option value="ibw" selected>理想體重（BMI 22）</option></select></label>
+    <label class="chk full"><input type="checkbox" id="pRT" checked><span>正在做阻力訓練</span></label>
+    <label class="chk full"><input type="checkbox" id="pSick"><span>有急性或慢性疾病（住院、感染、慢性病急性期）</span></label>
+    <label class="chk full"><input type="checkbox" id="pCKD"><span>eGFR &lt;30 且未洗腎</span></label>
+  </div>
+  <div>
+    <div class="result r-r" id="pRes"><div class="lab">每日蛋白質目標</div><div class="cat mono" id="pCat" style="font-family:var(--mono);font-size:24px"></div><div id="pNote" class="soft" style="font-size:13.5px"></div></div>
+    <div class="meals" id="meals"></div>
+    <p class="cmp19" id="pServ"></p>
+  </div>
+</div>
+<small class="note" style="margin-top:8px">肥胖者用實際體重計算會高估需求，臨床上常改用理想或調整體重（一般臨床做法，非 AWGS 規定）。份數換算依國健署食物代換表：豆魚蛋肉類 1 份約 7 g 蛋白質，乳品類 1 杯（240 mL）約 8 g。</small>
+</div>
+
+<div class="col">
+  <div class="callout"><h4>腎功能是唯一要煞車的地方</h4><p>PROT-AGE 把 eGFR &lt;30、尚未洗腎的病人列為例外，這些人可能需要限制蛋白質。林先生這類糖尿病病人，開高蛋白飲食前先看腎功能。</p></div>
+
+  <h3>補充品：證據等級一覽</h3>
+  <span class="src add">Bi 等 2026 整理 AWGS 2025 引用的證據</span>
+  <p>補足蛋白質之後，必要時可以考慮 BCAA、HMB 或必需胺基酸。但單獨使用補充品的證據大多只有低到極低，不能取代運動。</p>
+</div>
+<div class="wide"><figure>
+  <div class="plate"><div class="tw"><svg id="evid" viewBox="0 0 640 320" role="img" aria-label="補充品與輔助介入的證據等級矩陣" style="min-width:520px"></svg></div></div>
+  <figcaption><span class="figno">FIG 6</span>圓點越滿，證據越確定；空白表示沒有這項評估。蛋白質強化食物另有「肌肉脂肪浸潤」一項為極低。維生素 D 在原表中有兩組資料，這裡依結果指標合併。全身振動的結果指標是 TUG（起身行走測試），歸在身體功能。</figcaption>
+</figure></div>
+
+<div class="col">
+  <h3>藥物：還沒有</h3>
+  <span class="src gl">AWGS 2025</span>
+  <p>全球目前沒有任何一種藥物核准用於肌少症。研發中的方向包括血管張力素受體阻斷劑（ARB）、選擇性雄性素受體調節劑（SARM）、myostatin 路徑藥物，部分能增加肌肉量，但目前沒有一種在肌力或身體功能上贏過運動。ICFSR 對同化荷爾蒙也不給建議。</p>
+  <p>陳亮恭接受訪問時也提到，補充男性荷爾蒙或使用單株抗體雖然能增加肌肉量，但沒有搭配運動，效果仍然有限。</p>
+
+  <h3>回到林先生：開一張處方</h3>
+</div>
+<div class="wide"><div class="rx">
+  <div class="rxh"><span class="mono">Rx · 林先生 58 歲 · AWGS 2025 肌少症</span></div>
+  <div class="rxg">
+    <div><b>運動</b><ul><li>阻力：每週 3 次（一、三、五），坐站、踏階、彈力帶划船、靠牆伏地挺身、墊腳尖，各 2–3 組 × 8–12 下</li><li>有氧：其他日子快走 30 分鐘</li><li>前 2 週中等強度，之後依「能多做 2 下就加重」漸進</li></ul></div>
+    <div><b>營養</b><ul><li>先查 eGFR，排除需要限制蛋白質的情況</li><li>以理想體重 62 kg × 1.6 g ≈ 每天 100 g，三餐各約 30 g</li><li>早餐最容易不足：加一杯牛奶或豆漿、一顆蛋</li></ul></div>
+    <div><b>追蹤</b><ul><li>結果指標：握力 31 kg、5 次起坐 11.2 秒、步速 1.15 m/s</li><li>回診重測，看介入有沒有效</li><li>考慮減重藥時，更要守住阻力運動與蛋白質</li></ul></div>
+  </div>
+</div>
+<div class="col" style="padding:0">
+  <div class="callout olive"><h4>減重藥與肌肉</h4><p>林先生正在考慮減重藥。減重時流失的體重有一部分是肌肉，原本就有肌少症的人更要小心。代謝島張皓翔〈減重藥物最新機轉與門診實戰攻略〉會接著談，見 <a href="obesity.html#c9">代謝體重島：減重與長期維持</a>。</p></div>
+</div></div>
+
+<div class="col">
+  <h3>帶走六件事</h3>
+  <ol class="take">
+    <li>評估年齡往下到 50 歲：50–64 歲握力切點男 34、女 20 kg。</li>
+    <li>診斷只看兩項：低肌力＋低肌肉量；身體功能改為結果指標。</li>
+    <li>肌肉量多了 ASM/BMI，肥胖病人只用身高校正會漏掉。</li>
+    <li>篩檢多了指環測試；肥胖、慢性病人篩檢陰性時，臨床危險因子仍是入口。</li>
+    <li>分類變成風險／可能／肌少症，嚴重度取消；三種都要開始介入，並放進 ICOPE 追蹤。</li>
+    <li>介入以阻力運動為核心，每週 2–3 次、中高強度；蛋白質阻力訓練期間 ≥1.2–1.6 g/kg，三餐平均，先看腎功能；補充品與藥物都只是配角。</li>
+  </ol>
+
+  <h3>參考資料</h3>
+  <ul class="sources">
+    <li>周明岳〈2025 肌少症診斷標準與基層門診介入策略〉，台灣家庭醫學醫學會 115 年度秋季學術研討會</li>
+    <li>Chen LK, et al. A focus shift from sarcopenia to muscle health in the Asian Working Group for Sarcopenia 2025 Consensus Update. <i>Nat Aging</i> 2025;5(11):2164–2175. <a href="https://pubmed.ncbi.nlm.nih.gov/41188603/">PubMed</a></li>
+    <li>Bi, Li, Kang. Interpretation of A Focus Shift From Sarcopenia to Muscle Health in the AWGS 2025 Consensus Update. <i>Aging Med</i> 2026;9(2):89–98. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13163934/">PMC</a></li>
+    <li>日本肥滿學會：新しいサルコペニアの診断基準（AWGS 2025）のお知らせ <a href="https://www.jasso.or.jp/data/authorization/pdf/diagnostic_criteria_sarcopenia.pdf">PDF</a></li>
+    <li>Chen LK, et al. Asian Working Group for Sarcopenia: 2019 consensus update. <i>J Am Med Dir Assoc</i> 2020;21:300–307.</li>
+    <li>Tanaka T, et al. "Yubi-wakka" (finger-ring) test: a practical self-screening method for sarcopenia. <i>Geriatr Gerontol Int</i> 2018;18:224–232.</li>
+    <li>Dent E, et al. International Clinical Practice Guidelines for Sarcopenia (ICFSR): screening, diagnosis and management. <i>J Nutr Health Aging</i> 2018;22:1148–1161.</li>
+    <li>Bauer J, et al. Evidence-based recommendations for optimal dietary protein intake in older people: PROT-AGE Study Group. <i>J Am Med Dir Assoc</i> 2013;14:542–559.</li>
+    <li>Fragala MS, et al. Resistance training for older adults: position statement from the National Strength and Conditioning Association. <i>J Strength Cond Res</i> 2019;33:2019–2052.</li>
+    <li>天下雜誌：亞洲肌少症新共識（陳亮恭訪談）<a href="https://www.cw.com.tw/aging/article/5139259">連結</a>；TVBS 健康 2050：肌少症篩檢提前至 50 歲 <a href="https://health.tvbs.com.tw/nutrition/359309">連結</a></li>
+  </ul>
+</div>
+<div class="col"><footer>家醫群島 · 高齡島深入頁 · 病例為教學設計，非真實病人 · 判定與計算工具為教學用簡化版，不能取代臨床判斷</footer></div>
+</section>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const el=(n,a={},p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* progress */
+const bar=$("#progbar"),now=$("#chapnow"),chs=$$("section.ch");
+function onScroll(){const h=document.documentElement;const p=h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight);bar.style.width=(p*100).toFixed(1)+"%";
+  let cur="高齡島";for(const c of chs){if(c.getBoundingClientRect().top<120)cur=c.dataset.name}now.textContent=cur}
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+function scrolly(root,cb){const steps=[...root.querySelectorAll(".step")];
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){steps.forEach(s=>s.classList.toggle("on",s===e.target));cb(+e.target.dataset.s)}})},{rootMargin:"-45% 0px -45% 0px"});
+  steps.forEach(s=>io.observe(s));}
+function autoCycle(sel,ms){const box=$(sel);if(!box)return;const sp=[...box.querySelectorAll("span")];let i=0;
+  if(reduce){sp.forEach(s=>s.classList.add("on"));return}
+  let t=null;const tick=()=>{sp.forEach((s,k)=>s.classList.toggle("on",k===i));i=(i+1)%sp.length};
+  new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!t){tick();t=setInterval(tick,ms)}else if(!e.isIntersecting&&t){clearInterval(t);t=null}})}).observe(box);}
+
+/* tabs + guess */
+$$(".tabs .chip").forEach(b=>b.addEventListener("click",()=>{$$(".tabs .chip").forEach(x=>x.classList.toggle("on",x===b));$$(".panel").forEach(p=>p.classList.toggle("on",p.id===b.dataset.tab))}));
+const GU={a:"篩檢工具確實都正常，但 2025 對 50–64 歲另訂了握力切點，他的 31 kg 已經不夠。",
+ b:"很接近！握力 31 kg 低於 50–64 歲的 34 kg，至少是可能肌少症。再看看肌肉量用哪一種校正。",
+ c:"答對方向了。握力低下，加上 BMI 校正後肌肉量也低，兩項都成立。"};
+$$("[data-guess]").forEach(b=>b.addEventListener("click",()=>{$$("[data-guess]").forEach(x=>x.classList.toggle("on",x===b));$("#guessOut").textContent=GU[b.dataset.guess]+" 打開「判讀」看完整說明。"}));
+
+/* ---------- flow ---------- */
+const flow=$("#flow");
+if(flow){
+ const defs=el("defs",{},flow);const mkr=el("marker",{id:"fa",viewBox:"0 0 10 10",refX:8,refY:5,markerWidth:6,markerHeight:6,orient:"auto-start-reverse"},defs);el("path",{d:"M1,1 L9,5 L1,9",fill:"none",stroke:"context-stroke","stroke-width":1.6},mkr);
+ const lab=(x,y,t,c,anchor)=>{const e=el("text",{x,y,"font-size":11,fill:c||"#6f8f90","font-family":"IBM Plex Mono, monospace","text-anchor":anchor||"start"},flow);e.textContent=t;return e};
+ lab(30,20,"基層／社區");lab(390,20,"醫院／臨床");
+ const edges=[];
+ const E=(d,g,dash,label)=>{const p=el("path",{d,class:"ed","marker-end":dash?"":"url(#fa)"},flow);if(dash)p.setAttribute("stroke-dasharray","4 4");edges.push([p,g]);if(label){const t=lab(label[0],label[1],label[2],null,label[3]);t.setAttribute("class","elab");edges.push([t,g])}};
+ E("M180,82 L180,100",1);
+ E("M180,152 L180,176 L360,176",1);E("M540,152 L540,176 L360,176",1);E("M360,176 L360,204",1);
+ E("M220,236 L120,236 L120,304",3,0,[170,228,"正常","middle"]);
+ E("M360,268 L360,304",2,0,[368,292,"低下"]);
+ E("M120,360 L120,392",3,1);
+ E("M360,360 L360,392",4);
+ E("M360,456 L360,488",4,0,[368,478,"低"]);
+ E("M500,424 L536,424",4,0,[506,416,"正常"]);
+ E("M460,517 L534,517",5,1,[497,509,"結果","middle"]);
+ E("M120,436 L120,612 L170,612",6);E("M360,546 L360,584",6);E("M618,456 L618,612 L550,612",6);
+ E("M360,640 L360,668",6);
+ const N=[
+  ["age",30,30,300,52,["≥65 歲","或有肌肉疑慮的 50–64 歲"],[1],0,1],
+  ["scr",30,100,300,52,["篩檢工具","小腿圍・SARC-F・SARC-CalF・指環"],[1],0,1],
+  ["risk",390,30,300,122,["臨床危險因子","心衰竭・COPD・糖尿病・CKD","反覆跌倒・非意願體重下降","營養不良・憂鬱・認知障礙"],[1],0,0],
+  ["grip",220,204,280,64,["握力（2–3 次取最大值）","≥65：男<28 女<18 · 50–64：男<34 女<20"],[2],0,1],
+  ["risk2",20,304,200,56,["肌少症風險","At risk"],[3],0,1],
+  ["poss",260,304,200,56,["可能肌少症","Possible sarcopenia"],[3],0,0],
+  ["ann",20,392,200,44,["每年再測握力"],[3],1,0],
+  ["mass",220,392,280,64,["肌肉量 DXA／BIA","ASM/身高² ・ ASM/BMI"],[4],0,1],
+  ["stay",536,392,166,64,["肌肉量正常","仍屬可能肌少症"],[4],1,0],
+  ["sarc",260,488,200,58,["肌少症","低肌力＋低肌肉量"],[4],0,0],
+  ["perf",534,488,168,58,["身體功能","步速・起坐・SPPB"],[5],1,1],
+  ["sev",20,488,200,58,["嚴重肌少症","2025 移除"],[5],1,1],
+  ["int",170,584,380,56,["介入：多元運動＋營養","納入 ICOPE 照護計畫"],[6],0,0],
+  ["re",190,668,340,40,["再評估：住院或新疾病後"],[6],1,0]];
+ const nodes=[];let sevStrike;
+ N.forEach(([id,x,y,w,h,t,g,dash,nw])=>{const G=el("g",{class:"nd"+(dash?" dash":"")},flow);el("rect",{x,y,width:w,height:h,rx:5},G);
+  const n=t.length,lh=n>2?20:18,top=y+h/2-(n-1)*lh/2+4;
+  t.forEach((s,i)=>{const e=el("text",{x:x+w/2,y:top+i*lh,"text-anchor":"middle",class:i?"sub":""},G);e.textContent=s});
+  if(nw){const b=el("text",{x:x+w-6,y:y+13,"text-anchor":"end",class:"newb"},G);b.textContent=id==="sev"||id==="perf"?"CHANGED":"NEW"}
+  if(id==="sev"){sevStrike=el("line",{x1:x+30,y1:y+h/2-2,x2:x+w-30,y2:y+h/2-2,class:"strike"},flow)}
+  nodes.push([G,g,id])});
+ const path=["risk","grip","poss","mass","sarc","perf","int"];
+ const setS=s=>{nodes.forEach(([G,g,id])=>{G.classList.toggle("on",g.some(v=>v<=s));G.classList.toggle("hot",g.includes(s)&&path.includes(id))});
+  edges.forEach(([e,g])=>e.classList.toggle("on",g<=s));sevStrike.classList.toggle("on",s>=5)};
+ setS(6);scrolly($("#flowScrolly"),setS);
+}
+
+/* ---------- cutoffs ---------- */
+const CUT={
+ mid:{grip:[34,20],dxa:[7.2,5.5],dxab:[.80,.55],bia:[7.6,5.7],biab:[.90,.63],gait:"<1.2 m/s",cs:"≥10 秒",sppb:"未訂"},
+ old:{grip:[28,18],dxa:[7.0,5.4],dxab:[.73,.52],bia:[7.0,5.7],biab:[.83,.57],gait:"<1.0 m/s",cs:"≥12 秒",sppb:"≤9 分"}};
+function renderCut(k){const c=CUT[k],nw=k==="mid";const tg=nw?'<span class="tag">NEW</span>':"";
+ $("#cutTable").innerHTML=`<tr><th>項目</th><th>男</th><th>女</th></tr>
+ <tr class="${nw?"chg":""}"><td>握力${tg}</td><td class="n">&lt;${c.grip[0]} kg</td><td class="n">&lt;${c.grip[1]} kg</td></tr>
+ <tr class="${nw?"chg":""}"><td>DXA ASM/身高²${tg}</td><td class="n">&lt;${c.dxa[0]}</td><td class="n">&lt;${c.dxa[1]}</td></tr>
+ <tr class="chg"><td>DXA ASM/BMI<span class="tag">NEW</span></td><td class="n">&lt;${c.dxab[0].toFixed(2)}</td><td class="n">&lt;${c.dxab[1].toFixed(2)}</td></tr>
+ <tr class="${nw?"chg":""}"><td>BIA ASM/身高²${tg}</td><td class="n">&lt;${c.bia[0]}</td><td class="n">&lt;${c.bia[1]}</td></tr>
+ <tr class="chg"><td>BIA ASM/BMI<span class="tag">NEW</span></td><td class="n">&lt;${c.biab[0].toFixed(2)}</td><td class="n">&lt;${c.biab[1].toFixed(2)}</td></tr>
+ <tr><td class="soft">步速（結果指標）</td><td class="n" colspan="2">${c.gait}</td></tr>
+ <tr><td class="soft">5 次起立坐下（結果指標）</td><td class="n" colspan="2">${c.cs}</td></tr>
+ <tr><td class="soft">SPPB（結果指標）</td><td class="n" colspan="2">${c.sppb}</td></tr>`}
+renderCut("mid");
+$$("#ageTog .chip").forEach(b=>b.addEventListener("click",()=>{$$("#ageTog .chip").forEach(x=>x.classList.toggle("on",x===b));renderCut(b.dataset.a)}));
+
+/* ---------- classifier (pure) ---------- */
+function classify({age,sex,h,w,grip,method,asm,risk}){
+ const out={steps:[],cat:"",cls:"",note:"",c19:""};
+ const si=sex==="m"?0:1, hm=h/100, bmi=w/(hm*hm);
+ if(!(age>=50)){out.steps.push(["na","入口",`${age} 歲：AWGS 2025 沒有 50 歲以下的切點`]);out.cat="不適用";out.cls="r-n";out.note="可以參考成人肌力常模，但不套用肌少症診斷。";}
+ else{
+  const c=age>=65?CUT.old:CUT.mid, grp=age>=65?"≥65 歲":"50–64 歲";
+  const gLow=grip<c.grip[si];
+  out.steps.push(["ok","入口",`${grp}${risk?"，篩檢陽性或有危險因子":"，未勾選篩檢陽性或危險因子"}`]);
+  out.steps.push([gLow?"low":"ok","握力",`${grip} kg ${gLow?"<":"≥"} ${c.grip[si]} kg → ${gLow?"低下":"正常"}`]);
+  if(!gLow){
+   if(risk){out.cat="肌少症風險";out.cls="r-r";out.note="握力正常但有風險：開始預防性介入，每年再測握力。"}
+   else{out.cat="目前無異常";out.cls="r-n";out.note="握力正常、也沒有風險因子。"}
+   out.steps.push(["na","肌肉量","握力正常，不需要往下量"]);
+  } else {
+   if(!(asm>0)){out.steps.push(["na","肌肉量","還沒量"]);out.cat="可能肌少症";out.cls="r-p";out.note="握力低下即可開始介入；有儀器時再量肌肉量確認。"}
+   else{
+    const ht=asm/(hm*hm), ab=asm/bmi, cH=method==="dxa"?c.dxa[si]:c.bia[si], cB=method==="dxa"?c.dxab[si]:c.biab[si];
+    const lowH=ht<cH, lowB=ab<cB, M=method==="dxa"?"DXA":"BIA";
+    out.steps.push([lowH?"low":"ok",`${M} ASM/身高²`,`${ht.toFixed(2)} ${lowH?"<":"≥"} ${cH}`]);
+    out.steps.push([lowB?"low":"ok",`${M} ASM/BMI`,`${ab.toFixed(2)} ${lowB?"<":"≥"} ${cB.toFixed(2)}（BMI ${bmi.toFixed(1)}）`]);
+    if(lowH&&lowB){out.cat="肌少症";out.cls="r-s";out.note="低肌力＋兩種校正的肌肉量都低。"}
+    else if(lowH||lowB){out.cat="肌少症（指標不一致）";out.cls="r-s";
+      out.note=lowB?`只有 BMI 校正值偏低。BMI ${bmi.toFixed(1)}${bmi>=24?"，過重者身高校正容易低估，共識建議參考 BMI 判讀並及早介入。":"，請結合體型判讀，並及早介入。"}`:`只有身高校正值偏低。BMI ${bmi.toFixed(1)}${bmi<18.5?"，體重過輕時 BMI 校正可能高估肌肉量。":"，請結合體型判讀，並及早介入。"}`;}
+    else{out.cat="可能肌少症";out.cls="r-p";out.note="握力低下但肌肉量正常：仍屬可能肌少症，開始介入。"}
+   }
+  }
+ }
+ /* AWGS 2019: ≥60, grip 28/18, ht² only, performance not entered */
+ if(age<60)out.c19=`AWGS 2019：${age} 歲不在評估範圍（60 或 65 歲以上）。`;
+ else{const g19=grip<[28,18][si];const c19=method==="dxa"?[7.0,5.4][si]:[7.0,5.7][si];const ht=asm>0?asm/(hm*hm):null;
+  let r=g19?(ht!==null&&ht<c19?"肌少症":ht===null?"可能肌少症":"可能肌少症"):(ht!==null&&ht<c19?"需看身體功能":"正常");
+  out.c19=`AWGS 2019：握力 ${g19?"低下":"正常"}（切點 ${[28,18][si]}）、ASM/身高² ${ht===null?"未量":(ht<c19?"低":"正常")}（切點 ${c19}）→ ${r}。2019 還可用低身體功能補足診斷，這裡未計入。`;}
+ return out;}
+const F=["fAge","fSex","fH","fW","fG","fM","fA","fR"];
+function runCalc(){const v=id=>$("#"+id);
+ const o=classify({age:+v("fAge").value,sex:v("fSex").value,h:+v("fH").value,w:+v("fW").value,grip:+v("fG").value,method:v("fM").value,asm:v("fA").value===""?NaN:+v("fA").value,risk:v("fR").checked});
+ $("#trace").innerHTML=o.steps.map(([c,a,b])=>`<li class="${c}"><span><b>${a}</b><br><span class="mono">${b}</span></span></li>`).join("");
+ $("#result").className="result "+o.cls;$("#cat").textContent=o.cat;$("#catnote").textContent=o.note;$("#cmp19").textContent=o.c19;}
+F.forEach(id=>{$("#"+id).addEventListener("input",runCalc);$("#"+id).addEventListener("change",runCalc)});runCalc();
+
+/* ---------- ASM/BMI slider ---------- */
+const gs=$("#gauges");
+if(gs){const H=1.68,ASM=21.8,cH=7.6,cB=0.90;
+ const scale=(v,a,b)=>40+(v-a)/(b-a)*560;
+ const axis=(y,a,b,ticks,cut,title,fmt)=>{const t=el("text",{x:40,y:y-16,"font-size":12,fill:"#e8efe9"},gs);t.textContent=title;
+  el("rect",{x:40,y,width:560,height:14,rx:3,fill:"#0f3540"},gs);
+  el("rect",{x:40,y,width:scale(cut,a,b)-40,height:14,rx:3,fill:"#d0715e",opacity:.22},gs);
+  el("line",{x1:scale(cut,a,b),y1:y-4,x2:scale(cut,a,b),y2:y+18,stroke:"#d0715e","stroke-width":1.5},gs);
+  const ct=el("text",{x:scale(cut,a,b),y:y+32,"font-size":10.5,fill:"#d0715e","text-anchor":"middle","font-family":"IBM Plex Mono, monospace"},gs);ct.textContent="切點 "+fmt(cut);
+  ticks.forEach(v=>{const tx=el("text",{x:scale(v,a,b),y:y+32,"font-size":10.5,fill:"#6f8f90","text-anchor":"middle","font-family":"IBM Plex Mono, monospace"},gs);tx.textContent=fmt(v)});
+  const g=el("g",{},gs);const m=el("circle",{cy:y+7,r:8,fill:"#f2b134",stroke:"#082028","stroke-width":2},g);const lt=el("text",{y:y-4,"font-size":12,fill:"#f2b134","text-anchor":"middle","font-family":"IBM Plex Mono, monospace"},g);
+  return (v)=>{const x=Math.max(40,Math.min(600,scale(v,a,b)));m.setAttribute("cx",x);lt.setAttribute("x",x);lt.textContent=fmt(v)}};
+ const u1=axis(30,6,9,[6,7,8,9],cH,"ASM / 身高²（kg/m²）· BIA 50–64 歲男",v=>v.toFixed(1));
+ const u2=axis(110,0.6,1.2,[0.6,0.8,1.0,1.2],cB,"ASM / BMI（m²）· BIA 50–64 歲男",v=>v.toFixed(2));
+ const upd=()=>{const w=+$("#wSl").value,bmi=w/(H*H),ab=ASM/bmi,ht=ASM/(H*H);u1(ht);u2(ab);
+  $("#wOut").textContent=`${w.toFixed(1)} kg · BMI ${bmi.toFixed(1)}`;
+  $("#wNote").textContent=ab<cB?`BMI ${bmi.toFixed(1)}：身高校正 ${ht.toFixed(2)} 看起來正常，BMI 校正 ${ab.toFixed(2)} 已低於切點。`:`BMI ${bmi.toFixed(1)}：兩個指標都在切點以上。`};
+ $("#wSl").addEventListener("input",upd);upd();}
+
+autoCycle("#icope",1600);
+
+/* ---------- CH4: exercises ---------- */
+const EXS=[
+ {n:"椅子坐站",m:"股四頭肌、臀肌",d:"10 下 × 2–3 組",p:"不用手撐 → 下去慢數 3 秒 → 抱一瓶水",svg:`<path d="M24,60 L52,60 M24,60 L24,94 M52,60 L52,94 M24,60 L24,30" stroke="#3f6f7a" stroke-width="3" fill="none"/>
+  <g opacity=".35" stroke="#e8efe9" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="42" cy="28" r="7" fill="#e8efe9" stroke="none"/><path d="M42,36 L40,58 L64,60 L64,94 M42,42 L60,48"/></g>
+  <g stroke="#e8efe9" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="86" cy="12" r="7" fill="#e8efe9" stroke="none"/><path d="M86,20 L84,54 L82,94 M84,54 L88,94 M86,28 L96,36 L84,38"/></g>
+  <path d="M108,70 L108,30" stroke="#f2b134" stroke-width="2" marker-end="url(#exa)"/>`},
+ {n:"踏階",m:"下肢、平衡",d:"每腳 10 下 × 2 組",p:"加高台階 → 雙手提水瓶",svg:`<rect x="70" y="72" width="56" height="22" fill="#3f6f7a"/>
+  <g stroke="#e8efe9" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="62" cy="14" r="7" fill="#e8efe9" stroke="none"/><path d="M62,22 L62,52 L80,60 L84,72 M62,52 L56,94 M62,28 L54,48 M62,28 L70,46"/></g>
+  <path d="M100,62 L100,36" stroke="#f2b134" stroke-width="2" marker-end="url(#exa)"/>`},
+ {n:"彈力帶划船",m:"背肌、肩胛",d:"10–12 下 × 2–3 組",p:"縮短彈力帶 → 換更硬的帶子",svg:`<line x1="126" y1="20" x2="126" y2="94" stroke="#3f6f7a" stroke-width="4"/>
+  <path d="M60,44 L126,44" stroke="#f2b134" stroke-width="2.5"/>
+  <g stroke="#e8efe9" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="40" cy="18" r="7" fill="#e8efe9" stroke="none"/><path d="M40,26 L40,60 L34,94 M40,60 L46,94 M40,32 L28,44 L58,44"/></g>
+  <path d="M84,56 L66,56" stroke="#f2b134" stroke-width="2" marker-end="url(#exa)"/>`},
+ {n:"靠牆伏地挺身",m:"胸、肩、三頭肌",d:"10–12 下 × 2–3 組",p:"牆 → 桌緣 → 地板跪姿",svg:`<line x1="112" y1="6" x2="112" y2="94" stroke="#3f6f7a" stroke-width="4"/>
+  <g stroke="#e8efe9" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="88" cy="24" r="7" fill="#e8efe9" stroke="none"/><path d="M83,32 L40,92 M80,38 L96,46 L110,40"/></g>
+  <path d="M70,70 L90,56" stroke="#f2b134" stroke-width="2" marker-end="url(#exa)"/>`},
+ {n:"墊腳尖",m:"小腿",d:"15 下 × 2 組",p:"雙腳 → 單腳 → 站在階梯邊緣",svg:`<path d="M24,36 L44,36 M30,36 L30,94" stroke="#3f6f7a" stroke-width="3" fill="none"/>
+  <g stroke="#e8efe9" stroke-width="4" stroke-linecap="round" fill="none"><circle cx="72" cy="12" r="7" fill="#e8efe9" stroke="none"/><path d="M72,20 L72,56 L68,84 L74,90 M72,56 L76,84 L82,90 M72,30 L44,38"/></g>
+  <path d="M100,86 L100,62" stroke="#f2b134" stroke-width="2" marker-end="url(#exa)"/>`}];
+const exw=$("#exs");
+if(exw){EXS.forEach(e=>{const d=document.createElement("div");d.className="ex";
+ d.innerHTML=`<svg viewBox="0 0 140 100" role="img" aria-label="${e.n}示意"><defs><marker id="exa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#f2b134" stroke-width="1.6"/></marker></defs>${e.svg}</svg>
+ <h4>${e.n}</h4><span class="mono">${e.m}</span><p><b>起步</b>${e.d}</p><p><b>進階</b>${e.p}</p>`;exw.appendChild(d)})}
+
+/* ---------- CH4: week ---------- */
+const WK=[["一","阻力","坐站、踏階、彈力帶划船、靠牆伏地挺身、墊腳尖，各 2–3 組 × 8–12 下（約 30 分鐘）"],["二","有氧","快走 30 分鐘，可以說話但沒辦法唱歌的強度"],["三","阻力","同週一；上次覺得輕鬆的動作加一點難度"],["四","有氧","快走或騎腳踏車 30 分鐘"],["五","阻力","同週一"],["六","有氧＋平衡","快走 30 分鐘，加單腳站、直線走（扶著牆或椅背）"],["日","休息","日常活動就好，讓肌肉恢復"]];
+const wk=$("#week");
+if(wk){const row=document.createElement("div");row.className="wrow";const det=document.createElement("div");det.className="wdet";
+ WK.forEach(([d,t,x],i)=>{const b=document.createElement("button");b.className="wd "+(t.startsWith("阻力")?"r":t==="休息"?"z":"a");b.innerHTML=`<b>${d}</b><span>${t}</span>`;
+  b.addEventListener("click",()=>{[...row.children].forEach(c=>c.classList.toggle("on",c===b));det.innerHTML=`<b>週${d}・${t}</b>　${x}`});row.appendChild(b);if(i===0){b.classList.add("on");det.innerHTML=`<b>週${d}・${t}</b>　${x}`}});
+ wk.appendChild(row);wk.appendChild(det);}
+
+/* ---------- CH4: protein ---------- */
+function protein({w,h,age,base,rt,sick,ckd}){
+ const hm=h/100,ibw=22*hm*hm,bw=base==="ibw"?Math.min(w,ibw):w;
+ if(ckd)return{ckd:true,bw};
+ let lo,hi,open=false,why=[];
+ if(age>=65){
+  if(rt){lo=1.2;hi=1.59;why.push("AWGS 2025：≥65 歲阻力訓練期間 1.2–1.59 g/kg")}
+  else if(sick){lo=1.2;hi=1.5;why.push("PROT-AGE：有急慢性疾病 1.2–1.5 g/kg")}
+  else{lo=1.0;hi=1.2;why.push("PROT-AGE：健康高齡者 1.0–1.2 g/kg")}
+  if(rt&&sick)why.push("合併疾病：取較高端")
+ }else{
+  if(rt){lo=1.6;hi=null;open=true;why.push("AWGS 2025：<65 歲阻力訓練期間 ≥1.6 g/kg")}
+  else if(sick){lo=1.2;hi=1.5;why.push("參考 PROT-AGE 疾病狀態 1.2–1.5 g/kg")}
+  else{lo=1.0;hi=1.2;why.push("參考 PROT-AGE 1.0–1.2 g/kg（原建議對象為 >65 歲）")}
+ }
+ const gLo=Math.round(lo*bw),gHi=hi?Math.round(hi*bw):null,mid=hi?(gLo+gHi)/2:gLo;
+ return{bw,lo,hi,open,gLo,gHi,mid,why}}
+function runProt(){const v=id=>$("#"+id);
+ const o=protein({w:+v("pW").value,h:+v("pH").value,age:+v("pAge").value,base:v("pBase").value,rt:v("pRT").checked,sick:v("pSick").checked,ckd:v("pCKD").checked});
+ const res=$("#pRes"),meals=$("#meals");
+ if(o.ckd){res.className="result r-p";$("#pCat").textContent="先不要拉高";$("#pNote").textContent="eGFR <30 且未洗腎：PROT-AGE 列為例外，可能需要限制蛋白質，請與腎臟科、營養師個別討論。";meals.innerHTML="";$("#pServ").textContent="";return}
+ res.className="result r-r";
+ $("#pCat").textContent=o.open?`≥ ${o.gLo} g／天`:`${o.gLo}–${o.gHi} g／天`;
+ $("#pNote").textContent=`以 ${o.bw.toFixed(1)} kg 計算 · ${o.why.join("；")}`;
+ const per=o.mid/3;
+ meals.innerHTML=["早餐","午餐","晚餐"].map(m=>{const pct=Math.min(100,per/40*100);
+  return `<div class="meal"><span>${m}</span><div class="mbar"><i style="width:${pct.toFixed(0)}%"></i><em style="left:${(25/40*100)}%"></em><em style="left:${(30/40*100)}%"></em></div><span class="mono">${per.toFixed(0)} g</span></div>`}).join("")+
+  `<small class="note">直線標出每餐 25 g 與 30 g，也就是 PROT-AGE 建議的每餐門檻。</small>`;
+ $("#pServ").textContent=`每餐約 ${(per/7).toFixed(1)} 份豆魚蛋肉類（1 份 ≈ 7 g：1 顆蛋、魚肉約 35 g、傳統豆腐約 80 g）。每天加 1 杯 240 mL 牛奶，可以再補約 8 g。`;}
+["pW","pH","pAge","pBase","pRT","pSick","pCKD"].forEach(id=>{const e=$("#"+id);if(e){e.addEventListener("input",runProt);e.addEventListener("change",runProt)}});
+if($("#pRes"))runProt();
+
+/* ---------- CH4: evidence matrix ---------- */
+const ev=$("#evid");
+if(ev){const COLS=["肌肉量","肌力","身體功能"],LV=["","極低","低","中","高"];
+ const ROWS=[["蛋白質強化食物",[0,0,3]],["HMB",[2,2,1]],["BCAA",[2,2,2]],["Omega-3",[2,2,0]],["益生菌",[2,2,0]],["維生素 D",[1,2,2]],["全身振動",[0,0,2]]];
+ COLS.forEach((c,i)=>{const t=el("text",{x:250+i*130,y:24,"text-anchor":"middle","font-size":13,fill:"#9fb9b8"},ev);t.textContent=c});
+ ROWS.forEach(([n,lv],r)=>{const y=58+r*38;
+  el("line",{x1:10,y1:y+19,x2:630,y2:y+19,stroke:"#1a4350"},ev);
+  const t=el("text",{x:14,y:y+5,"font-size":14,fill:"#e8efe9"},ev);t.textContent=n;
+  lv.forEach((l,i)=>{const cx=250+i*130;if(!l){const d=el("text",{x:cx,y:y+5,"text-anchor":"middle","font-size":12,fill:"#3f6f7a"},ev);d.textContent="—";return}
+   for(let k=0;k<4;k++)el("circle",{cx:cx-33+k*14,cy:y,r:5,fill:k<l?(l>=3?"#7fb26a":"#b8b07a"):"none",stroke:k<l?"none":"#3f6f7a","stroke-width":1.2},ev);
+   const lt=el("text",{x:cx+28,y:y+4,"font-size":12,fill:l>=3?"#a9d496":"#9fb9b8"},ev);lt.textContent=LV[l]})});
+ const lg=el("text",{x:14,y:318,"font-size":11.5,fill:"#6f8f90","font-family":"IBM Plex Mono, monospace"},ev);lg.textContent="● ● ● ● 高　● ● ● ○ 中　● ● ○ ○ 低　● ○ ○ ○ 極低";}
+
+})();
+</script>
+</body></html>

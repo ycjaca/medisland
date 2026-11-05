@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二型糖尿病深入探索</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* 代謝體重島：沿用夜間航海圖。主軸是一條血糖曲線，章節依「診斷 → 門診 → 年輕型」往下走。 */
+:root{
+  --sea:#0d2a33;--sea-deep:#082028;--panel:#0a252d;--grid:#1a4350;--grid2:#2a5662;
+  --ink:#e8efe9;--ink-soft:#9fb9b8;--buoy:#f2b134;--acc:#c9a25a;--acc-l:#e6c98f;
+  --bad:#d0715e;--bad-l:#f0a291;--ok:#7fb26a;--ok-l:#a9d496;--warn:#e0a24a;--teal:#5fa8a0;--old:#6f8c92;--purple:#8f86c9;--rose:#c77fa0;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:60px}
+body{margin:0;background:var(--sea);color:var(--ink);font-family:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:16.5px;padding-bottom:env(safe-area-inset-bottom,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--sea-deep)}
+a{color:var(--buoy)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--buoy);outline-offset:3px}
+svg text{font-family:var(--body)}
+.mono{font-family:var(--mono)}
+.col,.wide{margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.col{max-width:780px}.wide{max-width:1060px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(8,32,40,.95);border-bottom:1px solid var(--grid)}
+.topbar .wide{display:flex;align-items:center;gap:14px;height:48px}
+.back{font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--buoy)}
+.prog{flex:1;height:3px;background:var(--grid);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--acc)}
+.chapnav{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap;max-width:45vw;overflow:hidden;text-overflow:ellipsis}
+header.hero{padding:44px 0 26px}
+.coords{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1.16;margin:8px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--acc);display:inline-block}
+.lede{color:var(--ink-soft);margin:0 0 18px;max-width:38em}
+.cgm{display:block;width:100%;height:auto;background:var(--sea-deep);border:1px solid var(--grid);border-radius:4px;margin:14px 0 6px}
+.cgmcap{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.part{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--buoy);margin:26px 0 6px}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:6px 0 0;padding:0;list-style:none}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14.5px;padding:8px 10px;border:1px solid var(--grid);border-radius:4px}
+.toc a:hover{border-color:var(--acc)}
+.toc a span{font-family:var(--mono);font-size:11px;color:var(--acc)}
+.partband{padding:60px 0 6px;border-top:1px solid var(--grid)}
+.partband .wide{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.partband b{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--buoy);font-weight:500}
+.partband span{font-family:var(--display);font-size:26px}
+.partband small{color:var(--ink-soft);font-size:14px}
+section.ch{padding:56px 0 20px;border-top:1px solid var(--grid)}
+.partband+section.ch{border-top:0;padding-top:28px}
+.chno{font-family:var(--mono);font-size:12px;color:var(--acc);letter-spacing:.1em}
+h2{font-family:var(--display);font-size:clamp(27px,4.2vw,38px);line-height:1.22;margin:4px 0 8px;font-weight:700;text-wrap:balance}
+h3{font-family:var(--display);font-size:22px;margin:34px 0 8px;font-weight:700;text-wrap:balance}
+.src{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);border:1px solid var(--grid);border-radius:20px;padding:1px 9px;margin:0 6px 6px 0}
+.src.g{border-color:var(--teal);color:#9ed4cd}
+.src.nhi{border-color:var(--buoy);color:#f5cf7f}
+.src.calc{border-style:dashed}
+.src.self{border-color:var(--bad);color:var(--bad-l)}
+p{margin:0 0 14px}
+.soft{color:var(--ink-soft)}
+.lim{max-width:46em}
+small.note{display:block;font-size:13px;color:var(--ink-soft);line-height:1.6}
+figure{margin:22px 0 26px;padding:0;min-width:0}
+.plate{background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px;padding:16px;min-width:0}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+figcaption b{color:var(--ink);font-weight:500}
+.figno{font-family:var(--mono);font-size:11px;color:var(--acc);margin-right:6px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--grid);background:transparent;border-radius:20px;padding:5px 13px;font-size:13.5px;cursor:pointer;color:var(--ink-soft);transition:border-color .2s,background .2s}
+.chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+.chip.on{border-color:var(--acc);background:rgba(201,162,90,.17);color:var(--ink)}
+.chip i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
+.btn{border:1px solid var(--acc);background:rgba(201,162,90,.12);border-radius:4px;padding:7px 16px;cursor:pointer;font-size:14px;color:var(--ink);text-decoration:none;display:inline-block}
+.btn:hover{background:rgba(201,162,90,.25)}
+.btn.ghost{border-color:var(--grid);background:transparent;color:var(--ink-soft)}
+.callout{border-left:3px solid var(--buoy);background:rgba(242,177,52,.06);padding:12px 16px;margin:18px 0}
+.callout.acc{border-left-color:var(--acc);background:rgba(201,162,90,.07)}
+.callout.bad{border-left-color:var(--bad);background:rgba(208,113,94,.07)}
+.callout.purple{border-left-color:var(--purple);background:rgba(143,134,201,.08)}
+.callout.teal{border-left-color:var(--teal);background:rgba(95,168,160,.08)}
+.callout h4{margin:0 0 4px;font-size:15px;font-weight:500}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.callout ul{margin:4px 0 0;padding-left:20px}
+.tw{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0 20px;min-width:560px}
+table.t th,table.t td{border-bottom:1px solid var(--grid);padding:8px;text-align:left;vertical-align:top}
+table.t th{font-weight:500;color:var(--ink-soft);font-size:13px}
+table.t td.num{font-family:var(--mono);white-space:nowrap}
+.card{background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:18px;min-width:0}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+.tool{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:20px;align-items:start}
+@media (max-width:820px){.two,.tool{grid-template-columns:minmax(0,1fr)}}
+.visits{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.visits button{border:1px solid var(--grid);background:transparent;border-radius:4px;padding:6px 12px;cursor:pointer;font-size:13.5px;color:var(--ink-soft);text-align:left;line-height:1.35}
+.visits button b{display:block;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--acc)}
+.visits button.on{border-color:var(--acc);background:rgba(201,162,90,.14);color:var(--ink)}
+.who{font-family:var(--display);font-size:21px;margin:0 0 6px}
+.card ul{margin:0;padding-left:20px}
+.lab{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.lab div{border:1px solid var(--grid);border-radius:4px;padding:5px 10px;min-width:86px}
+.lab span{display:block;font-size:11.5px;color:var(--ink-soft)}
+.lab b{font-family:var(--mono);font-size:17px;font-weight:500}
+.lab b.hi{color:var(--bad-l)}
+.q{font-weight:500;margin:4px 0 6px}
+.opt{display:grid;gap:8px;margin-top:8px}
+.optc{border:1px solid var(--grid);border-radius:4px;padding:10px 12px;background:transparent;text-align:left;cursor:pointer;font-size:14px;line-height:1.5}
+.optc:hover{border-color:var(--ink-soft)}
+.optc.on{border-color:var(--buoy);background:rgba(242,177,52,.07)}
+.fb{border:1px solid var(--grid);border-radius:4px;padding:12px 14px;font-size:14.5px;margin-top:10px}
+.fb h5{margin:0 0 4px;font-size:15px;font-weight:500}
+.fb p:last-child{margin-bottom:0}
+.grp{margin-bottom:12px}
+.grp h5{margin:0 0 6px;font-size:13px;font-weight:500;color:var(--ink-soft);font-family:var(--mono)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px}
+.check{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--grid);border-radius:4px;padding:7px 10px;cursor:pointer;font-size:13.5px;line-height:1.45}
+.check input{margin-top:4px;accent-color:var(--acc)}
+.check.on{border-color:var(--acc);background:rgba(201,162,90,.09)}
+.row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px;flex-wrap:wrap}
+.row label{min-width:84px;color:var(--ink-soft)}
+.row input[type=number],.row select{background:var(--sea-deep);border:1px solid var(--grid2);border-radius:4px;padding:5px 8px}
+.row input[type=number]{width:92px;font-family:var(--mono)}
+.row input[type=range]{flex:1;min-width:150px;accent-color:var(--acc)}
+.row output{font-family:var(--mono);color:var(--buoy);min-width:56px}
+.sticky{position:sticky;top:64px}
+@media (max-width:820px){.sticky{position:static}}
+.big{font-family:var(--mono);font-size:30px;font-weight:500;color:var(--buoy);line-height:1.2}
+.verdict{border:1px solid var(--grid);border-left:4px solid var(--c,var(--acc));border-radius:4px;padding:12px 14px;margin-bottom:10px;background:var(--sea-deep)}
+.verdict h5{margin:0 0 3px;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--c,var(--acc))}
+.verdict .v{font-family:var(--display);font-size:22px;line-height:1.35}
+.verdict p{margin:4px 0 0;font-size:14px;color:var(--ink-soft)}
+.pill{font-size:12.5px;border-radius:3px;padding:1px 8px;white-space:nowrap}
+.pill.y{background:rgba(127,178,106,.2);color:var(--ok-l)}
+.pill.m{background:rgba(242,177,52,.16);color:#f5cf7f}
+.pill.n{background:rgba(111,140,146,.2);color:var(--ink-soft)}
+.pill.x{background:rgba(208,113,94,.22);color:var(--bad-l)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.stat{border:1px solid var(--grid);border-radius:6px;padding:10px 12px}
+.stat b{display:block;font-family:var(--mono);font-size:25px;font-weight:500;color:var(--buoy);line-height:1.25}
+.stat span{font-size:12.5px;color:var(--ink-soft);line-height:1.45;display:block}
+.lanes{display:grid;gap:10px}
+.lane{border:1px solid var(--grid);border-left:4px solid var(--c,var(--teal));border-radius:4px;padding:10px 13px;font-size:14.5px;background:var(--sea-deep)}
+.lane h5{margin:0 0 3px;font-size:13px;font-weight:500;color:var(--c,var(--teal));font-family:var(--mono)}
+.lane b{font-weight:500}
+.lane p{margin:0 0 5px}.lane p:last-child{margin:0}
+.lane ul{margin:2px 0 0;padding-left:18px}
+.rx{display:grid;gap:7px}
+.rxi{border:1px solid var(--grid);border-radius:4px;padding:9px 12px;font-size:14px;line-height:1.55}
+.rxi b{font-weight:500}
+.rxi.good{border-left:4px solid var(--ok)}
+.rxi.care{border-left:4px solid var(--warn)}
+.rxi.no{border-left:4px solid var(--bad)}
+.rxi.info{border-left:4px solid var(--teal)}
+.rxi .pill{float:right;margin-left:8px}
+.rxi small{display:block;color:var(--ink-soft);font-size:13px;margin-top:2px}
+.ev{margin:14px 0;border:1px solid var(--grid);border-radius:6px;background:rgba(8,32,40,.35)}
+.ev>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;min-height:44px;padding:9px 14px;font-size:14px;color:var(--ink-soft)}
+.ev>summary::-webkit-details-marker{display:none}
+.ev>summary::before{content:'+';font-family:var(--mono);font-size:17px;color:var(--buoy);width:12px;flex:none}
+.ev[open]>summary::before{content:'−'}
+.ev>summary:hover{color:var(--ink)}
+.ev>summary b{font-weight:500}
+.ev-b{padding:2px 14px 12px;min-width:0}
+/* 機制圖 */
+.mech .hl{transition:opacity .25s,stroke .25s,fill .25s}
+.mech .dim{opacity:.22}
+.mech .on-stroke{stroke:var(--hc,#c9a25a)!important;stroke-width:3!important}
+.mech .on-fill{fill:var(--hc,#c9a25a)!important}
+.mech text{fill:var(--ink);font-size:13px}
+.mech .lbl{fill:var(--ink-soft);font-size:11.5px}
+.xmark{opacity:0;transition:opacity .25s}
+.xmark.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.mech .hl,.xmark{transition:none}}
+/* 藥物圖鑑 */
+.organ{cursor:pointer}
+.organ rect,.organ ellipse,.organ path{transition:fill .2s,stroke .2s}
+.organ.lit rect,.organ.lit ellipse,.organ.lit path.o{fill:rgba(201,162,90,.32);stroke:var(--acc-l)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin:10px 0}
+.dgrid button{border:1px solid var(--grid);border-radius:4px;background:transparent;cursor:pointer;padding:7px 10px;text-align:left;font-size:13.5px;line-height:1.35;color:var(--ink-soft)}
+.dgrid button b{display:block;font-weight:500;color:var(--ink);font-size:14px}
+.dgrid button.on{border-color:var(--acc);background:rgba(201,162,90,.14)}
+.dcard{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+.dcard div{border:1px solid var(--grid);border-radius:4px;padding:7px 10px;font-size:13.5px;line-height:1.5}
+.dcard span{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.meter{display:flex;gap:3px;margin-top:3px}
+.meter i{display:block;width:16px;height:7px;border-radius:2px;background:var(--grid)}
+.meter i.f{background:var(--acc)}
+.meter.bad i.f{background:var(--bad)}
+.brand{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+.brand span{border:1px solid var(--grid2);border-radius:3px;padding:2px 8px;font-size:13px}
+.brand span i{font-style:normal;color:var(--ink-soft);font-size:12px;margin-left:4px}
+.combo{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.cmb{border:1px solid var(--grid);border-radius:4px;padding:10px 12px;font-size:14px}
+.cmb b{font-weight:500}
+.cmb .tag{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.cmb.gone{opacity:.6}
+/* 選藥決策器 */
+.dual{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.dual{grid-template-columns:minmax(0,1fr)}}
+.dual h5{margin:0 0 8px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.06em}
+.gap{border:1px dashed var(--buoy);border-radius:4px;padding:9px 12px;font-size:14px;margin-top:10px;color:#f5cf7f}
+/* 胰島素模擬 */
+.sim td input{width:70px;background:var(--sea-deep);border:1px solid var(--grid2);border-radius:4px;padding:3px 6px;font-family:var(--mono)}
+.flag{color:var(--bad-l);font-family:var(--mono);font-size:12.5px}
+.ok{color:var(--ok-l)}
+.timeline{display:grid;gap:6px;margin:12px 0}
+.tl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;border:1px solid var(--grid);border-radius:4px;padding:9px 12px;font-size:14px}
+.tl b{font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--acc-l)}
+.take{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;list-style:none;padding:0;margin:14px 0}
+.take li{border:1px solid var(--grid);border-radius:6px;padding:12px 14px;font-size:14.5px;background:var(--panel)}
+.take b{font-weight:500;display:block;margin-bottom:2px}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin:10px 0 0}
+.links a{border:1px solid var(--grid2);border-radius:4px;padding:10px 12px;font-size:14px;text-decoration:none;color:var(--ink)}
+.links a:hover{border-color:var(--acc)}
+.links span{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:14px 0}
+.mini .card h4{margin:0 0 4px;font-family:var(--display);font-size:19px;font-weight:700}
+.reveal{margin-top:8px}
+.ticks{display:grid;gap:6px}
+.tick{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--grid);border-radius:4px;padding:8px 11px;cursor:pointer;font-size:14px;line-height:1.5}
+.tick input{margin-top:5px;accent-color:var(--ok)}
+.tick.on{border-color:var(--ok);background:rgba(127,178,106,.07)}
+.tick small{display:block;color:var(--ink-soft);font-size:12.5px}
+footer{padding:50px 0 80px;border-top:1px solid var(--grid);margin-top:40px;font-size:13.5px;color:var(--ink-soft)}
+footer ol{padding-left:20px}footer li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wide">
+  <a class="back" href="index.html#metabolic">← 回到群島</a>
+  <div class="prog"><i id="progbar"></i></div>
+  <span class="chapnav" id="chapnav">代謝體重島</span>
+</div></div>
+
+<header class="hero"><div class="col">
+  <div class="coords">代謝體重島 · 國際會議廳 08:50 · 115.10.18</div>
+  <h1>第二型糖尿病：<em>從診斷到胰島素</em></h1>
+  <p class="lede">健檢抓到血糖偏高的 55 歲業務，和 34 歲就確診的工程師。先確定是不是糖尿病、是哪一型，再走一次門診實務：篩檢、首診、目標、選藥與複方、胰島素，最後看年輕發病為什麼要更早、更積極。</p>
+  <svg class="cgm" id="cgm" viewBox="0 0 900 140" role="img" aria-label="一天的血糖曲線示意：三餐後上升，灰色帶為 70 到 180 的目標範圍"></svg>
+  <div class="cgmcap">CGM 一日示意 · 灰帶為 70–180 mg/dL 目標範圍 · 三餐後的高峰</div>
+  <div class="callout purple" style="margin-top:18px"><h4>閱讀提醒</h4><p class="soft" style="margin:0">本頁沒有講者投影片，內容依指引、試驗與健保條文整理，不代表羅仕昌醫師（中山附醫內分泌科）的演講內容。標 <span class="src g">指引</span> 的來自 ADA 2026 等指引，標 <span class="src nhi">健保</span> 的來自健保署藥品給付規定，標 <span class="src self">自費</span> 的是台灣沒有健保給付，標 <span class="src calc">示意</span> 的是教學用的簡化模型。</p></div>
+  <div class="callout bad"><h4>開講前請再核對</h4><p class="soft" style="margin:0">健保條文由健保署 5.1 總則、爭議審定書與醫師整理文章（依 114/6/1 版）拼成，「口服降血糖藥最多四種」是否已刪除，各來源說法不一。部分品項（Xultophy、三合一複方、每週胰島素）是否在台上市尚未確認，頁面上都有標示。</p></div>
+  <div class="part">第一部分 · 診斷與鑑別</div>
+  <ul class="toc">
+    <li><a href="#c1"><span>01</span>兩位病人</a></li>
+    <li><a href="#c2"><span>02</span>確診了嗎</a></li>
+    <li><a href="#c3"><span>03</span>β 細胞哪裡壞了</a></li>
+    <li><a href="#c4"><span>04</span>抗體與 C-peptide</a></li>
+    <li><a href="#c5"><span>05</span>依型別治療</a></li>
+    <li><a href="#c6"><span>06</span>差點誤診</a></li>
+  </ul>
+  <div class="part">第二部分 · 門診實務</div>
+  <ul class="toc">
+    <li><a href="#c7"><span>07</span>誰該篩檢</a></li>
+    <li><a href="#c8"><span>08</span>第一次門診</a></li>
+    <li><a href="#c9"><span>09</span>個人化目標</a></li>
+    <li><a href="#c10"><span>10</span>藥物與複方圖鑑</a></li>
+    <li><a href="#c11"><span>11</span>選藥決策器</a></li>
+    <li><a href="#c12"><span>12</span>開藥實務</a></li>
+    <li><a href="#c13"><span>13</span>胰島素</a></li>
+    <li><a href="#c14"><span>14</span>追蹤與加強</a></li>
+  </ul>
+  <div class="part">第三部分 · 年輕型有什麼不同</div>
+  <ul class="toc">
+    <li><a href="#c15"><span>15</span>病程比較兇</a></li>
+    <li><a href="#c16"><span>16</span>早合併、看體重、談緩解</a></li>
+    <li><a href="#c17"><span>17</span>年輕人的課題</a></li>
+    <li><a href="#c18"><span>18</span>帶走六件事</a></li>
+  </ul>
+</div></header>
+
+<div class="partband"><div class="wide"><b>PART 1</b><span>診斷與鑑別</span><small>先確定是不是糖尿病，再確定是哪一種</small></div></div>
+
+<section class="ch" id="c1"><div class="wide">
+  <div class="chno">01 · 門診</div>
+  <h2>兩位病人，同一個問題</h2>
+  <p class="soft lim">兩位都是血糖偏高來看診。病人 A 會陪你走完第二部分的門診流程，病人 B 會在鑑別和第三部分回來。</p>
+  <div class="visits" id="caseTabs">
+    <button class="on" data-v="0"><b>病人 A</b>55 歲 · 健檢異常</button>
+    <button data-v="1"><b>病人 B</b>34 歲 · 口渴夜尿</button>
+  </div>
+  <div class="two">
+    <div class="card" id="caseCard"></div>
+    <div class="card"><div id="caseQ"></div></div>
+  </div>
+</div></section>
+
+<section class="ch" id="c2"><div class="wide">
+  <div class="chno">02 · 診斷</div>
+  <h2>確診了嗎：四個標準與一個陷阱</h2>
+  <span class="src g">ADA 2026 第 2 章</span>
+  <p class="lim">診斷有四個入口：空腹血糖、OGTT 兩小時、HbA1c、有典型症狀時的隨機血糖。沒有明顯高血糖症狀時，<b>需要兩個異常結果</b>，可以是同一次抽血的兩項，也可以是同一項在另一天再驗一次。</p>
+  <div class="tool">
+    <div class="card">
+      <div class="row"><label>空腹血糖</label><input type="number" id="dxF" placeholder="未驗"> <span class="soft">mg/dL</span></div>
+      <div class="row"><label>OGTT 2 小時</label><input type="number" id="dxO" placeholder="未驗"> <span class="soft">mg/dL</span></div>
+      <div class="row"><label>HbA1c</label><input type="number" step="0.1" id="dxA" placeholder="未驗"> <span class="soft">%</span></div>
+      <div class="row"><label>隨機血糖</label><input type="number" id="dxR" placeholder="未驗"> <span class="soft">mg/dL</span></div>
+      <label class="check" style="margin-bottom:6px"><input type="checkbox" id="dxS">有典型症狀（多吃多喝多尿、體重下降）或高血糖危象</label>
+      <label class="check"><input type="checkbox" id="dxRep">唯一異常的那一項，已在另一天重驗仍異常</label>
+      <div class="btns" style="margin-top:12px"><button class="chip" data-dx="A">帶入病人 A</button><button class="chip" data-dx="B">帶入病人 B</button><button class="chip" data-dx="C">只驗一次 HbA1c 6.7</button><button class="chip" data-dx="0">清空</button></div>
+    </div>
+    <div class="sticky">
+      <div class="verdict" id="dxOut"></div>
+      <table class="t" style="min-width:0;font-size:13.5px">
+        <tr><th></th><th>正常</th><th>糖尿病前期</th><th>糖尿病</th></tr>
+        <tr><td>空腹血糖</td><td class="num">&lt;100</td><td class="num">100–125</td><td class="num">≥126</td></tr>
+        <tr><td>OGTT 2 小時</td><td class="num">&lt;140</td><td class="num">140–199</td><td class="num">≥200</td></tr>
+        <tr><td>HbA1c</td><td class="num">&lt;5.7%</td><td class="num">5.7–6.4%</td><td class="num">≥6.5%</td></tr>
+        <tr><td>隨機血糖</td><td colspan="3">≥200 且有典型症狀即可診斷</td></tr>
+      </table>
+    </div>
+  </div>
+  <h3>HbA1c 什麼時候會騙人</h3>
+  <p class="lim soft">HbA1c 反映紅血球過去約三個月接觸的血糖，只要紅血球壽命或血紅素本身不正常，數字就會偏。HbA1c 和血糖對不起來時，ADA 建議改用血糖判斷。</p>
+  <div class="btns" id="a1cTraps">
+    <button class="chip on" data-t="0">海洋性貧血帶因</button>
+    <button class="chip" data-t="1">缺鐵性貧血</button>
+    <button class="chip" data-t="2">失血、溶血、輸血</button>
+    <button class="chip" data-t="3">慢性腎臟病、EPO</button>
+    <button class="chip" data-t="4">懷孕中後期</button>
+    <button class="chip" data-t="5">剛發病、血糖急升</button>
+  </div>
+  <div class="verdict" id="a1cOut" style="--c:var(--warn)"></div>
+</div></section>
+
+<section class="ch" id="c3"><div class="wide">
+  <div class="chno">03 · 機制</div>
+  <h2>β 細胞哪裡壞了：七種糖尿病放在同一張圖</h2>
+  <p class="lim">血糖進入 β 細胞後，經過「感應 → 產生 ATP → 關上 K-ATP 通道 → 鈣離子進來 → 釋放胰島素」這條路。各型糖尿病壞在不同位置，所以適合的藥也不同。點下面的型別，看它壞在哪一步。</p>
+  <div class="btns" id="typeBtns"></div>
+  <figure>
+    <div class="plate"><svg class="mech" id="mech" viewBox="0 0 900 480" role="img" aria-label="β 細胞胰島素分泌路徑與周邊器官的機制圖"></svg></div>
+    <figcaption><span class="figno">圖 1</span><b>β 細胞與周邊器官。</b>亮起的是這一型出問題的位置；紅色叉號代表功能喪失，綠色標籤代表藥物可以介入的點。<span class="src calc">示意</span></figcaption>
+  </figure>
+  <div class="lanes" id="typeInfo"></div>
+  <h3>C-peptide 隨時間怎麼走</h3>
+  <p class="lim soft">C-peptide 和胰島素等量分泌，又不受外來胰島素干擾，是看自身胰島素還剩多少的指標。各型下降的速度不同，這就是為什麼診斷不清時要「隔幾年再驗一次」。</p>
+  <figure>
+    <div class="plate"><svg id="cpep" viewBox="0 0 900 330" role="img" aria-label="不同型別糖尿病 C-peptide 隨病程下降的示意曲線"></svg></div>
+    <figcaption><span class="figno">圖 2</span><b>C-peptide 趨勢示意。</b>虛線是 ADA/EASD 流程用的兩個切點：&lt;200 pmol/L 支持第一型，&gt;600 pmol/L 支持第二型。曲線形狀依文獻描述繪製，不是實測資料。<span class="src calc">示意</span></figcaption>
+  </figure>
+</div></section>
+
+<section class="ch" id="c4"><div class="wide">
+  <div class="chno">04 · 鑑別工具</div>
+  <h2>抗體與 C-peptide：成人該怎麼分型</h2>
+  <span class="src g">ADA/EASD 2021 成人第一型共識</span><span class="src g">LADA 專家共識 2020</span>
+  <p class="lim">成人糖尿病的分型錯誤很常見，30 歲以後才診斷的人裡，誤判比例最高可達四成。ADA/EASD 流程的順序是：懷疑第一型時先驗抗體，抗體陰性再看年齡與 C-peptide。</p>
+  <div class="two">
+    <div class="lanes">
+      <div class="lane" style="--c:var(--bad)"><h5>胰島自體抗體</h5><p><b>GAD 抗體最敏感</b>，先驗它；臨床仍懷疑再加驗 IA-2、ZnT8。成人第一型約 5–10% 抗體陰性，所以陰性不能完全排除。</p><p class="soft">LADA 專家共識建議：新診斷、不需胰島素的糖尿病都篩 GAD。</p></div>
+      <div class="lane" style="--c:var(--teal)"><h5>C-peptide 怎麼驗</h5><ul><li>可用<b>餐後 5 小時內的隨機值</b>，一定要同時驗血糖</li><li>已在打胰島素的人，C-peptide 才有分型意義</li><li>&lt;80 pmol/L 不必重驗；&lt;600 且同時血糖 &lt;72 mg/dL，要重驗</li><li>台灣報告多用 ng/mL：<span class="mono">1 ng/mL ≈ 331 pmol/L</span></li></ul></div>
+      <div class="lane" style="--c:var(--ok)"><h5>單基因糖尿病（MODY）</h5><p>35 歲前發病、抗體陰性、C-peptide &gt;200 pmol/L：用 Exeter MODY 機率計算器，機率 &gt;5% 考慮基因檢測。</p><p class="soft">台灣：亞洲家族性 MODY 的已知基因檢出率不到兩成（歐洲約七到八成），基因檢測多為自費；台中榮總正在收案建立年輕型糖尿病登錄。</p></div>
+    </div>
+    <div class="card">
+      <h4 style="margin:0 0 8px;font-family:var(--display);font-size:20px">分型判定器</h4>
+      <div class="row"><label>診斷年齡</label><input type="number" id="clAge" value="34"></div>
+      <div class="row"><label>抗體</label><select id="clAb"><option value="na">還沒驗</option><option value="neg" selected>陰性</option><option value="pos">陽性（多個或高效價）</option><option value="low">單一、低效價陽性</option></select></div>
+      <div class="row"><label>C-peptide</label><input type="number" step="0.01" id="clCp" value="2.4"><select id="clU"><option value="ng">ng/mL</option><option value="pm">pmol/L</option></select></div>
+      <label class="check" style="margin-bottom:6px"><input type="checkbox" id="clT2" checked>有第二型特徵（肥胖、黑色棘皮症、代謝症候群）</label>
+      <label class="check" style="margin-bottom:6px"><input type="checkbox" id="clFast">很快就需要胰島素（約 3 年內）</label>
+      <label class="check"><input type="checkbox" id="clFam">父母、祖父母連續多代糖尿病</label>
+      <div class="btns" style="margin-top:10px"><button class="chip" data-cl="B">病人 B</button><button class="chip" data-cl="L">瘦的 48 歲、GAD 陽性</button><button class="chip" data-cl="M">22 歲、不胖、抗體陰性</button></div>
+      <div class="verdict" id="clOut" style="margin-top:8px"></div>
+    </div>
+  </div>
+  <details class="ev"><summary><b>判定器依據</b>與限制</summary><div class="ev-b"><p class="soft">流程改寫自 ADA/EASD 2021 成人第一型糖尿病共識（Holt et al., Diabetologia 2021）。該流程以歐洲白人資料建立，亞洲人在較低 BMI 就出現第二型，年齡 35 歲的切點也有學者質疑；也有人主張用 C-peptide／同時血糖的比值，因為同樣 300 pmol/L，若血糖達 200–250 mg/dL 代表胰島素已明顯不足。ADA/EASD 已於 2026 年更新成人第一型共識，新版把 35 歲以下、BMI &lt;25、DKA 或血糖 &gt;360 mg/dL 列為考慮第一型的特徵，流程細節本頁尚未核對。</p></div></details>
+</div></section>
+
+<section class="ch" id="c5"><div class="wide">
+  <div class="chno">05 · 依型別治療</div>
+  <h2>分對型，藥就換了</h2>
+  <p class="lim">分型的價值在於治療不同：GCK-MODY 可以停藥，HNF1A-MODY 用小劑量 SU 就夠，LADA 不該用 SU，第一型一開始就要胰島素。</p>
+  <div class="tw"><table class="t">
+    <tr><th>型別</th><th>第一線</th><th>要避免</th><th>其他</th></tr>
+    <tr><td><b>第一型</b></td><td>多次注射或胰島素幫浦，CGM</td><td>只用口服藥</td><td>篩甲狀腺、乳糜瀉等自體免疫疾病</td></tr>
+    <tr><td><b>LADA</b></td><td>依 C-peptide 分三層（右側工具）</td><td>SU（可能加速 β 細胞衰退）</td><td>DPP-4i、GLP-1 RA、SGLT2i 只有小型研究</td></tr>
+    <tr><td><b>GCK-MODY</b></td><td>不需治療</td><td>為了 HbA1c 開藥（藥物幾乎沒效）</td><td>懷孕時依胎兒是否帶基因決定是否用胰島素</td></tr>
+    <tr><td><b>HNF1A／HNF4A</b></td><td>低劑量 SU（如 gliclazide）</td><td>高劑量 SU 起始（易低血糖）</td><td>約四成最後仍需胰島素；懷孕時改胰島素</td></tr>
+    <tr><td><b>HNF1B</b></td><td>通常需早期胰島素</td><td>期待 SU 有效</td><td>轉介腎臟科、泌尿科、婦科</td></tr>
+    <tr><td><b>第二型</b></td><td>依共病選藥（第 11 章）</td><td>—</td><td>年輕型要更早合併（第 16 章）</td></tr>
+  </table></div>
+  <div class="tool">
+    <div class="card">
+      <h4 style="margin:0 0 6px;font-family:var(--display);font-size:20px">LADA：C-peptide 決定用什麼</h4>
+      <span class="src g">Buzzetti 2020</span>
+      <div class="row" style="margin-top:8px"><label>隨機 C-peptide</label><input type="range" id="ladaCp" min="0.05" max="1.5" step="0.05" value="0.5"><output id="ladaCpO"></output></div>
+      <small class="note">單位 nmol/L（0.3 nmol/L ≈ 0.9 ng/mL；0.7 nmol/L ≈ 2.1 ng/mL）</small>
+    </div>
+    <div class="verdict" id="ladaOut"></div>
+  </div>
+</div></section>
+
+<section class="ch" id="c6"><div class="wide">
+  <div class="chno">06 · 小病例</div>
+  <h2>差點誤診的三個人</h2>
+  <p class="lim soft">三位都先被當成第二型。先想一下哪裡怪，再打開答案。</p>
+  <div class="mini">
+    <div class="card"><h4>瘦瘦的會計師</h4><p style="font-size:14.5px">48 歲女性，BMI 21，診斷兩年。metformin 加 glimepiride，HbA1c 從 7.1 一路升到 9.4%，最近體重掉了 4 kg。有橋本氏甲狀腺炎。</p>
+      <details class="ev reveal"><summary><b>看答案</b></summary><div class="ev-b"><p><b>LADA。</b>不胖、有其他自體免疫疾病、口服藥很快失效、體重下降，都是線索。驗 GAD 抗體陽性、C-peptide 0.25 nmol/L，應改多次胰島素，並停掉 SU。</p></div></details></div>
+    <div class="card"><h4>HbA1c 永遠 6.5% 的老師</h4><p style="font-size:14.5px">29 歲女性，懷孕時發現空腹血糖 118，產後 HbA1c 一直在 6.4–6.6%，吃了三年 metformin 數字都沒變。媽媽也是「血糖有點高、一直沒吃藥」。</p>
+      <details class="ev reveal"><summary><b>看答案</b></summary><div class="ev-b"><p><b>GCK-MODY。</b>輕微而穩定的空腹高血糖、藥物沒效、家族裡「沒吃藥也沒併發症」。確診後可以停藥，不需要定期追蹤併發症；下次懷孕要看胎兒是否帶基因再決定治療。</p></div></details></div>
+    <div class="card"><h4>吃 SU 就頭暈的工程師</h4><p style="font-size:14.5px">26 歲男性，BMI 22，祖父、父親都是年輕就有糖尿病。換到 glimepiride 2 mg 後反覆低血糖，HbA1c 卻降很多。尿糖在血糖不高時也是陽性。</p>
+      <details class="ev reveal"><summary><b>看答案</b></summary><div class="ev-b"><p><b>HNF1A-MODY。</b>多代家族史、不胖、對 SU 異常敏感、腎糖閾低。HNF1A 壞在上游，K-ATP 通道本身完好，SU 直接作用在通道上，所以小劑量就很有效。改低劑量 gliclazide，家人可做預測性基因檢測。</p></div></details></div>
+  </div>
+</div></section>
+
+<div class="partband"><div class="wide"><b>PART 2</b><span>門診實務</span><small>跟著病人 A，從篩檢走到胰島素</small></div></div>
+
+<section class="ch" id="c7"><div class="wide">
+  <div class="chno">07 · 篩檢</div>
+  <h2>誰該篩檢：ADA 與台灣成人健檢</h2>
+  <span class="src g">ADA 2026 第 2、3 章</span><span class="src nhi">國健署成人預防保健</span>
+  <p class="lim">台灣成人預防保健從 114 年 1 月 1 日起下修到 30 歲，30–39 歲每 5 年、40–64 歲每 3 年、65 歲以上每年一次，內容包含空腹血糖。ADA 的建議更積極：亞裔只要 BMI ≥23 加一項危險因子，任何年齡都該篩；沒有危險因子的人 35 歲起篩。</p>
+  <div class="tool">
+    <div class="card">
+      <div class="row"><label>年齡</label><input type="range" id="scAge" min="18" max="80" value="55"><output id="scAgeO"></output></div>
+      <div class="row"><label>BMI</label><input type="range" id="scBmi" min="18" max="40" step="0.5" value="27.5"><output id="scBmiO"></output></div>
+      <div class="grp"><h5>危險因子</h5><div class="checks" id="scRisk">
+        <label class="check"><input type="checkbox" value="fam">一等親有糖尿病</label>
+        <label class="check"><input type="checkbox" value="htn" checked>高血壓或在吃降壓藥</label>
+        <label class="check"><input type="checkbox" value="lip">HDL &lt;35 或 TG &gt;250</label>
+        <label class="check"><input type="checkbox" value="cvd">心血管疾病病史</label>
+        <label class="check"><input type="checkbox" value="pcos">多囊性卵巢症候群</label>
+        <label class="check"><input type="checkbox" value="inact">身體活動量少</label>
+        <label class="check"><input type="checkbox" value="ir">黑色棘皮症等胰島素阻抗表現</label>
+        <label class="check"><input type="checkbox" value="drug">長期類固醇、抗精神病藥、HIV</label>
+      </div></div>
+      <div class="grp"><h5>特殊病史</h5><div class="checks" id="scHx">
+        <label class="check"><input type="checkbox" value="gdm">曾有妊娠糖尿病</label>
+        <label class="check"><input type="checkbox" value="pre">已知糖尿病前期</label>
+        <label class="check"><input type="checkbox" value="abo">原住民</label>
+      </div></div>
+    </div>
+    <div class="sticky"><div class="verdict" id="scAda" style="--c:var(--teal)"></div><div class="verdict" id="scTw" style="--c:var(--buoy)"></div></div>
+  </div>
+  <h3>篩到糖尿病前期，接下來</h3>
+  <div class="lanes">
+    <div class="lane" style="--c:var(--ok)"><h5>生活型態是主角</h5><p>ADA 2026 把減重目標訂為<b>原體重的 5–7%</b>，每週至少 150 分鐘中等強度活動。飲食型態中，<b>地中海飲食與低碳水飲食</b>預防糖尿病的證據最好。</p></div>
+    <div class="lane" style="--c:var(--teal)"><h5>什麼時候加 metformin</h5><p>BMI ≥35、60 歲以下、曾有妊娠糖尿病的人效果最明顯。DPP 試驗中，生活型態介入讓糖尿病發生率降 58%，metformin 降 31%。</p></div>
+    <div class="lane" style="--c:var(--buoy)"><h5>多久再驗</h5><p>糖尿病前期每年驗一次；結果正常、但有危險因子的人至少每 3 年一次；曾有妊娠糖尿病的人終身至少每 3 年一次。</p></div>
+  </div>
+</div></section>
+
+<section class="ch" id="c8"><div class="wide">
+  <div class="chno">08 · 第一次門診</div>
+  <h2>確診後的第一次門診：一張檢查表</h2>
+  <p class="lim">病人 A 確診了。第一次門診除了開藥，更重要的是把併發症和共病的基準線建起來，並加入共同照護。點選已完成的項目，右邊會顯示還缺什麼。</p>
+  <div class="tool">
+    <div class="ticks" id="firstVisit">
+      <label class="tick"><input type="checkbox">問診：症狀、體重變化、家族史、用藥（類固醇、抗精神病藥）、吸菸、睡眠打呼<small>年輕或不典型的人，想到第 4 章的分型</small></label>
+      <label class="tick"><input type="checkbox">理學：身高體重、腰圍、血壓、黑色棘皮症<small>病人 A：BMI 27.5、BP 138/86</small></label>
+      <label class="tick"><input type="checkbox">足部：外觀、脈搏、單股尼龍線、震動覺<small>基準線，之後每年一次</small></label>
+      <label class="tick"><input type="checkbox">HbA1c、血脂、肌酸酐與 eGFR<small>LDL 128 → 依健保新制，糖尿病屬高風險，目標 &lt;100</small></label>
+      <label class="tick"><input type="checkbox">尿液白蛋白／肌酸酐比值（UACR）<small>病人 A：45 mg/g，三個月內再驗確認</small></label>
+      <label class="tick"><input type="checkbox">肝功能與 FIB-4<small>ADA 建議第二型糖尿病用 FIB-4 篩脂肪肝纖維化，≥1.3 進一步評估</small></label>
+      <label class="tick"><input type="checkbox">眼底檢查<small>第二型確診時就要做，之後每 1–2 年</small></label>
+      <label class="tick"><input type="checkbox">疫苗：流感、肺炎鏈球菌、B 型肝炎、帶狀疱疹、新冠<small>可連到疫苗感染島</small></label>
+      <label class="tick"><input type="checkbox">加入糖尿病共同照護（衛教師、營養師）<small>健保照護整合方案；也是追蹤達標的獎勵來源</small></label>
+      <label class="tick"><input type="checkbox">心理：糖尿病困擾、焦慮、憂鬱篩檢<small>ADA 2026 新增每年篩焦慮與低血糖恐懼</small></label>
+    </div>
+    <div class="sticky"><div class="verdict" id="fvOut"></div></div>
+  </div>
+</div></section>
+
+<section class="ch" id="c9"><div class="wide">
+  <div class="chno">09 · 目標</div>
+  <h2>個人化目標：不是每個人都要 7%</h2>
+  <span class="src g">ADA 2026 第 6 章</span>
+  <p class="lim">多數成人的 HbA1c 目標是 &lt;7%。年輕、病程短、沒有低血糖風險的人，可以追求更低；高齡、低血糖風險高、預期壽命有限的人，放寬到 &lt;8% 比較安全。CGM 的目標是 70–180 mg/dL 的時間超過 70%、低於 70 的時間少於 4%。</p>
+  <div class="tool">
+    <div class="card" id="tgt">
+      <div class="row"><label>低血糖風險</label><input type="range" min="0" max="2" value="0" data-k="hypo"><output></output></div>
+      <div class="row"><label>預期壽命</label><input type="range" min="0" max="2" value="0" data-k="life"><output></output></div>
+      <div class="row"><label>病程</label><input type="range" min="0" max="2" value="0" data-k="dur"><output></output></div>
+      <div class="row"><label>重大共病</label><input type="range" min="0" max="2" value="0" data-k="comor"><output></output></div>
+      <div class="row"><label>意願與資源</label><input type="range" min="0" max="2" value="0" data-k="res"><output></output></div>
+      <small class="note">每一列往右代表越不利於嚴格控制。預設值是病人 A。</small>
+    </div>
+    <div class="sticky">
+      <div class="verdict" id="tgtOut"></div>
+      <div class="rx">
+        <div class="rxi info"><b>血壓 &lt;130/80 mmHg</b><small>有白蛋白尿時首選 ACEI 或 ARB</small></div>
+        <div class="rxi info"><b>LDL：糖尿病屬高風險，&lt;100 mg/dL</b><small>合併 ASCVD 則 &lt;70 或 &lt;55，詳見 <a href="ldl-c.html">LDL-C 頁的健保新制</a></small></div>
+        <div class="rxi info"><b>體重：先減 5–10%</b><small>減 10–15% 以上才可能讓糖尿病緩解（第 16 章）</small></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="ch" id="c10"><div class="wide">
+  <div class="chno">10 · 藥物圖鑑</div>
+  <h2>常見藥物與複方：作用在哪、台灣有哪些</h2>
+  <span class="src g">ADA 2026 表 9.2</span><span class="src nhi">健保 5.1</span>
+  <p class="lim">降血糖藥分成十類，作用在七個器官。點器官看有哪些藥作用在那裡，點藥物看它的特性、健保條件和常見商品名。</p>
+  <figure>
+    <div class="plate"><svg id="organs" viewBox="0 0 900 400" role="img" aria-label="降血糖藥作用器官圖"></svg></div>
+    <figcaption><span class="figno">圖 3</span><b>作用器官。</b>亮起的是目前選取藥物的作用位置；點器官可以篩選右下的藥物清單。<span class="src calc">示意</span></figcaption>
+  </figure>
+  <div class="dgrid" id="drugGrid"></div>
+  <div class="card" id="drugCard"></div>
+
+  <h3>複方拼圖：選成分，看有哪些複方</h3>
+  <p class="lim soft">複方可以減少藥丸數、提高順從性；缺點是劑量彈性變小，其中一個成分出問題就要整顆換。健保上，SGLT2i／DPP-4i 複方是<b>唯一能同時拿到這兩類藥</b>的方式。</p>
+  <div class="btns" id="comboPick">
+    <button class="chip" data-c="met">Metformin</button>
+    <button class="chip" data-c="su">SU</button>
+    <button class="chip" data-c="dpp4">DPP-4i</button>
+    <button class="chip" data-c="sglt2">SGLT2i</button>
+    <button class="chip" data-c="tzd">TZD</button>
+    <button class="chip" data-c="glp1">GLP-1 RA</button>
+    <button class="chip" data-c="basal">基礎胰島素</button>
+    <button class="chip" data-c="rapid">速效胰島素</button>
+  </div>
+  <div class="combo" id="comboOut"></div>
+  <div class="callout"><h4>健保和指引最大的落差</h4><p class="soft">健保規定 GLP-1 RA <b>不得與 SGLT2i、DPP-4i 併用</b>，SGLT2i 和 DPP-4i 也只能擇一（複方除外）。但 ADA 認為 GLP-1 RA 加 SGLT2i 可以同時拿到心臟與腎臟的好處。臨床上常要在「健保給付」和「指引最佳組合」之間取捨，或請病人自費其中一種。</p></div>
+</div></section>
+
+<section class="ch" id="c11"><div class="wide">
+  <div class="chno">11 · 選藥</div>
+  <h2>選藥決策器：指引怎麼說、健保怎麼給</h2>
+  <span class="src g">ADA 2026 第 9 章</span><span class="src nhi">健保 5.1、2.1</span>
+  <p class="lim">ADA 2026 的原則是<b>先看共病，再看血糖</b>：有心、腎、肥胖、脂肪肝的人，不論 HbA1c 多少，都應及早用有實證的 SGLT2i 或 GLP-1 RA，可以和 metformin 併用，也可以不經 metformin。HbA1c 比目標高 1.5% 以上，或已有心腎代謝共病，就該早點合併治療。健保則仍以 metformin 為入口，逐步往上加。</p>
+  <div class="tool">
+    <div class="card">
+      <div class="row"><label>HbA1c</label><input type="range" id="dsA1c" min="6.5" max="12" step="0.1" value="7.8"><output id="dsA1cO"></output></div>
+      <div class="checks" id="dsCo" style="grid-template-columns:repeat(auto-fill,minmax(190px,1fr))">
+        <label class="check"><input type="checkbox" value="ascvd">ASCVD（心肌梗塞、中風、PAD）</label>
+        <label class="check"><input type="checkbox" value="event">其中有 MI、血管再通術或缺血性中風</label>
+        <label class="check"><input type="checkbox" value="hf">心衰竭（LVEF ≤49%）</label>
+        <label class="check"><input type="checkbox" value="ckd" checked>CKD（eGFR &lt;60 或 UACR ≥30）</label>
+        <label class="check"><input type="checkbox" value="ckdnhi">eGFR 25–60 且 UACR 200–5000、有參加腎臟照護計畫</label>
+        <label class="check"><input type="checkbox" value="obese" checked>過重或肥胖</label>
+        <label class="check"><input type="checkbox" value="masld" checked>脂肪肝（MASLD）</label>
+        <label class="check"><input type="checkbox" value="hypo">低血糖高風險（高齡、獨居）</label>
+        <label class="check"><input type="checkbox" value="cata">分解代謝症狀（體重掉、酮症）</label>
+      </div>
+      <small class="note" style="margin-top:8px">預設為病人 A：HbA1c 7.8%、UACR 45（輕度白蛋白尿）、過重、脂肪肝。</small>
+    </div>
+    <div class="sticky">
+      <div class="dual">
+        <div><h5 style="color:#9ed4cd">指引 · ADA 2026</h5><div class="rx" id="dsAda"></div></div>
+        <div><h5 style="color:#f5cf7f">健保給付路徑</h5><div class="rx" id="dsNhi"></div></div>
+      </div>
+      <div id="dsGap"></div>
+    </div>
+  </div>
+  <details class="ev"><summary><b>健保條文摘要</b>（依 114/6/1 版整理）</summary><div class="ev-b">
+    <ul class="soft" style="font-size:14px;padding-left:18px">
+      <li><b>總則</b>：第二型原則上優先 metformin，或考慮早期胰島素。TZD、DPP-4i、SGLT2i 及其複方，限已用最大耐受劑量 metformin 仍控制不佳者；SGLT2i 與 DPP-4i（含複方）宜擇一。三種口服仍控制不佳，宜考慮胰島素。</li>
+      <li><b>SGLT2i／DPP-4i 複方</b>（Glyxambi、Qtern）：用足 metformin，且併用其中一種單方至少 6 個月，HbA1c 仍 &gt;7.5%；每日 1 粒。</li>
+      <li><b>GLP-1 RA</b>（liraglutide、dulaglutide、semaglutide、lixisenatide）：用足 metformin 及／或 SU，再併用 SGLT2i、DPP-4i、其複方或胰島素之一 6 個月以上，HbA1c 仍 &gt;8.5%；不得與 DPP-4i、SGLT2i 併用。曾發生心肌梗塞、血管再通術或動脈硬化缺血性中風者，用足 metformin 後可直接使用 liraglutide、dulaglutide 或 semaglutide。</li>
+      <li><b>Soliqua</b>：條件同 GLP-1 RA，但 HbA1c &gt;8.0%、胰島素每日 &lt;60 單位。</li>
+      <li><b>SGLT2i 用於心衰與 CKD</b>（dapagliflozin、empagliflozin 10 mg，不需有糖尿病）：HFrEF、HFmrEF（41–49% 需曾因心衰住院或心臟專科診斷）；CKD 需參加初期 CKD 照護整合方案或 Pre-ESRD 計畫、ACEI／ARB 最大耐受劑量至少 4 週、eGFR 25–60、UACR 200–5000 mg/g。</li>
+      <li><b>自費</b>：tirzepatide（Mounjaro）、口服 semaglutide（Rybelsus）在台灣有第二型糖尿病適應症，健保未給付。</li>
+    </ul>
+  </div></details>
+</div></section>
+
+<section class="ch" id="c12"><div class="wide">
+  <div class="chno">12 · 開藥</div>
+  <h2>開藥實務：劑量、腎功能、生病的時候</h2>
+  <h3>腎功能調整：拖動 eGFR</h3>
+  <div class="card">
+    <div class="row"><label>eGFR</label><input type="range" id="egfr" min="10" max="100" value="85"><output id="egfrO"></output></div>
+    <div class="rx" id="egfrOut"></div>
+    <small class="note" style="margin-top:8px">依各藥仿單與 ADA 2026 整理，實際開立以院內藥典為準。</small>
+  </div>
+  <h3>三個最常被問的實務問題</h3>
+  <div class="visits" id="pracTabs">
+    <button class="on" data-v="0"><b>Metformin</b>肚子不舒服</button>
+    <button data-v="1"><b>SGLT2i</b>生病與手術</button>
+    <button data-v="2"><b>GLP-1 RA</b>怎麼加劑量</button>
+    <button data-v="3"><b>SU</b>低血糖</button>
+  </div>
+  <div class="card" id="pracOut"></div>
+</div></section>
+
+<section class="ch" id="c13"><div class="wide">
+  <div class="chno">13 · 胰島素</div>
+  <h2>胰島素：何時開始、選哪一種、怎麼和口服藥搭配</h2>
+  <span class="src g">ADA 2026 第 9 章</span>
+  <p class="lim">五年後的病人 A：體重 80 kg，吃 metformin 2000 mg 加上 Glyxambi（empagliflozin＋linagliptin 複方），HbA1c 還是 9.6%，空腹血糖多在 180 上下。該打針了嗎？</p>
+
+  <h3>何時開始</h3>
+  <div class="tool">
+    <div class="checks" id="insWhen" style="grid-template-columns:minmax(0,1fr)">
+      <label class="check"><input type="checkbox" value="a">HbA1c ≥10% 或血糖 ≥300 mg/dL</label>
+      <label class="check"><input type="checkbox" value="b">分解代謝症狀：體重下降、酮症、多尿多渴</label>
+      <label class="check"><input type="checkbox" value="c" checked>已用三種口服藥，仍未達標</label>
+      <label class="check"><input type="checkbox" value="d">已用 GLP-1 RA，仍未達標</label>
+      <label class="check"><input type="checkbox" value="e">懷孕或計畫懷孕</label>
+      <label class="check"><input type="checkbox" value="f">急性疾病、住院、手術</label>
+      <label class="check"><input type="checkbox" value="g">懷疑第一型或 LADA（C-peptide &lt;0.3 nmol/L）</label>
+    </div>
+    <div class="verdict" id="insWhenOut"></div>
+  </div>
+  <div class="callout acc"><h4>注射治療先想 GLP-1 RA</h4><p class="soft">除非有分解代謝症狀或極高血糖，ADA 建議需要注射時先用 GLP-1 RA（或 tirzepatide），再考慮胰島素：降糖效果相近，體重和低血糖都比較好。在台灣，GLP-1 RA 要 HbA1c &gt;8.5% 且停用 SGLT2i、DPP-4i 才給付，這也是很多人直接走向胰島素的原因。</p></div>
+
+  <h3>選哪一種方案</h3>
+  <div class="tool">
+    <div class="card">
+      <div class="grp"><h5>病人的狀況</h5><div class="checks" id="insPick" style="grid-template-columns:minmax(0,1fr)">
+        <label class="check"><input type="checkbox" value="meal">三餐不規律、常外食</label>
+        <label class="check"><input type="checkbox" value="fewinj">只願意一天打一針</label>
+        <label class="check"><input type="checkbox" value="weight">很在意體重</label>
+        <label class="check"><input type="checkbox" value="hypo">低血糖風險高</label>
+        <label class="check"><input type="checkbox" value="self">能自己量血糖、自己調劑量</label>
+        <label class="check"><input type="checkbox" value="post">空腹已達標，但餐後很高</label>
+        <label class="check"><input type="checkbox" value="weekly">很難每天記得打針</label>
+      </div></div>
+    </div>
+    <div class="rx" id="insPickOut"></div>
+  </div>
+  <div class="tw"><table class="t">
+    <tr><th>方案</th><th>台灣常見品項</th><th>適合</th><th>注意</th></tr>
+    <tr><td><b>基礎胰島素</b></td><td>glargine U100（Lantus）、U300（Toujeo）、degludec（Tresiba）、NPH</td><td>多數人的第一步</td><td>最常見的錯誤是一直往上加（過度基礎化）</td></tr>
+    <tr><td><b>基礎＋GLP-1 RA 固定比例</b></td><td>Soliqua（glargine＋lixisenatide）；Xultophy 在台狀態待確認</td><td>想一針解決、在意體重</td><td>健保：HbA1c &gt;8.0%、胰島素 &lt;60 U、不得併 SGLT2i／DPP-4i</td></tr>
+    <tr><td><b>預混</b></td><td>NovoMix 30、Humalog Mix 25／50；IDegAsp（Ryzodeg）</td><td>三餐規律、不想打太多針</td><td>延遲用餐容易低血糖</td></tr>
+    <tr><td><b>Basal-plus → basal-bolus</b></td><td>基礎＋速效（aspart、lispro、glulisine）</td><td>餐後高、能自我調整</td><td>針數多，衛教負擔大</td></tr>
+    <tr><td><b>每週一次基礎</b></td><td>icodec（FDA 2026-03 核准）、efsitora（FDA 2026 核准）</td><td>順從性差</td><td>台灣尚未確認核准；低血糖約為每日胰島素兩倍；術前需停 4–8 週</td></tr>
+  </table></div>
+
+  <h3>起始與調整：模擬四週</h3>
+  <p class="lim soft">ADA 建議從每天 10 單位或 0.1–0.2 U/kg 開始，每 3 天依空腹血糖調整：高於目標加 2 單位，出現原因不明的低血糖減 10–20%。修改每段的空腹血糖平均，看劑量怎麼走。</p>
+  <div class="tool">
+    <div class="card">
+      <div class="row"><label>體重</label><input type="number" id="tiW" value="80"> <span class="soft">kg</span></div>
+      <div class="row"><label>起始方式</label><select id="tiStart"><option value="10">固定 10 單位</option><option value="0.1">0.1 U/kg</option><option value="0.2">0.2 U/kg</option></select></div>
+      <div class="row"><label>空腹目標</label><select id="tiTgt"><option value="130">80–130</option><option value="110">80–110</option></select></div>
+      <div class="tw"><table class="t sim" style="min-width:0"><thead><tr><th>第幾天</th><th>空腹血糖平均</th><th>當天劑量</th><th>動作</th></tr></thead><tbody id="tiBody"></tbody></table></div>
+      <div class="btns"><button class="chip" data-ti="good">順利達標</button><button class="chip" data-ti="over">一直加不下來</button><button class="chip" data-ti="hypo">中途低血糖</button></div>
+    </div>
+    <div class="sticky"><svg id="tiChart" viewBox="0 0 420 240" style="width:100%;background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px"></svg><div class="verdict" id="tiOut" style="margin-top:10px"></div></div>
+  </div>
+
+  <h3>過度基礎化偵測器</h3>
+  <p class="lim soft">基礎胰島素只管空腹與夜間。空腹達標了 HbA1c 還是高，就代表問題在餐後，再加基礎只會換來夜間低血糖和體重。</p>
+  <div class="tool">
+    <div class="card">
+      <div class="row"><label>基礎劑量</label><input type="number" id="obD" value="46"> <span class="soft">U/日</span></div>
+      <div class="row"><label>體重</label><input type="number" id="obW" value="80"> <span class="soft">kg</span></div>
+      <div class="row"><label>睡前血糖</label><input type="number" id="obBed" value="232"> <span class="soft">mg/dL</span></div>
+      <div class="row"><label>隔天空腹</label><input type="number" id="obAm" value="118"> <span class="soft">mg/dL</span></div>
+      <div class="row"><label>HbA1c</label><input type="number" step="0.1" id="obA" value="8.4"> <span class="soft">%</span></div>
+      <label class="check"><input type="checkbox" id="obH">近期有低血糖</label>
+    </div>
+    <div class="sticky"><div class="verdict" id="obOut"></div></div>
+  </div>
+
+  <h3>加了胰島素，原本的口服藥怎麼辦</h3>
+  <div class="tool">
+    <div class="card"><div class="checks" id="mixMeds" style="grid-template-columns:minmax(0,1fr)">
+      <label class="check"><input type="checkbox" value="met" checked>Metformin</label>
+      <label class="check"><input type="checkbox" value="sglt2" checked>SGLT2i</label>
+      <label class="check"><input type="checkbox" value="dpp4" checked>DPP-4i</label>
+      <label class="check"><input type="checkbox" value="su">SU（如 glimepiride）</label>
+      <label class="check"><input type="checkbox" value="tzd">Pioglitazone</label>
+      <label class="check"><input type="checkbox" value="glp1">GLP-1 RA</label>
+      <label class="check"><input type="checkbox" value="agi">Acarbose</label>
+    </div>
+    <div class="row" style="margin-top:10px"><label>要加的胰島素</label><select id="mixIns"><option value="basal">基礎胰島素</option><option value="prandial">再加餐前速效</option><option value="premix">改預混</option></select></div></div>
+    <div class="rx" id="mixOut"></div>
+  </div>
+</div></section>
+
+<section class="ch" id="c14"><div class="wide">
+  <div class="chno">14 · 追蹤</div>
+  <h2>追蹤與加強：三個月沒達標就調整</h2>
+  <p class="lim">從確診到需要胰島素，最常拖延病程的不是藥不夠好，而是「臨床惰性」：明明沒達標，卻照舊處方。ADA 建議每 3–6 個月重新評估，沒達標就調整，不要等。</p>
+  <div class="timeline">
+    <div class="tl"><b>每次回診</b><span>血壓、體重、低血糖紀錄、服藥順從性、自我血糖或 CGM 報告</span></div>
+    <div class="tl"><b>每 3 個月</b><span>HbA1c（未達標或剛調藥時）；達標穩定後可每 6 個月</span></div>
+    <div class="tl"><b>每年</b><span>血脂、eGFR 與 UACR、肝功能與 FIB-4、足部檢查、牙科；長期 metformin 驗維生素 B12</span></div>
+    <div class="tl"><b>每 1–2 年</b><span>眼底檢查（無視網膜病變且控制良好者可 2 年一次）</span></div>
+    <div class="tl"><b>每年季節</b><span>流感疫苗；依年齡補肺炎鏈球菌、帶狀疱疹、RSV</span></div>
+  </div>
+  <div class="callout teal"><h4>反方向：什麼時候該減藥</h4><p class="soft">高齡、衰弱、反覆低血糖、預期壽命有限的人，HbA1c 太低反而有害。ADA 2026 新增年長者減藥的階梯：先停最容易低血糖的 SU 和胰島素，或簡化成一天一次的方案。</p></div>
+</div></section>
+
+<div class="partband"><div class="wide"><b>PART 3</b><span>年輕型有什麼不同</span><small>病人 B 回來了</small></div></div>
+
+<section class="ch" id="c15"><div class="wide">
+  <div class="chno">15 · 病程</div>
+  <h2>年輕發病：β 細胞退得更快，併發症來得更早</h2>
+  <span class="src g">Lancet 2025 系列</span><span class="src g">TODAY／TODAY2</span>
+  <p class="lim">早發型第二型糖尿病一般指 <b>40 歲前診斷</b>。它不是「比較早得的同一種病」：胰島素阻抗更重、β 細胞衰退更快、高血糖進展更急。台灣糖尿病年鑑提到，40 歲以下的發病率近年增加約 25%。</p>
+  <div class="stats">
+    <div class="stat"><b>20–35%</b><span>TODAY：青少年 β 細胞功能每年下降幅度（成人約 7–11%）</span></div>
+    <div class="stat"><b>約一半</b><span>TODAY：單用 metformin 能維持控制的比例</span></div>
+    <div class="stat"><b>60%</b><span>TODAY2：診斷 15 年內至少一種併發症；近三分之一有兩種以上</span></div>
+    <div class="stat"><b>67% · 55% · 51%</b><span>TODAY2：高血壓、腎臟病變、眼病變的比例（平均約 26 歲）</span></div>
+  </div>
+  <figure>
+    <div class="plate">
+      <div class="row"><label>病程</label><input type="range" id="bcY" min="0" max="10" value="5"><output id="bcYO"></output></div>
+      <svg id="bcChart" viewBox="0 0 900 260" role="img" aria-label="成人與青少年 β 細胞功能隨時間下降的比較示意"></svg>
+    </div>
+    <figcaption><span class="figno">圖 4</span><b>β 細胞功能剩多少。</b>以每年下降 9%（成人）與 27%（青少年，TODAY 區間中位）複利計算，只為呈現速度差距。<span class="src calc">示意</span></figcaption>
+  </figure>
+  <div class="callout"><h4>證據的空洞</h4><p class="soft">TODAY 收的是 10–17 歲的青少年。19–39 歲的年輕成人其實人數更多，卻幾乎不在任何試驗裡，目前的治療建議多是從晚發型的研究外推。</p></div>
+</div></section>
+
+<section class="ch" id="c16"><div class="wide">
+  <div class="chno">16 · 策略</div>
+  <h2>早一點合併、看體重、談緩解</h2>
+  <div class="lanes">
+    <div class="lane" style="--c:var(--acc)"><h5>早合併</h5><p>VERIFY 試驗中，新診斷病人一開始就用 metformin 加 vildagliptin，比先用 metformin、失效再加藥的策略，治療失敗的風險少約一半（HR 0.51）。ADA 也建議 HbA1c 比目標高 1.5% 以上就考慮一開始合併。</p></div>
+    <div class="lane" style="--c:var(--teal)"><h5>以體重為中心</h5><p>年輕型的核心是胰島素阻抗和肥胖，GLP-1 RA 與 tirzepatide 同時降血糖和體重，是指引上的優先選項。健保門檻讓它們很難早用，常需討論自費（見 <a href="obesity.html">減重頁</a>）。</p></div>
+    <div class="lane" style="--c:var(--ok)"><h5>談緩解</h5><p>緩解的定義：<b>停藥至少 3 個月後，HbA1c 仍 &lt;6.5%</b>（2021 國際共識）。病程越短、減重越多，機會越大，年輕病人正是最有機會的族群。</p></div>
+  </div>
+  <details class="ev"><summary><b>VERIFY 細節</b>：早合併的證據與限制</summary><div class="ev-b">
+    <p class="soft">2001 位新診斷、HbA1c 6.5–7.5% 的病人，5 年追蹤。初始治療失敗（連續兩次 HbA1c ≥7%）：早合併組 43.6%，單藥組 62.1%；失敗時間中位數 61.9 vs 36.1 個月。限制：由藥廠贊助；收的是 HbA1c 很低的病人；DPP-4i 本身沒有心腎好處，換成 SGLT2i 或 GLP-1 RA 是否相同沒有直接證據。（Matthews, Lancet 2019）</p>
+  </div></details>
+  <h3>減多少，才可能緩解</h3>
+  <span class="src g">DiRECT（Lean, Lancet 2018）</span>
+  <p class="lim soft">英國基層的 DiRECT 試驗：20–65 歲、病程 6 年內、BMI 27–45 的病人，停藥並以每天約 850 大卡的代餐 3–5 個月，再逐步恢復飲食。一年緩解 46%，兩年 36%。點下面的減重幅度：</p>
+  <div class="btns" id="dirBtns">
+    <button class="chip" data-d="0">體重增加</button>
+    <button class="chip" data-d="1">減 0–5 kg</button>
+    <button class="chip" data-d="2">減 5–10 kg</button>
+    <button class="chip on" data-d="3">減 10–15 kg</button>
+    <button class="chip" data-d="4">減 ≥15 kg</button>
+  </div>
+  <div class="two">
+    <svg id="dirChart" viewBox="0 0 420 220" style="width:100%;background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px" role="img" aria-label="DiRECT 一年緩解率依減重幅度分組"></svg>
+    <div class="verdict" id="dirOut"></div>
+  </div>
+  <h3>病人 B 的處方</h3>
+  <div class="card">
+    <p style="margin-bottom:6px"><b>34 歲、HbA1c 8.6%、BMI 30、抗體陰性、C-peptide 2.4 ng/mL → 第二型。</b>口渴夜尿與體重下降在血糖改善後消失。</p>
+    <div class="dual" style="margin-top:10px">
+      <div class="rx">
+        <div class="rxi good"><b>Metformin</b>，兩週內加到 2000 mg<small>健保入口，也是年輕人最便宜的基礎</small></div>
+        <div class="rxi good"><b>加 SGLT2i</b>（metformin 用足後）<small>HbA1c 比目標高 1.5%，不等三個月；健保可給付</small></div>
+        <div class="rxi care"><b>討論 GLP-1 RA 或 tirzepatide</b>（自費）<small>以體重為目標；健保門檻 HbA1c &gt;8.5% 且需停 SGLT2i</small></div>
+      </div>
+      <div class="rx">
+        <div class="rxi info"><b>減重目標 ≥10%（約 9 kg）</b><small>談緩解：營養師、代餐或結構化飲食方案</small></div>
+        <div class="rxi info"><b>同步處理</b><small>血壓、血脂、UACR、眼底、脂肪肝都在診斷時建立基準</small></div>
+        <div class="rxi info"><b>回診節奏</b><small>前半年每 1–3 個月；三個月沒達標就加強</small></div>
+      </div>
+    </div>
+    <small class="note" style="margin-top:8px">這是共同決策的一種示範，不是唯一做法。</small>
+  </div>
+</div></section>
+
+<section class="ch" id="c17"><div class="wide">
+  <div class="chno">17 · 年輕人</div>
+  <h2>年輕人的課題：懷孕、心理、上班、不回診</h2>
+  <div class="visits" id="ypTabs">
+    <button class="on" data-v="0"><b>懷孕</b>計畫與避孕</button>
+    <button data-v="1"><b>心理</b>糖尿病困擾</button>
+    <button data-v="2"><b>生活</b>輪班與外食</button>
+    <button data-v="3"><b>回診</b>中斷與轉銜</button>
+  </div>
+  <div class="card" id="ypOut"></div>
+</div></section>
+
+<section class="ch" id="c18"><div class="wide">
+  <div class="chno">18 · 帶走</div>
+  <h2>帶走六件事</h2>
+  <ul class="take">
+    <li><b>沒有症狀，要兩個異常</b>同一次抽血兩項，或同一項另一天再驗。HbA1c 和血糖對不起來時，相信血糖。</li>
+    <li><b>年輕、不胖、口服藥很快失效，先懷疑分型</b>先驗 GAD 抗體，再看年齡和 C-peptide；分對型，藥就換了。</li>
+    <li><b>先看共病，再看血糖</b>心、腎、肥胖、脂肪肝，指引都建議及早用 SGLT2i 或 GLP-1 RA，不必等 metformin 失效。</li>
+    <li><b>熟悉健保的入口與門檻</b>metformin 用足、SGLT2i 與 DPP-4i 擇一、複方 &gt;7.5%、GLP-1 RA &gt;8.5% 且不能併用。</li>
+    <li><b>胰島素從 10 單位開始，每 3 天調</b>基礎超過 0.5 U/kg 還沒達標就停手，改處理餐後。加胰島素時減 SU、停 DPP-4i（若有 GLP-1 RA）。</li>
+    <li><b>年輕型要更早、更積極</b>早合併、以體重為中心、談緩解，並提早處理懷孕與避孕。</li>
+  </ul>
+  <h3>群島上的相關頁面</h3>
+  <div class="links">
+    <a href="obesity.html"><span>代謝體重島</span>減重藥物與長期維持</a>
+    <a href="ldl-c.html"><span>心腎島</span>為何 LDL-C 仍未達標</a>
+    <a href="sarcopenia.html"><span>高齡島</span>肌少症：減重時保住肌肉</a>
+    <a href="sleep.html"><span>腦與睡眠島</span>睡眠呼吸中止與 tirzepatide</a>
+  </div>
+</div></section>
+
+<footer><div class="col">
+  <p><b style="color:var(--ink)">資料來源</b></p>
+  <ol>
+    <li>American Diabetes Association. Standards of Care in Diabetes—2026. Diabetes Care 2026;49(Suppl 1).</li>
+    <li>Holt RIG, et al. The management of type 1 diabetes in adults. ADA/EASD consensus report. Diabetologia 2021;64:2609–2652.</li>
+    <li>Buzzetti R, et al. Management of latent autoimmune diabetes in adults: a consensus statement. Diabetes 2020;69:2037–2047.</li>
+    <li>Delvecchio M, et al. Treatment options for MODY patients: a systematic review. Diabetes Ther 2020;11:1667–1685.</li>
+    <li>Naylor RN, et al. Precision treatment of beta-cell monogenic diabetes: a systematic review. Commun Med 2024.</li>
+    <li>Misra S, et al. Managing early-onset type 2 diabetes in the individual and at the population level. Lancet 2025;405:2341–2354.</li>
+    <li>Misra S, et al. Current insights and emerging trends in early-onset type 2 diabetes. Lancet Diabetes Endocrinol 2023;11:768–782.</li>
+    <li>TODAY Study Group; TODAY2: Long-term complications in youth-onset type 2 diabetes. N Engl J Med 2021;385:416–426.</li>
+    <li>Matthews DR, et al. VERIFY. Lancet 2019;394:1519–1529.</li>
+    <li>Lean MEJ, et al. DiRECT. Lancet 2018;391:541–551；Riddle MC, et al. Consensus report: definition of remission. Diabetes Care 2021;44:2438–2444.</li>
+    <li>Knowler WC, et al. Diabetes Prevention Program. N Engl J Med 2002;346:393–403.</li>
+    <li>健保署藥品給付規定 5.1 糖尿病用藥（總則）；衛福部爭議審定書衛部爭字第 1143401578 號（Glyxambi 條文）；劉漢文醫師〈GLP-1 RA 及 SGLT-2 抑制劑健保給付規定〉（依 114/6/1、114/3/1 版）。</li>
+    <li>衛福部國健署：成人預防保健服務 114 年起下修至 30 歲。</li>
+    <li>FDA：insulin icodec（Awiqli）2026-03-26 核准；efsitora alfa 2026 核准（Healio 2026-10-23）。</li>
+    <li>中華民國糖尿病衛教學會《台灣糖尿病年鑑》（TVBS 2025-11 報導）。</li>
+  </ol>
+  <p>本頁為家醫科住院醫師的學習整理，非處方建議。劑量與給付以最新仿單、院內藥典及健保署公告為準。</p>
+  <p><a href="index.html#metabolic">← 回到群島</a></p>
+</div></footer>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const qa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const NS='http://www.w3.org/2000/svg';
+const C={acc:'#c9a25a',accl:'#e6c98f',buoy:'#f2b134',bad:'#d0715e',badl:'#f0a291',ok:'#7fb26a',okl:'#a9d496',teal:'#5fa8a0',purple:'#8f86c9',rose:'#c77fa0',warn:'#e0a24a',grid:'#1a4350',grid2:'#2a5662',ink:'#e8efe9',soft:'#9fb9b8'};
+function tabs(boxId,fn){const b=$(boxId);if(!b)return;qa('button',b).forEach(x=>x.addEventListener('click',()=>{qa('button',b).forEach(y=>y.classList.toggle('on',y===x));fn(+x.dataset.v);}));fn(0);}
+function checks(box){qa('.check',box).forEach(l=>{const i=l.querySelector('input');if(!i)return;const f=()=>l.classList.toggle('on',i.checked);i.addEventListener('change',f);f();});}
+qa('.checks').forEach(checks);
+function picked(boxId){return qa('#'+boxId+' input:checked').map(i=>i.value);}
+function V(c,h,v,p){return `<h5>${h}</h5><div class="v">${v}</div>${p?`<p>${p}</p>`:''}`;}
+function setV(el,color,h,v,p){el.style.setProperty('--c',color);el.innerHTML=V(0,h,v,p);}
+
+/* ---------- hero CGM ---------- */
+(function(){const s=$('cgm');if(!s)return;const W=900,H=140,y=g=>H-10-(g-40)*(H-20)/260;
+ let h=`<rect x="0" y="${y(180)}" width="${W}" height="${y(70)-y(180)}" fill="rgba(159,185,184,.08)"/>`;
+ [70,180].forEach(g=>h+=`<line x1="0" x2="${W}" y1="${y(g)}" y2="${y(g)}" stroke="${C.grid2}" stroke-dasharray="3 5"/><text x="6" y="${y(g)-4}" fill="${C.soft}" font-size="11" font-family="IBM Plex Mono">${g}</text>`);
+ const meals=[[7.5,95],[12.5,120],[19,140]];let d='';
+ for(let i=0;i<=480;i++){const t=i/20;let g=105+8*Math.sin(t/24*2*Math.PI-1);meals.forEach(([m,a])=>{const dt=t-m;if(dt>0)g+=a*(dt/1.1)*Math.exp(1-dt/1.1)*0.9;});if(t>3&&t<6)g+=14*Math.sin((t-3)/3*Math.PI);d+=(i?'L':'M')+(i/480*W).toFixed(1)+' '+y(g).toFixed(1);}
+ h+=`<path d="${d}" fill="none" stroke="${C.acc}" stroke-width="2.4"/>`;
+ [['早餐',7.5],['午餐',12.5],['晚餐',19]].forEach(([n,m])=>h+=`<text x="${m/24*W}" y="${H-4}" fill="${C.soft}" font-size="11" text-anchor="middle">${n}</text>`);
+ s.innerHTML=h;})();
+
+/* ---------- progress ---------- */
+(function(){const bar=$('progbar'),nav=$('chapnav'),secs=qa('section.ch');
+ function f(){const h=document.documentElement;bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';let cur=null;secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s;});nav.textContent=cur?(cur.querySelector('.chno').textContent.split('·')[0].trim()+' · '+cur.querySelector('h2').textContent):'代謝體重島';}
+ addEventListener('scroll',f,{passive:true});f();})();
+
+/* ---------- c1 cases ---------- */
+const CASES=[
+ {who:'病人 A · 55 歲男性，業務',d:'成人健檢空腹血糖 138，兩週後回診複驗。沒有口渴多尿，常應酬、很少運動，抽菸已戒 5 年。父母沒有糖尿病。',lab:[['HbA1c','7.8%',1],['空腹血糖','152',1],['BMI','27.5'],['血壓','138/86',1],['LDL','128',1],['ALT','48',1],['UACR','45',1],['eGFR','85']],
+  q:'這樣可以確診嗎？',o:[['還不行，HbA1c 要隔一段時間再驗一次',0],['可以，同一次抽血空腹血糖和 HbA1c 都異常',1],['要做 OGTT 才能確定',0]],
+  fb:['可以確診','沒有症狀時需要兩個異常結果，同一次抽血的兩個不同項目就算數。空腹 152、HbA1c 7.8% 都過門檻，不必再等。下一步是第 8 章的首診檢查。']},
+ {who:'病人 B · 34 歲男性，軟體工程師',d:'口渴、夜尿兩個月，半年瘦了 3 公斤，以為是工作忙。公司健檢 HbA1c 偏高來看。頸部有黑色棘皮症，父親 50 歲時診斷糖尿病。',lab:[['HbA1c','8.6%',1],['隨機血糖','268',1],['BMI','30.0',1],['尿酮','陰性'],['血壓','132/84'],['TG','240',1]],
+  q:'確診之後，型別怎麼判斷？',o:[['又胖又有黑色棘皮症，一定是第二型',0],['40 歲前發病、有體重下降，先排除第一型或 LADA 再說',1],['家族史明顯，先送 MODY 基因檢測',0]],
+  fb:['先確認型別','有典型症狀加隨機血糖 ≥200，已經可以確診。肥胖讓第二型最可能，但 34 歲、體重下降，值得先驗 GAD 抗體和 C-peptide。MODY 要多代家族史且不胖，B 不太像。答案在第 4 章揭曉。']}];
+let caseAns=[null,null];
+tabs('caseTabs',v=>{const c=CASES[v];$('caseCard').innerHTML=`<div class="who">${c.who}</div><p style="font-size:14.5px">${c.d}</p><div class="lab">${c.lab.map(([a,b,h])=>`<div><span>${a}</span><b class="${h?'hi':''}">${b}</b></div>`).join('')}</div>`;
+ const draw=()=>{const a=caseAns[v];$('caseQ').innerHTML=`<p class="q">${c.q}</p><div class="opt">${c.o.map((o,i)=>`<button class="optc ${a===i?'on':''}" data-i="${i}">${o[0]}</button>`).join('')}</div>${a===null?'':`<div class="fb" style="border-color:${c.o[a][1]?C.ok:C.warn}"><h5>${c.o[a][1]?'✓ ':'再想想 · '}${c.fb[0]}</h5><p class="soft">${c.fb[1]}</p></div>`}`;qa('.optc',$('caseQ')).forEach(b=>b.onclick=()=>{caseAns[v]=+b.dataset.i;draw();});};draw();});
+
+/* ---------- c2 diagnosis ---------- */
+function dx(){const n=id=>{const x=parseFloat($(id).value);return isNaN(x)?null:x;};const F=n('dxF'),O=n('dxO'),A=n('dxA'),R=n('dxR'),S=$('dxS').checked,rep=$('dxRep').checked;
+ const ab=[];if(F!==null&&F>=126)ab.push('空腹血糖');if(O!==null&&O>=200)ab.push('OGTT 2 小時');if(A!==null&&A>=6.5)ab.push('HbA1c');
+ const pre=[];if(F!==null&&F>=100&&F<126)pre.push('空腹血糖');if(O!==null&&O>=140&&O<200)pre.push('OGTT');if(A!==null&&A>=5.7&&A<6.5)pre.push('HbA1c');
+ const el=$('dxOut');if(F===null&&O===null&&A===null&&R===null){setV(el,C.soft,'判定','輸入數值','左邊填入任何一項，沒驗的留空。');return;}
+ if(S&&R!==null&&R>=200){setV(el,C.bad,'判定','糖尿病','有典型症狀且隨機血糖 ≥200，一次就能確診。');return;}
+ if(ab.length>=2){setV(el,C.bad,'判定','糖尿病',`${ab.join('、')} 同時異常，兩項即可確診。`);return;}
+ if(ab.length===1&&rep){setV(el,C.bad,'判定','糖尿病',`${ab[0]} 在不同天重複異常，可以確診。`);return;}
+ if(ab.length===1){setV(el,C.warn,'判定','可能是糖尿病，需要確認',`只有 ${ab[0]} 異常。盡快在另一天重驗同一項，或同一次抽血加驗另一項。${R!==null&&R>=200?'隨機血糖 ≥200 但沒有典型症狀，不能單獨診斷。':''}`);return;}
+ if(R!==null&&R>=200){setV(el,C.warn,'判定','需要正式檢查','隨機血糖 ≥200 但沒有典型症狀，要用空腹血糖、HbA1c 或 OGTT 確認。');return;}
+ if(pre.length){setV(el,C.buoy,'判定','糖尿病前期',`${pre.join('、')} 落在前期範圍。處理方式見第 7 章，每年再驗。`);return;}
+ setV(el,C.ok,'判定','目前正常','有危險因子的人至少每 3 年再驗一次。');}
+['dxF','dxO','dxA','dxR','dxS','dxRep'].forEach(i=>$(i).addEventListener('input',dx));
+const DXP={A:{dxF:152,dxA:7.8},B:{dxR:268,dxA:8.6,dxS:1},C:{dxA:6.7},0:{}};
+qa('[data-dx]').forEach(b=>b.onclick=()=>{const p=DXP[b.dataset.dx];['dxF','dxO','dxA','dxR'].forEach(i=>$(i).value=p[i]??'');$('dxS').checked=!!p.dxS;$('dxRep').checked=false;dx();});dx();
+const TRAPS=[['依檢驗方法可能偏高或偏低','台灣海洋性貧血帶因不算少見，血紅素變異會干擾部分 HbA1c 檢驗方法。病人 MCV 很小、HbA1c 和血糖對不起來時，改用血糖診斷與追蹤，或請檢驗科確認方法。'],
+ ['偏高','缺鐵時紅血球壽命變長，接觸血糖的時間變久，HbA1c 偏高；補鐵後會下降。'],
+ ['偏低','急性失血、溶血、近期輸血，紅血球變年輕或混入他人的血，HbA1c 偏低。'],
+ ['多半偏低','透析與使用紅血球生成素（EPO）會縮短紅血球壽命；腎病也會影響 HbA1c 的準確度。'],
+ ['偏低','懷孕中後期紅血球更新快，HbA1c 偏低。妊娠糖尿病要用 OGTT 診斷，不用 HbA1c。'],
+ ['偏低（還沒跟上）','HbA1c 反映約三個月平均。血糖短期急升時（例如第一型剛發病）HbA1c 會低估，所以有症狀時看血糖。']];
+tabs('a1cTraps',()=>{});qa('#a1cTraps button').forEach(b=>b.addEventListener('click',()=>{const t=TRAPS[+b.dataset.t];$('a1cOut').innerHTML=V(0,'HbA1c 會',t[0],t[1]);}));
+qa('#a1cTraps button').forEach(b=>{b.dataset.v=b.dataset.t;});$('a1cOut').innerHTML=V(0,'HbA1c 會',TRAPS[0][0],TRAPS[0][1]);
+
+/* ---------- c3 mechanism ---------- */
+const TYPES=[
+ {k:'t2',n:'第二型',c:C.acc,hl:['liver','muscle','fat','gran','insout'],m:['tag-res','tag-prog'],mech:'周邊胰島素阻抗（肝、肌肉、脂肪）加上 β 細胞分泌逐漸不足。',clue:'肥胖、腰圍大、黑色棘皮症、家族史、代謝症候群。',tx:'依共病選藥（第 11 章）。'},
+ {k:'yt2',n:'年輕型第二型',c:C.warn,hl:['liver','muscle','fat','gran','insout'],m:['tag-res','tag-fast'],mech:'和第二型相同的兩個缺陷，但阻抗更重、β 細胞衰退速度是成人的數倍。',clue:'40 歲前診斷，常合併嚴重肥胖、脂肪肝、多囊性卵巢。',tx:'早期合併、以體重為中心（第 16 章）。'},
+ {k:'t1',n:'第一型',c:C.bad,hl:['immune','cell','gran'],m:['x-cell','tag-auto'],mech:'自體免疫破壞 β 細胞，胰島素快速歸零。',clue:'瘦、體重下降、DKA、其他自體免疫病；抗體陽性、C-peptide 低。',tx:'一開始就需要胰島素。'},
+ {k:'lada',n:'LADA',c:C.rose,hl:['immune','gran'],m:['tag-slow'],mech:'也是自體免疫，但攻擊得慢，診斷時常不需要胰島素。',clue:'30 歲以上、不太胖、口服藥很快失效、GAD 抗體陽性。',tx:'依 C-peptide 分三層，避免 SU（第 5 章）。'},
+ {k:'gck',n:'GCK-MODY',c:C.teal,hl:['gck'],m:['tag-set'],mech:'葡萄糖激酶是 β 細胞的「血糖感應器」。基因變異讓感應的設定點調高，β 細胞在較高的血糖才開始分泌。',clue:'空腹血糖約 100–145，HbA1c 多在 5.6–7.6%，數十年不變，幾乎沒有併發症。',tx:'不需治療，懷孕例外。'},
+ {k:'hnf1a',n:'HNF1A／4A-MODY',c:C.ok,hl:['nuc','gran','katp'],m:['tag-hnf','tag-su'],mech:'轉錄因子不足，胰島素合成與分泌逐年下降；但 K-ATP 通道本身完好。',clue:'25 歲前發病、不胖、多代家族史、抗體陰性；HNF1A 腎糖閾低、hsCRP 偏低。',tx:'低劑量 SU，對它異常敏感。'},
+ {k:'hnf1b',n:'HNF1B-MODY',c:C.purple,hl:['nuc','kidney','gran'],m:['tag-kid'],mech:'胰臟與腎臟在發育時一起受影響。',clue:'腎囊腫、腎功能不好、生殖道異常、低血鎂。',tx:'對 SU 沒反應，通常需早期胰島素。'},
+ {k:'kpd',n:'酮症傾向第二型',c:C.soft,hl:['gran','insout'],m:['tag-gtox'],mech:'長期高血糖造成「高血糖毒性」，暫時抑制 β 細胞；血糖降下來後功能恢復。',clue:'DKA 起病但抗體陰性，常是肥胖男性；之後可停胰島素。',tx:'先用胰島素解毒，再逐步改口服或 GLP-1 RA。'}];
+let curType=0;
+(function(){const s=$('mech');if(!s)return;
+ const box=(k,x,y,w,h,t1,t2)=>`<g class="hl" data-k="${k}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="7" fill="#123b47" stroke="${C.grid2}" stroke-width="1.5"/><text x="${x+w/2}" y="${y+(t2?h/2-3:h/2+5)}" text-anchor="middle">${t1}</text>${t2?`<text class="lbl" x="${x+w/2}" y="${y+h/2+15}" text-anchor="middle">${t2}</text>`:''}</g>`;
+ const arr=(d)=>`<path d="${d}" fill="none" stroke="${C.soft}" stroke-width="1.6" marker-end="url(#ah)"/>`;
+ const tag=(id,x,y,t,col,anchor='middle')=>`<g class="xmark" id="${id}"><text x="${x}" y="${y}" text-anchor="${anchor}" fill="${col}" style="fill:${col};font-size:12.5px;font-weight:500">${t}</text></g>`;
+ let h=`<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${C.soft}"/></marker></defs>`;
+ h+=`<g class="hl" data-k="cell"><rect x="70" y="70" width="500" height="370" rx="44" fill="#0e313b" stroke="${C.grid2}" stroke-width="2"/></g><text x="96" y="104" style="font-family:'LXGW WenKai TC';font-size:17px">β 細胞</text>`;
+ h+=`<g class="hl" data-k="immune"><circle cx="122" cy="34" r="13" fill="rgba(199,127,160,.35)" stroke="${C.rose}"/><circle cx="160" cy="22" r="11" fill="rgba(199,127,160,.35)" stroke="${C.rose}"/><circle cx="196" cy="38" r="12" fill="rgba(199,127,160,.35)" stroke="${C.rose}"/><path d="M128 46L140 68M164 33L168 68M196 50L190 68" stroke="${C.rose}" stroke-width="1.6" marker-end="url(#ah)"/><text class="lbl" x="122" y="14" text-anchor="middle">免疫細胞</text></g>`;
+ h+=`<text class="lbl" x="6" y="238">葡萄糖</text>`+arr('M14 250L48 250');
+ h+=box('glut2',50,226,46,48,'GLUT2');
+ h+=arr('M96 250L138 250')+box('gck',140,222,118,56,'葡萄糖激酶','感應器 GCK');
+ h+=arr('M258 250L288 250')+box('atp',290,222,84,56,'ATP ↑');
+ h+=arr('M332 222L332 98')+box('katp',272,48,130,46,'K-ATP 通道關閉');
+ h+=arr('M402 71L470 71L470 128')+box('ca',420,130,120,56,'去極化','Ca²⁺ 進入');
+ h+=arr('M480 186L480 288')+box('gran',420,290,120,60,'胰島素顆粒','胞吐釋放');
+ h+=`<g class="hl" data-k="nuc"><ellipse cx="215" cy="372" rx="112" ry="44" fill="#123b47" stroke="${C.grid2}" stroke-width="1.5"/><text x="215" y="366" text-anchor="middle">細胞核</text><text class="lbl" x="215" y="386" text-anchor="middle">HNF1A · HNF4A · HNF1B</text></g>`;
+ h+=`<path d="M199 328L199 282" stroke="${C.soft}" stroke-dasharray="4 4" marker-end="url(#ah)"/><path d="M326 366L418 334" stroke="${C.soft}" stroke-dasharray="4 4" marker-end="url(#ah)"/>`;
+ h+=`<g class="hl" data-k="insout"><path d="M540 320L610 320L610 95L646 95M610 185L646 185M610 275L646 275" fill="none" stroke="${C.acc}" stroke-width="2"/><text class="lbl" x="585" y="312" text-anchor="middle">胰島素</text></g>`;
+ const org=(k,y,t,s)=>`<g class="hl" data-k="${k}"><rect x="648" y="${y}" width="236" height="66" rx="10" fill="#123b47" stroke="${C.grid2}" stroke-width="1.5"/><text x="666" y="${y+28}">${t}</text><text class="lbl" x="666" y="${y+50}">${s}</text></g>`;
+ h+=org('liver',62,'肝臟','糖新生過多、肝醣分解')+org('muscle',152,'肌肉','葡萄糖攝取減少')+org('fat',242,'脂肪','脂肪分解、游離脂肪酸 ↑')+org('kidney',362,'腎臟','HNF1B：囊腫、發育異常');
+ h+=`<g class="xmark" id="x-cell"><path d="M120 120L520 400M520 120L120 400" stroke="${C.bad}" stroke-width="7" opacity=".75" stroke-linecap="round"/></g>`;
+ h+=tag('tag-res',766,48,'胰島素阻抗',C.acc);
+ h+=tag('tag-prog',480,376,'分泌逐漸不足',C.acc);
+ h+=tag('tag-fast',480,376,'每年衰退 20–35%',C.warn);
+ h+=tag('tag-auto',218,26,'抗體：GAD、IA-2、ZnT8',C.bad,'start');
+ h+=tag('tag-slow',218,26,'自體免疫，但進展很慢',C.rose,'start');
+ h+=tag('tag-set',199,212,'設定點調高',C.teal);
+ h+=`<g class="xmark" id="tag-su"><rect x="250" y="100" width="164" height="22" rx="4" fill="#082028" stroke="${C.ok}"/><text x="332" y="116" text-anchor="middle" style="fill:${C.okl};font-size:12.5px;font-weight:500">SU 直接關通道 → 很敏感</text></g>`;
+ h+=tag('tag-hnf',215,432,'轉錄因子不足，分泌逐年下降',C.ok);
+ h+=tag('tag-kid',215,432,'胰臟、腎臟一起發育異常',C.purple);
+ h+=tag('tag-gtox',480,376,'高血糖毒性：暫時抑制',C.soft);
+ s.innerHTML=h;})();
+function drawType(i){curType=i;const t=TYPES[i],s=$('mech');s.style.setProperty('--hc',t.c);
+ qa('#mech .hl').forEach(g=>{const on=t.hl.includes(g.dataset.k);g.classList.toggle('dim',!on);qa('rect,ellipse',g).forEach(r=>r.classList.toggle('on-stroke',on));});
+ qa('#mech .xmark').forEach(m=>m.classList.toggle('show',t.m.includes(m.id)));
+ $('typeInfo').innerHTML=`<div class="lane" style="--c:${t.c}"><h5>${t.n}</h5><p><b>壞在哪：</b>${t.mech}</p><p><b>臨床線索：</b>${t.clue}</p><p><b>治療方向：</b>${t.tx}</p></div>`;
+ qa('#typeBtns .chip').forEach((b,j)=>b.classList.toggle('on',j===i));drawCpep();}
+$('typeBtns').innerHTML=TYPES.map((t,i)=>`<button class="chip" data-i="${i}"><i style="background:${t.c}"></i>${t.n}</button>`).join('');
+qa('#typeBtns .chip').forEach(b=>b.onclick=()=>drawType(+b.dataset.i));
+const CP={t2:t=>900*Math.pow(.97,t),yt2:t=>1000*Math.pow(.88,t),t1:t=>380*Math.exp(-1.3*t)+18,lada:t=>650*Math.pow(.84,t),gck:t=>700,hnf1a:t=>650*Math.pow(.95,t),hnf1b:t=>480*Math.pow(.9,t),kpd:t=>t<.5?150+t/.5*550:700*Math.pow(.97,t-.5)};
+function drawCpep(){const s=$('cpep');const X=t=>80+t/10*790,Y=v=>290-v/1200*260;let h='';
+ [0,300,600,900,1200].forEach(v=>h+=`<line x1="80" x2="870" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.grid}"/><text x="72" y="${Y(v)+4}" text-anchor="end" fill="${C.soft}" font-size="11" font-family="IBM Plex Mono">${v}</text>`);
+ for(let t=0;t<=10;t+=2)h+=`<text x="${X(t)}" y="312" text-anchor="middle" fill="${C.soft}" font-size="11.5">${t===0?'診斷':t+' 年'}</text>`;
+ [[600,'600：支持第二型',C.acc],[200,'200：支持第一型',C.bad]].forEach(([v,l,c])=>h+=`<line x1="80" x2="870" y1="${Y(v)}" y2="${Y(v)}" stroke="${c}" stroke-dasharray="6 5"/><text x="866" y="${Y(v)-6}" text-anchor="end" fill="${c}" font-size="11.5">${l}</text>`);
+ h+=`<text x="16" y="160" fill="${C.soft}" font-size="11.5" transform="rotate(-90 16 160)" text-anchor="middle">C-peptide（pmol/L）</text>`;
+ TYPES.forEach((tp,i)=>{let d='';for(let j=0;j<=100;j++){const t=j/10;d+=(j?'L':'M')+X(t).toFixed(1)+' '+Y(CP[tp.k](t)).toFixed(1);}const on=i===curType;h+=`<path d="${d}" fill="none" stroke="${tp.c}" stroke-width="${on?3.4:1.3}" opacity="${on?1:.32}"/>`;if(on){const v=CP[tp.k](1.5);h+=`<text x="${X(1.5)}" y="${Y(v)-12}" fill="${tp.c}" font-size="13" font-weight="500">${tp.n}</text>`;}});
+ s.innerHTML=h;}
+drawType(0);
+
+/* ---------- c4 classifier ---------- */
+function cl(){const age=+$('clAge').value,ab=$('clAb').value,u=$('clU').value,raw=parseFloat($('clCp').value),t2=$('clT2').checked,fast=$('clFast').checked,fam=$('clFam').checked;const el=$('clOut');
+ const pm=isNaN(raw)?null:(u==='ng'?raw*331:raw);const cpTxt=pm===null?'':`C-peptide ≈ ${Math.round(pm)} pmol/L（${(pm/331).toFixed(2)} ng/mL · ${(pm/1000).toFixed(2)} nmol/L）`;
+ let col,v,p;
+ if(ab==='pos'){col=C.bad;if(age>=30&&!fast&&(pm===null||pm>=200)){v='自體免疫糖尿病（LADA 可能）';p=`抗體陽性即可診斷第一型。30 歲以上、還不需要胰島素，屬 LADA；用第 5 章的 C-peptide 分層決定治療，避免 SU。${cpTxt}`;}else{v='第一型';p=`抗體陽性。${pm!==null&&pm<200?'C-peptide 也很低，':''}需要胰島素。${cpTxt}`;}}
+ else if(ab==='low'){col=C.rose;v=pm!==null&&pm<200?'第一型':'暫不確定';p=pm!==null&&pm<200?`單一低效價抗體不一定可靠，但 C-peptide &lt;200 pmol/L 已支持第一型。${cpTxt}`:`單一、低效價的抗體可能是偽陽性。先依臨床治療，密切追蹤，約 3 年後重驗 C-peptide。${cpTxt}`;}
+ else{const pre=ab==='na'?'還沒驗抗體：懷疑第一型時應先驗 GAD。以下是暫時判斷。':'';
+  if(age>=35||t2){if(pm!==null&&pm<200){col=C.bad;v='胰島素明顯不足，需轉介';p=`${pre}抗體陰性但 C-peptide &lt;200，可能是抗體陰性第一型或病程很長的第二型。${cpTxt}`;}
+   else if(fast){col=C.warn;v='第二型可能，但要重驗';p=`${pre}很快就需要胰島素，應重驗 C-peptide 並考慮第一型。${cpTxt}`;}
+   else{col=C.acc;v='第二型';p=`${pre}${age>=35?'35 歲以上':'有第二型特徵'}、抗體陰性，最可能是第二型。${fam&&!t2?'多代家族史且不胖，仍可用 MODY 計算器評估。':''}${cpTxt}`;}}
+  else{if(pm===null){col=C.soft;v='需要 C-peptide';p=`${pre}35 歲以下、沒有第二型特徵、抗體陰性，下一步驗 C-peptide。`;}
+   else if(pm<200){col=C.bad;v='第一型（抗體陰性）';p=`${pre}C-peptide &lt;200 pmol/L。約 5–10% 的成人第一型抗體陰性。${cpTxt}`;}
+   else{col=C.ok;v=fam?'考慮單基因糖尿病（MODY）':'考慮 MODY，或分型不明';p=`${pre}35 歲以下、C-peptide &gt;200、抗體陰性、沒有第二型特徵：用 Exeter MODY 機率計算器，&gt;5% 考慮基因檢測。${fam?'多代家族史讓機率更高。':'若機率低，先用非胰島素治療，密切追蹤並重驗 C-peptide。'}${cpTxt}`;}}}
+ setV(el,col,'最可能的分型',v,p);}
+['clAge','clAb','clCp','clU','clT2','clFast','clFam'].forEach(i=>$(i).addEventListener('input',cl));
+const CLP={B:[34,'neg',2.4,'ng',1,0,0],L:[48,'pos',0.8,'ng',0,1,0],M:[22,'neg',1.6,'ng',0,0,1]};
+qa('[data-cl]').forEach(b=>b.onclick=()=>{const p=CLP[b.dataset.cl];$('clAge').value=p[0];$('clAb').value=p[1];$('clCp').value=p[2];$('clU').value=p[3];$('clT2').checked=!!p[4];$('clFast').checked=!!p[5];$('clFam').checked=!!p[6];qa('.check').forEach(l=>{const i=l.querySelector('input');if(i)l.classList.toggle('on',i.checked);});cl();});
+cl();
+
+/* ---------- c5 LADA ---------- */
+function lada(){const v=+$('ladaCp').value;$('ladaCpO').textContent=v.toFixed(2);const el=$('ladaOut');
+ if(v<0.3)setV(el,C.bad,'C-peptide < 0.3 nmol/L','比照第一型：多次胰島素','基礎加餐前胰島素，或胰島素幫浦；可搭配 CGM。');
+ else if(v<=0.7)setV(el,C.warn,'0.3–0.7 nmol/L · 灰色地帶','修改版第二型流程','依心腎風險選 metformin、SGLT2i、DPP-4i 或 GLP-1 RA，避免 SU；可考慮及早合併胰島素保護 β 細胞。約每 6 個月重驗 C-peptide。');
+ else setV(el,C.ok,'C-peptide > 0.7 nmol/L','比照第二型，但避免 SU','依第二型流程用藥；LADA 會慢慢進展，定期重驗 C-peptide，血糖變難控時更要驗。');}
+$('ladaCp').addEventListener('input',lada);lada();
+
+/* ---------- c7 screening ---------- */
+function sc(){const age=+$('scAge').value,bmi=+$('scBmi').value;$('scAgeO').textContent=age+' 歲';$('scBmiO').textContent=bmi.toFixed(1);
+ const r=picked('scRisk'),hx=picked('scHx');let a;
+ if(hx.includes('pre'))a=['每年驗一次','已知糖尿病前期，每年追蹤，並積極介入生活型態。'];
+ else if(hx.includes('gdm'))a=['現在驗，之後至少每 3 年','曾有妊娠糖尿病，終身至少每 3 年一次。'];
+ else if(bmi>=23&&r.length)a=['現在就該篩',`亞裔 BMI ≥23（${bmi.toFixed(1)}）加 ${r.length} 項危險因子，不論年齡都應篩檢；正常則至少每 3 年。`];
+ else if(age>=35)a=['現在就該篩','35 歲以上所有成人都篩；正常則至少每 3 年。'];
+ else a=['暫不需要例行篩檢',bmi>=23?'BMI ≥23，但沒有危險因子；35 歲起篩，或出現危險因子時篩。':'35 歲起篩，或出現危險因子時篩。'];
+ $('scAda').innerHTML=V(0,'ADA 2026',a[0],a[1]+' 可用空腹血糖、HbA1c 或 OGTT。');
+ let t;if(hx.includes('abo')&&age>=55)t=['每年一次','55 歲以上原住民每年一次。'];else if(age>=65)t=['每年一次','65 歲以上每年一次。'];else if(age>=40)t=['每 3 年一次','40–64 歲每 3 年一次。'];else if(age>=30)t=['每 5 年一次','30–39 歲每 5 年一次（114 年起新增）。'];else t=['不在補助範圍','成人預防保健從 30 歲開始，可自費檢查或因症狀就醫時驗。'];
+ const gap=(a[0].includes('現在')&&age<40&&r.length)?'<br><b style="color:#f5cf7f">落差：</b>年輕、有危險因子的人，ADA 建議現在篩、之後每 3 年，但公費健檢是每 5 年或尚未涵蓋。':'';
+ $('scTw').innerHTML=V(0,'台灣成人預防保健',t[0],t[1]+' 血糖項目是空腹血糖。'+gap);}
+['scAge','scBmi'].forEach(i=>$(i).addEventListener('input',sc));qa('#scRisk input,#scHx input').forEach(i=>i.addEventListener('change',sc));sc();
+
+/* ---------- c8 first visit ---------- */
+function fv(){const all=qa('#firstVisit .tick');let done=0;const miss=[];all.forEach(l=>{const i=l.querySelector('input');l.classList.toggle('on',i.checked);if(i.checked)done++;else miss.push(l.childNodes[1].textContent.split('：')[0].split('（')[0].trim());});
+ $('fvOut').innerHTML=V(0,'完成度',`${done} / ${all.length}`,done===all.length?'基準線都建立了。病人 A 的 UACR 45 與 LDL 128，會在第 11 章影響選藥。':'還沒做：'+miss.join('、'));}
+qa('#firstVisit input').forEach(i=>i.addEventListener('change',fv));fv();
+
+/* ---------- c9 targets ---------- */
+const TL={hypo:['低','中','高'],life:['長','中等','有限'],dur:['新診斷','數年','很久'],comor:['無','少','多'],res:['積極','一般','有限']};
+qa('#tgt input')[3].value=1;
+function tg(){let s=0;qa('#tgt input').forEach(i=>{s+=+i.value;i.nextElementSibling.textContent=TL[i.dataset.k][+i.value];});
+ let v,p;if(s===0){v='&lt;6.5%';p='年輕、病程短、低血糖風險低：可以在不增加低血糖的前提下追求更低。';}else if(s<=4){v='&lt;7%';p='多數成人的目標。';}else if(s<=7){v='&lt;7.5–8%';p='部分條件不利，避免為了數字增加低血糖或治療負擔。';}else{v='&lt;8%';p='以避免症狀性高血糖和低血糖為主，HbA1c 不是重點。';}
+ $('tgtOut').innerHTML=V(0,'建議 HbA1c 目標',v,p+' CGM：TIR &gt;70%、TBR &lt;4%。');}
+qa('#tgt input').forEach(i=>i.addEventListener('input',tg));tg();
+
+/* ---------- c10 drugs ---------- */
+const ORG=[['brain','腦','食慾'],['stomach','胃','排空'],['liver','肝','糖新生'],['pancreas','胰臟','α、β 細胞'],['gut','腸道','吸收、腸泌素'],['muscle','肌肉與脂肪','利用葡萄糖'],['kidney','腎臟','排糖']];
+const DR=[
+ {k:'met',n:'Metformin',s:'雙胍類',o:['liver','gut'],a1c:3,w:'中性或略降',hy:0,mech:'減少肝臟糖新生，增加腸道葡萄糖利用與 GLP-1 分泌。',cv:'UKPDS 次分析有心血管好處，證據等級不高',ren:'eGFR 30–44 不新起始、已用者減量；&lt;30 停用',ae:'腸胃不適（從小劑量、隨餐、改長效錠）、長期 B12 缺乏、極少見乳酸中毒',nhi:'第一線，所有路徑的入口',b:[['Glucophage','500／850 mg'],['Glucophage XR','長效錠'],['多種學名藥','']]},
+ {k:'su',n:'SU',s:'磺醯尿素類',o:['pancreas'],a1c:3,w:'增加',hy:3,mech:'直接關閉 β 細胞的 K-ATP 通道，不論血糖高低都促進分泌。',cv:'中性（CAROLINA：glimepiride 與 linagliptin 相當）',ren:'glibenclamide eGFR &lt;60 避免；glimepiride、gliclazide 減量謹慎',ae:'低血糖（高齡、腎病、沒吃飯時）、體重增加',nhi:'可給付',b:[['Diamicron MR','gliclazide'],['Amaryl','glimepiride'],['glipizide',''],['glibenclamide','低血糖最多']]},
+ {k:'glin',n:'Glinide',s:'短效促泌劑',o:['pancreas'],a1c:2,w:'增加',hy:2,mech:'和 SU 同一個通道，但作用短，餐前吃、管餐後。',cv:'無心血管結果試驗',ren:'repaglinide 經肝代謝，腎病可用',ae:'低血糖（比 SU 少）、一天三次',nhi:'可給付',b:[['NovoNorm','repaglinide'],['Starlix','nateglinide'],['Glufast','mitiglinide']]},
+ {k:'agi',n:'Acarbose',s:'α-葡萄糖苷酶抑制劑',o:['gut'],a1c:1,w:'中性',hy:0,mech:'延緩腸道分解碳水化合物，壓低餐後血糖。',cv:'中性',ren:'肌酸酐清除率 &lt;25 不建議',ae:'脹氣、排氣；併用其他藥低血糖時要用葡萄糖（不是砂糖）',nhi:'可給付',b:[['Glucobay','acarbose']]},
+ {k:'tzd',n:'Pioglitazone',s:'TZD',o:['muscle','liver'],a1c:3,w:'增加',hy:0,mech:'活化 PPAR-γ，提升肌肉、脂肪、肝臟對胰島素的敏感性。',cv:'中風後可降再中風（IRIS）；脂肪性肝炎有實證',ren:'不需調整',ae:'水腫、體重增加、骨折；NYHA III–IV 心衰禁用；膀胱癌疑慮',nhi:'metformin 用足後',b:[['Actos','pioglitazone']]},
+ {k:'dpp4',n:'DPP-4i',s:'DPP-4 抑制劑',o:['gut','pancreas'],a1c:1,w:'中性',hy:0,mech:'延長自身腸泌素（GLP-1、GIP）作用，血糖高時才促進分泌、抑制升糖素。',cv:'中性；saxagliptin 心衰住院略增',ren:'linagliptin 不需調整，其餘依 eGFR 減量（第 12 章）',ae:'耐受性好；少見關節痛、類天疱瘡',nhi:'metformin 用足後；與 SGLT2i 擇一',b:[['Januvia','sitagliptin'],['Galvus','vildagliptin'],['Onglyza','saxagliptin'],['Trajenta','linagliptin'],['Nesina','alogliptin']]},
+ {k:'sglt2',n:'SGLT2i',s:'SGLT2 抑制劑',o:['kidney'],a1c:1,w:'下降 2–3 kg',hy:0,mech:'阻斷近端腎小管回收葡萄糖，從尿中排糖；同時利鈉、降腎絲球內壓。',cv:'降心衰住院、延緩腎病進展；ASCVD 者降 MACE',ren:'降糖效果 eGFR &lt;45 明顯下降；心腎保護 dapagliflozin ≥25、empagliflozin ≥20 可起始',ae:'生殖器黴菌感染、體液不足、正常血糖 DKA（生病時暫停）',nhi:'糖尿病：metformin 用足後；心衰、CKD 另有路徑',b:[['Forxiga','dapagliflozin'],['Jardiance','empagliflozin'],['Canaglu','canagliflozin'],['Steglatro','ertugliflozin']]},
+ {k:'glp1',n:'GLP-1 RA',s:'GLP-1 受體促效劑',o:['brain','stomach','pancreas'],a1c:3,w:'下降 3–6 kg',hy:0,mech:'作用在腦（飽足）、胃（延緩排空）、胰臟（葡萄糖依賴的胰島素分泌、抑制升糖素）。',cv:'降 MACE（LEADER、SUSTAIN-6、REWIND）；semaglutide 有腎臟結果（FLOW）',ren:'多數不需調整；注意嘔吐腹瀉造成脫水',ae:'噁心、嘔吐、便秘；膽結石；甲狀腺髓質癌或 MEN2 家族史禁用',nhi:'HbA1c &gt;8.5% 且前置治療 6 個月；不得併 SGLT2i、DPP-4i',b:[['Ozempic','semaglutide 每週'],['Trulicity','dulaglutide 每週'],['Victoza','liraglutide 每天'],['Lyxumia','lixisenatide 每天'],['Rybelsus','口服 semaglutide，自費']]},
+ {k:'tirz',n:'Tirzepatide',s:'GIP／GLP-1 雙重促效劑',o:['brain','stomach','pancreas','muscle'],a1c:3,w:'下降 7–12 kg',hy:0,mech:'同時刺激 GIP 與 GLP-1 受體，GIP 另作用在脂肪組織。',cv:'SURPASS-CVOT：MACE 不劣於 dulaglutide',ren:'不需調整',ae:'腸胃道副作用；降低口服避孕藥效果（第 17 章）',nhi:'台灣有第二型糖尿病適應症，健保未給付',b:[['Mounjaro','每週，自費']]},
+ {k:'ins',n:'胰島素',s:'基礎、速效、預混',o:['liver','muscle'],a1c:3,w:'增加',hy:3,mech:'直接補充：抑制肝臟產糖，促進肌肉與脂肪利用葡萄糖。',cv:'中性（ORIGIN、DEVOTE）',ren:'腎功能差時需求量下降，要減量',ae:'低血糖、體重增加、注射負擔',nhi:'可給付；三種口服仍未達標宜考慮',b:[['Lantus／Toujeo','glargine'],['Tresiba','degludec'],['NovoMix、Humalog Mix','預混'],['Soliqua','glargine＋lixisenatide']]}];
+let curDrug=0,orgFilter=null;
+(function(){const s=$('organs');const pos={brain:'<ellipse cx="450" cy="54" rx="86" ry="38"/>',stomach:'<ellipse cx="318" cy="168" rx="72" ry="42"/>',liver:'<rect x="470" y="128" width="170" height="74" rx="32"/>',pancreas:'<rect x="330" y="232" width="190" height="42" rx="21"/>',gut:'<rect x="350" y="300" width="200" height="74" rx="28"/>',muscle:'<rect x="90" y="228" width="190" height="120" rx="14"/>',kidney:'<ellipse cx="680" cy="290" rx="52" ry="64"/>'};
+ const lab={brain:[450,50],stomach:[318,164],liver:[555,160],pancreas:[425,252],gut:[450,332],muscle:[185,282],kidney:[680,286]};
+ let h=`<path d="M450 92L450 380M318 210L330 240M520 200L470 232M280 290L330 260M630 290L560 320" stroke="${C.grid}" stroke-width="1.5" fill="none"/>`;
+ ORG.forEach(([k,n,sub])=>{h+=`<g class="organ" data-o="${k}" tabindex="0" role="button" aria-label="${n}">${pos[k].replace('/>',` class="o" fill="#123b47" stroke="${C.grid2}" stroke-width="1.6"/>`)}<text x="${lab[k][0]}" y="${lab[k][1]}" text-anchor="middle" fill="${C.ink}" font-size="15">${n}</text><text x="${lab[k][0]}" y="${lab[k][1]+18}" text-anchor="middle" fill="${C.soft}" font-size="11.5">${sub}</text></g>`;});
+ s.innerHTML=h;qa('.organ',s).forEach(g=>{const f=()=>{orgFilter=orgFilter===g.dataset.o?null:g.dataset.o;drawGrid();};g.addEventListener('click',f);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f();}});});})();
+function meter(n,bad){return `<span class="meter ${bad?'bad':''}">${[0,1,2].map(i=>`<i class="${i<n?'f':''}"></i>`).join('')}</span>`;}
+function drawGrid(){const g=$('drugGrid');const list=DR.map((d,i)=>[d,i]).filter(([d])=>!orgFilter||d.o.includes(orgFilter));
+ g.innerHTML=(orgFilter?`<button data-reset="1" style="border-style:dashed"><b>顯示全部</b>目前篩選：${ORG.find(o=>o[0]===orgFilter)[1]}</button>`:'')+list.map(([d,i])=>`<button class="${i===curDrug?'on':''}" data-i="${i}"><b>${d.n}</b>${d.s}</button>`).join('');
+ qa('button',g).forEach(b=>b.onclick=()=>{if(b.dataset.reset){orgFilter=null;drawGrid();return;}curDrug=+b.dataset.i;drawDrug();drawGrid();});
+ qa('#organs .organ').forEach(o=>o.classList.toggle('lit',orgFilter?o.dataset.o===orgFilter:DR[curDrug].o.includes(o.dataset.o)));}
+function drawDrug(){const d=DR[curDrug];$('drugCard').innerHTML=`<div class="who">${d.n} <span class="soft" style="font-size:15px">· ${d.s}</span></div><p style="margin:0">${d.mech}</p>
+ <div class="dcard"><div><span>HbA1c 降幅</span>${['','約 0.5%','0.5–1%','1–1.5% 以上'][d.a1c]}${meter(d.a1c)}</div><div><span>體重</span>${d.w}</div><div><span>低血糖風險</span>${['低','低','中','高'][d.hy]}${meter(d.hy,1)}</div><div><span>心腎結果</span>${d.cv}</div><div><span>腎功能</span>${d.ren}</div><div><span>主要副作用</span>${d.ae}</div></div>
+ <p style="margin:0 0 4px"><span class="src nhi">健保</span>${d.nhi}</p><div class="brand">${d.b.map(([a,b])=>`<span>${a}<i>${b}</i></span>`).join('')}</div>`;
+ qa('#organs .organ').forEach(o=>o.classList.toggle('lit',d.o.includes(o.dataset.o)));}
+drawDrug();drawGrid();
+const CB=[
+ {c:['met','dpp4'],n:'Janumet／Janumet XR',d:'sitagliptin＋metformin',st:'tw'},
+ {c:['met','dpp4'],n:'Galvus Met',d:'vildagliptin＋metformin',st:'tw'},
+ {c:['met','dpp4'],n:'Trajenta Duo',d:'linagliptin＋metformin',st:'tw'},
+ {c:['met','dpp4'],n:'Kombiglyze XR',d:'saxagliptin＋metformin',st:'chk'},
+ {c:['met','sglt2'],n:'Jardiance Duo',d:'empagliflozin＋metformin，健保每日最多 2 粒',st:'tw'},
+ {c:['met','sglt2'],n:'Xigduo XR',d:'dapagliflozin＋metformin 長效，健保每日 1 粒',st:'tw'},
+ {c:['sglt2','dpp4'],n:'Glyxambi',d:'empagliflozin＋linagliptin。健保：用足 metformin，併用單方 6 個月後 HbA1c 仍 &gt;7.5%',st:'tw'},
+ {c:['sglt2','dpp4'],n:'Qtern',d:'dapagliflozin＋saxagliptin，條件同上',st:'tw'},
+ {c:['sglt2','dpp4'],n:'Steglujan',d:'ertugliflozin＋sitagliptin，113 年 1 月停產退市',st:'gone'},
+ {c:['met','sglt2','dpp4'],n:'Trijardy XR',d:'empagliflozin＋linagliptin＋metformin（FDA 2020）',st:'chk'},
+ {c:['met','su'],n:'Glucovance',d:'glibenclamide＋metformin',st:'chk'},
+ {c:['met','su'],n:'Amaryl M',d:'glimepiride＋metformin',st:'chk'},
+ {c:['met','tzd'],n:'pioglitazone＋metformin',d:'複方錠',st:'chk'},
+ {c:['dpp4','tzd'],n:'Oseni',d:'alogliptin＋pioglitazone',st:'chk'},
+ {c:['basal','glp1'],n:'Soliqua',d:'glargine＋lixisenatide。健保：HbA1c &gt;8.0%、胰島素 &lt;60 U、不得併 SGLT2i／DPP-4i',st:'tw'},
+ {c:['basal','glp1'],n:'Xultophy',d:'degludec＋liraglutide',st:'chk'},
+ {c:['basal','rapid'],n:'NovoMix 30、Humalog Mix 25／50',d:'預混：中效（魚精蛋白）＋速效',st:'tw'},
+ {c:['basal','rapid'],n:'Ryzodeg',d:'degludec＋aspart',st:'chk'}];
+const ST={tw:['y','台灣有'],chk:['m','在台狀態待確認'],gone:['x','已停產']};
+let cmbSel=new Set();
+function drawCombo(){const s=[...cmbSel];const out=$('comboOut');const list=CB.filter(x=>s.every(k=>x.c.includes(k)));
+ let note='';if(s.includes('glp1')&&(s.includes('sglt2')||s.includes('dpp4')))note=`<div class="rxi no"><b>沒有這種複方</b><small>${s.includes('sglt2')?'GLP-1 RA＋SGLT2i 是指引推薦的心腎組合，但健保不給付併用。':'GLP-1 RA 和 DPP-4i 機轉重疊，不建議併用。'}</small></div>`;
+ out.innerHTML=note+(list.length?list.map(x=>`<div class="cmb ${x.st==='gone'?'gone':''}"><span class="pill ${ST[x.st][0]}" style="float:right">${ST[x.st][1]}</span><b>${x.n}</b><div class="soft" style="font-size:13.5px">${x.d}</div></div>`).join(''):(note?'':'<div class="cmb soft">這個組合沒有複方，分開開立。</div>'));
+ if(!s.length)out.insertAdjacentHTML('afterbegin','<div class="soft" style="font-size:13.5px">點選上方成分篩選；目前顯示全部。</div>');}
+qa('#comboPick .chip').forEach(b=>b.onclick=()=>{const k=b.dataset.c;cmbSel.has(k)?cmbSel.delete(k):cmbSel.add(k);b.classList.toggle('on');drawCombo();});drawCombo();
+
+/* ---------- c11 decision ---------- */
+function ds(){const a=+$('dsA1c').value;$('dsA1cO').textContent=a.toFixed(1)+'%';const co=picked('dsCo');const has=k=>co.includes(k);const R=(c,t,s)=>`<div class="rxi ${c}"><b>${t}</b>${s?`<small>${s}</small>`:''}</div>`;
+ const ckm=has('ascvd')||has('event')||has('hf')||has('ckd')||has('obese')||has('masld');let A='';
+ if(has('cata'))A+=R('care','胰島素先上','有分解代謝症狀，先用胰島素解除高血糖毒性，之後可再簡化。');
+ else if(a>=10)A+=R('care','考慮胰島素或 GLP-1 RA','HbA1c ≥10%：沒有分解代謝症狀時，GLP-1 RA 或 tirzepatide 也是選項。');
+ if(has('hf'))A+=R('good','SGLT2i','降心衰住院，不論 HbA1c。'+(has('obese')?'合併肥胖的 HFpEF 可加 semaglutide 或 tirzepatide。':''));
+ if(has('ckd'))A+=R('good','SGLT2i ＋ GLP-1 RA','SGLT2i 延緩腎病進展（eGFR ≥20 可起始）；semaglutide 有腎臟結果證據。');
+ if(has('ascvd')||has('event'))A+=R('good','有心血管實證的 GLP-1 RA 或 SGLT2i','不論 HbA1c 是否達標。');
+ if(has('obese'))A+=R('good','GLP-1 RA 或 tirzepatide','以減重為目標。');
+ if(has('masld'))A+=R('good','GLP-1 RA、tirzepatide 或 pioglitazone','對脂肪性肝炎有實證。');
+ if(has('hypo'))A+=R('care','避開 SU 與胰島素','選低血糖風險低的藥。');
+ A+=R('info','Metformin 仍可當基礎','可與上述藥物併用，但不是必要的第一步。');
+ if(a>=7.5||ckm)A+=R('info','一開始就合併','HbA1c ≥7.5% 或有心腎代謝共病，及早合併兩類藥。');
+ $('dsAda').innerHTML=A;
+ let N='';const ckdN=has('ckdnhi'),hfN=has('hf');
+ if(has('cata')||a>=10)N+=R('good','胰島素','健保總則：可考慮早期使用胰島素。');
+ if(hfN||ckdN)N+=R('good','SGLT2i 走心衰或 CKD 路徑',`${hfN?'心衰（LVEF ≤49%）':''}${hfN&&ckdN?'、':''}${ckdN?'CKD（eGFR 25–60、UACR 200–5000、參加計畫）':''}：dapagliflozin、empagliflozin 10 mg 可給付，不需先用 metformin。`);
+ N+=R('good','Metformin 用到最大耐受劑量','SGLT2i、DPP-4i、TZD 的前提。');
+ N+=R('good','再加 SGLT2i 或 DPP-4i（擇一）、TZD、SU','metformin 用足仍控制不佳。');
+ N+=a>7.5?R('info','SGLT2i／DPP-4i 複方','併用其中一種單方 6 個月後 HbA1c 仍 &gt;7.5%。'):R('no','SGLT2i／DPP-4i 複方','HbA1c 未 &gt;7.5%，不符條件。');
+ if(has('event'))N+=R('good','GLP-1 RA（心血管事件路徑）','曾 MI、血管再通術或缺血性中風：用足 metformin 後可直接使用 liraglutide、dulaglutide、semaglutide；不得併 SGLT2i、DPP-4i。');
+ else if(a>8.5)N+=R('care','GLP-1 RA','前置治療 6 個月後 HbA1c 仍 &gt;8.5% 才給付，且要停 SGLT2i、DPP-4i。');
+ else N+=R('no','GLP-1 RA','HbA1c 未 &gt;8.5%，也沒有心血管事件，不符給付。');
+ if(has('obese')||has('masld'))N+=R('no','Tirzepatide、口服 semaglutide','有糖尿病適應症，但需自費。');
+ $('dsNhi').innerHTML=N;
+ const gaps=[];if(has('ckd')&&!ckdN)gaps.push('有 CKD，但未達健保 CKD 路徑（UACR 200 以上且參加計畫），SGLT2i 只能走糖尿病路徑，先用足 metformin。病人 A 就是這種情況。');
+ if((has('ckd')||has('ascvd')||has('hf')||has('event'))&&(has('obese')||has('ckd')))gaps.push('指引的 SGLT2i＋GLP-1 RA 心腎雙保護，健保不能同時給付。');
+ if(has('obese')&&a<=8.5&&!has('event'))gaps.push('想以體重為目標用 GLP-1 RA 或 tirzepatide，在這個 HbA1c 下需自費。');
+ $('dsGap').innerHTML=gaps.map(g=>`<div class="gap">落差 · ${g}</div>`).join('');}
+$('dsA1c').addEventListener('input',ds);qa('#dsCo input').forEach(i=>i.addEventListener('change',ds));ds();
+
+/* ---------- c12 eGFR ---------- */
+function eg(){const e=+$('egfr').value;$('egfrO').textContent=e;const R=(c,t,s)=>`<div class="rxi ${c}"><span class="pill ${c==='good'?'y':c==='care'?'m':'x'}">${c==='good'?'可用':c==='care'?'調整':'避免'}</span><b>${t}</b><small>${s}</small></div>`;let h='';
+ h+=e>=45?R('good','Metformin','全劑量，每日最多約 2000 mg。'):e>=30?R('care','Metformin','不新起始；已在用者減到每日 ≤1000 mg。'):R('no','Metformin','停用。');
+ h+=e>=45?R('good','SGLT2i','降糖與心腎保護都有。'):e>=20?R('care','SGLT2i',`降糖效果明顯下降，但心腎保護仍在：${e>=25?'dapagliflozin、':''}empagliflozin 可起始，已用者續用。`):R('care','SGLT2i','不新起始；已在用者可續用到透析。');
+ const sit=e>=45?100:e>=30?50:25,vil=e>=50?'50 mg 每日兩次':'50 mg 每日一次',sax=e>45?5:2.5,alo=e>=60?25:e>=30?12.5:6.25;
+ h+=R(e>=45?'good':'care','DPP-4i',`sitagliptin ${sit} mg · vildagliptin ${vil} · saxagliptin ${sax} mg · alogliptin ${alo} mg · linagliptin 5 mg 不調整`);
+ h+=e>=15?R('good','GLP-1 RA','liraglutide、dulaglutide、semaglutide 不需調整；嘔吐腹瀉時注意脫水。'):R('care','GLP-1 RA','末期腎病資料有限，從低劑量慢慢加。');
+ h+=e>=60?R('good','SU','可用；glibenclamide 低血糖風險最高，盡量避免。'):e>=30?R('care','SU','glibenclamide 避免；glimepiride 從 1 mg 起、gliclazide 謹慎。'):R('no','SU','避免，低血糖會拖很久。');
+ h+=R('good','Pioglitazone','不需調整；注意水腫與心衰。');
+ h+=e>=25?R('good','Acarbose','可用。'):R('no','Acarbose','肌酸酐清除率 &lt;25 不建議。');
+ h+=R(e<45?'care':'good','胰島素',e<45?'腎功能下降時需求量減少，注意低血糖、適度減量。':'依血糖調整。');
+ $('egfrOut').innerHTML=h;}
+$('egfr').addEventListener('input',eg);eg();
+const PRAC=[
+ `<div class="two"><div><p class="q">從小劑量、隨餐開始</p><div class="timeline" style="margin:0"><div class="tl"><b>第 1 週</b><span>500 mg，晚餐後</span></div><div class="tl"><b>第 2 週</b><span>500 mg 早晚各一</span></div><div class="tl"><b>第 3 週</b><span>早 500、晚 1000 mg</span></div><div class="tl"><b>第 4 週起</b><span>1000 mg 早晚各一（最大耐受劑量）</span></div></div></div><div class="rx"><div class="rxi info"><b>腸胃不適</b><small>多在前幾週，放慢加量、隨餐吃，或改長效錠（XR）。</small></div><div class="rxi info"><b>健保要「最大耐受劑量」</b><small>之後要加 SGLT2i 或 DPP-4i，病歷要寫清楚劑量和為什麼停在這裡。</small></div><div class="rxi care"><b>顯影劑檢查</b><small>eGFR 30–60 或打動脈顯影劑時，檢查時暫停，48 小時後確認腎功能再吃。</small></div><div class="rxi care"><b>長期使用</b><small>定期驗維生素 B12，尤其有周邊神經病變時。</small></div></div></div>`,
+ `<div class="two"><div class="rx"><div class="rxi no"><b>生病時暫停</b><small>嘔吐、腹瀉、吃不下、發燒脫水時先停，恢復正常進食 24–48 小時再吃。</small></div><div class="rxi no"><b>手術前停藥</b><small>canagliflozin、dapagliflozin、empagliflozin 至少 3 天；ertugliflozin 至少 4 天（FDA 仿單）。</small></div><div class="rxi care"><b>正常血糖 DKA</b><small>血糖可能只有 200 上下，但噁心、嘔吐、腹痛、喘。要驗酮體，不要因血糖不高就排除。</small></div></div><div class="rx"><div class="rxi info"><b>eGFR 一開始會降一點</b><small>起始後下降 3–5 是預期中的血行動力學變化，不必停藥；下降超過 30% 再評估。</small></div><div class="rxi info"><b>生殖器黴菌感染</b><small>最常見的副作用，衛教清潔，多半局部治療即可。</small></div><div class="rxi info"><b>和利尿劑併用</b><small>高齡者注意姿勢性低血壓，必要時減利尿劑。</small></div></div></div>`,
+ `<div class="tw"><table class="t"><tr><th>藥物</th><th>起始</th><th>加量</th><th>糖尿病常用最高</th></tr><tr><td>semaglutide（Ozempic）</td><td class="num">0.25 mg/週 × 4 週</td><td>每 4 週加一階：0.5 → 1</td><td class="num">2 mg/週</td></tr><tr><td>dulaglutide（Trulicity）</td><td class="num">0.75 或 1.5 mg/週</td><td>至少 4 週後加：3 → 4.5</td><td class="num">4.5 mg/週</td></tr><tr><td>liraglutide（Victoza）</td><td class="num">0.6 mg/天 × 1 週</td><td>1.2 mg</td><td class="num">1.8 mg/天</td></tr><tr><td>口服 semaglutide（Rybelsus）</td><td class="num">3 mg/天 × 30 天</td><td>7 mg</td><td class="num">14 mg/天</td></tr><tr><td>tirzepatide（Mounjaro）</td><td class="num">2.5 mg/週 × 4 週</td><td>每 4 週加 2.5 mg</td><td class="num">15 mg/週</td></tr></table></div><div class="rx"><div class="rxi info"><b>腸胃副作用</b><small>少量多餐、吃到七分飽就停、少油；副作用明顯時延後加量，不必急著到最高劑量。</small></div><div class="rxi care"><b>視網膜病變</b><small>血糖快速下降可能讓既有視網膜病變短期惡化（SUSTAIN-6），起始前確認眼底。</small></div><div class="rxi no"><b>禁忌</b><small>甲狀腺髓質癌或 MEN2 個人／家族史；有胰臟炎病史要謹慎。</small></div></div>`,
+ `<div class="two"><div class="rx"><div class="rxi no"><b>最容易低血糖的人</b><small>高齡、腎功能差、吃不規律、喝酒、合併胰島素。</small></div><div class="rxi good"><b>選比較安全的</b><small>gliclazide MR、glimepiride 低血糖比 glibenclamide 少。</small></div><div class="rxi care"><b>沒吃飯就不要吃</b><small>衛教：跳餐、禁食檢查當天先停。</small></div></div><div class="rx"><div class="rxi info"><b>低血糖的 15–15 原則</b><small>血糖 &lt;70：吃 15 公克糖（如半杯果汁），15 分鐘後再測，仍低就重複。</small></div><div class="rxi info"><b>用 acarbose 的人</b><small>低血糖要用葡萄糖錠或含葡萄糖的飲料，砂糖吸收會被抑制。</small></div><div class="rxi info"><b>SU 低血糖會拖很久</b><small>急診處理後要觀察，必要時住院。</small></div></div></div>`];
+tabs('pracTabs',v=>$('pracOut').innerHTML=PRAC[v]);
+
+/* ---------- c13 insulin ---------- */
+function iw(){const p=picked('insWhen');const el=$('insWhenOut');const now=['a','b','e','f','g'].filter(x=>p.includes(x));
+ if(now.length)setV(el,C.bad,'判斷','現在就開始胰島素',(p.includes('b')?'有分解代謝症狀，胰島素先上，血糖穩定後可再簡化。':'')+(p.includes('e')?'懷孕首選胰島素。':'')+(p.includes('g')?'疑似第一型或 LADA 的 C-peptide 已很低。':'')+(p.includes('f')?'急性疾病時以胰島素控制。':''));
+ else if(p.includes('d'))setV(el,C.warn,'判斷','加基礎胰島素','已用 GLP-1 RA 仍未達標，加基礎胰島素，或改固定比例複方。');
+ else if(p.includes('c'))setV(el,C.warn,'判斷','可以開始，但先比較 GLP-1 RA','三種口服仍未達標。病人 A 的 HbA1c 9.6% &gt;8.5%，符合健保 GLP-1 RA 條件（要停掉 Glyxambi）；也可以加基礎胰島素或 Soliqua。和病人討論針數、體重、心腎好處再決定。');
+ else setV(el,C.ok,'判斷','還不需要','先把非胰島素藥物用足、用對。');}
+qa('#insWhen input').forEach(i=>i.addEventListener('change',iw));iw();
+function ip(){const p=picked('insPick');const R=(c,t,s)=>`<div class="rxi ${c}"><b>${t}</b><small>${s}</small></div>`;let h='';
+ if(p.includes('post'))h+=R('good','Basal-plus','保留基礎，在最大一餐前加 4 單位（或基礎量 10%）速效；或改加 GLP-1 RA。');
+ else h+=R('good','基礎胰島素開始','glargine 或 degludec，一天一針，從 10 單位起。');
+ if(p.includes('weight'))h+=R('good','基礎＋GLP-1 RA 或 Soliqua','體重增加較少、胰島素用量較低。');
+ if(p.includes('hypo'))h+=R('good','degludec 或 glargine U300','夜間低血糖比 U100 與 NPH 少。');
+ if(p.includes('fewinj'))h+=R('info','一天一針的選擇','基礎胰島素或固定比例複方；預混至少要兩針。');
+ if(p.includes('meal'))h+=R('no','不適合預混','預混的速效成分要配固定的用餐時間，延遲吃飯容易低血糖。');
+ else if(!p.includes('fewinj')&&!p.includes('self'))h+=R('care','可考慮預混','三餐規律、不想自己算劑量的人，早晚各一次預混是務實選擇。');
+ if(p.includes('self'))h+=R('info','教自我滴定','每 3 天看空腹血糖，高於目標加 2 單位。');
+ if(p.includes('weekly'))h+=R('care','每週一次基礎胰島素','icodec、efsitora 已獲 FDA 核准，台灣上市狀態待確認。');
+ $('insPickOut').innerHTML=h;}
+qa('#insPick input').forEach(i=>i.addEventListener('change',ip));ip();
+const TIP={good:[186,172,160,150,140,131,122,118,114,112],over:[196,192,188,186,184,183,182,184,182,181],hypo:[180,166,150,134,118,64,104,112,116,118]};
+let tiF=TIP.good.slice();
+function ti(){const w=+$('tiW').value||80,st=$('tiStart').value,tg=+$('tiTgt').value;let d=st==='10'?10:Math.round(w*+st);const rows=[],doses=[];
+ tiF.forEach((f,i)=>{let act,nd=d;if(f<70){nd=Math.round(d*0.85);act=`<span class="flag">低血糖 → 減 15%</span>`;}else if(f>180){nd=d+4;act='+4 U';}else if(f>tg){nd=d+2;act='+2 U';}else{act='<span class="ok">維持</span>';}
+  rows.push(`<tr><td class="num">第 ${1+i*3} 天</td><td><input type="number" data-r="${i}" value="${f}"></td><td class="num">${d} U</td><td>${act}</td></tr>`);doses.push(d);d=nd;});
+ $('tiBody').innerHTML=rows.join('');qa('#tiBody input').forEach(x=>x.addEventListener('change',()=>{tiF[+x.dataset.r]=+x.value;ti();}));
+ const s=$('tiChart'),lim=w*0.5,maxD=Math.max(lim+6,...doses)+4,X=i=>40+i*(360/9),Y=v=>200-v/maxD*170,Yf=v=>200-(v-50)/170*170;let h='';
+ h+=`<line x1="40" x2="400" y1="${Y(lim)}" y2="${Y(lim)}" stroke="${C.bad}" stroke-dasharray="5 4"/><text x="398" y="${Y(lim)-5}" text-anchor="end" fill="${C.badl}" font-size="11">0.5 U/kg = ${lim.toFixed(0)} U</text>`;
+ h+=`<rect x="40" y="${Yf(tg)}" width="360" height="${Yf(80)-Yf(tg)}" fill="rgba(127,178,106,.1)"/>`;
+ h+=`<path d="${doses.map((v,i)=>(i?'L':'M')+X(i)+' '+Y(v)).join('')}" fill="none" stroke="${C.acc}" stroke-width="2.5"/>`;
+ doses.forEach((v,i)=>h+=`<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="${C.acc}"/>`);
+ tiF.forEach((f,i)=>h+=`<circle cx="${X(i)}" cy="${Yf(Math.min(220,Math.max(50,f)))}" r="3" fill="none" stroke="${f<70?C.bad:C.teal}" stroke-width="1.6"/>`);
+ h+=`<text x="40" y="226" fill="${C.soft}" font-size="11">● 劑量（U）　○ 空腹血糖（綠帶為目標）</text>`;s.innerHTML=h;
+ const last=doses[doses.length-1],kg=last/w,lastF=tiF[tiF.length-1];
+ setV($('tiOut'),kg>0.5?C.bad:lastF<=tg&&lastF>=80?C.ok:C.warn,`第 ${1+(tiF.length-1)*3} 天`,`${last} U · ${kg.toFixed(2)} U/kg`,kg>0.5?'已超過 0.5 U/kg，空腹仍未達標：停止往上加，回頭檢查餐後血糖、服藥與飲食，考慮加 GLP-1 RA 或餐前胰島素。':lastF<=tg&&lastF>=80?'空腹已達標。三個月後看 HbA1c，若仍高，問題在餐後。':'持續每 3 天調整；接近 0.5 U/kg 時要重新評估。');}
+['tiW','tiStart','tiTgt'].forEach(i=>$(i).addEventListener('input',ti));
+qa('[data-ti]').forEach(b=>b.onclick=()=>{tiF=TIP[b.dataset.ti].slice();if(b.dataset.ti==='over'){$('tiStart').value='0.2';tiF=tiF.concat([]);}ti();});ti();
+function ob(){const d=+$('obD').value,w=+$('obW').value,bed=+$('obBed').value,am=+$('obAm').value,a=+$('obA').value,h=$('obH').checked;const sig=[];
+ if(w&&d/w>0.5)sig.push(`基礎劑量 ${(d/w).toFixed(2)} U/kg，超過 0.5`);if(bed-am>=50)sig.push(`睡前到早上掉了 ${bed-am} mg/dL（≥50）`);if(h)sig.push('近期有低血糖');if(am<=130&&a>=7)sig.push('空腹已達標，HbA1c 還是高 → 問題在餐後');
+ const el=$('obOut');if(sig.length>=2)setV(el,C.bad,`${sig.length} 個訊號`,'過度基礎化','<b>不要再加基礎胰島素。</b>'+sig.join('；')+'。做法：基礎量先減 10–20%，改加 GLP-1 RA、最大一餐前速效胰島素，或改預混。');
+ else if(sig.length===1)setV(el,C.warn,'1 個訊號','需要留意',sig[0]+'。檢查一週的餐前、餐後與睡前血糖。');else setV(el,C.ok,'沒有訊號','基礎劑量合理','可以繼續依空腹血糖調整。');}
+['obD','obW','obBed','obAm','obA','obH'].forEach(i=>$(i).addEventListener('input',ob));ob();
+function mx(){const m=picked('mixMeds'),ins=$('mixIns').value,glp=m.includes('glp1');const R=(c,t,s,p)=>`<div class="rxi ${c}"><span class="pill ${c==='good'?'y':c==='care'?'m':c==='no'?'x':'n'}">${p}</span><b>${t}</b><small>${s}</small></div>`;let h='';
+ if(m.includes('met'))h+=R('good','Metformin','減少胰島素用量與體重增加。','繼續');
+ if(m.includes('sglt2'))h+=R('good','SGLT2i','保留心腎好處；胰島素不要一下減太多，生病時注意正常血糖 DKA。','繼續');
+ if(m.includes('glp1'))h+=R('good','GLP-1 RA','和基礎胰島素互補：胰島素管空腹，GLP-1 RA 管餐後和體重；也可改固定比例複方。','繼續');
+ if(m.includes('dpp4'))h+=glp?R('no','DPP-4i','和 GLP-1 RA 機轉重疊，健保也不能併用。','停用'):R('care','DPP-4i','加基礎胰島素可以留；改 Soliqua 或 GLP-1 RA 時要停。','可留');
+ if(m.includes('su'))h+=ins==='basal'?R('care','SU','基礎胰島素調高後，空腹達標或出現低血糖就減量或停掉。','減量'):R('no','SU','與餐前胰島素作用重疊，低血糖風險高。','停用');
+ if(m.includes('tzd'))h+=R('care','Pioglitazone','和胰島素併用水腫、心衰風險增加，多半減量或停用。','減量');
+ if(m.includes('agi'))h+=R('info','Acarbose','可以留；低血糖時要用葡萄糖處理。','可留');
+ if(ins==='premix'&&m.includes('su'))h+='';
+ if(m.includes('sglt2')||m.includes('dpp4'))h+=`<div class="gap">健保 · Soliqua 和 GLP-1 RA 都不得與 SGLT2i、DPP-4i 併用；單純加基礎胰島素則沒有這個限制。</div>`;
+ $('mixOut').innerHTML=h||'<div class="rxi info">勾選目前的用藥。</div>';}
+qa('#mixMeds input').forEach(i=>i.addEventListener('change',mx));$('mixIns').addEventListener('input',mx);mx();
+
+/* ---------- c15 β-cell ---------- */
+function bc(){const y=+$('bcY').value;$('bcYO').textContent=y+' 年';const s=$('bcChart'),X=t=>80+t/10*780,Y=v=>220-v/100*190;let h='';
+ [0,25,50,75,100].forEach(v=>h+=`<line x1="80" x2="860" y1="${Y(v)}" y2="${Y(v)}" stroke="${C.grid}"/><text x="72" y="${Y(v)+4}" text-anchor="end" fill="${C.soft}" font-size="11" font-family="IBM Plex Mono">${v}%</text>`);
+ for(let t=0;t<=10;t+=2)h+=`<text x="${X(t)}" y="244" text-anchor="middle" fill="${C.soft}" font-size="11.5">${t} 年</text>`;
+ [[.91,C.teal,'成人（每年 −9%）'],[.73,C.warn,'青少年（每年 −27%）']].forEach(([r,c,l],j)=>{let d='';for(let i=0;i<=100;i++){const t=i/10;d+=(i?'L':'M')+X(t)+' '+Y(100*Math.pow(r,t));}h+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="2.6"/>`;const v=100*Math.pow(r,y);h+=`<circle cx="${X(y)}" cy="${Y(v)}" r="5" fill="${c}"/><text x="${X(y)+(y>7?-10:10)}" y="${Y(v)-10}" text-anchor="${y>7?'end':'start'}" fill="${c}" font-size="13">${l}：剩 ${v.toFixed(0)}%</text>`;});
+ h+=`<line x1="${X(y)}" x2="${X(y)}" y1="30" y2="220" stroke="${C.grid2}" stroke-dasharray="3 4"/>`;s.innerHTML=h;}
+$('bcY').addEventListener('input',bc);bc();
+
+/* ---------- c16 DiRECT ---------- */
+const DIR=[['體重增加',0],['0–5 kg',7],['5–10 kg',34],['10–15 kg',57],['≥15 kg',86]];let dirI=3;
+function dr(){const s=$('dirChart');let h='';DIR.forEach(([l,v],i)=>{const x=30+i*78,hh=v/100*150;h+=`<rect x="${x}" y="${180-hh}" width="56" height="${hh}" rx="3" fill="${i===dirI?C.ok:'rgba(127,178,106,.3)'}"/><text x="${x+28}" y="${172-hh}" text-anchor="middle" fill="${C.ink}" font-size="13" font-family="IBM Plex Mono">${v}%</text><text x="${x+28}" y="200" text-anchor="middle" fill="${C.soft}" font-size="11.5">${l}</text>`;});s.innerHTML=h;
+ const [l,v]=DIR[dirI];setV($('dirOut'),C.ok,'DiRECT 一年後',`${l}：緩解 ${v}%`,dirI===4?'減超過 15 公斤的人，八成以上緩解。病人 B 若從 92 kg 減到 77 kg 就達到這個區間。':dirI===0?'體重沒有下降的人幾乎沒有緩解。':'整體一年緩解率 46%，兩年 36%。關鍵是減多少，而不是用什麼方法。');}
+qa('#dirBtns .chip').forEach(b=>b.onclick=()=>{dirI=+b.dataset.d;qa('#dirBtns .chip').forEach(x=>x.classList.toggle('on',x===b));dr();});dr();
+
+/* ---------- c17 young ---------- */
+const YP=[
+ `<div class="two"><div class="rx"><div class="rxi info"><b>懷孕前</b><small>HbA1c 在不增加低血糖下盡量 &lt;6.5%；補充葉酸；檢查眼底、腎功能。</small></div><div class="rxi no"><b>懷孕前要換掉的藥</b><small>statin、ACEI／ARB；SGLT2i、DPP-4i、GLP-1 RA、tirzepatide 都不建議用於懷孕，懷孕首選胰島素。</small></div><div class="rxi care"><b>GLP-1 RA 提前停</b><small>semaglutide 歐盟仿單建議計畫懷孕前至少停 2 個月（半衰期長）。</small></div></div><div class="rx"><div class="rxi care"><b>Tirzepatide 降低口服避孕藥效果</b><small>延緩胃排空影響吸收：開始用藥後 4 週、以及每次加量後 4 週，改用非口服避孕或加保險套。</small></div><div class="rxi info"><b>沒有懷孕計畫時</b><small>年輕女性開始降糖藥時，就要主動談避孕，不要等到懷孕才發現藥物不適合。</small></div><div class="rxi info"><b>男性也要問</b><small>肥胖與高血糖都會影響生育力，減重本身有幫助。</small></div></div></div>`,
+ `<div class="rx"><div class="rxi info"><b>糖尿病困擾比老年人高</b><small>年輕病人常有污名感、對未來的焦慮、工作上的隱瞞。ADA 建議每年篩糖尿病困擾、憂鬱，2026 年起加上焦慮與低血糖恐懼。</small></div><div class="rxi info"><b>問法</b><small>「這陣子處理糖尿病，讓你覺得最累的是什麼？」比「有沒有按時吃藥」更能打開話題。</small></div><div class="rxi care"><b>飲食失調</b><small>年輕病人合併暴食或刻意少打胰島素減重的情況不少見，體重或血糖變化異常時要想到。</small></div><div class="rxi info"><b>轉介</b><small>困擾在門診處理不了時，轉介心理師或身心科。</small></div></div>`,
+ `<div class="rx"><div class="rxi info"><b>輪班</b><small>選低血糖風險低的藥（metformin、SGLT2i、DPP-4i、GLP-1 RA），避免 SU 與固定時間的預混胰島素。</small></div><div class="rxi info"><b>外食</b><small>教「餐盤法」：半盤蔬菜、四分之一蛋白質、四分之一全穀；含糖飲料是第一個要拿掉的。</small></div><div class="rxi info"><b>工作日看診困難</b><small>延長處方、遠距衛教、CGM 報告線上回顧，降低回診門檻。</small></div><div class="rxi care"><b>睡眠</b><small>肥胖的年輕人常合併睡眠呼吸中止，鼾聲與白天嗜睡要問（見腦與睡眠島）。</small></div></div>`,
+ `<div class="rx"><div class="rxi no"><b>最大的風險是消失</b><small>年輕病人在換工作、搬家、從兒科轉成人門診時最容易中斷追蹤，等再出現時常已有併發症。</small></div><div class="rxi info"><b>留住病人</b><small>加入共同照護方案、固定衛教師、用簡訊或 LINE 提醒回診。</small></div><div class="rxi info"><b>兒少轉成人</b><small>從 16–18 歲就開始準備，讓病人自己學會調藥、看報告。</small></div><div class="rxi info"><b>簡化處方</b><small>一天一次的口服藥或每週一次的針劑，比一天三次更容易持續。</small></div></div>`];
+tabs('ypTabs',v=>$('ypOut').innerHTML=YP[v]);
+})();
+</script>
+</body></html>

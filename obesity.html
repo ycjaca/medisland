@@ -1,0 +1,1001 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>減重與長期維持｜深入探索</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sea:#0d2a33;--sea-deep:#082028;--panel:#0a252d;--grid:#1a4350;--grid2:#2a5662;
+  --ink:#e8efe9;--ink-soft:#9fb9b8;--buoy:#f2b134;--acc:#c9a25a;--acc-l:#e6c88c;
+  --b2:#7fb26a;--b2-l:#a9d496;
+  --ok:#7fb26a;--warn:#e0a24a;--stop:#d0715e;--teal:#5fa8a0;--old:#6f8c92;--purple:#8f86c9;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--sea);color:var(--ink);font-family:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:16.5px}
+a{color:var(--buoy)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--buoy);outline-offset:3px}
+svg text{font-family:var(--body)}
+.mono{font-family:var(--mono)}
+.col{max-width:760px;margin:0 auto;padding:0 20px}
+.wide{max-width:1040px;margin:0 auto;padding:0 20px}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(8,32,40,.94);border-bottom:1px solid var(--grid)}
+.topbar .wide{display:flex;align-items:center;gap:14px;height:48px}
+.back{font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--buoy)}
+.prog{flex:1;height:3px;background:var(--grid);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--acc)}
+.chapnav{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+header.hero{padding:48px 0 26px}
+.coords{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,6vw,62px);line-height:1.12;margin:8px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--acc)}
+.lede{color:var(--ink-soft);margin:0 0 18px;max-width:38em}
+.speakers{display:flex;flex-wrap:wrap;gap:10px}
+.spk{border:1px solid var(--grid);border-radius:4px;padding:8px 12px;font-size:14px;line-height:1.5}
+.spk b{font-weight:500}.spk span{display:block;color:var(--ink-soft);font-size:12.5px}
+.spk.a{border-color:var(--acc)}.spk.b{border-color:var(--b2)}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:22px;padding:0;list-style:none}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14.5px;padding:8px 10px;border:1px solid var(--grid);border-radius:4px}
+.toc a:hover{border-color:var(--acc)}
+.toc a span{font-family:var(--mono);font-size:11px;color:var(--acc)}
+.toc a.b span{color:var(--b2)}
+.toc li.sep{grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-top:6px}
+section.ch{padding:56px 0 20px;border-top:1px solid var(--grid)}
+.part{padding:46px 0 10px;border-top:1px solid var(--grid);text-align:center}
+.part .k{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ink-soft)}
+.part h2{margin:6px 0 4px}
+.chno{font-family:var(--mono);font-size:12px;color:var(--acc);letter-spacing:.1em}
+.b2 .chno{color:var(--b2)}
+h2{font-family:var(--display);font-size:clamp(27px,4.2vw,38px);line-height:1.2;margin:4px 0 8px;font-weight:700;text-wrap:balance}
+h3{font-family:var(--display);font-size:22px;margin:34px 0 8px;font-weight:700;text-wrap:balance}
+.src{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);border:1px solid var(--grid);border-radius:20px;padding:1px 9px;margin:0 6px 6px 0}
+.src.s1{border-color:var(--acc);color:var(--acc-l)}
+.src.s2{border-color:var(--b2);color:var(--b2-l)}
+.src.add{border-style:dashed}
+.src.ad{border-color:var(--purple);color:#c4bdf0}
+p{margin:0 0 14px}
+.soft{color:var(--ink-soft)}
+small.note{display:block;font-size:13px;color:var(--ink-soft);line-height:1.6}
+figure{margin:22px 0 26px;padding:0}
+.plate{background:var(--sea-deep);border:1px solid var(--grid);border-radius:6px;padding:16px;position:relative}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+figcaption b{color:var(--ink);font-weight:500}
+.figno{font-family:var(--mono);font-size:11px;color:var(--acc);margin-right:6px}
+.b2 .figno{color:var(--b2)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--grid);background:transparent;border-radius:20px;padding:5px 13px;font-size:13.5px;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+.chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+.chip.on{border-color:var(--acc);background:rgba(201,162,90,.18);color:var(--ink)}
+.b2 .chip.on{border-color:var(--b2);background:rgba(127,178,106,.16)}
+.btn{border:1px solid var(--acc);background:rgba(201,162,90,.12);border-radius:4px;padding:7px 16px;cursor:pointer;font-size:14px}
+.btn:hover{background:rgba(201,162,90,.25)}
+.btn.ghost{border-color:var(--grid);background:transparent;color:var(--ink-soft)}
+.callout{border-left:3px solid var(--buoy);background:rgba(242,177,52,.06);padding:12px 16px;margin:18px 0}
+.callout.acc{border-left-color:var(--acc);background:rgba(201,162,90,.07)}
+.callout.green{border-left-color:var(--b2);background:rgba(127,178,106,.07)}
+.callout.purple{border-left-color:var(--purple);background:rgba(143,134,201,.08)}
+.callout.red{border-left-color:var(--stop);background:rgba(208,113,94,.08)}
+.callout h4{margin:0 0 4px;font-size:15px;font-weight:500}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.callout ul{margin:4px 0 0;padding-left:20px}
+table.t{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0 20px}
+table.t th,table.t td{border-bottom:1px solid var(--grid);padding:8px 8px;text-align:left;vertical-align:top}
+table.t th{font-weight:500;color:var(--ink-soft);font-size:13px}
+table.t td.num{font-family:var(--mono);white-space:nowrap}
+.tw{overflow-x:auto}
+.twocol{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:800px){.twocol{grid-template-columns:1fr}}
+.split{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:20px;align-items:start}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--grid);border-radius:6px;padding:16px 18px}
+.card h4{font-family:var(--display);font-size:21px;margin:0 0 6px;font-weight:700}
+.card ul{margin:0;padding-left:20px}.card li{margin-bottom:3px}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:14px 0}
+.stat{border:1px solid var(--grid);border-radius:6px;padding:10px 12px}
+.stat b{display:block;font-family:var(--mono);font-size:24px;font-weight:500;color:var(--buoy);line-height:1.2}
+.stat span{font-size:12.5px;color:var(--ink-soft);line-height:1.45;display:block}
+.row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px;flex-wrap:wrap}
+.row label{min-width:80px;color:var(--ink-soft)}
+.row input[type=number],.row select{background:var(--sea-deep);border:1px solid var(--grid2);border-radius:4px;padding:5px 8px}
+.row input[type=number]{width:90px;font-family:var(--mono)}
+input[type=range]{accent-color:var(--acc);width:100%}
+.b2 input[type=range]{accent-color:var(--b2)}
+.check{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--grid);border-radius:4px;padding:7px 10px;cursor:pointer;font-size:13.5px;line-height:1.45}
+.check input{margin-top:4px;accent-color:var(--acc)}
+.check.on{border-color:var(--acc);background:rgba(201,162,90,.08)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px}
+.big{font-family:var(--display);font-size:26px;line-height:1.25;margin:0 0 4px}
+.pill{display:inline-block;white-space:nowrap;font-size:12px;border-radius:3px;padding:1px 8px;margin:2px 4px 2px 0;font-family:var(--mono)}
+.pill.g{background:rgba(127,178,106,.18);color:#a9d496}
+.pill.y{background:rgba(242,177,52,.15);color:#f5cf7f}
+.pill.r{background:rgba(208,113,94,.2);color:#f0a291}
+.pill.n{background:rgba(111,140,146,.2);color:#b5c6c8}
+.pill.p{background:rgba(143,134,201,.2);color:#c4bdf0}
+/* case */
+.visits{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.visits button{border:1px solid var(--grid);background:transparent;border-radius:4px;padding:6px 12px;cursor:pointer;font-size:13.5px;color:var(--ink-soft);text-align:left;line-height:1.35}
+.visits button b{display:block;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--acc)}
+.visits button.on{border-color:var(--acc);background:rgba(201,162,90,.14);color:var(--ink)}
+.lab{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+.lab div{border:1px solid var(--grid);border-radius:4px;padding:6px 10px;min-width:86px}
+.lab span{display:block;font-size:11.5px;color:var(--ink-soft)}
+.lab b{font-family:var(--mono);font-size:19px;font-weight:500}
+.lab b.bad{color:#f0a291}.lab b.good{color:#a9d496}
+.optc{border:1px solid var(--grid);border-radius:4px;padding:10px 12px;background:transparent;text-align:left;cursor:pointer;font-size:14px;line-height:1.5;width:100%;margin-bottom:8px}
+.optc b{font-weight:500}
+.optc small{display:block;color:var(--ink-soft);font-size:12.5px}
+.optc.right{border-color:var(--ok);background:rgba(127,178,106,.1)}
+.optc.wrong{border-color:var(--stop);background:rgba(208,113,94,.08)}
+.fb{border:1px solid var(--grid);border-radius:4px;padding:12px 14px;font-size:14.5px;margin-top:6px;display:none}
+.fb.show{display:block}
+.pane{display:none}.pane.on{display:block}
+/* body map */
+.org{cursor:pointer;transition:all .3s}
+.org .shape{fill:#12404b;stroke:#2a5662;stroke-width:1.2;transition:all .35s}
+.org text{fill:var(--ink-soft);font-size:12.5px;transition:fill .3s}
+.org.lit .shape{fill:rgba(201,162,90,.55);stroke:#e6c88c;stroke-width:2}
+.org.lit text{fill:var(--ink)}
+.org.lit2 .shape{fill:rgba(143,134,201,.5);stroke:#c4bdf0;stroke-width:2}
+.org.sel .shape{stroke:#f2b134;stroke-width:3}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+.dinfo h4{font-family:var(--display);font-size:22px;margin:0 0 4px;font-weight:700}
+.dinfo dl{margin:8px 0 0;display:grid;grid-template-columns:72px 1fr;gap:6px 10px;font-size:13.5px}
+.dinfo dt{color:var(--acc-l)}
+.dinfo dd{margin:0}
+/* matrix */
+.mx{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+.mx th,.mx td{border-bottom:1px solid var(--grid);padding:7px 6px;text-align:center}
+.mx th{font-weight:500;color:var(--ink-soft);font-size:12.5px}
+.mx td:first-child,.mx th:first-child{text-align:left}
+.mx td.sum{font-weight:500}
+.ic{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;font-size:13px}
+.ic.g{background:rgba(127,178,106,.25);color:#a9d496}
+.ic.y{background:rgba(242,177,52,.2);color:#f5cf7f}
+.ic.r{background:rgba(208,113,94,.28);color:#f0a291}
+.ic.q{background:rgba(143,134,201,.2);color:#c4bdf0}
+.ic.n{color:#4e6c73}
+.mx tr.hide{display:none}
+/* safety */
+.pits{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.pit{border:1px solid var(--grid);border-radius:6px;padding:12px 14px;background:var(--panel)}
+.pit .k{font-family:var(--mono);font-size:11px;color:var(--acc)}
+.pit h4{margin:2px 0 4px;font-size:16px;font-weight:500;line-height:1.4}
+.pit p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+.pit.hide{display:none}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:10px 0}
+@media (max-width:820px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fstep{border:1px solid var(--grid);border-radius:6px;padding:8px 9px;font-size:13px;line-height:1.45;cursor:pointer;background:var(--panel);min-height:84px}
+.fstep b{display:block;font-family:var(--mono);font-size:11px;color:var(--b2)}
+.fstep.miss{border-style:dashed;opacity:.55;cursor:default}
+.fstep.on{border-color:var(--b2);background:rgba(127,178,106,.12)}
+/* maintenance */
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.mopt{border:1px solid var(--grid);border-radius:6px;padding:10px 12px;background:transparent;text-align:left;cursor:pointer;font-size:14px;line-height:1.45}
+.mopt small{display:block;color:var(--ink-soft);font-size:12px}
+.mopt.on{border-color:var(--b2);background:rgba(127,178,106,.12)}
+.stars{font-family:var(--mono);color:var(--buoy);letter-spacing:2px}
+.take{counter-reset:t;list-style:none;padding:0;margin:0}
+.take li{counter-increment:t;position:relative;padding:10px 0 10px 46px;border-bottom:1px solid var(--grid)}
+.take li::before{content:counter(t,decimal-leading-zero);position:absolute;left:0;top:10px;font-family:var(--mono);color:var(--acc);font-size:14px}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:10px 0 0}
+.links a,.links div{border:1px dashed var(--grid2);border-radius:4px;padding:10px 12px;font-size:14px;text-decoration:none;color:var(--ink)}
+.links a{border-style:solid;border-color:var(--acc)}
+.links span{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+footer{padding:50px 0 80px;border-top:1px solid var(--grid);margin-top:40px;font-size:13.5px;color:var(--ink-soft)}
+footer ol{padding-left:20px}
+footer li{margin-bottom:4px}
+.val{font-family:var(--mono);color:var(--buoy)}
+.tip{position:absolute;pointer-events:none;background:#061a20;border:1px solid var(--grid2);border-radius:4px;padding:6px 9px;font-size:12.5px;line-height:1.5;opacity:0;transition:opacity .15s;max-width:240px;z-index:5}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wide">
+  <a class="back" href="index.html#metabolic">← 回到群島</a>
+  <div class="prog"><i id="progbar"></i></div>
+  <span class="chapnav" id="chapnav">代謝體重島</span>
+</div></div>
+
+<header class="hero"><div class="col">
+  <div class="coords">代謝體重島 · 第一演講廳 14:50–16:20 · 115.10.18</div>
+  <h1>減重藥之後，<em>怎麼不復胖</em>？</h1>
+  <p class="lede">一位前糖尿病、脂肪肝的上班族想打「瘦瘦針」。她符合用藥條件嗎？該選哪一支？一年後瘦了 16%，她想停藥，接下來會發生什麼事？</p>
+  <div class="speakers">
+    <div class="spk a"><b>張皓翔</b><span>臺大醫院家庭醫學部｜減重藥物最新機轉與門診實戰攻略</span></div>
+    <div class="spk b"><b>許芷瑜</b><span>初日診所｜減重後的長期體重維持策略</span></div>
+  </div>
+  <div class="callout purple" style="margin-top:20px"><h4>閱讀提醒</h4><p class="soft" style="margin:0">張皓翔的投影片中有幾張使用 Wegovy（Novo Nordisk）與 Mounjaro（Lilly）的廠商版型。標 <span class="src s1">張皓翔</span>、<span class="src s2">許芷瑜</span> 的是講者投影片內容，<span class="src ad">廠商版型</span> 是投影片中的廠商資料，<span class="src add">補充</span> 是另外查證的指引、試驗原文與 2026 年新資料。許芷瑜場次只拍到一張投影片，所以後半大部分是補充文獻。</p></div>
+  <ul class="toc">
+    <li class="sep">前半｜怎麼減（張皓翔）</li>
+    <li><a href="#c1"><span>01</span>門診：她想打瘦瘦針</a></li>
+    <li><a href="#c2"><span>02</span>誰可以用藥</a></li>
+    <li><a href="#c3"><span>03</span>藥物作用在哪裡</a></li>
+    <li><a href="#c4"><span>04</span>台灣核准的 5 種藥</a></li>
+    <li><a href="#c5"><span>05</span>兩大試驗怎麼讀</a></li>
+    <li><a href="#c6"><span>06</span>依共病選藥</a></li>
+    <li><a href="#c7"><span>07</span>門診實戰：劑量與安全</a></li>
+    <li><a href="#c8"><span>08</span>下一代新藥</a></li>
+    <li class="sep">後半｜怎麼不復胖（許芷瑜）</li>
+    <li><a class="b" href="#c9"><span>09</span>營養：減脂不減肌</a></li>
+    <li><a class="b" href="#c10"><span>10</span>停藥後為什麼會回來</a></li>
+    <li><a class="b" href="#c11"><span>11</span>長期維持的選項</a></li>
+    <li><a href="#c12"><span>12</span>帶走六件事</a></li>
+  </ul>
+</div></header>
+
+<!-- 01 CASE -->
+<section class="ch" id="c1" data-name="門診"><div class="wide">
+  <div class="chno">01 · 門診</div>
+  <h2>她想打瘦瘦針</h2>
+  <p class="soft" style="max-width:44em">跟著這位病人走兩次門診：第一次決定要不要用藥、用哪一支；一年後她想停藥。每一幕都有一個決定要做。</p>
+  <div class="visits" id="visits">
+    <button class="on" data-v="0"><b>第一幕</b>能不能用藥</button>
+    <button data-v="1"><b>第一幕</b>選哪一支</button>
+    <button data-v="2"><b>一年後</b>她想停藥</button>
+  </div>
+  <div class="split">
+    <div class="card">
+      <h4 id="cWho">42 歲女性，行政主管</h4>
+      <ul id="cList">
+        <li>身高 160 cm，體重 73.2 kg</li>
+        <li>健檢：空腹血糖 112、HbA1c 6.1%（糖尿病前期）</li>
+        <li>腹部超音波：中度脂肪肝，ALT 52</li>
+        <li>試過飲食控制與運動 6 個月，體重沒什麼變化</li>
+        <li>同事在打猛健樂，想問自己能不能打</li>
+      </ul>
+      <div class="lab" id="cLab"></div>
+    </div>
+    <div>
+      <div class="pane on" data-p="0">
+        <p class="big">她可以開始用藥嗎？</p>
+        <button class="optc" data-ok="0"><b>還不行</b><small>BMI 沒到 30，先繼續生活型態調整</small></button>
+        <button class="optc" data-ok="1"><b>可以</b><small>BMI ≥27 且有體重相關共病</small></button>
+        <button class="optc" data-ok="0"><b>只能考慮減重手術</b><small>生活型態失敗就該轉外科</small></button>
+        <div class="fb" id="fb0"></div>
+      </div>
+      <div class="pane" data-p="1">
+        <p class="big">糖尿病前期＋脂肪肝，先考慮哪一類？</p>
+        <button class="optc" data-ok="0"><b>Orlistat</b><small>最早上市、價格較低</small></button>
+        <button class="optc" data-ok="0"><b>Naltrexone/Bupropion</b><small>口服，不用打針</small></button>
+        <button class="optc" data-ok="1"><b>Semaglutide 或 tirzepatide</b><small>腸泌素類，每週一次注射</small></button>
+        <div class="fb" id="fb1"></div>
+      </div>
+      <div class="pane" data-p="2">
+        <p class="big">「瘦下來了，可以停了吧？」</p>
+        <p class="soft">一年 tirzepatide 10 mg，體重 73.2 → 61.5 kg（−16%），HbA1c 5.6%、ALT 24。藥費一個月不少，她想停。</p>
+        <button class="optc" data-ok="0"><b>可以直接停</b><small>習慣已經養成，體重會維持</small></button>
+        <button class="optc" data-ok="1"><b>先說明停藥後的回升，再一起討論維持方案</b><small>繼續、減量或停藥加強行為支持，各有代價</small></button>
+        <div class="fb" id="fb2"></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 02 WHO -->
+<section class="ch" id="c2" data-name="誰可以用藥"><div class="wide">
+  <div class="chno">02 · 誰可以用藥</div>
+  <h2>台灣 2025 指引的門檻，比仿單低</h2>
+  <span class="src add">補充：台灣肥胖醫學會 2025 指引新聞稿</span><span class="src s1">張皓翔：TFDA 適應症</span>
+  <div class="col" style="padding:0;margin:0;max-width:46em">
+  <p>台灣肥胖醫學會 2025 年發布的成人肥胖臨床實務指引，把 BMI 24–27 的「過重」族群也納入藥物評估：合併腰圍超標或三高等共病，生活型態調整 3–6 個月沒有達標，就可以由醫師評估用藥。BMI ≥27 合併共病，可以直接啟動醫療介入。</p>
+  <p>但 TFDA 核准的仿單，多數寫的是 <b>BMI ≥30，或 ≥27 合併至少一項體重相關共病</b>。兩者之間的落差，就是「指引建議、但屬仿單外」的灰色地帶。</p>
+  </div>
+  <figure><div class="plate">
+    <div class="split">
+      <div>
+        <div class="row"><label>身高 cm</label><input type="number" id="gH" value="160" min="130" max="210"><label style="min-width:auto">體重 kg</label><input type="number" id="gW" value="73.2" min="30" max="250" step="0.1"></div>
+        <div class="row"><label>性別</label><select id="gS"><option value="f">女</option><option value="m">男</option></select><label style="min-width:auto">腰圍 cm</label><input type="number" id="gWc" value="92" min="50" max="200"></div>
+        <div class="checks" id="gCo"></div>
+        <label class="check" style="margin-top:8px" id="gLsL"><input type="checkbox" id="gLs" checked><span>已經做過 3–6 個月生活型態調整，未達標</span></label>
+      </div>
+      <div class="card" id="gOut"></div>
+    </div>
+    <div class="tw"><svg id="bmiRuler" viewBox="0 0 900 150" style="margin-top:14px;min-width:620px" role="img" aria-label="BMI 尺標：指引與仿單門檻"></svg></div>
+  </div>
+  <figcaption><span class="figno">FIG 1</span>輸入身高體重與共病，下方尺標會標出她的位置。<b>金色帶</b>是指引可考慮用藥的範圍，<b>灰框</b>是 TFDA 仿單範圍。健保的減重手術門檻（BMI ≥37.5，或 ≥32.5 合併併發症）也一併標出。指引條文以新聞稿描述整理，原文細節待核對。</figcaption></figure>
+  <div class="callout acc"><h4>BMI <24 不建議用藥</h4><p>嘉義基督教醫院周莒光醫師在指引發布時提醒：BMI 低於 24 的人用減重藥，肌肉流失的風險大於效益。指引同時加入腰圍（男 ≥90、女 ≥80 cm）與體組成，找出 BMI 正常但內臟脂肪高的「泡芙人」，這群人的第一步是生活型態與體組成評估，不是打針。</p></div>
+</div></section>
+
+<!-- 03 MECH -->
+<section class="ch" id="c3" data-name="作用機轉"><div class="wide">
+  <div class="chno">03 · 作用機轉</div>
+  <h2>藥物作用在哪裡</h2>
+  <span class="src s1">張皓翔 p.7、p.28</span><span class="src ad">p.28 Mounjaro 版型</span><span class="src add">補充：下一代藥物</span>
+  <figure><div class="plate">
+    <div class="btns" id="mDrugs"></div>
+    <div class="split">
+      <svg id="body" viewBox="0 0 420 520" role="img" aria-label="減重藥作用器官圖"></svg>
+      <div class="dinfo" id="mInfo"></div>
+    </div>
+  </div>
+  <figcaption><span class="figno">FIG 2</span>點上方藥物，作用器官會亮起；點器官可以看該藥在那裡做什麼。紫色是 2026 年尚未在台灣上市的下一代藥物。依講者 p.7 重繪，GIP 對大腦與脂肪的作用依 p.28 標註為臨床前證據。</figcaption></figure>
+
+  <h3>GIP 和 GLP-1 分工不同</h3>
+  <p style="max-width:46em">Tirzepatide 同時作用在兩個受體。講者 p.28 用四個器官比較兩者，最值得注意的是胰臟：<b>GIP 會增加升糖素，GLP-1 會減少升糖素</b>，兩者在這一點方向相反。</p>
+  <figure><div class="plate">
+    <div class="btns" id="gipBtns"><button class="chip on" data-g="both">兩者一起看</button><button class="chip" data-g="gip">只看 GIP</button><button class="chip" data-g="glp">只看 GLP-1</button></div>
+    <svg id="gipSvg" viewBox="0 0 900 250" role="img" aria-label="GIP 與 GLP-1 各器官作用"></svg>
+  </div>
+  <figcaption><span class="figno">FIG 3</span>↑ 增加、↓ 減少。虛線框為臨床前研究證據（Samms RJ, et al. Trends Endocrinol Metab 2020）。</figcaption></figure>
+</div></section>
+
+<!-- 04 FIVE DRUGS -->
+<section class="ch" id="c4" data-name="台灣核准藥物"><div class="wide">
+  <div class="chno">04 · 台灣核准的 5 種藥</div>
+  <h2>從 orlistat 到 tirzepatide</h2>
+  <span class="src s1">張皓翔 p.8</span>
+  <p style="max-width:46em">在飲食運動輔助療法下，TFDA 核准的體重管理藥物共 5 種。點時間軸上的藥物，看它在美國、歐洲、台灣的核准年份，以及台灣晚了幾年。</p>
+  <figure><div class="plate">
+    <svg id="tlSvg" viewBox="0 0 900 250" role="img" aria-label="減重藥核准時間軸"></svg>
+    <div id="tlInfo" style="margin-top:8px"></div>
+  </div>
+  <figcaption><span class="figno">FIG 4</span>FDA、EMA、TFDA 核准年份依講者 p.8。台灣與美國的時間差從 Contrave 的 8 年，縮短到 semaglutide、tirzepatide 的 2 年。</figcaption></figure>
+  <div class="tw"><table class="t">
+    <thead><tr><th>成分（商品名）</th><th>用法</th><th>TFDA 適應症重點</th></tr></thead>
+    <tbody>
+      <tr><td><b>Orlistat</b>（Xenical）</td><td>口服，每日三次，每次 60 或 120 mg</td><td>成人配合低卡飲食；青少年需先有 6 個月以上生活型態治療失敗</td></tr>
+      <tr><td><b>Naltrexone/Bupropion</b>（Contrave）</td><td>口服，目標每日兩次、每次兩顆 8/90 mg</td><td>BMI ≥30，或 27–30 合併至少一項體重相關共病</td></tr>
+      <tr><td><b>Liraglutide</b>（Saxenda）</td><td>每日皮下注射，0.6 mg 起，每週加 0.6 mg 至 3 mg</td><td>成人肥胖或過重合併共病；≥12 歲青少年肥胖且體重 >60 kg</td></tr>
+      <tr><td><b>Semaglutide</b>（Wegovy）</td><td>每週一次，0.25 mg 起，每 4 週遞增至 2.4 mg</td><td>成人肥胖或過重合併共病（含 OSA、心血管疾病）；≥12 歲青少年</td></tr>
+      <tr><td><b>Tirzepatide</b>（Mounjaro）</td><td>每週一次，2.5 mg 起，每 4 週加 2.5 mg，最高 15 mg</td><td>肥胖或過重合併共病（含糖尿病前期、OSA、心血管疾病）</td></tr>
+    </tbody>
+  </table></div>
+  <p class="soft" style="font-size:14px;max-width:46em">講者 p.7 另列出常見的仿單外使用：metformin、糖尿病劑型的 GLP-1 RA、SGLT2 抑制劑、topiramate、bupropion。國外常用的 phentermine/topiramate 在台灣沒有核准。</p>
+</div></section>
+
+<!-- 05 TRIALS -->
+<section class="ch" id="c5" data-name="試驗"><div class="wide">
+  <div class="chno">05 · 兩大試驗</div>
+  <h2>STEP 1 與 SURMOUNT-1 怎麼讀</h2>
+  <span class="src s1">張皓翔 p.11、p.16、p.33</span><span class="src ad">p.16 Wegovy 版型・p.33 Mounjaro 版型</span>
+
+  <h3>STEP 1：semaglutide 2.4 mg</h3>
+  <figure><div class="plate">
+    <div class="btns"><button class="btn" id="stepPlay">▶ 播放 75 週</button></div>
+    <svg id="stepSvg" viewBox="0 0 900 300" role="img" aria-label="STEP 1 試驗設計"></svg>
+  </div>
+  <figcaption><span class="figno">FIG 5</span>N=1961，2:1 隨機分配。納入：≥18 歲、BMI ≥30 或 ≥27 合併共病、體重穩定 ≥90 天、HbA1c <6.5%。兩組都有生活型態介入（每日約少 500 kcal、每週 ≥150 分鐘活動）。第 16 週完成遞增，第 68 週停藥，第 75 週結束。Wilding JPH, et al. NEJM 2021;384:989–1002。</figcaption></figure>
+
+  <p style="max-width:46em">體重之外，講者用 p.16 列出心血管風險因子的變化。點選指標比較兩組：</p>
+  <figure><div class="plate">
+    <div class="btns" id="secBtns"></div>
+    <svg id="secSvg" viewBox="0 0 900 180" role="img" aria-label="STEP 1 次要指標"></svg>
+    <div id="secNote" class="soft" style="font-size:13.5px"></div>
+  </div>
+  <figcaption><span class="figno">FIG 6</span>腰圍與收縮壓是確認性次要指標；其餘為支持性指標，沒有納入多重檢定。Wegovy 的適應症不包含高血壓、糖尿病或高血脂。</figcaption></figure>
+
+  <h3>SURMOUNT-1：tirzepatide 每 100 個人</h3>
+  <figure><div class="plate">
+    <div class="btns" id="thrBtns"></div>
+    <div id="waffle" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px"></div>
+  </div>
+  <figcaption><span class="figno">FIG 7</span>第 72 週達到各減重門檻的人數比例（efficacy estimand），每格代表 1%。基線平均體重 104.8 kg，不含糖尿病病人。≥25% 為預先指定的探索性指標，沒有做假說檢定。Jastreboff AM, et al. NEJM 2022;387:205–216。</figcaption></figure>
+
+  <div class="twocol">
+    <div class="callout red"><h4>批判性閱讀：兩種「平均減重」</h4>
+      <p style="font-size:14.5px">同一個試驗有兩套數字。<b>Efficacy estimand</b> 假設每個人都持續用藥；<b>treatment-regimen estimand</b> 把中途停藥的人也算進去，比較接近門診實況。</p>
+      <div class="btns" id="estBtns"><button class="chip on" data-e="eff">Efficacy</button><button class="chip" data-e="tr">Treatment-regimen</button></div>
+      <svg id="estSvg" viewBox="0 0 420 160"></svg>
+      <p class="soft" style="font-size:12.5px;margin:0">講者 p.33 的達標率用的是 efficacy estimand。</p>
+    </div>
+    <div class="callout"><h4>心血管結果試驗</h4>
+      <ul style="font-size:14.5px">
+        <li><b>SELECT</b>：semaglutide 2.4 mg 用在有 ASCVD、沒有糖尿病的肥胖者，主要心血管事件減少 20%。</li>
+        <li><b>SURPASS-CVOT</b>：T2D 合併 ASCVD，tirzepatide 對 dulaglutide，MACE HR 0.92（95% CI 0.83–1.01），達不劣性，優效性未達統計顯著。</li>
+        <li><b>SURMOUNT-MMO</b>：tirzepatide 用在沒有糖尿病的肥胖者，結果尚待正式發表（2026-11 查詢時說法不一）。</li>
+      </ul>
+      <p class="soft" style="font-size:12.5px;margin:0">STEP 1 的心率平均上升 3.5 bpm（安慰劑 −0.7）。</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- 06 CKM -->
+<section class="ch" id="c6" data-name="依共病選藥"><div class="wide">
+  <div class="chno">06 · 依共病選藥</div>
+  <h2>病人有什麼病，決定先選哪一支</h2>
+  <span class="src s1">張皓翔：肥胖的藥物治療 by CKM 併發症</span>
+  <p style="max-width:46em">講者引用 J Endocrinol Invest 2025 的建議，把選藥依據從「BMI 多少」換成「合併什麼病」。勾選病人有的共病，下表會整理每個藥在這些共病的建議；最右欄是全部合在一起的結論，只要有一項「避免」就是避免。</p>
+  <figure><div class="plate">
+    <div class="btns" id="ckmBtns"></div>
+    <div class="btns" id="goalBtns"></div>
+    <label class="check" style="display:inline-flex;margin-bottom:10px"><input type="checkbox" id="twOnly"><span>只看台灣有核准體重適應症的藥</span></label>
+    <div class="tw"><table class="mx" id="ckmTbl"></table></div>
+  </div>
+  <figcaption><span class="figno">FIG 8</span><span class="ic g">✓</span> 建議　<span class="ic y">!</span> 注意　<span class="ic r">✕</span> 避免　<span class="ic q">?</span> 缺乏專門資料。照片字小，各格依判讀整理，原文待核對（J Endocrinol Invest 2025;48(12):2761–2798）。Metformin、SGLT2i 用於減重屬仿單外；phentermine/topiramate 台灣未核准。</figcaption></figure>
+  <div class="callout acc"><h4>回到病人</h4><p>糖尿病前期＋脂肪肝：tirzepatide、semaglutide、liraglutide 都在建議欄；目標減重 10–20% 以上的話，剩 tirzepatide 與 semaglutide。Orlistat 在 MASLD 欄是「注意」。</p></div>
+</div></section>
+
+<!-- 07 PRACTICE -->
+<section class="ch" id="c7" data-name="門診實戰"><div class="wide">
+  <div class="chno">07 · 門診實戰</div>
+  <h2>劑量怎麼爬、哪些人要小心</h2>
+  <span class="src s1">張皓翔 p.8、p.26</span><span class="src add">補充：各藥仿單</span>
+  <figure><div class="plate">
+    <div class="btns" id="doseBtns"></div>
+    <label class="check" style="display:inline-flex;margin:0 0 6px"><input type="checkbox" id="doseDelay"><span>腸胃症狀明顯：第 2 次遞增延後 4 週</span></label>
+    <svg id="doseSvg" viewBox="0 0 900 270" role="img" aria-label="劑量遞增時間軸"></svg>
+    <input type="range" id="doseWk" min="0" max="24" value="6" aria-label="週數">
+    <div id="doseNow" style="font-size:14.5px;margin-top:6px"></div>
+  </div>
+  <figcaption><span class="figno">FIG 9</span>拖動滑桿看第幾週該用多少劑量。口服 semaglutide 每階至少 30 天，以 4 週近似。各藥遞增依講者 p.8、p.26；停藥評估規則依各藥仿單。</figcaption></figure>
+
+  <h3>開藥前與追蹤時要問的事</h3>
+  <div class="btns" id="safeBtns"><button class="chip on" data-f="all">全部</button><button class="chip" data-f="glp">腸泌素類</button><button class="chip" data-f="nb">Contrave</button><button class="chip" data-f="orl">Orlistat</button></div>
+  <div class="pits" id="pits">
+    <div class="pit" data-f="glp"><div class="k">禁忌</div><h4>本人或家族有甲狀腺髓質癌、MEN2</h4><p>腸泌素類（liraglutide、semaglutide、tirzepatide）都不可用。</p></div>
+    <div class="pit" data-f="glp nb orl"><div class="k">禁忌</div><h4>懷孕或正在備孕</h4><p>減重藥都不建議在懷孕期間使用。Semaglutide 仿單建議計畫懷孕前至少 2 個月停藥。</p></div>
+    <div class="pit" data-f="glp"><div class="k">交互作用</div><h4>Tirzepatide 與口服避孕藥</h4><p>延緩胃排空可能降低口服避孕藥吸收。仿單建議開始用藥後 4 週，以及每次加量後 4 週，改用非口服方式或加上屏障避孕。</p></div>
+    <div class="pit" data-f="glp"><div class="k">小心</div><h4>胰臟炎、膽囊疾病</h4><p>有胰臟炎病史要評估；持續上腹痛要停藥檢查。快速減重本身也會增加膽結石風險。</p></div>
+    <div class="pit" data-f="glp"><div class="k">小心</div><h4>合併 sulfonylurea 或胰島素</h4><p>低血糖風險增加，開始時考慮降低原本降血糖藥劑量。</p></div>
+    <div class="pit" data-f="glp"><div class="k">小心</div><h4>手術或內視鏡前</h4><p>胃排空延緩，麻醉時有吸入性肺炎疑慮。術前要告知麻醉科，依各院流程決定是否暫停或延長禁食。</p></div>
+    <div class="pit" data-f="glp"><div class="k">追蹤</div><h4>心率、腸胃症狀、情緒</h4><p>STEP 1 心率平均上升 3.5 bpm。噁心、便秘多在遞增期，可延後加量。有情緒變化或自殺意念要評估。</p></div>
+    <div class="pit" data-f="nb"><div class="k">禁忌</div><h4>未控制的高血壓、癲癇、正在用鴉片類</h4><p>Bupropion 會降低癲癇閾值、可能升壓；naltrexone 會拮抗鴉片類止痛。厭食症或暴食症病史也不可用。</p></div>
+    <div class="pit" data-f="nb"><div class="k">警語</div><h4>自殺意念與情緒變化</h4><p>Bupropion 成分有自殺意念的加框警語，尤其年輕族群，要追蹤情緒。</p></div>
+    <div class="pit" data-f="orl"><div class="k">副作用</div><h4>油便、脂溶性維生素</h4><p>約三成膳食脂肪不被吸收，高油飲食時會有油便、便急。長期使用要補充脂溶性維生素（A、D、E、K）。慢性吸收不良、膽汁滯留不可用。</p></div>
+  </div>
+</div></section>
+
+<!-- 08 PIPELINE -->
+<section class="ch" id="c8" data-name="新藥"><div class="wide">
+  <div class="chno">08 · 下一代新藥</div>
+  <h2>更強、更方便，副作用呢？</h2>
+  <span class="src s1">張皓翔 p.72</span><span class="src add">補充：2026 新資料</span>
+  <figure><div class="plate">
+    <div class="btns" id="pipeBtns"><button class="chip on" data-s="loss">依減重排序</button><button class="chip" data-s="gi">依腸胃副作用排序</button><button class="chip" data-s="upd">套用 2026 新資料</button></div>
+    <div class="tw"><svg id="pipeSvg" viewBox="0 0 900 360" style="min-width:600px" role="img" aria-label="新藥減重與腸胃副作用比較"></svg></div>
+    <div id="pipeInfo" class="card" style="margin-top:10px"></div>
+  </div>
+  <figcaption><span class="figno">FIG 10</span>長條是平均減重，右側圓點是腸胃道副作用比例（區間取中點）。點長條看詳細資料。不同試驗的週數、族群與統計方法不同，<b>不能直接橫向比較</b>。</figcaption></figure>
+  <div class="callout"><h4>講者之後的新進展</h4><ul style="font-size:14.5px">
+    <li>口服 semaglutide 25 mg（Wegovy 錠）2025 年 12 月獲 FDA 核准；空腹服用，服藥後 30 分鐘內不可進食、喝飲料或吃其他藥（講者 p.26）。</li>
+    <li>Orforglipron（Foundayo）2026 年 4 月獲 FDA 核准，是口服小分子 GLP-1，服用不受進食限制。</li>
+    <li>Retatrutide 第 3 期 TRIUMPH-1（2026 年 5 月公司公布）：12 mg 80 週減 28.3%（全部受試者計算為 25.0%），尚未有正式論文。</li>
+  </ul></div>
+</div></section>
+
+<!-- PART 2 -->
+<div class="part b2"><div class="col">
+  <div class="k">PART 2 · 許芷瑜</div>
+  <h2>瘦下來之後</h2>
+  <p class="soft">減重藥讓「減」變容易了，「維持」反而成了更大的挑戰。</p>
+</div></div>
+
+<!-- 09 NUTRITION -->
+<section class="ch b2" id="c9" data-name="營養"><div class="wide">
+  <div class="chno">09 · 營養</div>
+  <h2>減脂不減肌</h2>
+  <span class="src s2">許芷瑜：GLP-1 治療期間的營養流程</span><span class="src add">補充：AACE 2025</span>
+  <p style="max-width:46em">用藥期間吃得少，蛋白質、水分和纖維很容易一起不夠。講者的流程圖分成 7 步；照片只拍到其中 5 步，點每一步看內容。</p>
+  <figure><div class="plate">
+    <div class="flow" id="flow"></div>
+    <div class="card" id="flowInfo"></div>
+  </div>
+  <figcaption><span class="figno">FIG 11</span>虛線框（步驟 1、4）照片沒有拍到。</figcaption></figure>
+
+  <div class="twocol">
+    <figure style="margin:0"><div class="plate">
+      <p class="big" style="font-size:21px">每日目標計算</p>
+      <div class="row"><label>身高 cm</label><input type="number" id="nH" value="160"><label style="min-width:auto">體重 kg</label><input type="number" id="nW" value="73.2" step="0.1"></div>
+      <div class="row"><label>蛋白質依</label><select id="nBase"><option value="ibw">理想體重（BMI 22）</option><option value="act">實際體重</option></select></div>
+      <label class="check" style="margin-bottom:10px"><input type="checkbox" id="nCkd"><span>eGFR <30 未洗腎</span></label>
+      <svg id="nSvg" viewBox="0 0 420 210"></svg>
+      <div id="nOut" style="font-size:14px"></div>
+    </div>
+    <figcaption><span class="figno">FIG 12</span>蛋白質 1.2–1.6 g/kg、水分 30–35 mL/kg、纖維 25–35 g、阻力訓練每週 2–3 次，依講者流程圖。肥胖者以理想體重計算蛋白質是一般臨床做法，不是講者投影片的規定。</figcaption></figure>
+    <figure style="margin:0"><div class="plate">
+      <p class="big" style="font-size:21px">病人說：「我現在⋯⋯」</p>
+      <div class="btns" id="giBtns"></div>
+      <div id="giOut"></div>
+    </div>
+    <figcaption><span class="figno">FIG 13</span>依症狀調整飲食，內容依講者流程圖步驟 5。</figcaption></figure>
+  </div>
+  <div class="callout green"><h4>減掉的體重，大約四分之一是瘦體重</h4><p>SURMOUNT-1 的 DXA 子研究中，減掉的體重約 25% 是瘦體重；台灣受試者的資料（ObesityWeek 2025）約 75% 來自脂肪。原本就有肌少症風險的人更要守住蛋白質和阻力訓練。評估與運動處方可以看 <a href="sarcopenia.html">高齡島：肌少症</a>。</p></div>
+</div></section>
+
+<!-- 10 REGAIN -->
+<section class="ch b2" id="c10" data-name="復胖"><div class="wide">
+  <div class="chno">10 · 停藥之後</div>
+  <h2>停藥後，體重為什麼會回來</h2>
+  <span class="src add">補充：停藥試驗與 BMJ 2026 統合分析</span>
+  <p style="max-width:46em">三個試驗都讓病人先用藥、再隨機停藥。點圖例切換試驗，看停藥那條線往哪裡走。</p>
+  <figure><div class="plate">
+    <div class="btns" id="wdBtns"></div>
+    <svg id="wdSvg" viewBox="0 0 900 340" role="img" aria-label="停藥試驗體重變化"></svg>
+    <div id="wdInfo" style="font-size:14.5px"></div>
+  </div>
+  <figcaption><span class="figno">FIG 14</span>只連接論文報告的時間點，中間是示意直線。STEP 4 停藥組第 68 週的總變化依論文數字換算（−10.6% 後再 +6.9%）。SURMOUNT-4：Aronne LJ, et al. JAMA 2024;331:38–48；STEP 4：Rubino D, et al. JAMA 2021;325:1414–1425；STEP 1 延伸：Wilding JPH, et al. Diabetes Obes Metab 2022;24:1553–1564。</figcaption></figure>
+
+  <h3>身體在「追回」體重</h3>
+  <p style="max-width:46em">減重之後，食慾訊號會變強，能量消耗會變少，兩邊加起來形成一個缺口。藥物在的時候把食慾壓住；停藥後，缺口就會讓體重往回走。</p>
+  <figure><div class="plate">
+    <div class="row"><label>已減</label><input type="range" id="egKg" min="1" max="30" value="12" style="max-width:340px"><span class="val" id="egKgV"></span></div>
+    <svg id="egSvg" viewBox="0 0 900 200" role="img" aria-label="減重後的能量缺口"></svg>
+  </div>
+  <figcaption><span class="figno">FIG 15</span>食慾增加約每減 1 kg 每天多 100 kcal（Polidori D, et al. Obesity 2016;24:2289–2295，數學模型估計）。能量消耗下降以每 kg 約 20–25 kcal 粗估，個人差異很大。數字是示意，不是給病人的熱量處方。</figcaption></figure>
+
+  <h3>停藥後多久回到原點</h3>
+  <figure><div class="plate">
+    <div class="split">
+      <div>
+        <div class="row"><label>已減</label><input type="number" id="rgKg" value="11.7" step="0.1" min="1" max="60"> kg</div>
+        <div class="row"><label>停藥後</label><input type="range" id="rgM" min="0" max="36" value="12" style="max-width:260px"><span class="val" id="rgMV"></span></div>
+        <div class="btns" id="rgModel"><button class="chip on" data-m="lin">線性：BMJ 2026</button><button class="chip" data-m="nl">非線性：eClinicalMedicine 2026</button></div>
+        <div id="rgOut" style="font-size:14.5px"></div>
+      </div>
+      <svg id="rgSvg" viewBox="0 0 440 280" role="img" aria-label="停藥後體重回升模擬"></svg>
+    </div>
+  </div>
+  <figcaption><span class="figno">FIG 16</span>線性模型依 BMJ 2026 統合分析（37 篇、9,341 人）：所有減重藥停藥後平均每月回升 0.4 kg，semaglutide／tirzepatide 約 0.8 kg；行為介入結束後回升約慢 0.3 kg／月。非線性模型依 eClinicalMedicine 2026（48 篇）：停藥一年回升約 60%，推估最後停在約 75%。預設值是開場病人（73.2 → 61.5 kg）。</figcaption></figure>
+  <div class="callout red"><h4>判讀限制</h4><p>BMJ 統合分析中只有 8 篇是新一代 GLP-1 藥物，停藥後最長追蹤 12 個月，低偏誤風險的研究不多。停藥試驗多是「直接停」，沒有減量，也常同時停掉生活型態支持。真實世界約一半的人一年內停藥。</p></div>
+</div></section>
+
+<!-- 11 MAINTAIN -->
+<section class="ch b2" id="c11" data-name="維持"><div class="wide">
+  <div class="chno">11 · 長期維持</div>
+  <h2>繼續、減量、還是停？</h2>
+  <span class="src add">補充：試驗、指引與專家共識</span>
+  <p style="max-width:46em">肥胖被視為需要長期管理的慢性、易復發疾病。點選維持方案，看證據強度與代價；下方是不論選哪一種都要做的事。</p>
+  <figure><div class="plate">
+    <div class="opts" id="mOpts"></div>
+    <div class="card" id="mInfo2" style="margin-top:12px"></div>
+  </div>
+  <figcaption><span class="figno">FIG 17</span>星號是證據強度的粗略分級：★★★ 有隨機分派試驗、★★ 有部分研究、★ 以觀察資料或專家意見為主。</figcaption></figure>
+  <h3>不論選哪一種</h3>
+  <div class="stats">
+    <div class="stat"><b>200–300</b><span>分鐘／週身體活動，ACSM 對長期維持的建議</span></div>
+    <div class="stat"><b>2–3</b><span>次／週阻力訓練，保留肌肉</span></div>
+    <div class="stat"><b>1.2–1.6</b><span>g/kg 蛋白質（腎功能正常）</span></div>
+    <div class="stat"><b>≥1 年</b><span>停藥後仍持續追蹤與支持（NICE 品質標準）</span></div>
+    <div class="stat"><b>每週</b><span>自我量體重，及早發現回升</span></div>
+  </div>
+  <div class="callout green"><h4>回到病人：她的維持計畫</h4>
+    <p>和她說明 SURMOUNT-4 的結果後，她決定先降到 5 mg 試三個月，同時每週兩次阻力訓練、每天蛋白質約 75 g（理想體重 56 kg × 1.3）、每週量體重。約定好：如果一個月回升超過 2 kg，就回診討論加回劑量。</p>
+    <p class="soft" style="font-size:13px">降低維持劑量的證據還有限，這是共同決策的結果，不是標準做法。</p></div>
+</div></section>
+
+<!-- 12 TAKEAWAY -->
+<section class="ch" id="c12" data-name="帶走"><div class="wide"><div class="col" style="padding:0;margin:0;max-width:46em">
+  <div class="chno">12 · 帶走</div>
+  <h2>帶走六件事</h2>
+  <ol class="take">
+    <li>台灣 2025 指引：BMI 24–27 合併共病，生活型態 3–6 個月未達標可評估用藥；但多數仿單是 BMI ≥30 或 ≥27＋共病，兩者之間屬仿單外。BMI <24 不建議用藥。</li>
+    <li>TFDA 核准 5 種：orlistat、naltrexone/bupropion、liraglutide、semaglutide、tirzepatide。台灣與美國的核准時間差已縮短到 2 年。</li>
+    <li>選藥看共病：ASCVD、HFpEF、CKD 優先 semaglutide／tirzepatide；naltrexone/bupropion 在這幾種共病是避免。</li>
+    <li>讀試驗先看 estimand：efficacy estimand 只算持續用藥的人，數字會比門診實況好看。</li>
+    <li>用藥期間：蛋白質 1.2–1.6 g/kg、水分 30–35 mL/kg、纖維 25–35 g、阻力訓練每週 2–3 次；腸胃症狀先調飲食、再延後加量。</li>
+    <li>停藥後體重平均每月回升 0.4–0.8 kg，約一年半回到原點。開藥那天就要談維持計畫。</li>
+  </ol>
+  <h3>相關島嶼</h3>
+  <div class="links">
+    <a href="sarcopenia.html"><span>高齡島</span>肌少症 2025 新標準</a>
+    <div><span>代謝體重島 · 製作中</span>減脂保肝（林家揚）</div>
+    <div><span>代謝體重島 · 製作中</span>戒菸後的體重控制（顏啟華）</div>
+    <a href="sleep.html#c8"><span>腦與睡眠島</span>睡眠呼吸中止（杭良文）</a>
+    <div><span>代謝體重島 · 製作中</span>年輕發病的 T2DM（羅仕昌）</div>
+  </div>
+</div></div></section>
+
+<footer><div class="col">
+  <h3 style="color:var(--ink)">參考資料</h3>
+  <ol>
+    <li>張皓翔〈減重藥物最新機轉與門診實戰攻略〉、許芷瑜〈減重後的長期體重維持策略〉，台灣家庭醫學醫學會 115 年度秋季學術研討會（現場投影片照片）</li>
+    <li>台灣肥胖醫學會《2025 台灣成人肥胖臨床實務指引》（依新聞稿：台灣英文新聞、世界日報、健康醫療網 2026）</li>
+    <li>Wilding JPH, et al. Once-weekly semaglutide in adults with overweight or obesity (STEP 1). <i>NEJM</i> 2021;384:989–1002.</li>
+    <li>Jastreboff AM, et al. Tirzepatide once weekly for the treatment of obesity (SURMOUNT-1). <i>NEJM</i> 2022;387:205–216.</li>
+    <li>Samms RJ, et al. How may GIP enhance the therapeutic efficacy of GLP-1? <i>Trends Endocrinol Metab</i> 2020;31(6):410–421.</li>
+    <li>Pharmacological treatment of obesity by CKM complications. <i>J Endocrinol Invest</i> 2025;48(12):2761–2798. doi:10.1007/s40618-025-02700-7</li>
+    <li>Rubino D, et al. Effect of continued weekly semaglutide vs placebo on weight loss maintenance (STEP 4). <i>JAMA</i> 2021;325:1414–1425.</li>
+    <li>Aronne LJ, et al. Continued treatment with tirzepatide for maintenance of weight reduction (SURMOUNT-4). <i>JAMA</i> 2024;331:38–48.</li>
+    <li>Wilding JPH, et al. Weight regain and cardiometabolic effects after withdrawal of semaglutide: the STEP 1 trial extension. <i>Diabetes Obes Metab</i> 2022;24:1553–1564.</li>
+    <li>West S, et al. Weight regain after cessation of medication for weight management: systematic review and meta-analysis. <i>BMJ</i> 2026;392:e085304.</li>
+    <li>Budini B, et al. Trajectory of weight regain after cessation of GLP-1 receptor agonists. <i>eClinicalMedicine</i> 2026;103796.</li>
+    <li>Polidori D, et al. How strongly does appetite counter weight loss? <i>Obesity</i> 2016;24:2289–2295.</li>
+    <li>Nicholls SJ, et al. Cardiovascular outcomes with tirzepatide versus dulaglutide in type 2 diabetes (SURPASS-CVOT). <i>NEJM</i> 2025;393:2409–2420.</li>
+    <li>Lincoff AM, et al. Semaglutide and cardiovascular outcomes in obesity without diabetes (SELECT). <i>NEJM</i> 2023;389:2221–2232.</li>
+    <li>AACE 2025. Nutritional considerations for patients on obesity medications.</li>
+    <li>FDA 核准 orforglipron（Healio 2026-04-01）；Lilly TRIUMPH-1 topline（2026-05-21）</li>
+  </ol>
+  <p style="margin-top:20px">本頁為個人學習整理，不構成個別病人的治療建議。</p>
+</div></footer>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e;}
+const C={acc:'#c9a25a',accl:'#e6c88c',b2:'#7fb26a',b2l:'#a9d496',ink:'#e8efe9',soft:'#9fb9b8',grid:'#1a4350',grid2:'#2a5662',buoy:'#f2b134',red:'#d0715e',redl:'#f0a291',teal:'#5fa8a0',old:'#6f8c92',pur:'#8f86c9',purl:'#c4bdf0'};
+const mono={'font-family':'IBM Plex Mono'};
+
+/* progress */
+const secs=$$('section.ch');
+addEventListener('scroll',()=>{const h=document.documentElement;$('#progbar').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  let cur='代謝體重島';secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s.querySelector('.chno').textContent;});$('#chapnav').textContent=cur;},{passive:true});
+
+/* ===== 01 CASE ===== */
+const LAB=[
+  [['BMI','28.6','bad'],['腰圍','92 cm','bad'],['HbA1c','6.1%','bad'],['ALT','52','bad']],
+  [['BMI','28.6','bad'],['腰圍','92 cm','bad'],['HbA1c','6.1%','bad'],['ALT','52','bad']],
+  [['BMI','24.0',''],['腰圍','79 cm','good'],['HbA1c','5.6%','good'],['ALT','24','good']]
+];
+const FB=[
+  ['<b>可以。</b>BMI 28.6 ≥27，合併糖尿病前期與脂肪肝，符合 TFDA 仿單，也符合台灣 2025 指引「BMI ≥27 合併共病可直接啟動醫療介入」。她也已經做過 6 個月生活型態調整。','BMI 不是只看 30。BMI ≥27 合併至少一項體重相關共病，就符合仿單與指引。'],
+  ['<b>腸泌素類。</b>糖尿病前期與 MASLD 在 CKM 選藥表都建議 semaglutide 或 tirzepatide，減重幅度也最大（10–20% 以上）。Orlistat 在 MASLD 是「注意」，Contrave 減重幅度約 5–10%。','可以，但不是首選。看第 6 章的依共病選藥表。'],
+  ['<b>這是最關鍵的一次對話。</b>SURMOUNT-4 中，tirzepatide 36 週後改打安慰劑的人，一年內體重回升 14%；繼續用藥的人再多減 5.5%。停或不停都可以，但要先講清楚代價，並把維持計畫排好。後半（第 9–11 章）就是在談這件事。','停藥試驗顯示，大部分人停藥一年內會回升三分之二左右的體重。']
+];
+function setV(v){
+  $$('#visits button').forEach(b=>b.classList.toggle('on',+b.dataset.v===v));
+  $$('.pane').forEach(p=>p.classList.toggle('on',+p.dataset.p===v));
+  $('#cLab').innerHTML=LAB[v].map(x=>'<div><span>'+x[0]+'</span><b class="'+x[2]+'">'+x[1]+'</b></div>').join('');
+  $('#cWho').textContent=v===2?'同一位病人，一年後':'42 歲女性，行政主管';
+  $('#cList').innerHTML=v===2?'<li>tirzepatide 10 mg 用了一年</li><li>體重 73.2 → 61.5 kg（−16%）</li><li>脂肪肝改善，血糖回到正常範圍</li><li>考慮藥費，想停藥</li>':'<li>身高 160 cm，體重 73.2 kg</li><li>健檢：空腹血糖 112、HbA1c 6.1%（糖尿病前期）</li><li>腹部超音波：中度脂肪肝，ALT 52</li><li>試過飲食控制與運動 6 個月，體重沒什麼變化</li><li>同事在打猛健樂，想問自己能不能打</li>';
+}
+$$('#visits button').forEach(b=>b.addEventListener('click',()=>setV(+b.dataset.v)));
+$$('.pane').forEach((p,i)=>{p.querySelectorAll('.optc').forEach(o=>o.addEventListener('click',()=>{
+  p.querySelectorAll('.optc').forEach(x=>x.classList.remove('right','wrong'));
+  const ok=o.dataset.ok==='1';o.classList.add(ok?'right':'wrong');
+  const f=$('#fb'+i);f.classList.add('show');f.innerHTML=ok?FB[i][0]+(i<2?'<p style="margin:8px 0 0"><a href="#" data-next="'+(i+1)+'">下一步 →</a></p>':''):FB[i][1];
+  const nx=f.querySelector('[data-next]');if(nx)nx.addEventListener('click',e=>{e.preventDefault();setV(+nx.dataset.next);});
+}));});
+setV(0);
+
+/* ===== 02 GUIDELINE ===== */
+const CO=['高血壓','糖尿病前期／T2D','血脂異常','睡眠呼吸中止','心血管疾病','脂肪肝 MASLD','退化性關節炎','多囊性卵巢'];
+$('#gCo').innerHTML=CO.map((c,i)=>'<label class="check'+(i===1||i===5?' on':'')+'"><input type="checkbox" value="'+i+'"'+(i===1||i===5?' checked':'')+'><span>'+c+'</span></label>').join('');
+function guide(){
+  const h=parseFloat($('#gH').value)/100,w=parseFloat($('#gW').value),wc=parseFloat($('#gWc').value),sex=$('#gS').value;
+  $$('#gCo .check').forEach(c=>c.classList.toggle('on',c.querySelector('input').checked));
+  $('#gLsL').classList.toggle('on',$('#gLs').checked);
+  if(!(h>1.2&&h<2.2&&w>25&&w<300)){$('#gOut').innerHTML='<p class="soft">請輸入合理的身高與體重。</p>';return;}
+  const bmi=w/h/h;const nco=$$('#gCo input').filter(i=>i.checked).length;const waistHi=wc>=(sex==='m'?90:80);const ls=$('#gLs').checked;
+  let title,col,body='',label;
+  label=(bmi>=30||(bmi>=27&&nco>0));
+  if(bmi<24){title='不建議用藥';col=C.old;body=waistHi?'BMI 正常但腰圍超標，屬「泡芙人」：先做體組成評估與生活型態調整，藥物風險大於效益。':'BMI 在健康範圍，維持生活型態即可。';}
+  else if(bmi<27){
+    if((waistHi||nco>0)&&ls){title='可評估用藥（指引）';col=C.acc;body='BMI 24–27 合併'+(waistHi?'腰圍超標':'')+(waistHi&&nco?'、':'')+(nco?nco+' 項共病':'')+'，且生活型態 3–6 個月未達標，符合 2025 指引的用藥評估條件。';}
+    else if(waistHi||nco>0){title='先做 3–6 個月生活型態';col=C.teal;body='BMI 24–27 合併風險因子，指引建議先調整生活型態 3–6 個月，未達標再評估用藥。';}
+    else{title='過重：生活型態調整';col=C.teal;body='BMI 24–27、沒有腰圍超標或共病，先從飲食與運動開始。';}
+  } else if(bmi<30&&nco===0){title=ls?'可考慮用藥（指引）':'先做生活型態';col=ls?C.acc:C.teal;body='BMI 27–30 但沒有勾選共病。'+(ls?'指引可評估用藥；仿單需合併共病或 BMI ≥30。':'先做 3–6 個月生活型態調整。');}
+  else {title='可以開始用藥';col=C.b2;body='BMI '+(bmi>=30?'≥30':'≥27 合併共病')+'，符合指引直接啟動醫療介入，也在仿單範圍內。';}
+  let surg='';if(bmi>=37.5||(bmi>=32.5&&nco>0))surg='<p style="margin:8px 0 0;font-size:13.5px"><span class="pill p">手術</span>符合健保減重手術轉介門檻（BMI ≥37.5，或 ≥32.5 合併併發症），可一併討論。</p>';
+  $('#gOut').innerHTML='<div class="mono soft" style="font-size:12px">BMI</div><div class="mono" style="font-size:34px;line-height:1.1;color:'+C.buoy+'">'+bmi.toFixed(1)+'</div><p class="big" style="color:'+col+';margin-top:8px">'+title+'</p><p style="font-size:14px;margin:0">'+body+'</p>'+
+    (bmi>=24?'<p style="margin:8px 0 0;font-size:13.5px">'+(label?'<span class="pill g">仿單內</span>':'<span class="pill y">仿單外</span>')+(label?'BMI ≥30 或 ≥27＋共病':'多數減重藥仿單要求 BMI ≥30 或 ≥27＋共病')+'</p>':'')+
+    (waistHi?'<p style="margin:6px 0 0;font-size:13.5px"><span class="pill r">腰圍</span>'+wc+' cm，超過'+(sex==='m'?'男性 90':'女性 80')+' cm</p>':'')+surg;
+  drawRuler(bmi,nco>0||waistHi);
+}
+function drawRuler(bmi,risk){
+  const s=$('#bmiRuler');s.innerHTML='';const x0=40,x1=860,lo=18,hi=42;const X=v=>x0+(Math.min(Math.max(v,lo),hi)-lo)/(hi-lo)*(x1-x0);
+  [[18,24,'#123a44','健康'],[24,27,'#1f4a50','過重'],[27,hi,'#2a4f4b','肥胖']].forEach(z=>{el('rect',{x:X(z[0]),y:60,width:X(z[1])-X(z[0]),height:26,fill:z[2]},s);el('text',{x:(X(z[0])+X(z[1]))/2,y:78,'text-anchor':'middle',fill:C.soft,'font-size':12.5},s,z[3]);});
+  el('rect',{x:X(risk?24:27),y:52,width:X(hi)-X(risk?24:27),height:6,fill:C.acc,rx:2},s);
+  el('text',{x:X(risk?24:27)+2,y:46,fill:C.accl,'font-size':12},s,'指引：可評估用藥'+(risk?'（BMI 24 起，需風險因子＋3–6 個月）':''));
+  el('rect',{x:X(27),y:90,width:X(hi)-X(27),height:6,fill:'none',stroke:C.soft,'stroke-dasharray':'3 3'},s);
+  el('text',{x:X(27)+2,y:110,fill:C.soft,'font-size':12},s,'仿單：≥27＋共病，或 ≥30');
+  el('line',{x1:X(32.5),x2:X(32.5),y1:56,y2:120,stroke:C.purl,'stroke-dasharray':'2 3'},s);el('text',{x:X(32.5)+4,y:128,fill:C.purl,'font-size':11.5},s,'32.5＋併發症');
+  el('line',{x1:X(37.5),x2:X(37.5),y1:56,y2:120,stroke:C.purl,'stroke-dasharray':'2 3'},s);el('text',{x:X(37.5)+4,y:128,fill:C.purl,'font-size':11.5},s,'37.5 健保手術');
+  [18,24,27,30,35,40].forEach(v=>el('text',{x:X(v),y:144,'text-anchor':'middle',fill:C.soft,'font-size':11.5,...mono},s,v));
+  el('line',{x1:X(30),x2:X(30),y1:86,y2:96,stroke:C.soft},s);
+  const g=el('g',{},s);el('polygon',{points:(X(bmi)-8)+',14 '+(X(bmi)+8)+',14 '+X(bmi)+',28',fill:C.buoy},g);el('line',{x1:X(bmi),x2:X(bmi),y1:28,y2:90,stroke:C.buoy,'stroke-width':2},g);
+  el('text',{x:X(bmi),y:10,'text-anchor':'middle',fill:C.buoy,'font-size':12,...mono},g,bmi.toFixed(1));
+}
+['#gH','#gW','#gWc','#gS','#gLs'].forEach(id=>$(id).addEventListener('input',guide));$('#gCo').addEventListener('change',guide);guide();
+
+/* ===== 03 BODY MAP ===== */
+const ORG={
+  brain:{nm:'大腦',lx:300,ly:58},stomach:{nm:'胃',lx:330,ly:250},liver:{nm:'肝臟',lx:66,ly:236},pancreas:{nm:'胰臟',lx:330,ly:300},fat:{nm:'皮下脂肪',lx:52,ly:350},gut:{nm:'腸道',lx:330,ly:390}
+};
+const MD={
+  nb:{nm:'Naltrexone/Bupropion',tag:'Contrave・口服',c:'lit',o:{brain:'Bupropion 讓多巴胺與正腎上腺素增加，抑制食慾；naltrexone 抑制 μ 型鴉片類受體，降低飢餓感與進食的獎賞感。'},note:'作用全在中樞，也是它在情緒性進食欄被建議的原因。'},
+  glp:{nm:'Liraglutide／Semaglutide',tag:'GLP-1 RA',c:'lit',o:{brain:'GLP-1 RA 在腦部抑制食慾、增加飽足感。',stomach:'延緩胃排空，吃一點就飽；也是噁心、早飽的來源。',pancreas:'葡萄糖依賴地增加胰島素、減少升糖素。'},note:'Liraglutide 每天打，semaglutide 每週打；口服 semaglutide 25 mg 2025 年在美國核准。'},
+  tz:{nm:'Tirzepatide',tag:'GIP／GLP-1 雙重促效',c:'lit',o:{brain:'GIP／GLP-1 共同抑制食慾（GIP 的中樞作用為臨床前證據）。',stomach:'延緩胃排空（GLP-1）。',pancreas:'增加胰島素分泌；升糖素方面 GIP 增加、GLP-1 減少。',fat:'講者 p.7：增加脂肪分解。p.28：GIP 增加胰島素敏感性、脂質緩衝與儲存能力（臨床前）。'},note:'比單純 GLP-1 多了脂肪組織這個作用點。'},
+  orl:{nm:'Orlistat',tag:'脂肪酶抑制劑',c:'lit',o:{gut:'在腸道抑制胃與胰臟的脂肪酶，約三成膳食脂肪不被吸收，直接排出。'},note:'唯一不作用在大腦的減重藥，所以不影響食慾；油便是作用本身的結果。'},
+  reta:{nm:'Retatrutide',tag:'未上市・GIP／GLP-1／glucagon',c:'lit2',o:{brain:'GIP／GLP-1 抑制食慾。',pancreas:'GIP／GLP-1 增加胰島素。',liver:'Glucagon 受體：促進肝臟脂肪代謝。',fat:'Glucagon 增加能量消耗，可能是減重幅度更大的原因。'},note:'第 3 期 TRIUMPH-1：80 週減 28.3%。'},
+  cagri:{nm:'CagriSema',tag:'未上市・amylin＋GLP-1',c:'lit2',o:{brain:'Cagrilintide（amylin 類似物）作用在後腦區增加飽足感，加上 semaglutide 的 GLP-1 作用。',stomach:'延緩胃排空。'},note:'REDEFINE 1：68 週減 20.4%。'}
+};
+(function(){const s=$('#body');
+  el('path',{d:'M210 20 C178 20 160 44 160 72 C160 98 176 116 192 122 L190 140 C150 146 112 158 100 190 L86 300 C82 340 92 420 112 500 L308 500 C328 420 338 340 334 300 L320 190 C308 158 270 146 230 140 L228 122 C244 116 260 98 260 72 C260 44 242 20 210 20 Z',fill:'#0b2e37',stroke:C.grid2,'stroke-width':1.2},s);
+  const shapes={
+    brain:'<ellipse class="shape" cx="210" cy="64" rx="38" ry="28"/><path d="M190 56 q10 -10 20 0 q10 10 20 0 M186 72 q12 -8 24 0 q12 8 24 0" stroke="#2a5662" fill="none"/>',
+    liver:'<path class="shape" d="M128 214 C150 198 206 200 222 214 C214 240 186 256 150 256 C132 252 122 232 128 214Z"/>',
+    stomach:'<path class="shape" d="M228 206 C250 198 278 210 280 236 C282 262 262 278 240 276 C228 274 222 262 232 254 C246 246 244 230 228 226Z"/>',
+    pancreas:'<path class="shape" d="M166 292 C190 280 236 282 272 292 C268 304 236 306 206 304 C186 304 172 302 166 292Z"/>',
+    fat:'<path class="shape" d="M104 318 C98 360 104 400 118 432 L134 426 C122 396 118 360 122 322Z M316 318 C322 360 316 400 302 432 L286 426 C298 396 302 360 298 322Z"/>',
+    gut:'<path class="shape" d="M150 330 C170 318 250 318 270 330 C282 360 278 400 262 420 C230 436 190 436 158 420 C142 400 138 360 150 330Z"/><path d="M168 350 q20 14 40 0 q20 -14 40 0 M168 380 q20 14 40 0 q20 -14 40 0 M172 406 q18 10 36 0 q18 -10 36 0" stroke="#2a5662" fill="none"/>'
+  };
+  const anchor={brain:[248,64],stomach:[280,240],liver:[128,230],pancreas:[272,296],fat:[106,350],gut:[272,390]};
+  for(const k in ORG){const g=el('g',{class:'org','data-o':k,tabindex:0,role:'button'},s);g.innerHTML=shapes[k];
+    const o=ORG[k];el('line',{x1:anchor[k][0],y1:anchor[k][1],x2:o.lx+(o.lx>210?-6:40),y2:o.ly-4,stroke:C.grid2,'stroke-dasharray':'2 3'},g);
+    el('text',{x:o.lx,y:o.ly,'text-anchor':o.lx>210?'start':'start'},g,o.nm);
+    g.addEventListener('click',()=>selOrg(k));g.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();selOrg(k);}});}
+})();
+$('#mDrugs').innerHTML=Object.keys(MD).map(k=>'<button class="chip" data-d="'+k+'" style="'+(MD[k].c==='lit2'?'border-style:dashed':'')+'">'+MD[k].nm+'</button>').join('');
+let curMD='tz',curOrg=null;
+function selDrug(d){curMD=d;curOrg=null;$$('#mDrugs .chip').forEach(c=>c.classList.toggle('on',c.dataset.d===d));
+  $$('.org').forEach(g=>{g.classList.remove('lit','lit2','sel');if(MD[d].o[g.dataset.o])g.classList.add(MD[d].c);});
+  const m=MD[d];$('#mInfo').innerHTML='<div class="mono soft" style="font-size:11.5px">'+m.tag+'</div><h4>'+m.nm+'</h4><dl>'+Object.keys(m.o).map(k=>'<dt>'+ORG[k].nm+'</dt><dd>'+m.o[k]+'</dd>').join('')+'</dl><p class="soft" style="font-size:13.5px;margin:10px 0 0">'+m.note+'</p>';}
+function selOrg(k){curOrg=k;$$('.org').forEach(g=>g.classList.toggle('sel',g.dataset.o===k));
+  const users=Object.keys(MD).filter(d=>MD[d].o[k]);
+  $('#mInfo').innerHTML='<div class="mono soft" style="font-size:11.5px">器官</div><h4>'+ORG[k].nm+'</h4>'+(users.length?'<dl>'+users.map(d=>'<dt style="'+(MD[d].c==='lit2'?'color:#c4bdf0':'')+'">'+MD[d].nm.split('／')[0].split('/')[0]+'</dt><dd>'+MD[d].o[k]+'</dd>').join('')+'</dl>':'<p class="soft">沒有藥物作用在這裡。</p>')+'<p class="soft" style="font-size:13px;margin:10px 0 0">再點一次上方藥物回到藥物檢視。</p>';}
+$$('#mDrugs .chip').forEach(c=>c.addEventListener('click',()=>selDrug(c.dataset.d)));selDrug('tz');
+
+/* GIP vs GLP */
+const GG=[
+  ['大腦',[['↓','減少食物攝取',1]],[['↓','減少食物攝取'],['↑','增加飽足感']]],
+  ['皮下白色脂肪',[['↑','胰島素敏感性',1],['↑','脂質緩衝能力',1],['↑','儲存容量',1]],[]],
+  ['胰臟',[['↑','胰島素分泌'],['↑','升糖素分泌']],[['↑','胰島素分泌'],['↓','升糖素分泌']]],
+  ['胃',[],[['↓','延緩胃排空']]]
+];
+function drawGG(mode){const s=$('#gipSvg');s.innerHTML='';
+  GG.forEach((o,i)=>{const x=12+i*222,w=210;el('rect',{x:x,y:8,width:w,height:234,rx:6,fill:'#0b2e37',stroke:C.grid},s);el('text',{x:x+w/2,y:34,'text-anchor':'middle',fill:C.ink,'font-size':16,'font-family':'LXGW WenKai TC'},s,o[0]);
+    let y=60;const blk=(arr,lab,col)=>{if(!arr.length)return;el('text',{x:x+12,y:y,fill:col,'font-size':12,...mono},s,lab);y+=8;arr.forEach(r=>{const g=el('g',{},s);
+      el('rect',{x:x+10,y:y,width:w-20,height:28,rx:4,fill:col===C.redl?'rgba(208,113,94,.12)':'rgba(95,168,160,.14)',stroke:r[2]?col:'none','stroke-dasharray':r[2]?'3 3':''},g);
+      const anti=o[0]==='胰臟'&&r[1]==='升糖素分泌'&&mode==='both';
+      el('text',{x:x+22,y:y+19,fill:anti?C.buoy:col,'font-size':16,'font-weight':700},g,r[0]);el('text',{x:x+42,y:y+19,fill:C.ink,'font-size':13.5},g,r[1]);y+=34;});y+=10;};
+    if(mode!=='glp')blk(o[1],'GIP',C.redl);if(mode!=='gip')blk(o[2],'GLP-1',C.teal);
+    if(y===60)el('text',{x:x+w/2,y:130,'text-anchor':'middle',fill:C.old,'font-size':13},s,'（此處無作用）');
+  });
+  if(mode==='both')el('text',{x:12+2*222+105,y:238,'text-anchor':'middle',fill:C.buoy,'font-size':11.5},s,'升糖素：方向相反');
+}
+$$('#gipBtns .chip').forEach(b=>b.addEventListener('click',()=>{$$('#gipBtns .chip').forEach(x=>x.classList.toggle('on',x===b));drawGG(b.dataset.g);}));drawGG('both');
+
+/* ===== 04 TIMELINE ===== */
+const TL=[['Orlistat',1999,1998,2000,'#8f86c9'],['Contrave',2014,2015,2022,'#d0715e'],['Liraglutide',2014,2015,2020,'#5fa8a0'],['Semaglutide',2021,2022,2023,'#7fb26a'],['Tirzepatide',2023,2022,2025,'#c9a25a']];
+let tlSel=4;
+function drawTL(){const s=$('#tlSvg');s.innerHTML='';const x0=110,x1=870,lo=1997,hi=2026;const X=y=>x0+(y-lo)/(hi-lo)*(x1-x0);
+  ['FDA','EMA','TFDA'].forEach((r,i)=>{const y=50+i*62;el('line',{x1:x0,x2:x1,y1:y,y2:y,stroke:C.grid2},s);el('text',{x:x0-16,y:y+5,'text-anchor':'end',fill:i===2?C.accl:C.soft,'font-size':14,...mono},s,r);});
+  for(let y=2000;y<=2025;y+=5){el('text',{x:X(y),y:226,'text-anchor':'middle',fill:C.soft,'font-size':11.5,...mono},s,y);el('line',{x1:X(y),x2:X(y),y1:30,y2:200,stroke:C.grid,'stroke-dasharray':'2 4'},s);}
+  TL.forEach((d,i)=>{const on=i===tlSel;const g=el('g',{style:'cursor:pointer',opacity:on?1:.45},s);
+    if(on){el('line',{x1:X(d[1]),x2:X(d[3]),y1:50,y2:174,stroke:d[4],'stroke-width':1.5,'stroke-dasharray':'4 3'},g);el('line',{x1:X(d[1]),x2:X(d[3]),y1:186,y2:186,stroke:d[4],'stroke-width':2},g);el('text',{x:(X(d[1])+X(d[3]))/2,y:204,'text-anchor':'middle',fill:d[4],'font-size':12.5},g,'台灣晚 '+(d[3]-d[1])+' 年');}
+    [d[1],d[2],d[3]].forEach((yr,j)=>{const off=(i%2?6:-6)*(on?0:1);el('circle',{cx:X(yr),cy:50+j*62+off,r:on?9:6,fill:d[4],stroke:on?'#fff':'none','stroke-width':1.5},g);if(on)el('text',{x:X(yr),y:50+j*62-15,'text-anchor':'middle',fill:C.ink,'font-size':12,...mono},g,yr);});
+    g.addEventListener('click',()=>{tlSel=i;drawTL();});
+  });
+  const b=$('#tlInfo');b.innerHTML=TL.map((d,i)=>'<button class="chip'+(i===tlSel?' on':'')+'" data-i="'+i+'" style="border-color:'+(i===tlSel?d[4]:'')+'"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+d[4]+';margin-right:6px"></span>'+d[0]+'</button>').join(' ');
+  $$('#tlInfo .chip').forEach(c=>c.addEventListener('click',()=>{tlSel=+c.dataset.i;drawTL();}));
+}
+drawTL();
+
+/* ===== 05 STEP 1 ===== */
+(function(){const s=$('#stepSvg');const x0=90,x1=860;const X=w=>x0+w/75*(x1-x0);
+  const Yd=d=>200-d/2.4*120;
+  el('line',{x1:x0,x2:x1,y1:250,y2:250,stroke:C.soft,'stroke-dasharray':'4 4'},s);
+  [[0,'第 0 週','隨機分配 2:1'],[16,'第 16 週','遞增完成'],[68,'第 68 週','停藥'],[75,'第 75 週','試驗結束']].forEach(t=>{el('line',{x1:X(t[0]),x2:X(t[0]),y1:244,y2:256,stroke:C.soft},s);el('text',{x:X(t[0]),y:272,'text-anchor':'middle',fill:C.ink,'font-size':12.5},s,t[1]);el('text',{x:X(t[0]),y:290,'text-anchor':'middle',fill:C.soft,'font-size':11.5},s,t[2]);});
+  const steps=[[0,.25],[4,.5],[8,1],[12,1.7],[16,2.4]];
+  let pts='';steps.forEach((p,i)=>{const nx=i<4?steps[i+1][0]:16;pts+=X(p[0])+','+Yd(p[1])+' '+X(nx)+','+Yd(p[1])+' ';if(i<4)el('text',{x:X(p[0])+4,y:Yd(p[1])+16,fill:C.accl,'font-size':11.5,...mono},s,p[1]+' mg');});
+  el('polyline',{points:pts,fill:'none',stroke:C.acc,'stroke-width':2.5},s);
+  el('rect',{x:X(16),y:Yd(2.4)-14,width:X(68)-X(16),height:28,rx:3,fill:'rgba(201,162,90,.35)',stroke:C.acc},s);
+  el('text',{x:X(20),y:Yd(2.4)+5,fill:C.ink,'font-size':14},s,'Semaglutide 2.4 mg 每週皮下注射（n≈1306）');
+  el('rect',{x:X(68),y:Yd(2.4)-14,width:X(75)-X(68),height:28,rx:3,fill:'none',stroke:C.soft,'stroke-dasharray':'3 3'},s);el('text',{x:(X(68)+X(75))/2,y:Yd(2.4)+5,'text-anchor':'middle',fill:C.soft,'font-size':11.5},s,'停藥追蹤');
+  el('rect',{x:X(16),y:206,width:X(68)-X(16),height:24,rx:3,fill:'rgba(111,140,146,.3)',stroke:C.old},s);el('text',{x:X(20),y:223,fill:C.soft,'font-size':13},s,'安慰劑（n≈655，同樣遞增）');
+  el('text',{x:X(8),y:30,'text-anchor':'middle',fill:C.soft,'font-size':12},s,'每 4 週升一階');
+  el('text',{x:x0-12,y:Yd(2.4)+4,'text-anchor':'end',fill:C.soft,'font-size':11,...mono},s,'2.4');el('text',{x:x0-12,y:Yd(0.25)+4,'text-anchor':'end',fill:C.soft,'font-size':11,...mono},s,'0.25');
+  const mk=el('g',{opacity:0},s);el('line',{x1:0,x2:0,y1:40,y2:250,stroke:C.buoy,'stroke-width':1.5},mk);const mt=el('text',{x:6,y:52,fill:C.buoy,'font-size':12.5,...mono},mk,'');
+  let raf=null;$('#stepPlay').addEventListener('click',()=>{cancelAnimationFrame(raf);const t0=performance.now();mk.setAttribute('opacity',1);
+    const tick=t=>{const w=Math.min(75,(t-t0)/80);mk.setAttribute('transform','translate('+X(w)+',0)');const d=w<16?steps.filter(p=>p[0]<=w).pop()[1]:(w<68?2.4:0);
+      mt.textContent='第 '+Math.floor(w)+' 週 · '+(d?d+' mg':'停藥');if(w<75)raf=requestAnimationFrame(tick);};raf=requestAnimationFrame(tick);});
+})();
+const SEC=[['腰圍','cm',-13.5,-4.1,'確認性指標'],['收縮壓','mmHg',-6.2,-1.1,'確認性指標'],['舒張壓','mmHg',-2.8,-0.4,''],['HbA1c','%',-0.45,-0.15,''],['hsCRP','%',-53,-15,''],['脂肪量','kg',-8.4,-1.4,'Wegovy 減 20%、安慰劑減 3.3%'],['三酸甘油酯','%',-22,-7,''],['LDL','%',-3,1,''],['HDL','%',5,1,''],['心率','bpm',3.5,-0.7,'安全性指標：上升']];
+$('#secBtns').innerHTML=SEC.map((d,i)=>'<button class="chip'+(i===0?' on':'')+'" data-i="'+i+'">'+d[0]+'</button>').join('');
+function drawSec(i){const d=SEC[i],s=$('#secSvg');s.innerHTML='';const mx=Math.max(Math.abs(d[2]),Math.abs(d[3]))*1.25,cx=450,W=330;const X=v=>cx+v/mx*W;
+  el('line',{x1:cx,x2:cx,y1:10,y2:150,stroke:C.soft},s);el('text',{x:cx,y:172,'text-anchor':'middle',fill:C.soft,'font-size':12,...mono},s,'0');
+  [['Wegovy',d[2],C.acc],['安慰劑',d[3],C.old]].forEach((r,j)=>{const y=30+j*62;el('text',{x:r[1]<0?cx+12:cx-12,y:y+24,'text-anchor':r[1]<0?'start':'end',fill:C.soft,'font-size':13},s,r[0]);
+    const bar=el('rect',{x:cx,y:y,width:0,height:36,rx:3,fill:r[2]},s);
+    const tx=el('text',{x:X(r[1])+(r[1]<0?-8:8),y:y+24,'text-anchor':r[1]<0?'end':'start',fill:j?'#b5c6c8':C.accl,'font-size':15,...mono},s,(r[1]>0?'+':r[1]<0?'−':'')+Math.abs(r[1])+' '+d[1]);
+    requestAnimationFrame(()=>{bar.style.transition='all .6s';bar.setAttribute('x',Math.min(cx,X(r[1])));bar.setAttribute('width',Math.abs(X(r[1])-cx));});});
+  $('#secNote').textContent=d[4];
+  $$('#secBtns .chip').forEach(c=>c.classList.toggle('on',+c.dataset.i===i));}
+$$('#secBtns .chip').forEach(c=>c.addEventListener('click',()=>drawSec(+c.dataset.i)));drawSec(0);
+
+/* waffle */
+const SM={5:[89.4,96.2,96.3,27.9],10:[73.4,85.9,90.1,13.5],15:[50.2,73.6,78.2,6.0],20:[31.6,55.5,62.9,1.3],25:[16.5,35.0,39.7,0.3]};
+const SMG=[['5 mg','#6f5a9a'],['10 mg','#b05aa0'],['15 mg','#c9a25a'],['安慰劑','#6f8c92']];
+$('#thrBtns').innerHTML='<span class="soft" style="font-size:13.5px;align-self:center">減重至少</span>'+[5,10,15,20,25].map(t=>'<button class="chip'+(t===20?' on':'')+'" data-t="'+t+'">≥'+t+'%</button>').join('');
+function drawWaffle(t){$('#waffle').innerHTML=SMG.map((g,i)=>{const v=SM[t][i],n=Math.round(v);let cells='';for(let k=0;k<100;k++)cells+='<i style="display:block;aspect-ratio:1;border-radius:2px;background:'+(k<n?g[1]:'#12343c')+';transition:background .4s '+(k*4)+'ms"></i>';
+  return '<div><div style="display:grid;grid-template-columns:repeat(10,1fr);gap:2px">'+cells+'</div><div style="text-align:center;margin-top:6px"><div class="mono" style="font-size:22px;color:'+(i===3?'#b5c6c8':C.ink)+'">'+v+'%</div><div class="soft" style="font-size:12.5px">'+g[0]+'</div></div></div>';}).join('');
+  $$('#thrBtns .chip').forEach(c=>c.classList.toggle('on',+c.dataset.t===t));}
+$$('#thrBtns .chip').forEach(c=>c.addEventListener('click',()=>drawWaffle(+c.dataset.t)));drawWaffle(20);
+const EST={eff:[16.0,21.4,22.5,2.4],tr:[15.0,19.5,20.9,3.1]};
+function drawEst(k){const s=$('#estSvg');s.innerHTML='';const x0=70,W=320;
+  SMG.forEach((g,i)=>{const y=12+i*36,v=EST[k][i];el('text',{x:x0-8,y:y+18,'text-anchor':'end',fill:C.soft,'font-size':12.5},s,g[0]);
+    el('rect',{x:x0,y:y,width:v/25*W,height:24,rx:3,fill:g[1]},s);el('text',{x:x0+v/25*W+6,y:y+17,fill:C.ink,'font-size':13,...mono},s,'−'+v.toFixed(1)+'%');});
+  $$('#estBtns .chip').forEach(c=>c.classList.toggle('on',c.dataset.e===k));}
+$$('#estBtns .chip').forEach(c=>c.addEventListener('click',()=>drawEst(c.dataset.e)));drawEst('eff');
+
+/* ===== 06 CKM ===== */
+const DRG=[['tz','Tirzepatide 15',1],['se','Semaglutide 2.4',1],['li','Liraglutide 3.0',1],['nb','Naltrexone/Bupropion',1],['or','Orlistat',1],['pt','Phentermine/Topiramate',0,'台灣未核准'],['mf','Metformin',0,'仿單外'],['sg','SGLT2i',0,'仿單外'],['su','減重手術',0,'']];
+const CK={
+  'T2DM':{g:['tz','se','li','pt','nb','mf','sg']},
+  'ASCVD':{g:['se','tz'],r:['nb']},
+  'HFpEF':{g:['tz','se'],r:['nb']},
+  'MASLD':{g:['tz','se','li'],y:['or']},
+  'CKD':{g:['se','tz'],y:['or'],r:['pt','nb']},
+  'PCOS':{g:['li','mf'],y:['pt','or'],q:['se','tz']},
+  'OSA':{g:['tz','li','su'],y:['pt']},
+  '膝關節炎':{g:['se','tz']},
+  '情緒性進食':{g:['nb','tz','se']}
+};
+const GOAL={'5–10%':['or','li','nb','pt'],'10–20%':['tz','se','pt'],'>20%':['tz','su']};
+let ckSel=new Set(['T2DM','MASLD']),goal=null;
+$('#ckmBtns').innerHTML='<span class="soft" style="font-size:13px;align-self:center;font-family:IBM Plex Mono">共病</span>'+Object.keys(CK).map(k=>'<button class="chip" data-k="'+k+'">'+k+'</button>').join('');
+$('#goalBtns').innerHTML='<span class="soft" style="font-size:13px;align-self:center;font-family:IBM Plex Mono">減重目標</span>'+Object.keys(GOAL).map(k=>'<button class="chip" data-g="'+k+'">'+k+'</button>').join('');
+function st(k,d){const c=CK[k];if(c.r&&c.r.includes(d))return 'r';if(c.y&&c.y.includes(d))return 'y';if(c.q&&c.q.includes(d))return 'q';if(c.g&&c.g.includes(d))return 'g';return 'n';}
+const ICON={g:'✓',y:'!',r:'✕',q:'?',n:'·'};
+function drawCK(){const cols=[...ckSel];const tw=$('#twOnly').checked;
+  $$('#ckmBtns .chip').forEach(c=>c.classList.toggle('on',ckSel.has(c.dataset.k)));$$('#goalBtns .chip').forEach(c=>c.classList.toggle('on',c.dataset.g===goal));
+  let h='<thead><tr><th>藥物</th>'+cols.map(c=>'<th>'+c+'</th>').join('')+(goal?'<th>目標 '+goal+'</th>':'')+'<th>綜合</th></tr></thead><tbody>';
+  DRG.forEach(d=>{if(tw&&!d[2])return;const ss=cols.map(c=>st(c,d[0]));let sum;
+    if(!cols.length&&!goal)sum='<span class="soft">選共病</span>';
+    else{const goalOk=goal?GOAL[goal].includes(d[0]):true;
+      if(ss.includes('r'))sum='<span class="pill r">避免</span>';else if(!goalOk)sum='<span class="pill n">幅度不足</span>';else if(ss.includes('y'))sum='<span class="pill y">可用，需注意</span>';else if(ss.includes('q'))sum='<span class="pill p">資料不足</span>';else if(ss.length&&ss.every(x=>x==='g'))sum='<span class="pill g">建議</span>';else if(ss.some(x=>x==='g'))sum='<span class="pill g">部分建議</span>';else sum=goal&&goalOk?'<span class="pill g">符合目標</span>':'<span class="pill n">無特定建議</span>';}
+    h+='<tr><td><b style="font-weight:500">'+d[1]+'</b>'+(d[3]?'<br><span class="soft" style="font-size:11.5px">'+d[3]+'</span>':'')+'</td>'+ss.map(x=>'<td><span class="ic '+x+'">'+ICON[x]+'</span></td>').join('')+(goal?'<td><span class="ic '+(GOAL[goal].includes(d[0])?'g':'n')+'">'+(GOAL[goal].includes(d[0])?'✓':'·')+'</span></td>':'')+'<td class="sum">'+sum+'</td></tr>';});
+  $('#ckmTbl').innerHTML=h+'</tbody>';}
+$$('#ckmBtns .chip').forEach(c=>c.addEventListener('click',()=>{const k=c.dataset.k;ckSel.has(k)?ckSel.delete(k):ckSel.add(k);drawCK();}));
+$$('#goalBtns .chip').forEach(c=>c.addEventListener('click',()=>{goal=goal===c.dataset.g?null:c.dataset.g;drawCK();}));
+$('#twOnly').addEventListener('change',drawCK);drawCK();
+
+/* ===== 07 DOSE ===== */
+const DS={
+  sema:{nm:'Semaglutide',u:'mg／週',steps:[.25,.5,1,1.7,2.4],int:4,max:2.4,rule:'第 16 週到達 2.4 mg 維持劑量。耐受不佳可延後 4 週再加量。'},
+  tz:{nm:'Tirzepatide',u:'mg／週',steps:[2.5,5,7.5,10,12.5,15],int:4,max:15,rule:'每 4 週加 2.5 mg；維持劑量 5、10 或 15 mg，不一定要加到 15 mg。'},
+  lira:{nm:'Liraglutide',u:'mg／天',steps:[.6,1.2,1.8,2.4,3],int:1,max:3,rule:'每週加 0.6 mg，第 5 週到 3 mg。仿單：3 mg 使用 12 週後體重減少未達 5%，應停藥。'},
+  oral:{nm:'口服 semaglutide',u:'mg／天',steps:[1.5,4,9,25],int:4,max:25,rule:'每階至少 30 天（圖中以 4 週近似）。空腹服用，30 分鐘內不可進食、喝飲料、吃其他藥。'},
+  nb:{nm:'Contrave',u:'顆／天',steps:[1,2,3,4],int:1,max:4,rule:'第 1 週早 1 顆 → 第 2 週早晚各 1 → 第 3 週早 2 晚 1 → 第 4 週起早晚各 2（8/90 mg）。仿單：維持劑量 12 週後減重未達 5% 應停藥。'}
+};
+let curDS='tz';
+$('#doseBtns').innerHTML=Object.keys(DS).map(k=>'<button class="chip'+(k===curDS?' on':'')+'" data-k="'+k+'">'+DS[k].nm+'</button>').join('');
+function doseAt(d,w,delay){let wk=0;for(let i=0;i<d.steps.length;i++){let len=d.int+(delay&&i===1?4:0);if(i===d.steps.length-1)return [d.steps[i],i];if(w<wk+len)return [d.steps[i],i];wk+=len;}}
+function drawDose(){const d=DS[curDS],delay=$('#doseDelay').checked,w=+$('#doseWk').value;const s=$('#doseSvg');s.innerHTML='';
+  const x0=70,x1=870,y0=30,y1=220;const X=v=>x0+v/24*(x1-x0),Y=v=>y1-v/d.max*(y1-y0);
+  [0,.25,.5,.75,1].forEach(f=>{el('line',{x1:x0,x2:x1,y1:Y(f*d.max),y2:Y(f*d.max),stroke:C.grid},s);});
+  for(let k=0;k<=24;k+=4)el('text',{x:X(k),y:244,'text-anchor':'middle',fill:C.soft,'font-size':11.5,...mono},s,'第'+k+'週');
+  let pts='';for(let k=0;k<=24;k+=.25){const v=doseAt(d,k,delay)[0];pts+=X(k)+','+Y(v)+' ';}
+  el('polyline',{points:pts,fill:'none',stroke:C.acc,'stroke-width':3},s);
+  let wk=0;d.steps.forEach((v,i)=>{el('text',{x:X(wk)+4,y:Y(v)-8,fill:C.accl,'font-size':12,...mono},s,v);wk+=d.int+(delay&&i===1?4:0);});
+  if(delay){let a=d.int*2;el('rect',{x:X(d.int*1+d.int),y:y0,width:X(4)-X(0),height:y1-y0,fill:'rgba(208,113,94,.08)'},s);el('text',{x:X(d.int*2)+4,y:y0+14,fill:C.redl,'font-size':11.5},s,'延後 4 週');}
+  el('line',{x1:X(w),x2:X(w),y1:y0-10,y2:y1,stroke:C.buoy,'stroke-width':1.5},s);const cur=doseAt(d,w,delay);el('circle',{cx:X(w),cy:Y(cur[0]),r:6,fill:C.buoy},s);
+  el('text',{x:x0-10,y:Y(d.max)+4,'text-anchor':'end',fill:C.soft,'font-size':11,...mono},s,d.max);
+  $('#doseNow').innerHTML='<b class="mono" style="color:'+C.buoy+'">第 '+w+' 週：'+cur[0]+' '+d.u+'</b>'+(cur[1]===d.steps.length-1?' <span class="pill g">最高劑量</span>':'')+'<br><span class="soft">'+d.rule+'</span>';
+  $$('#doseBtns .chip').forEach(c=>c.classList.toggle('on',c.dataset.k===curDS));}
+$$('#doseBtns .chip').forEach(c=>c.addEventListener('click',()=>{curDS=c.dataset.k;drawDose();}));
+$('#doseWk').addEventListener('input',drawDose);$('#doseDelay').addEventListener('change',drawDose);drawDose();
+$$('#safeBtns .chip').forEach(c=>c.addEventListener('click',()=>{$$('#safeBtns .chip').forEach(x=>x.classList.toggle('on',x===c));const f=c.dataset.f;$$('.pit').forEach(p=>p.classList.toggle('hide',f!=='all'&&!p.dataset.f.split(' ').includes(f)));}));
+
+/* ===== 08 PIPELINE ===== */
+const PL=[
+  {n:'Retatrutide',m:'GIP／GLP-1／glucagon 三重促效',v:24.2,gi:79,gir:'73–85%',t:'第 2 期，48 週',ae:'噁心、腹瀉、嘔吐、便秘',r:'注射',u:{v:28.3,t:'第 3 期 TRIUMPH-1，80 週（公司公布）',note:'全部受試者計算為 25.0%'}},
+  {n:'CagriSema',m:'Amylin＋GLP-1 複方',v:20.4,gi:79.6,gir:'79.6%',t:'REDEFINE 1，第 3 期，68 週',ae:'噁心、嘔吐、腹瀉',r:'注射'},
+  {n:'MariTide',m:'GLP-1 促效／GIP 拮抗（maridebart cafraglutide）',v:16.2,gi:94.5,gir:'90–99%',t:'第 2 期，52 週',ae:'噁心、嘔吐，頻率高',r:'注射'},
+  {n:'Survodutide',m:'Glucagon＋GLP-1 雙重促效',v:14.9,gi:91,gir:'91%',t:'第 2 期，46 週',ae:'噁心、嘔吐；心率增加',r:'注射'},
+  {n:'口服 semaglutide 25 mg',m:'GLP-1（胜肽，口服）',v:13.6,gi:74,gir:'74%',t:'OASIS 4，第 3 期，64 週',ae:'噁心、嘔吐，多為短暫',r:'口服',u:{appr:'FDA 2025-12 核准'}},
+  {n:'Orforglipron',m:'口服小分子 GLP-1',v:11.2,gi:null,gir:'未標示比例',t:'ATTAIN-1，第 3 期，72 週',ae:'噁心、便秘、腹瀉',r:'口服',u:{appr:'FDA 2026-04 核准（Foundayo）'}}
+];
+let plSort='loss',plUpd=false,plSel=0;
+function drawPL(){const s=$('#pipeSvg');s.innerHTML='';const arr=PL.map((p,i)=>Object.assign({i:i,vv:plUpd&&p.u&&p.u.v?p.u.v:p.v},p));
+  arr.sort((a,b)=>plSort==='gi'?((b.gi||0)-(a.gi||0)):(b.vv-a.vv));
+  const x0=200,W=470;const X=v=>x0+v/32*W;
+  [0,10,20,30].forEach(v=>{el('line',{x1:X(v),x2:X(v),y1:14,y2:336,stroke:C.grid},s);el('text',{x:X(v),y:352,'text-anchor':'middle',fill:C.soft,'font-size':11.5,...mono},s,v?'−'+v+'%':'0');});
+  el('text',{x:790,y:12,'text-anchor':'middle',fill:C.soft,'font-size':11.5},s,'腸胃道副作用');
+  arr.forEach((p,k)=>{const y=24+k*52;const g=el('g',{style:'cursor:pointer'},s);const on=p.i===plSel;
+    el('text',{x:x0-10,y:y+18,'text-anchor':'end',fill:on?C.buoy:C.ink,'font-size':14},g,p.n);el('text',{x:x0-10,y:y+34,'text-anchor':'end',fill:C.soft,'font-size':11},g,p.r+(plUpd&&p.u&&p.u.appr?' · 已核准':''));
+    el('rect',{x:x0,y:y+4,width:X(p.vv)-x0,height:26,rx:3,fill:p.r==='口服'?C.teal:C.acc,opacity:on?1:.75,stroke:on?C.buoy:'none','stroke-width':2},g);
+    if(plUpd&&p.u&&p.u.v){el('rect',{x:X(p.v),y:y+4,width:X(p.u.v)-X(p.v),height:26,fill:'rgba(242,177,52,.35)',stroke:C.buoy,'stroke-dasharray':'3 2'},g);}
+    el('text',{x:X(p.vv)+8,y:y+22,fill:C.ink,'font-size':13.5,...mono},g,'−'+p.vv+'%');
+    if(p.gi!=null){el('circle',{cx:790,cy:y+17,r:4+p.gi/10,fill:'rgba(208,113,94,.35)',stroke:C.redl},g);el('text',{x:812,y:y+21,fill:C.redl,'font-size':12,...mono},g,p.gir);}else el('text',{x:790,y:y+21,'text-anchor':'middle',fill:C.soft,'font-size':11.5},g,'—');
+    g.addEventListener('click',()=>{plSel=p.i;drawPL();});});
+  const p=PL[plSel];$('#pipeInfo').innerHTML='<h4>'+p.n+'</h4><p style="margin:0;font-size:14.5px">'+p.m+'｜'+p.t+'｜平均減重 <b class="mono">−'+p.v+'%</b>｜腸胃道副作用 '+p.gir+'（'+p.ae+'）</p>'+(p.u?'<p style="margin:6px 0 0;font-size:13.5px;color:'+C.buoy+'">2026 更新：'+(p.u.v?p.u.t+' −'+p.u.v+'%（'+p.u.note+'）':'')+(p.u.appr||'')+'</p>':'');
+  $$('#pipeBtns .chip').forEach(c=>c.classList.toggle('on',(c.dataset.s===plSort)||(c.dataset.s==='upd'&&plUpd)));}
+$$('#pipeBtns .chip').forEach(c=>c.addEventListener('click',()=>{if(c.dataset.s==='upd')plUpd=!plUpd;else plSort=c.dataset.s;drawPL();}));drawPL();
+
+/* ===== 09 NUTRITION ===== */
+const FL=[
+  [1,'（未拍到）',null],
+  [2,'基線營養評估',['體重','身體組成／去脂體重','飲食品質','蛋白質攝取量','水分狀態','腸胃狀態']],
+  [3,'核心營養策略',['蛋白質 1.2–1.6 g/kg/天','水分 30–35 mL/kg/天','三餐定時 ±1 份點心','纖維 25–35 g/天','阻力訓練每週 2–3 次']],
+  [4,'（未拍到）',null],
+  [5,'依症狀調整',['早飽／噁心、便秘、腹瀉、脹氣各有對策（見右下方選擇器）']],
+  [6,'持續監測',['定期重新評估並調整營養策略']],
+  [7,'再評估成果',['耐受度改善','可持續的減重','保留去脂體重','代謝健康改善']]
+];
+$('#flow').innerHTML=FL.map(f=>'<div class="fstep'+(f[2]?'':' miss')+(f[0]===3?' on':'')+'" data-i="'+f[0]+'"><b>STEP '+f[0]+'</b>'+f[1]+'</div>').join('');
+function selFlow(i){const f=FL[i-1];if(!f[2])return;$$('.fstep').forEach(x=>x.classList.toggle('on',+x.dataset.i===i));$('#flowInfo').innerHTML='<b style="font-weight:500">STEP '+i+'｜'+f[1]+'</b><ul style="margin:6px 0 0">'+f[2].map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+$$('.fstep').forEach(x=>x.addEventListener('click',()=>selFlow(+x.dataset.i)));selFlow(3);
+function nut(){const h=parseFloat($('#nH').value)/100,w=parseFloat($('#nW').value);const s=$('#nSvg');s.innerHTML='';
+  if(!(h>1.2&&h<2.2&&w>25&&w<300)){$('#nOut').innerHTML='<span class="soft">請輸入合理數值</span>';return;}
+  const ibw=22*h*h,base=$('#nBase').value==='ibw'?ibw:w,ckd=$('#nCkd').checked;
+  const p=[1.2*base,1.6*base],wa=[30*w,35*w];
+  const rows=[['蛋白質',ckd?null:p,'g',200,C.b2],['水分',wa,'mL',4000,C.teal],['纖維',[25,35],'g',50,C.acc]];
+  rows.forEach((r,i)=>{const y=14+i*64;el('text',{x:0,y:y+14,fill:C.ink,'font-size':14},s,r[0]);el('rect',{x:0,y:y+22,width:420,height:20,rx:3,fill:'#12343c'},s);
+    if(!r[1]){el('text',{x:8,y:y+37,fill:C.redl,'font-size':12.5},s,'需個別評估，請與腎臟科／營養師討論');return;}
+    el('rect',{x:r[1][0]/r[3]*420,y:y+22,width:(r[1][1]-r[1][0])/r[3]*420,height:20,rx:3,fill:r[4]},s);
+    el('text',{x:420,y:y+14,'text-anchor':'end',fill:C.buoy,'font-size':13.5,...mono},s,Math.round(r[1][0])+'–'+Math.round(r[1][1])+' '+r[2]);});
+  $('#nOut').innerHTML=ckd?'<span class="soft">eGFR <30 未洗腎者的蛋白質目標需個別化，不套用 1.2–1.6 g/kg。</span>':'以'+(base===ibw?'理想體重 '+ibw.toFixed(1):'實際體重 '+w)+' kg 計算，三餐平均約 <b class="mono">'+Math.round(p[0]/3)+'–'+Math.round(p[1]/3)+' g</b>／餐。吃不下時先吃蛋白質。';}
+['#nH','#nW','#nBase','#nCkd'].forEach(id=>$(id).addEventListener('input',nut));nut();
+const GI={
+  '早飽／噁心':['少量多餐','有飽足感就停，不要吃完','放慢進食速度','每餐脂肪適量','液體在兩餐之間喝，不要配餐大量喝'],
+  '便秘':['纖維逐步增加','可溶性纖維，例如洋車前子','足夠水分','身體活動','必要時使用鎂鹽類軟便劑'],
+  '腹瀉':['暫時限制高纖食物','減少油脂','限制糖醇（代糖、無糖食品）','必要時益生菌'],
+  '脹氣':['少量進食','不喝碳酸飲料','放慢進食速度','纖維逐步增加']
+};
+$('#giBtns').innerHTML=Object.keys(GI).map((k,i)=>'<button class="chip'+(i===0?' on':'')+'" data-k="'+k+'">'+k+'</button>').join('');
+function selGI(k){$$('#giBtns .chip').forEach(c=>c.classList.toggle('on',c.dataset.k===k));$('#giOut').innerHTML='<ul style="margin:6px 0 0;padding-left:20px">'+GI[k].map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="soft" style="font-size:13px;margin:10px 0 0">症狀持續或嚴重時，考慮延後加量或退回前一劑量；持續上腹痛要排除胰臟炎、膽道疾病。</p>';}
+$$('#giBtns .chip').forEach(c=>c.addEventListener('click',()=>selGI(c.dataset.k)));selGI('早飽／噁心');
+
+/* ===== 10 WITHDRAWAL ===== */
+const WD={
+  s4:{nm:'SURMOUNT-4',drug:'tirzepatide',col:C.acc,on:[[0,0],[36,-20.9],[88,-25.3]],off:[[36,-20.9],[88,-9.9]],sw:36,txt:'36 週開放用藥（最大耐受劑量 10 或 15 mg）平均減 20.9%。隨機後 52 週：繼續用藥再減 5.5%，換安慰劑回升 14.0%。第 88 週，繼續組 89.5% 維持至少八成的減重，安慰劑組只有 16.6%。台灣是收案國家之一。'},
+  st4:{nm:'STEP 4',drug:'semaglutide',col:C.teal,on:[[0,0],[20,-10.6],[68,-17.4]],off:[[20,-10.6],[68,-4.4]],sw:20,txt:'20 週遞增到 2.4 mg。之後 48 週：繼續用藥再減 7.9%，換安慰劑回升 6.9%。繼續組總共減 17.4%。'},
+  st1:{nm:'STEP 1 延伸',drug:'semaglutide',col:C.b2,on:[[0,0],[68,-17.3]],off:[[68,-17.3],[120,-5.6]],sw:68,txt:'68 週用藥減 17.3% 後，藥物與生活型態支持同時停止。一年後回升 11.6 個百分點，淨減只剩 5.6%，約三分之二回來了。血壓、血糖等改善也大多回到基線（327 人子集，探索性分析）。'}
+};
+let wdSel='s4';
+$('#wdBtns').innerHTML=Object.keys(WD).map(k=>'<button class="chip'+(k===wdSel?' on':'')+'" data-k="'+k+'"><span style="display:inline-block;width:10px;height:3px;background:'+WD[k].col+';margin-right:6px;vertical-align:middle"></span>'+WD[k].nm+'</button>').join('');
+function drawWD(){const s=$('#wdSvg');s.innerHTML='';const x0=70,x1=860,y0=20,y1=290;const X=w=>x0+w/120*(x1-x0),Y=v=>y0+(-v)/28*(y1-y0);
+  [0,-5,-10,-15,-20,-25].forEach(v=>{el('line',{x1:x0,x2:x1,y1:Y(v),y2:Y(v),stroke:C.grid},s);el('text',{x:x0-10,y:Y(v)+4,'text-anchor':'end',fill:C.soft,'font-size':12,...mono},s,v?v+'%':'0');});
+  [0,20,36,68,88,120].forEach(w=>el('text',{x:X(w),y:312,'text-anchor':'middle',fill:C.soft,'font-size':11.5,...mono},s,'W'+w));
+  Object.keys(WD).forEach(k=>{const d=WD[k],on=k===wdSel;const g=el('g',{opacity:on?1:.18},s);
+    el('line',{x1:X(d.sw),x2:X(d.sw),y1:y0,y2:y1,stroke:d.col,'stroke-dasharray':'2 4'},g);
+    el('polyline',{points:d.on.map(p=>X(p[0])+','+Y(p[1])).join(' '),fill:'none',stroke:d.col,'stroke-width':3},g);
+    el('polyline',{points:d.off.map(p=>X(p[0])+','+Y(p[1])).join(' '),fill:'none',stroke:d.col,'stroke-width':3,'stroke-dasharray':'7 5'},g);
+    if(on){d.on.concat(d.off).forEach(p=>{if(!p[0])return;el('circle',{cx:X(p[0]),cy:Y(p[1]),r:5,fill:d.col},g);el('text',{x:X(p[0])+8,y:Y(p[1])+(p[1]<-15?18:-8),fill:C.ink,'font-size':12.5,...mono},g,p[1]+'%');});
+      el('text',{x:X(d.sw)+6,y:y0+14,fill:d.col,'font-size':12},g,'隨機／停藥');
+      const lo=d.on[d.on.length-1],hi=d.off[d.off.length-1];el('text',{x:X(lo[0])+8,y:Y(lo[1])+36,fill:d.col,'font-size':12.5},g,k==='st1'?'用藥期（無繼續組）':'繼續用藥');el('text',{x:X(hi[0])+8,y:Y(hi[1])-22,fill:d.col,'font-size':12.5},g,'停藥（虛線）');}
+    g.addEventListener('click',()=>{wdSel=k;drawWD();});});
+  $('#wdInfo').innerHTML='<b style="font-weight:500">'+WD[wdSel].nm+'（'+WD[wdSel].drug+'）</b>：'+WD[wdSel].txt;
+  $$('#wdBtns .chip').forEach(c=>c.classList.toggle('on',c.dataset.k===wdSel));}
+$$('#wdBtns .chip').forEach(c=>c.addEventListener('click',()=>{wdSel=c.dataset.k;drawWD();}));drawWD();
+
+/* energy gap */
+function drawEG(){const kg=+$('#egKg').value;$('#egKgV').textContent=kg+' kg';const s=$('#egSvg');s.innerHTML='';
+  const app=100*kg,ee=22.5*kg,tot=app+ee;const x0=180,W=640,max=4000;const X=v=>x0+Math.min(v,max)/max*W;
+  el('text',{x:x0-12,y:52,'text-anchor':'end',fill:C.ink,'font-size':14},s,'食慾增加');el('rect',{x:x0,y:34,width:X(app)-x0,height:28,rx:3,fill:C.redl},s);el('text',{x:X(app)+8,y:54,fill:C.redl,'font-size':13.5,...mono},s,'+'+Math.round(app)+' kcal/天');
+  el('text',{x:x0-12,y:102,'text-anchor':'end',fill:C.ink,'font-size':14},s,'能量消耗減少');el('rect',{x:x0,y:84,width:X(ee)-x0,height:28,rx:3,fill:C.acc},s);el('text',{x:X(ee)+8,y:104,fill:C.accl,'font-size':13.5,...mono},s,'−'+Math.round(ee)+' kcal/天');
+  el('text',{x:x0-12,y:156,'text-anchor':'end',fill:C.buoy,'font-size':14},s,'缺口合計');el('rect',{x:x0,y:138,width:X(app)-x0,height:28,rx:3,fill:'rgba(240,162,145,.6)'},s);el('rect',{x:X(app),y:138,width:X(tot)-X(app),height:28,rx:0,fill:'rgba(201,162,90,.7)'},s);
+  el('text',{x:X(tot)+8,y:158,fill:C.buoy,'font-size':14,...mono},s,'≈'+Math.round(tot)+' kcal/天');
+  el('text',{x:x0,y:192,fill:C.soft,'font-size':12},s,'約等於每天多出 '+(tot/250).toFixed(1)+' 碗白飯（一碗約 250 kcal）的「想吃」與「少燒」');}
+$('#egKg').addEventListener('input',drawEG);drawEG();
+
+/* regain sim */
+let rgModel='lin';
+function drawRG(){const L=parseFloat($('#rgKg').value)||0,m=+$('#rgM').value;$('#rgMV').textContent=m+' 個月';const s=$('#rgSvg');s.innerHTML='';
+  const x0=46,x1=430,y0=16,y1=240,M=36;const X=t=>x0+t/M*(x1-x0),Y=v=>y1-v/Math.max(L,1)*(y1-y0)*.9;
+  [0,.25,.5,.75,1].forEach(f=>{el('line',{x1:x0,x2:x1,y1:Y(f*L),y2:Y(f*L),stroke:C.grid},s);el('text',{x:x0-6,y:Y(f*L)+4,'text-anchor':'end',fill:C.soft,'font-size':10.5,...mono},s,Math.round(f*100)+'%');});
+  [0,12,24,36].forEach(t=>el('text',{x:X(t),y:258,'text-anchor':'middle',fill:C.soft,'font-size':11,...mono},s,t+'月'));
+  el('text',{x:x0,y:276,fill:C.soft,'font-size':11},s,'縱軸：回升佔已減體重的比例');
+  const f={glp:t=>rgModel==='lin'?Math.min(L,.8*t):L*.753*(1-Math.exp(-.1329*t)),all:t=>Math.min(L,.4*t),beh:t=>Math.min(L,.1*t)};
+  const series=rgModel==='lin'?[['glp','semaglutide／tirzepatide',C.redl],['all','所有減重藥平均',C.acc],['beh','行為介入結束後',C.b2]]:[['glp','GLP-1 RA（非線性）',C.redl]];
+  series.forEach(sr=>{let p='';for(let t=0;t<=M;t+=.5)p+=X(t)+','+Y(f[sr[0]](t))+' ';el('polyline',{points:p,fill:'none',stroke:sr[2],'stroke-width':2.5},s);});
+  el('line',{x1:X(m),x2:X(m),y1:y0,y2:y1,stroke:C.buoy,'stroke-dasharray':'3 3'},s);
+  const v=f.glp(m);el('circle',{cx:X(m),cy:Y(v),r:5,fill:C.buoy},s);
+  $('#rgOut').innerHTML='<p style="margin:6px 0 4px">停藥 '+m+' 個月後，估計回升 <b class="mono" style="color:'+C.buoy+'">'+v.toFixed(1)+' kg</b>（已減的 '+Math.round(v/L*100)+'%）</p>'+
+    (rgModel==='lin'?'<p class="soft" style="font-size:13px;margin:0">'+series.map(sr=>'<span style="color:'+sr[2]+'">■</span> '+sr[1]).join('　')+'<br>以 0.8 kg／月計，約 '+(L/.8).toFixed(0)+' 個月回到停藥前的起點。</p>':'<p class="soft" style="font-size:13px;margin:0">一年約回升 60%，之後趨緩，推估停在約 75%（95% CI 68.9–81.6%）。</p>');
+  $$('#rgModel .chip').forEach(c=>c.classList.toggle('on',c.dataset.m===rgModel));}
+$('#rgKg').addEventListener('input',drawRG);$('#rgM').addEventListener('input',drawRG);$$('#rgModel .chip').forEach(c=>c.addEventListener('click',()=>{rgModel=c.dataset.m;drawRG();}));drawRG();
+
+/* ===== 11 MAINTAIN ===== */
+const MO=[
+  ['繼續原劑量','★★★','STEP 4、SURMOUNT-4 都顯示繼續用藥能維持甚至再多減一些。','藥費、長期副作用、需要持續回診。','證據最強的維持方式，也是試驗作者的結論：肥胖需要持續治療。'],
+  ['降到較低維持劑量','★','目前主要是小型觀察資料與臨床經驗，相關隨機試驗進行中。','回升風險因人而異，需要密切監測體重。','適合已穩定、想降低費用或副作用的人；先約定「回升多少就加回」。'],
+  ['拉長注射間隔','★','屬仿單外用法，資料很少。','藥物濃度波動，效果難預測。','不建議當成常規做法，只在共同決策下嘗試。'],
+  ['逐步減量後停藥','★','少數小型研究顯示回升可能較緩和，但沒有和直接停藥做大型隨機比較。','最終仍可能回升，只是比較慢。','若一定要停，逐步減量比直接停合理，並同步加強行為支持。'],
+  ['停藥＋強化行為支持','★★','BMJ 2026：行為介入結束後回升比停藥慢；NICE 建議停藥後至少一年的支持。','停藥試驗中大部分人仍回升三分之二左右。','要把「停藥」當成一段需要計畫的療程，不是終點。']
+];
+$('#mOpts').innerHTML=MO.map((o,i)=>'<button class="mopt'+(i===0?' on':'')+'" data-i="'+i+'"><b style="font-weight:500">'+o[0]+'</b><small class="stars">'+o[1]+'</small></button>').join('');
+function selMO(i){const o=MO[i];$$('.mopt').forEach(b=>b.classList.toggle('on',+b.dataset.i===i));
+  $('#mInfo2').innerHTML='<h4>'+o[0]+' <span class="stars" style="font-size:15px">'+o[1]+'</span></h4><div class="twocol" style="gap:14px"><div><div class="mono" style="font-size:11.5px;color:'+C.b2l+'">證據</div><p style="font-size:14.5px;margin:0">'+o[2]+'</p></div><div><div class="mono" style="font-size:11.5px;color:'+C.redl+'">代價</div><p style="font-size:14.5px;margin:0">'+o[3]+'</p></div></div><p class="soft" style="font-size:13.5px;margin:10px 0 0">'+o[4]+'</p>';}
+$$('.mopt').forEach(b=>b.addEventListener('click',()=>selMO(+b.dataset.i)));selMO(0);
+})();
+</script>
+</body>
+</html>
+
+</body></html>
