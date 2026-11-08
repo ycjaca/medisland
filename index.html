@@ -3,116 +3,687 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>家醫群島 115 秋季會</title>
+<title>ycjacademy 花園</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* Shell: loads each page of the site into one frame so links work inside the claude.ai viewer and on GitHub Pages alike. */
-:root{--sea:#0d2a33;--ink-soft:#9fb9b8;color-scheme:dark}
-html,body{margin:0;height:100%;background:var(--sea)}
-#view{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:var(--sea)}
-#status{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:14px "Noto Sans TC",sans-serif;color:var(--ink-soft);pointer-events:none}
-#status[hidden]{display:none}
+/* Layout idea: a round 3D garden. Scrolling walks a small doctor around the ring path; each stop on the ring is a section of the site. The sky follows the real sun. */
+:root{
+  --moss:#1b2619;
+  --moss-2:#232f20;
+  --line:#33452f;
+  --cream:#efe8d4;
+  --cream-soft:#b8b59c;
+  --sun:#f2b134;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--moss);color:var(--cream);font-family:var(--body);line-height:1.65;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--sun);outline-offset:3px}
+
+/* scroll track: the page scroll drives the walk */
+.walk{position:relative;height:1100vh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#8cc4ea}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+.tags{position:absolute;inset:0;pointer-events:none}
+.tag{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;cursor:pointer;border:0;padding:5px 12px 6px;border-radius:14px;
+  background:rgba(255,255,255,.92);color:#2b3a22;font-family:var(--display);font-weight:700;font-size:15px;white-space:nowrap;
+  box-shadow:0 4px 0 rgba(0,0,0,.15),0 8px 18px rgba(0,0,0,.18);transition:opacity .3s}
+.tag::after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(255,255,255,.92);border-bottom:0}
+.tag.fallow{background:rgba(245,236,214,.9);color:#7a5c33}
+
+/* HUD */
+.hud{position:absolute;inset:0;pointer-events:none;padding:clamp(12px,2.4vw,24px)}
+.brand{position:absolute;left:clamp(12px,2.4vw,24px);top:clamp(12px,2.4vw,22px);font-family:var(--display);font-weight:700;color:#fff;
+  font-size:clamp(22px,3.2vw,36px);line-height:1;text-shadow:0 2px 0 rgba(0,0,0,.18),0 3px 14px rgba(0,0,0,.25);letter-spacing:.02em}
+.brand small{display:block;font-size:.42em;font-weight:400;letter-spacing:.12em;margin-top:6px;opacity:.95}
+.clock{position:absolute;right:clamp(12px,2.4vw,24px);top:clamp(12px,2.4vw,22px);pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+  background:rgba(20,30,40,.38);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:8px 12px;
+  font-family:var(--mono);font-size:11.5px;color:#fff}
+.clock .row{display:flex;gap:6px;align-items:center}
+.clock input[type=range]{width:120px;accent-color:var(--sun)}
+.chip{border:1px solid rgba(255,255,255,.6);border-radius:20px;padding:1px 9px;background:transparent;cursor:pointer;font-family:var(--mono);font-size:11px;color:#fff}
+.mini{position:absolute;left:clamp(12px,2.4vw,24px);bottom:clamp(12px,2.4vw,24px);width:118px;height:118px;border-radius:50%;pointer-events:auto;cursor:pointer;
+  background:rgba(20,30,40,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:2px solid rgba(255,255,255,.55);box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.mini canvas{width:100%;height:100%;display:block}
+.card{position:absolute;right:clamp(12px,2.4vw,24px);bottom:clamp(14px,3vw,30px);transform:translateY(20px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;
+  width:min(400px,calc(100% - 170px));background:rgba(255,253,246,.95);color:#2b2414;border-radius:18px;padding:14px 16px 14px;box-shadow:0 6px 0 rgba(0,0,0,.12),0 14px 30px rgba(0,0,0,.25);
+  display:flex;flex-direction:column;gap:6px;border:2px solid #fff}
+.card.show{opacity:1;transform:none;pointer-events:auto}
+.card .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#8a6a40;display:flex;justify-content:space-between}
+.card h3{margin:0;font-family:var(--display);font-size:24px;line-height:1.15}
+.card p{margin:0;font-size:13px;color:#5d5236}
+.card ul{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.card li{display:flex;gap:7px;align-items:center}
+.card .btn{align-self:flex-start;margin-top:4px;border:0;border-radius:12px;padding:7px 16px;font-weight:700;cursor:pointer;background:var(--c,#f2b134);color:#2b2414;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.card .btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.18)}
+.hint{position:absolute;left:50%;top:clamp(84px,12vh,120px);transform:translateX(-50%);color:#fff;font-size:14px;text-shadow:0 2px 10px rgba(0,0,0,.4);
+  display:flex;flex-direction:column;align-items:center;gap:4px;transition:opacity .4s;pointer-events:none}
+.hint i{width:22px;height:34px;border:2px solid #fff;border-radius:12px;position:relative}
+.hint i::after{content:"";position:absolute;left:50%;top:6px;width:4px;height:7px;border-radius:2px;background:#fff;transform:translateX(-50%);animation:wheel 1.4s infinite}
+@keyframes wheel{0%{opacity:0;transform:translate(-50%,-3px)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,10px)}}
+.progress{position:absolute;left:150px;bottom:clamp(12px,2.4vw,24px);font-family:var(--mono);font-size:11px;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--mono);font-size:13px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+@media (prefers-reduced-motion:reduce){.hint i::after{animation:none}.card,.tag{transition:none}}
+@media (max-width:640px){.card{left:12px;right:12px;width:auto;bottom:118px;padding:10px 14px;gap:3px}.card p{display:none}.card h3{font-size:20px}.card ul{font-size:12px}.mini{width:96px;height:96px}.clock input[type=range]{width:90px}.progress{display:none}}
+
+main{max-width:1120px;margin:0 auto;padding:40px 20px 70px}
+main h2{font-family:var(--display);font-size:28px;margin:0 0 4px}
+main>p{color:var(--cream-soft);margin:0 0 20px;max-width:42em}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--cream-soft);margin:0 0 22px}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;display:inline-block}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.zc{text-align:left;background:var(--moss-2);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:0;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:8px}
+.zc:hover{background:#28361f}
+.zc h3{font-family:var(--display);font-size:22px;margin:0;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.zc h3 span{font-family:var(--mono);font-size:11.5px;font-weight:400;color:var(--cream-soft)}
+.zc p{margin:0;font-size:13.5px;color:var(--cream-soft)}
+.zc ul{list-style:none;margin:0;padding:0;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.zc li{display:flex;gap:8px;align-items:center}
+.zc .empty{font-family:var(--mono);font-size:12px;color:#8e8a70}
+
+.scrim{position:fixed;inset:0;background:rgba(8,14,8,.55);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.scrim.open{opacity:1;pointer-events:auto}
+aside.panel{position:fixed;z-index:21;top:0;right:0;height:100%;width:min(460px,100%);background:#1a2618;border-left:1px solid var(--line);transform:translateX(102%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+aside.panel.open{transform:none}
+@media (max-width:700px){aside.panel{top:auto;bottom:0;height:auto;max-height:82%;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;transform:translateY(102%)}}
+@media (prefers-reduced-motion:reduce){aside.panel,.scrim{transition:none}}
+.p-head{padding:22px 22px 14px;border-bottom:1px solid var(--line);position:relative}
+.p-head .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--c)}
+.p-head h2{font-family:var(--display);font-size:32px;margin:2px 0 6px;line-height:1.15}
+.p-head p{margin:0;color:var(--cream-soft);font-size:14px}
+.close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:20px;line-height:1}
+.p-body{overflow-y:auto;padding:6px 22px 28px}
+.item{padding:16px 0;border-bottom:1px dashed var(--line);display:flex;flex-direction:column;gap:6px}
+.item:last-child{border-bottom:0}
+.stage-l{font-family:var(--mono);font-size:11.5px;display:flex;align-items:center;gap:6px;color:var(--cream-soft)}
+.item h4{margin:0;font-size:16px;font-weight:500}
+.item p{margin:0;font-size:13.5px;color:var(--cream-soft)}
+.go{align-self:flex-start;margin-top:4px;text-decoration:none;font-size:13px;padding:6px 14px;border-radius:20px;background:var(--sun);color:#2b2414;font-weight:500}
+.fallow-note{font-family:var(--mono);font-size:13px;color:#8e8a70;padding:20px 0}
+.exhibit{border:1px solid #4a3c1c;background:#2a2414;border-radius:4px;padding:16px;margin:14px 0 4px;display:flex;flex-direction:column;gap:8px}
+.exhibit .k{font-family:var(--mono);font-size:11.5px;color:var(--sun);letter-spacing:.08em}
+.exhibit h4{font-family:var(--display);font-size:24px;margin:0}
+.exhibit p{margin:0;font-size:13.5px;color:var(--cream-soft)}
+footer{border-top:1px solid var(--line);max-width:1120px;margin:0 auto;padding:18px 20px 30px;font-size:12px;color:#8e8a70;font-family:var(--mono)}
 </style>
 </head>
 <body>
-<div id="status">載入中…</div>
+
+<section class="walk" id="walk" aria-label="花園散步：捲動頁面沿著環形小徑前進">
+  <div class="stage" id="stage">
+    <canvas id="gl" aria-hidden="true"></canvas>
+    <div class="loading" id="loading">花園整理中…</div>
+    <div class="tags" id="tags"></div>
+    <div class="hud">
+      <div class="brand">ycjacademy<small>家醫科住院醫師的學習花園</small></div>
+      <div class="clock" aria-live="polite">
+        <div id="where">—</div>
+        <div id="sunline">—</div>
+        <div class="row"><label for="scrub">時間</label><input id="scrub" type="range" min="-12" max="12" step="0.25" value="0"><button class="chip" id="nowBtn" type="button">現在</button></div>
+        <div class="row"><button class="chip" id="locBtn" type="button">用我的位置</button></div>
+      </div>
+      <div class="mini" id="mini" role="img" aria-label="小地圖：點一下走到該區"><canvas id="miniCv" width="236" height="236"></canvas></div>
+      <div class="hint" id="hint"><i></i>滾動滑鼠沿著小徑散步・點兩旁的區域走進去</div>
+      <div class="progress" id="prog"></div>
+    </div>
+  </div>
+</section>
+
+<main>
+  <h2>園區導覽</h2>
+  <p>環形小徑上有九個區域，每件作品都標著生長階段：從一顆構想的種子，長到開花完成，最後結果，用在報告或門診。標著「整地中」的區域還在規劃。</p>
+  <div class="legend" id="legend"></div>
+  <div class="cards" id="cards"></div>
+</main>
+<footer>天空依你所在地的太陽位置即時變化（未授權位置時，依瀏覽器時區推估）。</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="pTitle" aria-hidden="true">
+  <div class="p-head"><div class="k" id="pKey"></div><h2 id="pTitle"></h2><p id="pDesc"></p><button class="close" id="closeBtn" aria-label="關閉">×</button></div>
+  <div class="p-body" id="pBody"></div>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const PAGES = ["home","type2-diabetes","obesity","atrial-fibrillation","ldl-c","sleep","myofascial-pain","sarcopenia"];
-const ISLANDS = ["metabolic","cardiorenal","vaccine","brain","pain","prevention","women","aging","tech"];
-let view = null; const status = document.getElementById("status");
-// a fresh frame per page, with a unique name, so the browser never restores a stale frame on reload
-function freshFrame(){
-  if(view) view.remove();
-  view = document.createElement("iframe");
-  view.id = "view"; view.title = "家醫群島";
-  view.name = "page-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-  document.body.appendChild(view);
-  return view;
-}
-const cache = {};
-let current = null;
+/* ================= content: edit here ================= */
+const STAGES = {
+  seed:{label:"種子 · 構想", color:"#b08a5a"},
+  sprout:{label:"發芽 · 製作中", color:"#8fbf5a"},
+  bloom:{label:"開花 · 完成", color:"#e58fb0"},
+  fruit:{label:"結果 · 已報告／使用", color:"#e0703a"}
+};
+// order = order along the ring path, starting at the gate
+const ZONES = [
+  {id:"gate", name:"大門", sub:"關於・導覽", color:"#d9c79a",
+   desc:"歡迎光臨。這裡是 Ray 的學習花園：家醫科住院醫師，對醫療 AI、數學與物理有興趣。", items:[]},
+  {id:"expo", name:"展覽會場", sub:"學會專頁", color:"#f2b134",
+   desc:"每一場學會是一檔展覽，把聽到的內容整理成可以逛的展。", items:[], exhibits:[
+     {k:"第一檔 · 2026.10.18", t:"115 秋季會・家醫群島", note:"台灣家庭醫學醫學會 115 年度秋季學術研討會。九座主題島、34 場講題，7 個深入頁：糖尿病、減重、心房顫動、LDL-C、失眠與睡眠呼吸中止、肌筋膜疼痛、肌少症。", stage:"bloom", url:"islands/"}]},
+  {id:"nursery", name:"苗圃", sub:"構想與進行中", color:"#c9a25a",
+   desc:"還在育苗的專案。長大了就移植到其他區域。", items:[
+     {t:"鋼琴扒譜擴充功能", stage:"seed", note:"把影片裡的鋼琴演奏轉成樂譜。"},
+     {t:"語言學習短影片自動產生", stage:"sprout", note:"英文、日文單字短影片。"}]},
+  {id:"herb", name:"藥草園", sub:"臨床筆記與卡片", color:"#7fb26a",
+   desc:"門診用得到的知識，一株一株種下，隨手可摘。", items:[
+     {t:"皮膚科 Anki 卡片", stage:"sprout", note:"依 Fitzpatrick 圖譜製作，目標是應付皮膚科門診。"}]},
+  {id:"clinic", name:"門診實務", sub:"看診思路手冊", color:"#bb3f26",
+   desc:"依看診順序整理的門診手冊：初診、檢查、選藥、追蹤，看診時可以直接拿來用。", items:[], exhibits:[
+     {k:"第一專區 · 高血壓", t:"高血壓門診實務：初診篇", note:"確認血壓、三指引分級、急症分流、初診檢查、續發性線索、開藥決定。另有門診模式速查。選藥篇、追蹤篇製作中。", stage:"sprout", url:"https://claude.ai/artifact/GoW34KJ2JKNixjYsTUm3gv", go:"進入專區"}]},
+  {id:"study", name:"書齋涼亭", sub:"USMLE・期刊", color:"#9a8bd0",
+   desc:"坐下來讀書的涼亭：考試準備與期刊報告。", items:[
+     {t:"ARM 技術與乳癌術後淋巴水腫", stage:"fruit", note:"住院醫師 Journal Club 報告。"},
+     {t:"USMLE 準備", stage:"sprout", note:"讀書計畫與筆記。"}]},
+  {id:"greenhouse", name:"溫室", sub:"醫療 AI 實驗", color:"#5fa8a0",
+   desc:"醫療 AI 與健康科技的實驗，溫度控制好，慢慢培養。", items:[]},
+  {id:"observatory", name:"觀星台", sub:"數學與理論物理", color:"#7f86c9",
+   desc:"看星星的地方：數學、理論物理，以及其他讓人抬頭的問題。", items:[]},
+  {id:"shed", name:"工具棚", sub:"計算器・小工具", color:"#a3967a",
+   desc:"門診與讀書用的小工具。", items:[]},
+  {id:"journal", name:"小徑日誌", sub:"更新紀錄", color:"#c77fa0",
+   desc:"沿著小徑記下花園的變化。", items:[], log:[
+     ["2026-11-08","新增門診實務區，第一個專區是高血壓初診篇。"],
+     ["2026-11-08","花園改成圓形 3D 花園：捲動頁面就能沿著小徑散步。"],
+     ["2026-11-08","花園開園：大門、展覽會場、苗圃。"],
+     ["2026-11-05","家醫群島整合成單一網站並上線 GitHub Pages。"],
+     ["2026-11-02","家醫群島大綱頁完成。"]]}
+];
+const TZ_PLACES = [
+  ["Asia/Taipei",25.03,121.56,"台北"],["Asia/Tokyo",35.68,139.69,"東京"],["Asia/Shanghai",31.23,121.47,"上海"],
+  ["Asia/Hong_Kong",22.32,114.17,"香港"],["Asia/Singapore",1.35,103.82,"新加坡"],["Asia/Seoul",37.57,126.98,"首爾"],
+  ["America/New_York",40.71,-74.0,"紐約"],["America/Chicago",41.88,-87.63,"芝加哥"],["America/Denver",39.74,-104.99,"丹佛"],
+  ["America/Los_Angeles",34.05,-118.24,"洛杉磯"],["Europe/London",51.5,-0.13,"倫敦"],["Europe/Paris",48.86,2.35,"巴黎"],
+  ["Europe/Berlin",52.52,13.4,"柏林"],["Australia/Sydney",-33.87,151.21,"雪梨"]
+];
+const hasContent = z => z.items.length || (z.exhibits||[]).length || (z.log||[]).length || z.id==="gate";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const N=ZONES.length;
 
-// hash forms: "" → home; "<island>" → home with island open; "<page>" or "<page>--<anchor>" → deep page
-function parse(hash){
-  const h = decodeURIComponent((hash||"").replace(/^#/,""));
-  if(!h) return {page:"home"};
-  if(ISLANDS.includes(h)) return {page:"home", island:h};
-  const [p, a] = h.split("--");
-  if(PAGES.includes(p)) return {page:p, anchor:a||null};
-  return {page:"home"};
+/* ================= sun & sky ================= */
+const RAD=Math.PI/180;
+function sunPos(date,lat,lon){
+  const d=date.getTime()/86400000+2440587.5-2451545.0;
+  const L=(280.460+0.9856474*d)%360, g=((357.528+0.9856003*d)%360)*RAD;
+  const lam=(L+1.915*Math.sin(g)+0.020*Math.sin(2*g))*RAD, eps=(23.439-0.0000004*d)*RAD;
+  const ra=Math.atan2(Math.cos(eps)*Math.sin(lam),Math.cos(lam)), dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+  const gmst=(280.46061837+360.98564736629*d)%360, H=(gmst+lon)*RAD-ra, la=lat*RAD;
+  const alt=Math.asin(Math.sin(la)*Math.sin(dec)+Math.cos(la)*Math.cos(dec)*Math.cos(H));
+  const az=Math.atan2(-Math.sin(H),Math.tan(dec)*Math.cos(la)-Math.sin(la)*Math.cos(H));
+  return {alt:alt/RAD, az:((az/RAD)+360)%360};
 }
-function toHash(page, frag){
-  if(page==="home" || page==="index") return frag && ISLANDS.includes(frag) ? frag : "";
-  return frag ? `${page}--${frag}` : page;
+const SKY=[[-90,"#04060f","#0b1226"],[-18,"#060a1a","#121a35"],[-12,"#0c1430","#28284f"],[-6,"#1b2552","#6b4a74"],
+  [-2,"#33467e","#d8806a"],[2,"#4f70ad","#f2a46a"],[8,"#5a9ad8","#f6d6a6"],[20,"#3f8fe0","#cfeaf8"],[90,"#2f86e0","#bfe4f8"]];
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mixc=(a,b,t)=>{t=clamp(t,0,1);const A=hex(a),B=hex(b);return"#"+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,"0")).join("")};
+function skyAt(alt){for(let i=0;i<SKY.length-1;i++){const [a0,t0,b0]=SKY[i],[a1,t1,b1]=SKY[i+1];if(alt<=a1){const t=clamp((alt-a0)/(a1-a0),0,1);return{top:mixc(t0,t1,t),bot:mixc(b0,b1,t)}}}return{top:SKY.at(-1)[1],bot:SKY.at(-1)[2]}}
+let place=(()=>{let tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(e){}
+  const hit=TZ_PLACES.find(c=>c[0]===tz); if(hit) return {lat:hit[1],lon:hit[2],name:hit[3]};
+  const off=-new Date().getTimezoneOffset()/60; return {lat:25,lon:off*15,name:tz||"所在時區"};})();
+let offsetH=0;
+function phase(a){return a>20?"白天":a>6?"午後斜陽":a>0?"黃金時刻":a>-6?"民用暮光":a>-12?"航海暮光":a>-18?"天文暮光":"夜晚"}
+
+/* ================= cards & panel (work without WebGL too) ================= */
+document.getElementById("legend").innerHTML=Object.values(STAGES).map(s=>`<span><i class="dot" style="background:${s.color}"></i>${s.label}</span>`).join("");
+const zoneList=z=>[...(z.exhibits||[]).map(x=>({t:x.t,stage:x.stage})),...z.items];
+ZONES.forEach(z=>{
+  const list=zoneList(z), b=document.createElement("button");b.className="zc";b.type="button";b.style.setProperty("--c",z.color);
+  const n = z.log? `${z.log.length} 則` : list.length? `${list.length} 件` : (z.id==="gate"?"":"整地中");
+  b.innerHTML=`<h3>${esc(z.name)}<span>${n}</span></h3><p>${esc(z.desc)}</p>`+
+    (list.length?`<ul>${list.map(it=>`<li><i class="dot" style="background:${STAGES[it.stage].color}"></i>${esc(it.t)}</li>`).join("")}</ul>`:
+     z.log?`<ul>${z.log.slice(0,2).map(l=>`<li>${esc(l[0])}　${esc(l[1])}</li>`).join("")}</ul>`: z.id==="gate"?"":`<div class="empty">還沒種下東西</div>`);
+  b.addEventListener("click",()=>openZone(z.id));document.getElementById("cards").appendChild(b);
+});
+const panel=document.getElementById("panel"),scrim=document.getElementById("scrim");let lastFocus=null;
+function openZone(id,fromHash){
+  const z=ZONES.find(q=>q.id===id);if(!z)return;lastFocus=document.activeElement;
+  panel.style.setProperty("--c",z.color);
+  document.getElementById("pKey").textContent=z.sub;document.getElementById("pTitle").textContent=z.name;document.getElementById("pDesc").textContent=z.desc;
+  let html="";
+  (z.exhibits||[]).forEach(x=>{html+=`<div class="exhibit"><div class="k">${esc(x.k)}</div><h4>${esc(x.t)}</h4><div class="stage-l"><i class="dot" style="background:${STAGES[x.stage].color}"></i>${STAGES[x.stage].label}</div><p>${esc(x.note)}</p><a class="go" href="${esc(x.url)}"${/^https?:/.test(x.url)?' target="_blank" rel="noopener"':""}>${esc(x.go||"進入展覽")} →</a></div>`});
+  z.items.forEach(it=>{html+=`<div class="item"><div class="stage-l"><i class="dot" style="background:${STAGES[it.stage].color}"></i>${STAGES[it.stage].label}</div><h4>${esc(it.t)}</h4>${it.note?`<p>${esc(it.note)}</p>`:""}${it.url?`<a class="go" href="${esc(it.url)}" target="_blank" rel="noopener">前往 →</a>`:""}</div>`});
+  (z.log||[]).forEach(l=>{html+=`<div class="item"><div class="stage-l">${esc(l[0])}</div><p style="color:var(--cream)">${esc(l[1])}</p></div>`});
+  if(z.id==="gate") html+=`<div class="item"><h4>怎麼逛</h4><p>捲動頁面（滑鼠滾輪或手指上滑），就會沿著環形小徑往前走，每到一個區域會停下來。左下角的小地圖可以直接跳到任何一區。右上角的時間可以預覽花園的黃昏與夜晚。</p></div>`;
+  if(!html) html=`<div class="fallow-note">整地中，還沒種下東西。</div>`;
+  document.getElementById("pBody").innerHTML=html;
+  panel.classList.add("open");scrim.classList.add("open");panel.setAttribute("aria-hidden","false");
+  document.getElementById("closeBtn").focus({preventScroll:true});
+  if(!fromHash){try{history.replaceState(null,"","#"+id)}catch(e){}}
 }
-function go(hash){
-  if(("#"+hash) === location.hash || (hash==="" && !location.hash)) route(); else location.hash = hash;
+function closePanel(){
+  panel.classList.remove("open");scrim.classList.remove("open");panel.setAttribute("aria-hidden","true");
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});
+}
+document.getElementById("closeBtn").addEventListener("click",closePanel);
+scrim.addEventListener("click",closePanel);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&panel.classList.contains("open"))closePanel()});
+
+/* ================= scroll → walk ================= */
+const walk=document.getElementById("walk");
+function scrollFrac(){const r=walk.getBoundingClientRect(), max=walk.offsetHeight-innerHeight;return clamp(-r.top/max,0,1)}
+const START=-0.45; // begin a little before the gate
+function pathParam(f){ return START + f*N; } // continuous: one full lap per scroll track
+function scrollToZone(k){
+  const max=walk.offsetHeight-innerHeight, top=walk.getBoundingClientRect().top+scrollY;
+  scrollTo({top:top+max*clamp((k-0.25-START)/N,0,1),behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
 
-async function getPage(page){
-  if(cache[page]) return cache[page];
-  const r = await fetch(page + ".html", {credentials:"same-origin", cache:"no-cache"});
-  if(!r.ok) throw new Error(r.status);
-  return cache[page] = await r.text();
-}
+/* ================= 3D ================= */
+const REDUCED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(typeof THREE==="undefined"){
+  document.getElementById("loading").textContent="3D 花園無法載入，請往下捲看園區導覽。";
+} else start();
 
-async function route(){
-  const {page, island, anchor} = parse(location.hash);
-  if(page === current){ afterLoad(page, island, anchor); return; }
-  status.hidden = false;
-  try{
-    const html = await getPage(page);
-    const f = freshFrame();
-    f.onload = () => { current = page; status.hidden = true; wire(); afterLoad(page, island, anchor); };
-    f.srcdoc = html;
-  }catch(e){
-    status.hidden = false;
-    status.textContent = "這一頁載入失敗（" + e.message + "），請重新整理再試一次。";
+function start(){
+const canvas=document.getElementById("gl"), stage=document.getElementById("stage");
+let renderer;
+try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:"high-performance"})}catch(e){document.getElementById("loading").textContent="這台裝置無法顯示 3D，請往下捲看園區導覽。";return}
+renderer.setPixelRatio(Math.min(2,devicePixelRatio||1));
+renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputEncoding=THREE.sRGBEncoding;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(50,1,0.1,600);
+
+// toon shading ramp
+const ramp=new THREE.DataTexture(new Uint8Array([90,160,215,255]),4,1,THREE.LuminanceFormat);
+ramp.minFilter=ramp.magFilter=THREE.NearestFilter; ramp.needsUpdate=true;
+const MATS={};
+const toon=(c,opts={})=>{const k=c+JSON.stringify(opts);return MATS[k]||(MATS[k]=new THREE.MeshToonMaterial(Object.assign({color:new THREE.Color(c).convertSRGBToLinear(),gradientMap:ramp},opts)))};
+const basic=(c,opts={})=>new THREE.MeshBasicMaterial(Object.assign({color:new THREE.Color(c).convertSRGBToLinear()},opts));
+function mesh(geo,mat,{x=0,y=0,z=0,rx=0,ry=0,rz=0,s=1,cast=true,recv=true}={},parent){
+  const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.rotation.set(rx,ry,rz);
+  if(typeof s==="number")m.scale.setScalar(s);else m.scale.set(...s);
+  m.castShadow=cast;m.receiveShadow=recv;(parent||scene).add(m);return m;
+}
+let seed=7;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
+
+/* --- world constants --- */
+const RP=28, RSO=37, RSI=19; // ring path radius; outer / inner station radius
+const sideOf=k=>k%2===0?1:-1; // even stops on the outer side, odd stops on the inner side
+const RSk=k=>sideOf(k)>0?RSO:RSI;
+const angOf=k=>Math.PI/2 + k*(Math.PI*2/N); // gate faces the viewer's start
+const ringPos=(a,r)=>new THREE.Vector3(Math.cos(a)*r,0,Math.sin(a)*r);
+
+/* --- lights --- */
+const hemi=new THREE.HemisphereLight(0xdff1ff,0x6c8f4a,0.8); scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xffffff,1.2); sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048); const sc=sun.shadow.camera; sc.left=-34;sc.right=34;sc.top=34;sc.bottom=-34;sc.near=1;sc.far=160; sun.shadow.bias=-0.0005; sun.shadow.normalBias=0.02;
+scene.add(sun); scene.add(sun.target);
+const amb=new THREE.AmbientLight(0x404a66,0.0); scene.add(amb);
+const pavLight=new THREE.PointLight(0xffc77a,0,14,2); scene.add(pavLight);
+
+/* --- sky dome --- */
+const skyGeo=new THREE.SphereGeometry(400,32,16);
+const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,uniforms:{top:{value:new THREE.Color()},bot:{value:new THREE.Color()},sunDir:{value:new THREE.Vector3(0,1,0)},sunCol:{value:new THREE.Color(1,.9,.7)},sunAmt:{value:1}},
+  vertexShader:`varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  fragmentShader:`uniform vec3 top,bot,sunDir,sunCol;uniform float sunAmt;varying vec3 vP;
+   void main(){float h=clamp(vP.y,0.,1.);vec3 c=mix(bot,top,pow(h,.55));
+   float d=max(dot(normalize(vP),normalize(sunDir)),0.);c+=sunCol*(pow(d,900.)*2.2+pow(d,12.)*.35)*sunAmt;
+   if(vP.y<0.)c=bot;gl_FragColor=vec4(c,1.);}`});
+const sky=new THREE.Mesh(skyGeo,skyMat); scene.add(sky);
+// stars
+const starGeo=new THREE.BufferGeometry();{const p=[];for(let i=0;i<900;i++){const u=rnd()*2-1,t=rnd()*Math.PI*2,r=380;const y=Math.abs(u);const s=Math.sqrt(1-y*y);p.push(Math.cos(t)*s*r,y*r,Math.sin(t)*s*r)}starGeo.setAttribute("position",new THREE.Float32BufferAttribute(p,3))}
+const starMat=new THREE.PointsMaterial({color:0xffffff,size:1.6,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false});
+scene.add(new THREE.Points(starGeo,starMat));
+scene.fog=new THREE.Fog(0xcfeaf8,80,260);
+
+/* --- ground --- */
+mesh(new THREE.CircleGeometry(300,64),toon("#7fbf4f"),{rx:-Math.PI/2,cast:false});
+mesh(new THREE.CircleGeometry(47,96),toon("#8ccc58"),{rx:-Math.PI/2,y:0.01,cast:false});
+// ring path with soft edges
+mesh(new THREE.RingGeometry(RP-1.9,RP+1.9,160),toon("#e9d7a8"),{rx:-Math.PI/2,y:0.03,cast:false});
+mesh(new THREE.RingGeometry(RP-2.15,RP-1.9,160),toon("#cdb987"),{rx:-Math.PI/2,y:0.035,cast:false});
+mesh(new THREE.RingGeometry(RP+1.9,RP+2.15,160),toon("#cdb987"),{rx:-Math.PI/2,y:0.035,cast:false});
+// stepping stones on the path
+{const g=new THREE.CylinderGeometry(1,1,0.08,7);const m=toon("#d2c4a0");
+ for(let i=0;i<120;i++){const a=i/120*Math.PI*2+rnd()*0.02,r=RP+(rnd()-.5)*2.6;mesh(g,m,{x:Math.cos(a)*r,y:0.06,z:Math.sin(a)*r,ry:rnd()*3,s:[0.25+rnd()*0.25,1,0.2+rnd()*0.2],cast:false})}}
+// spokes: ring → each station, ring → centre
+{const m=toon("#e9d7a8");for(let k=0;k<N;k++){const a=angOf(k),sd=sideOf(k),r0=RP+sd*1.9,r1=RSk(k)-sd*5.2,len=Math.abs(r1-r0);const p=ringPos(a,(r0+r1)/2);mesh(new THREE.PlaneGeometry(2.6,len),m,{x:p.x,y:0.025,z:p.z,rx:-Math.PI/2,rz:-(a-Math.PI/2),cast:false})}}
+
+/* --- centre: plaza, fountain, flower rings --- */
+mesh(new THREE.CircleGeometry(9,48),toon("#e3dccb"),{rx:-Math.PI/2,y:0.04,cast:false});
+mesh(new THREE.CylinderGeometry(4.2,4.4,0.7,40),toon("#d8d0bd"),{y:0.35});
+const water=mesh(new THREE.CylinderGeometry(3.8,3.8,0.1,40),toon("#5cc2e6",{transparent:true,opacity:.9}),{y:0.62,cast:false});
+mesh(new THREE.CylinderGeometry(0.5,0.7,2.2,16),toon("#d8d0bd"),{y:1.4});
+mesh(new THREE.CylinderGeometry(1.8,1.2,0.35,24),toon("#e2dac6"),{y:2.5});
+mesh(new THREE.SphereGeometry(0.45,16,12),toon("#e2dac6"),{y:3.0});
+const jets=[];{const g=new THREE.SphereGeometry(0.12,8,6),m=toon("#bfeaff",{transparent:true,opacity:.85});for(let i=0;i<40;i++){const j=mesh(g,m,{cast:false});j.userData={a:rnd()*Math.PI*2,t:rnd()};jets.push(j)}}
+// flower beds ring around the plaza
+const flowerCols=["#ff7aa2","#ffd166","#ffffff","#b388ff","#ff8a5c","#ff4f6d","#7bdff2"];
+function flowers(n,place,scale=1){
+  const geo=new THREE.IcosahedronGeometry(0.16*scale,0), stem=new THREE.SphereGeometry(0.2*scale,6,5);
+  const fm=new THREE.InstancedMesh(geo,new THREE.MeshToonMaterial({gradientMap:ramp}),n), lm=new THREE.InstancedMesh(stem,toon("#3f8a3a"),n);
+  const o=new THREE.Object3D(), c=new THREE.Color();
+  for(let i=0;i<n;i++){const [x,z,col]=place(i);o.position.set(x,0.18*scale,z);o.scale.set(1,0.8,1);o.updateMatrix();lm.setMatrixAt(i,o.matrix);
+    o.position.y=0.42*scale;o.scale.setScalar(0.8+rnd()*0.6);o.updateMatrix();fm.setMatrixAt(i,o.matrix);fm.setColorAt(i,c.set(col).convertSRGBToLinear())}
+  fm.castShadow=lm.castShadow=true;scene.add(lm);scene.add(fm);
+}
+flowers(900,i=>{const a=rnd()*Math.PI*2,r=10.2+rnd()*6.6;const band=Math.floor(((a+Math.PI)/(Math.PI*2))*14)%flowerCols.length;return[Math.cos(a)*r,Math.sin(a)*r,flowerCols[(band+Math.floor(r/2.2))%flowerCols.length]]});
+// low hedge borders around beds
+{const m=toon("#3f8f3a");for(const r of [9.6,17.2]){mesh(new THREE.TorusGeometry(r,0.45,6,96),m,{rx:Math.PI/2,y:0.3,s:[1,1,0.9]})}}
+// path-side flowers
+flowers(700,i=>{const a=rnd()*Math.PI*2,side=rnd()<.5?-1:1,r=RP+side*(2.6+rnd()*1.4);return[Math.cos(a)*r,Math.sin(a)*r,flowerCols[Math.floor(rnd()*flowerCols.length)]]},0.85);
+
+/* --- trees, bushes, outer hedge --- */
+function tree(x,z,s=1,kind=0){
+  const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
+  mesh(new THREE.CylinderGeometry(0.25*s,0.38*s,2.2*s,7),toon("#8a5a34"),{y:1.1*s},g);
+  const greens=[["#3e9b45","#5bbd56"],["#2f8a4e","#4fae64"],["#6aa84f","#8fcf63"]][kind%3];
+  if(kind===1){for(let i=0;i<3;i++)mesh(new THREE.ConeGeometry((1.9-i*0.45)*s,2.2*s,8),toon(greens[i%2]),{y:(2.5+i*1.15)*s},g)}
+  else{for(let i=0;i<4;i++){const r=(1.2+rnd()*0.6)*s;mesh(new THREE.IcosahedronGeometry(r,1),toon(greens[i%2],{flatShading:true}),{x:(rnd()-.5)*1.4*s,y:(2.8+rnd()*1.2)*s,z:(rnd()-.5)*1.4*s},g)}}
+  return g;
+}
+function bush(x,z,s=1,col="#4caf50"){mesh(new THREE.IcosahedronGeometry(0.9*s,1),toon(col,{flatShading:true}),{x,y:0.5*s,z,s:[1,0.75,1]})}
+for(let i=0;i<90;i++){const a=rnd()*Math.PI*2,r=49+rnd()*45;tree(Math.cos(a)*r,Math.sin(a)*r,1.1+rnd()*0.9,Math.floor(rnd()*3))}
+for(let k=0;k<N;k++){const a=angOf(k+0.5);
+  {const p=ringPos(a,RSO+rnd()*2);tree(p.x,p.z,0.9+rnd()*0.3,Math.floor(rnd()*3))}
+  {const p=ringPos(a,RSI-1+rnd()*2);tree(p.x,p.z,0.8+rnd()*0.3,Math.floor(rnd()*3))}
+  for(const sd of [-1,1]){const b=ringPos(a+0.05*sd,RP+sd*4.6);bush(b.x,b.z,0.9,"#5cb85c")}}
+// outer hedge wall (gap at the gate)
+{const m=toon("#3a8a3e");for(let i=0;i<180;i++){const a=i/180*Math.PI*2;if(Math.abs(((a-angOf(0)+Math.PI*3)%(Math.PI*2))-Math.PI)<0.12)continue;const p=ringPos(a,46);mesh(new THREE.BoxGeometry(1.7,1.6,1.1),m,{x:p.x,y:0.8,z:p.z,ry:-a})}}
+// distant hills
+for(let i=0;i<14;i++){const a=i/14*Math.PI*2+rnd()*0.2,r=150+rnd()*60;mesh(new THREE.SphereGeometry(30+rnd()*25,12,8),toon(["#5d9e57","#6aa85e","#4f8f50"][i%3],{flatShading:true}),{x:Math.cos(a)*r,y:-12,z:Math.sin(a)*r,s:[1.4,0.6,1.1],cast:false})}
+
+/* --- lamps between stations --- */
+const lamps=[];const glowTex=(()=>{const c=document.createElement("canvas");c.width=c.height=64;const g=c.getContext("2d");const r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,"rgba(255,220,150,1)");r.addColorStop(.4,"rgba(255,190,110,.45)");r.addColorStop(1,"rgba(255,190,110,0)");g.fillStyle=r;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
+function lamp(x,z){const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
+  mesh(new THREE.CylinderGeometry(0.08,0.12,2.6,8),toon("#2e3a3a"),{y:1.3},g);
+  const bulb=mesh(new THREE.SphereGeometry(0.28,12,10),new THREE.MeshBasicMaterial({color:0xfff0c8}),{y:2.75,cast:false},g);
+  mesh(new THREE.ConeGeometry(0.4,0.3,8),toon("#2e3a3a"),{y:3.05},g);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));sp.position.y=2.75;sp.scale.setScalar(4.5);g.add(sp);
+  lamps.push({bulb,sp});}
+for(let k=0;k<N;k++){const a=angOf(k+0.5);for(const r of [RP-2.6,RP+2.6]){const p=ringPos(a+0.04*(r>RP?1:-1),r);lamp(p.x,p.z)}}
+
+/* --- stations --- */
+const stationGroups=[];
+function station(k){const a=angOf(k),sd=sideOf(k),p=ringPos(a,RSk(k));const g=new THREE.Group();g.position.copy(p);
+  g.rotation.y = sd>0 ? Math.atan2(-Math.cos(a),-Math.sin(a)) : Math.atan2(Math.cos(a),Math.sin(a)); // front faces the path
+  g.userData.k=k;scene.add(g);
+  mesh(new THREE.CylinderGeometry(5.9,6.1,0.18,40),toon(ZONES[k].id==="expo"?"#e8dfc9":"#9bd067"),{y:0.09,cast:false},g); // round plot
+  mesh(new THREE.TorusGeometry(6.0,0.42,6,64),toon("#3f8f3a"),{rx:Math.PI/2,y:0.35},g);
+  stationGroups.push(g);return g}
+const glowSpots=[];
+const builders={
+  gate(g){ // flower arch with a welcome board
+    const m=toon("#8a5a34");for(const x of [-2.1,2.1])mesh(new THREE.CylinderGeometry(0.25,0.3,4,8),m,{x,y:2,z:3},g);
+    mesh(new THREE.TorusGeometry(2.1,0.25,8,24,Math.PI),m,{y:4,z:3},g);
+    const rc=["#ff6f91","#ffc2d1","#ff4f6d"];for(let i=0;i<60;i++){const t=rnd();let x,y;if(t<.35){x=-2.1;y=rnd()*4}else if(t<.7){x=2.1;y=rnd()*4}else{const q=rnd()*Math.PI;x=Math.cos(q)*2.1;y=4+Math.sin(q)*2.1}
+      mesh(new THREE.IcosahedronGeometry(0.22+rnd()*0.15,0),toon(rnd()<.55?"#3f8a3a":rc[i%3],{flatShading:true}),{x:x+(rnd()-.5)*.4,y,z:3+(rnd()-.5)*.5},g)}
+    mesh(new THREE.BoxGeometry(2.6,1.4,0.15),toon("#f4e7c4"),{y:1.6,z:-1.6},g);mesh(new THREE.PlaneGeometry(2.4,1.2),new THREE.MeshLambertMaterial({map:textTex([["ycjacademy",86],["歡迎光臨",70]],"#f4e7c4","#5a3e1e")}),{y:1.6,z:-1.52,cast:false},g);mesh(new THREE.CylinderGeometry(0.1,0.1,1.6,6),m,{y:0.8,z:-1.7},g);
+    bushRing(g,["#ffd166","#ff7aa2"]);
+  },
+  expo(g){ // the exhibition pavilion
+    mesh(new THREE.BoxGeometry(8.4,0.5,6),toon("#e6dcc6"),{y:0.4},g);
+    mesh(new THREE.BoxGeometry(7.4,3.4,4.6),toon("#fbf3e1"),{y:2.35,z:-0.4},g);
+    for(let i=0;i<6;i++)mesh(new THREE.CylinderGeometry(0.22,0.26,3.4,12),toon("#ffffff"),{x:-3.2+i*1.28,y:2.35,z:2.1},g);
+    const roofShape=new THREE.Shape();roofShape.moveTo(-4.6,0);roofShape.lineTo(4.6,0);roofShape.lineTo(0,2.2);roofShape.lineTo(-4.6,0);
+    const roof=new THREE.ExtrudeGeometry(roofShape,{depth:6.2,bevelEnabled:false});mesh(roof,toon("#e07a3c"),{y:4.05,z:-3.5},g);
+    mesh(new THREE.BoxGeometry(9.4,0.3,6.6),toon("#c8612c"),{y:4.0,z:-0.4},g);
+    const door=mesh(new THREE.BoxGeometry(2,2.4,0.1),new THREE.MeshBasicMaterial({color:0x6a4426}),{y:1.85,z:1.86,cast:false},g);glowSpots.push({m:door,day:0x6a4426,night:0xffc77a});
+    // banner & posters
+    mesh(new THREE.BoxGeometry(3.4,0.8,0.1),toon("#c9342b"),{y:4.6,z:2.75},g);mesh(new THREE.PlaneGeometry(3.3,0.75),new THREE.MeshLambertMaterial({map:textTex([["展覽會場",150]],"#c9342b","#fff4d6",640,150)}),{y:4.6,z:2.81,cast:false},g);
+    const posters=["#0d2a33","#f2b134","#5fa8a0"];posters.forEach((c,i)=>mesh(new THREE.BoxGeometry(1.1,1.5,0.08),toon(c),{x:-2.6+i*2.6+(i===1?0:0),y:2.4,z:1.9},g));
+        pavLight.userData.station=g;
+  },
+  nursery(g){ // seedling trays + a small cold frame
+    const tray=toon("#9c7a52"),soil=toon("#5a3f2c");
+    for(let i=0;i<3;i++)for(let j=0;j<2;j++){const x=-3+i*3,z=-1.6+j*3;mesh(new THREE.BoxGeometry(2.4,0.5,2),tray,{x,y:0.45,z},g);mesh(new THREE.BoxGeometry(2.2,0.1,1.8),soil,{x,y:0.72,z},g);
+      for(let a=0;a<5;a++)for(let b=0;b<4;b++){const h=0.15+((i+j+a+b)%3)*0.12;mesh(new THREE.ConeGeometry(0.12,h*2,5),toon((a+b)%2?"#7cc35a":"#a5dc6f"),{x:x-0.9+a*0.45,y:0.78+h,z:z-0.65+b*0.43,cast:false},g)}}
+    mesh(new THREE.BoxGeometry(0.4,1.6,0.1),toon("#f4e7c4"),{x:3.8,y:1,z:2.6},g);
+  },
+  herb(g){ // raised herb beds with lavender
+    for(let i=0;i<3;i++){const z=-2.6+i*2.4;mesh(new THREE.BoxGeometry(7,0.7,1.5),toon("#9a7048"),{y:0.45,z},g);
+      for(let k=0;k<14;k++){const lav=k%4===0;mesh(new THREE.IcosahedronGeometry(lav?0.28:0.36,0),toon(lav?"#a98be0":["#5fa04a","#77b85a","#4c8d43"][k%3],{flatShading:true}),{x:-3.1+k*0.48,y:1.05+(lav?0.25:0),z:z+(rnd()-.5)*0.4,s:[1,lav?1.8:1,1]},g)}}
+    mesh(new THREE.CylinderGeometry(0.5,0.4,0.8,10),toon("#7aa6b8"),{x:3.8,y:0.5,z:2.4},g); // watering can stand-in
+  },
+  clinic(g){ // small white clinic with a red cross and a bench
+    mesh(new THREE.BoxGeometry(7,3.4,5),toon("#f7f3ea"),{y:1.8},g);
+    mesh(new THREE.BoxGeometry(7.8,0.4,5.8),toon("#bb3f26"),{y:3.7},g);
+    mesh(new THREE.BoxGeometry(1.5,2.3,0.2),toon("#5f8f96"),{y:1.25,z:2.55},g);
+    for(const x of [-2.4,2.4])mesh(new THREE.BoxGeometry(1.2,1.1,0.2),toon("#bfe0e6"),{x,y:2.1,z:2.55},g);
+    mesh(new THREE.BoxGeometry(1.5,0.45,0.25),toon("#d9402c"),{y:4.8},g);
+    mesh(new THREE.BoxGeometry(0.45,1.5,0.25),toon("#d9402c"),{y:4.8},g);
+  },
+  study(g){ // octagonal gazebo with a desk
+    mesh(new THREE.CylinderGeometry(4,4.2,0.5,8),toon("#d8c7a3"),{y:0.4},g);
+    for(let i=0;i<8;i++){const a=i/8*Math.PI*2+Math.PI/8;if(i===2)continue;mesh(new THREE.CylinderGeometry(0.16,0.16,3.2,8),toon("#fbf6ea"),{x:Math.cos(a)*3.6,y:2.2,z:Math.sin(a)*3.6},g)}
+    mesh(new THREE.ConeGeometry(4.8,2.4,8),toon("#7b5a9f"),{y:5,ry:Math.PI/8},g);
+    mesh(new THREE.SphereGeometry(0.3,10,8),toon("#f2b134"),{y:6.35},g);
+    mesh(new THREE.BoxGeometry(2.2,0.15,1.2),toon("#8a6440"),{y:1.55},g);for(const x of [-0.9,0.9])mesh(new THREE.BoxGeometry(0.12,0.9,1),toon("#6d4f33"),{x,y:1.05},g);
+    mesh(new THREE.BoxGeometry(0.7,0.12,0.5),toon("#e8e1ff"),{x:-0.3,y:1.7,ry:0.3},g);mesh(new THREE.BoxGeometry(0.6,0.25,0.45),toon("#c9342b"),{x:0.5,y:1.75},g);
+  },
+  greenhouse(g){
+    const glass=new THREE.MeshToonMaterial({color:0xbfe9f0,gradientMap:ramp,transparent:true,opacity:0.35,depthWrite:false});
+    const frame=toon("#ffffff");
+    mesh(new THREE.BoxGeometry(7,3,4.6),glass,{y:1.7,cast:false},g);
+    const rs=new THREE.Shape();rs.moveTo(-3.5,0);rs.lineTo(3.5,0);rs.lineTo(0,1.8);rs.lineTo(-3.5,0);
+    mesh(new THREE.ExtrudeGeometry(rs,{depth:4.6,bevelEnabled:false}),glass,{y:3.2,z:-2.3,cast:false},g);
+    for(let i=0;i<=6;i++)mesh(new THREE.BoxGeometry(0.1,3,0.1),frame,{x:-3.5+i*7/6,y:1.7,z:2.3},g);
+    for(let i=0;i<=6;i++)mesh(new THREE.BoxGeometry(0.1,3,0.1),frame,{x:-3.5+i*7/6,y:1.7,z:-2.3},g);
+    mesh(new THREE.BoxGeometry(7.1,0.12,0.12),frame,{y:3.2,z:2.3},g);mesh(new THREE.BoxGeometry(7.1,0.12,0.12),frame,{y:3.2,z:-2.3},g);
+    mesh(new THREE.BoxGeometry(0.12,0.12,4.7),frame,{y:5,z:0},g);
+    for(let i=0;i<10;i++)mesh(new THREE.IcosahedronGeometry(0.45+rnd()*0.3,0),toon(["#4f9a45","#6cbf55","#3b8a4e"][i%3],{flatShading:true}),{x:-2.8+(i%5)*1.4,y:0.9,z:i<5?-1:1},g);
+    glowSpots.push({m:null,light:true,g});
+  },
+  observatory(g){
+    mesh(new THREE.CylinderGeometry(3.4,3.6,1.6,24),toon("#d6cfc0"),{y:0.9},g);
+    const dome=mesh(new THREE.SphereGeometry(3.1,32,16,0,Math.PI*2,0,Math.PI/2),toon("#eef1f6"),{y:1.7},g);
+    mesh(new THREE.BoxGeometry(0.9,3.2,0.2),toon("#2b2f38"),{y:3.3,z:2.25,rx:-0.62},g);
+    const scope=mesh(new THREE.CylinderGeometry(0.22,0.3,2.4,12),toon("#c9a24a"),{y:4.6,z:1.4,rx:-0.8},g);
+    mesh(new THREE.TorusGeometry(3.15,0.12,6,48),toon("#b9bec8"),{rx:Math.PI/2,y:1.72},g);
+  },
+  shed(g){
+    mesh(new THREE.BoxGeometry(5,3,3.6),toon("#a0744c"),{y:1.6,z:-0.6},g);
+    const rs=new THREE.Shape();rs.moveTo(-2.9,0);rs.lineTo(2.9,0);rs.lineTo(0,1.5);rs.lineTo(-2.9,0);
+    mesh(new THREE.ExtrudeGeometry(rs,{depth:4.2,bevelEnabled:false}),toon("#5c6a6e"),{y:3.1,z:-2.7},g);
+    mesh(new THREE.BoxGeometry(1.3,2.2,0.1),toon("#6b4a2b"),{x:-0.8,y:1.2,z:1.25},g);
+    mesh(new THREE.BoxGeometry(1,0.8,0.1),toon("#bfe3ef"),{x:1.3,y:2,z:1.25},g);
+    mesh(new THREE.CylinderGeometry(0.55,0.55,1.1,14),toon("#6d4f33"),{x:3,y:0.65,z:1.4},g);
+    mesh(new THREE.BoxGeometry(0.15,2.2,0.15),toon("#8a6a48"),{x:2.2,y:1.1,z:1.8,rz:0.25},g);
+  },
+  journal(g){ // stepping stones, bench, a stack of notebooks
+    for(let i=0;i<7;i++){const t=i/6;mesh(new THREE.CylinderGeometry(0.75,0.8,0.14,9),toon("#cfc8b8"),{x:-3.6+t*7.2,y:0.22,z:Math.sin(t*5)*1.2,ry:rnd()*3,cast:false},g)}
+    mesh(new THREE.BoxGeometry(3,0.2,1),toon("#a0764e"),{y:1,z:-2.4},g);mesh(new THREE.BoxGeometry(3,1,0.2),toon("#a0764e"),{y:1.6,z:-2.85},g);
+    for(const x of [-1.3,1.3])mesh(new THREE.BoxGeometry(0.2,0.9,0.9),toon("#7d5a3a"),{x,y:0.5,z:-2.4},g);
+    ["#c77fa0","#f2b134","#5fa8a0"].forEach((c,i)=>mesh(new THREE.BoxGeometry(0.8,0.16,0.6),toon(c),{x:0.4,y:1.2+i*0.17,z:-2.4,ry:i*0.3},g));
+    bushRing(g,["#ff7aa2","#ffffff"]);
   }
-}
+};
+function textTex(lines,bg,fg,w=512,h=256){const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.fillStyle=bg;x.fillRect(0,0,w,h);
+  x.fillStyle=fg;x.textAlign="center";x.textBaseline="middle";lines.forEach((l,i)=>{x.font=`${l[1]}px "LXGW WenKai TC","Noto Sans TC",serif`;x.fillText(l[0],w/2,h*(i+0.5)/lines.length+(lines.length>1?(i?-8:8):0))});
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t}
+function bushRing(g,cols){for(let i=0;i<10;i++){const a=i/10*Math.PI*2;if(Math.abs(Math.sin(a))>0.85&&Math.cos(a)>-0.2)continue;mesh(new THREE.IcosahedronGeometry(0.55,1),toon(i%3?"#4caf50":cols[i%cols.length],{flatShading:true}),{x:Math.cos(a)*5.4,y:0.5,z:Math.sin(a)*5.4},g)}}
+ZONES.forEach((z,k)=>{const g=station(k);builders[z.id](g);
+  if(!hasContent(z)){ // fallow: a little "under construction" stake + tilled soil look
+    mesh(new THREE.BoxGeometry(1.6,0.9,0.1),toon("#f4e7c4"),{x:3.6,y:1.4,z:3.4,ry:-0.4},g);mesh(new THREE.CylinderGeometry(0.06,0.06,1.4,6),toon("#8a6a48"),{x:3.6,y:0.7,z:3.35},g)}
+});
+// pavilion light position
+{const p=new THREE.Vector3(0,2.2,3.6);stationGroups[ZONES.findIndex(z=>z.id==="expo")].localToWorld(p);pavLight.position.copy(p)}
 
-function afterLoad(page, island, anchor){
-  if(!view) return;
-  const w = view.contentWindow, d = view.contentDocument;
-  if(!d) return;
-  document.title = d.title || document.title;
-  if(page === "home"){
-    if(island && typeof w.openIsland === "function") w.openIsland(island, true);
-    else if(!island && typeof w.closeLog === "function" && d.getElementById("log")?.classList.contains("open")) w.closeLog();
-    return;
-  }
-  if(anchor){
-    const t = d.getElementById(anchor);
-    if(t) setTimeout(()=>t.scrollIntoView({block:"start"}), 50);
+/* --- clouds --- */
+const clouds=new THREE.Group();scene.add(clouds);
+const cloudMat=new THREE.MeshToonMaterial({color:0xffffff,gradientMap:ramp,transparent:true,opacity:0.95});
+for(let i=0;i<9;i++){const c=new THREE.Group();const a=i/9*Math.PI*2+rnd(),r=60+rnd()*60;c.position.set(Math.cos(a)*r,38+rnd()*16,Math.sin(a)*r);
+  for(let j=0;j<5;j++){const s=4+rnd()*4;const m=new THREE.Mesh(new THREE.IcosahedronGeometry(s,1),cloudMat);m.position.set((j-2)*s*0.9,rnd()*2,(rnd()-.5)*4);m.scale.y=0.65;c.add(m)}
+  clouds.add(c)}
+
+/* --- the walker: a chibi doctor --- */
+const hero=new THREE.Group();scene.add(hero);
+const body=new THREE.Group();hero.add(body);
+mesh(new THREE.CylinderGeometry(0.42,0.55,1.0,14),toon("#ffffff"),{y:1.05},body); // white coat
+mesh(new THREE.CylinderGeometry(0.43,0.43,0.12,14),toon("#5fa8a0"),{y:1.5},body); // scrub collar
+const head=mesh(new THREE.SphereGeometry(0.52,20,16),toon("#f6d2b4"),{y:2.05},body);
+mesh(new THREE.SphereGeometry(0.55,20,16,0,Math.PI*2,0,Math.PI*0.55),toon("#2b2420"),{y:2.12,rx:-0.25},body); // hair
+for(const x of [-0.18,0.18])mesh(new THREE.SphereGeometry(0.06,8,6),toon("#2b2420"),{x,y:2.08,z:0.47,cast:false},body);
+mesh(new THREE.TorusGeometry(0.22,0.035,6,16,Math.PI),toon("#7b8796"),{y:1.45,z:0.38,rx:0.5},body); // stethoscope
+const legs=[],arms=[];
+for(const x of [-0.18,0.18]){const l=new THREE.Group();l.position.set(x,0.6,0);mesh(new THREE.CylinderGeometry(0.12,0.12,0.55,8),toon("#4f7f9a"),{y:-0.27},l);mesh(new THREE.BoxGeometry(0.22,0.14,0.34),toon("#3a3a3a"),{y:-0.56,z:0.05},l);body.add(l);legs.push(l)}
+for(const x of [-0.52,0.52]){const a=new THREE.Group();a.position.set(x,1.42,0);mesh(new THREE.CylinderGeometry(0.1,0.1,0.6,8),toon("#ffffff"),{y:-0.3},a);mesh(new THREE.SphereGeometry(0.11,8,6),toon("#f6d2b4"),{y:-0.62},a);body.add(a);arms.push(a)}
+const heroShadow=mesh(new THREE.CircleGeometry(0.6,20),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.18,depthWrite:false}),{rx:-Math.PI/2,y:0.07,cast:false,recv:false},hero);
+
+/* --- butterflies & fireflies --- */
+const BCOL=["#ff9f1c","#ffffff","#4cc9f0","#ffd60a","#ff7aa2","#b388ff"];
+const butterflies=[];
+for(let i=0;i<12;i++){const g=new THREE.Group();const col=BCOL[i%BCOL.length];
+  const wm=new THREE.MeshBasicMaterial({color:new THREE.Color(col).convertSRGBToLinear(),side:THREE.DoubleSide});
+  const wg=new THREE.CircleGeometry(0.22,10);wg.scale(1,0.8,1);
+  const L=new THREE.Group(),R=new THREE.Group();
+  const l1=new THREE.Mesh(wg,wm);l1.position.set(-0.2,0.04,0);l1.rotation.x=-Math.PI/2;L.add(l1);const l2=new THREE.Mesh(wg,wm);l2.position.set(-0.14,0,0.2);l2.scale.setScalar(.7);l2.rotation.x=-Math.PI/2;L.add(l2);
+  const r1=l1.clone();r1.position.x=0.2;R.add(r1);const r2=l2.clone();r2.position.x=0.14;R.add(r2);
+  const bd=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.4,6),new THREE.MeshBasicMaterial({color:0x2a2018}));bd.rotation.x=Math.PI/2;
+  g.add(L,R,bd);g.scale.setScalar(0.85);scene.add(g);
+  butterflies.push({g,L,R,ph:rnd()*6,sp:10+rnd()*6,pos:new THREE.Vector3(),vel:new THREE.Vector3(),tgt:new THREE.Vector3(),init:false})}
+const ffGeo=new THREE.BufferGeometry(),FF=70,ffBase=[];{const p=new Float32Array(FF*3);for(let i=0;i<FF;i++){const a=rnd()*Math.PI*2,r=8+rnd()*40;ffBase.push([Math.cos(a)*r,0.6+rnd()*2.4,Math.sin(a)*r,rnd()*6]);}ffGeo.setAttribute("position",new THREE.BufferAttribute(p,3))}
+const ffMat=new THREE.PointsMaterial({map:glowTex,color:0xe6ff8c,size:0.9,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending});
+scene.add(new THREE.Points(ffGeo,ffMat));
+
+/* --- labels --- */
+const tagsEl=document.getElementById("tags"), tags=ZONES.map((z,k)=>{const b=document.createElement("button");b.type="button";b.className="tag"+(hasContent(z)?"":" fallow");
+  b.textContent=hasContent(z)?z.name:`${z.name}・整地中`;b.addEventListener("click",()=>openZone(z.id));tagsEl.appendChild(b);return b});
+const tagHeights={clinic:7,gate:6.8,expo:7.4,nursery:2.6,herb:2.8,study:7.2,greenhouse:5.8,observatory:6.4,shed:5.5,journal:3.5};
+
+/* --- minimap --- */
+const mini=document.getElementById("miniCv"), mctx=mini.getContext("2d");
+function drawMini(theta){
+  const W=mini.width,c=W/2,sc=(W/2-12)/RSO;mctx.clearRect(0,0,W,W);
+  mctx.strokeStyle="rgba(255,255,255,.75)";mctx.lineWidth=5;mctx.beginPath();mctx.arc(c,c,RP*sc,0,7);mctx.stroke();
+  mctx.fillStyle="rgba(140,204,88,.55)";mctx.beginPath();mctx.arc(c,c,14*sc,0,7);mctx.fill();
+  mctx.fillStyle="#5cc2e6";mctx.beginPath();mctx.arc(c,c,4*sc,0,7);mctx.fill();
+  ZONES.forEach((z,k)=>{const a=angOf(k);mctx.fillStyle=z.color;mctx.beginPath();mctx.arc(c+Math.cos(a)*RSk(k)*sc,c+Math.sin(a)*RSk(k)*sc,k===curStation?12:8,0,7);mctx.fill();
+    if(k===curStation){mctx.strokeStyle="#fff";mctx.lineWidth=3;mctx.stroke()}});
+  const px=c+Math.cos(theta)*RP*sc,py=c+Math.sin(theta)*RP*sc, f=[-Math.sin(theta),Math.cos(theta)];
+  mctx.fillStyle="#fff";mctx.beginPath();mctx.moveTo(px+f[0]*14,py+f[1]*14);mctx.lineTo(px-f[1]*9-f[0]*6,py+f[0]*9-f[1]*6);mctx.lineTo(px+f[1]*9-f[0]*6,py-f[0]*9-f[1]*6);mctx.closePath();mctx.fill();
+}
+document.getElementById("mini").addEventListener("click",e=>{const r=e.currentTarget.getBoundingClientRect();const a=Math.atan2(e.clientY-r.top-r.height/2,e.clientX-r.left-r.width/2);
+  let best=0,bd=9;ZONES.forEach((z,k)=>{let d=Math.abs(((a-angOf(k))%(Math.PI*2)+Math.PI*3)%(Math.PI*2)-Math.PI);if(d<bd){bd=d;best=k}});scrollToZone(best)});
+
+/* --- lighting update from the real sun --- */
+let NIGHT=0,SUNALT=45;
+function updateSky(){
+  const s=sunPos(new Date(Date.now()+offsetH*3600000),place.lat,place.lon);SUNALT=s.alt;
+  const col=skyAt(s.alt);skyMat.uniforms.top.value.set(col.top).convertSRGBToLinear();skyMat.uniforms.bot.value.set(col.bot).convertSRGBToLinear();
+  scene.fog.color.set(col.bot).convertSRGBToLinear();
+  // world: north = -z, east = +x
+  const el=Math.max(s.alt,-10)*RAD, az=s.az*RAD;
+  const dir=new THREE.Vector3(Math.sin(az)*Math.cos(el),Math.sin(el),-Math.cos(az)*Math.cos(el));
+  skyMat.uniforms.sunDir.value.copy(dir);
+  const day=clamp((s.alt+4)/14,0,1); NIGHT=clamp((-s.alt+1)/12,0,1);
+  const warm=s.alt>-6&&s.alt<16?1-Math.abs(s.alt-3)/13:0;
+  skyMat.uniforms.sunCol.value.set(mixc("#fff4d6","#ff9a4a",warm)).convertSRGBToLinear();skyMat.uniforms.sunAmt.value=day;
+  sun.userData.dir=dir.clone();
+  sun.color.set(mixc("#fff7e8","#ffb36b",warm)).convertSRGBToLinear();
+  sun.intensity = s.alt>0 ? 0.35+1.05*day : 0.25*NIGHT; // moonlight at night
+  if(s.alt<=0){sun.userData.dir=new THREE.Vector3(-0.4,0.8,0.3).normalize();sun.color.set("#9db4ff").convertSRGBToLinear()}
+  hemi.intensity=0.25+0.6*day; hemi.color.set(mixc("#2a3a66","#dff1ff",day)).convertSRGBToLinear(); hemi.groundColor.set(mixc("#1b2a1a","#6c8f4a",day)).convertSRGBToLinear();
+  amb.intensity=NIGHT*0.35;
+  starMat.opacity=clamp((-s.alt-4)/10,0,1);
+  cloudMat.color.set(mixc(mixc("#ffffff","#ffc1a8",warm),"#3a4566",NIGHT)).convertSRGBToLinear(); cloudMat.opacity=0.95-NIGHT*0.55;
+  lamps.forEach(l=>{l.sp.material.opacity=NIGHT*0.9;l.bulb.material.color.set(NIGHT>.2?"#ffd27a":"#fff0c8")});
+  glowSpots.forEach(o=>{if(o.m)o.m.material.color.set(NIGHT>.3?o.night:o.day)});
+  pavLight.intensity=NIGHT*2.2; ffMat.opacity=clamp((NIGHT-0.35)*1.6,0,1);
+  renderer.toneMappingExposure=1;
+  const t=new Date(Date.now()+offsetH*3600000).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});
+  document.getElementById("where").textContent=`${place.name} · ${t}${offsetH?`（預覽 ${offsetH>0?"+":""}${offsetH}h）`:""}`;
+  document.getElementById("sunline").textContent=`太陽 ${s.alt.toFixed(0)}° · ${phase(s.alt)}`;
+}
+updateSky(); setInterval(updateSky,60000);
+document.getElementById("scrub").addEventListener("input",e=>{offsetH=+e.target.value;updateSky()});
+document.getElementById("nowBtn").addEventListener("click",()=>{offsetH=0;document.getElementById("scrub").value=0;updateSky()});
+document.getElementById("locBtn").addEventListener("click",()=>{const btn=document.getElementById("locBtn");
+  try{navigator.geolocation.getCurrentPosition(p=>{place={lat:p.coords.latitude,lon:p.coords.longitude,name:`${p.coords.latitude.toFixed(1)}°, ${p.coords.longitude.toFixed(1)}°`};btn.textContent="已用你的位置";updateSky()},()=>{btn.textContent="無法定位，用時區"})}catch(e){btn.textContent="無法定位，用時區"}});
+
+/* --- resize --- */
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<640?60:52;camera.updateProjectionMatrix()}
+addEventListener("resize",resize);resize();
+
+let curStation=-1;
+/* --- frame loop --- */
+let sParam=pathParam(scrollFrac()), lastT=performance.now(), walkPhase=0;
+const tmpV=new THREE.Vector3(), camPos=new THREE.Vector3(), camLook=new THREE.Vector3(), V=(x,y,z)=>new THREE.Vector3(x,y,z);
+let firstFrame=true;
+function frame(now){
+  const rawDt=Math.min(0.25,(now-lastT)/1000), dt=Math.min(0.05,rawDt);lastT=now;const t=now/1000;
+  const target=pathParam(scrollFrac());
+  const prev=sParam; sParam+= (target-sParam)*(REDUCED?1:Math.min(1,rawDt*3.2));
+  const moving=Math.abs(sParam-prev)/Math.max(rawDt,1e-3);
+  const theta=angOf(sParam);
+  const P=ringPos(theta,RP), F=V(-Math.sin(theta),0,Math.cos(theta)), O=V(Math.cos(theta),0,Math.sin(theta));
+  // nearest stop (for the minimap highlight)
+  const near=((Math.round(sParam)%N)+N)%N; curStation = Math.abs(sParam-Math.round(sParam))<0.3 ? near : -1;
+  document.getElementById("hint").style.opacity = scrollFrac()<0.015 ? 1 : 0;
+  document.getElementById("prog").textContent=`${Math.round(scrollFrac()*100)}%`;
+  // hero always faces down the path
+  hero.position.copy(P);
+  hero.rotation.y=Math.atan2(F.x,F.z);
+  walkPhase+=dt*clamp(moving*9,0,12);
+  const sw=Math.sin(walkPhase)*clamp(moving*1.6,0,0.7);
+  legs[0].rotation.x=sw;legs[1].rotation.x=-sw;arms[0].rotation.x=-sw*0.9;arms[1].rotation.x=sw*0.9;
+  body.position.y=Math.abs(Math.sin(walkPhase))*clamp(moving*0.25,0,0.12) + (REDUCED?0:Math.sin(t*2)*0.02);
+  // camera: always behind the walker, looking along the path
+  // phones: high, steep view so both sides of the path fit a portrait screen
+  const narrow=stage.clientWidth<640;
+  let tp,tl;
+  if(narrow){
+    const T=ringPos(angOf(sParam+0.2),RP-3.5);
+    tl=T.clone(); tp=T.clone().addScaledVector(F,-27).add(V(0,40,0));
   } else {
-    w.scrollTo(0,0);
+    tp=ringPos(angOf(sParam-0.36),RP).add(V(0,6.2,0));
+    tl=ringPos(angOf(sParam+0.5),RP).add(V(0,0.6,0));
   }
+  if(firstFrame){camPos.copy(tp);camLook.copy(tl);firstFrame=false}
+  camPos.lerp(tp,REDUCED?1:Math.min(1,rawDt*6));camLook.lerp(tl,REDUCED?1:Math.min(1,rawDt*6));
+  camera.position.copy(camPos);camera.lookAt(camLook);
+  // sun follows the hero for crisp shadows
+  sun.position.copy(P).addScaledVector(sun.userData.dir,60);sun.target.position.copy(P);sun.target.updateMatrixWorld();
+  sky.position.copy(camera.position);
+  // fountain & water
+  if(!REDUCED){jets.forEach(j=>{const u=(j.userData.t+t*0.6)%1,a=j.userData.a;const r=0.3+u*2.6;j.position.set(Math.cos(a)*r,3.1+u*2.2-u*u*4.2,Math.sin(a)*r);j.visible=j.position.y>0.6});
+    clouds.rotation.y=t*0.004;}
+  // butterflies near the hero (daytime)
+  const day=clamp((SUNALT+2)/8,0,1);
+  butterflies.forEach((b,i)=>{b.g.visible=day>0.05;if(!b.g.visible)return;
+    if(!b.init||b.pos.distanceTo(P)>26){const a=rnd()*Math.PI*2;b.pos.copy(P).add(V(Math.cos(a)*8,1+rnd()*2,Math.sin(a)*8));b.init=true}
+    if(b.pos.distanceTo(b.tgt)<1||rnd()<0.005){const a=rnd()*Math.PI*2,r=3+rnd()*11;b.tgt.copy(P).add(V(Math.cos(a)*r,0.6+rnd()*2.6,Math.sin(a)*r)).addScaledVector(F,4)}
+    if(!REDUCED){tmpV.copy(b.tgt).sub(b.pos).multiplyScalar(0.9);tmpV.y+=Math.sin(t*3+b.ph)*0.8;b.vel.lerp(tmpV,Math.min(1,dt*1.5));if(b.vel.length()>3.2)b.vel.setLength(3.2);b.pos.addScaledVector(b.vel,dt)}
+    b.g.position.copy(b.pos);b.g.position.y+=Math.sin(t*7+b.ph)*0.08;
+    b.g.rotation.y=Math.atan2(b.vel.x,b.vel.z);
+    const fl=REDUCED?0.5:0.25+1.15*Math.abs(Math.sin(t*b.sp+b.ph));b.L.rotation.z=fl;b.R.rotation.z=-fl;});
+  // fireflies drift around the hero's half of the garden
+  if(NIGHT>0.35){const arr=ffGeo.attributes.position.array;ffBase.forEach((f,i)=>{arr[i*3]=f[0]+Math.sin(t*0.4+f[3])*1.2;arr[i*3+1]=f[1]+Math.sin(t*0.9+f[3]*2)*0.4;arr[i*3+2]=f[2]+Math.cos(t*0.35+f[3])*1.2});ffGeo.attributes.position.needsUpdate=true;
+    ffMat.size=0.6+0.4*Math.abs(Math.sin(t*2));}
+  // labels
+  const w2=stage.clientWidth,h2=stage.clientHeight;
+  ZONES.forEach((z,k)=>{const p=ringPos(angOf(k),RSk(k));p.y=tagHeights[z.id];const d=p.distanceTo(camera.position);p.project(camera);
+    const vis=p.z<1&&p.z>-1&&d<(w2<640?60:46)&&Math.abs(p.x)<1.1&&Math.abs(p.y)<1.1;const el=tags[k];
+    if(!vis){el.style.opacity=0;el.style.pointerEvents="none";return}
+    el.style.opacity=clamp(((w2<640?60:46)-d)/10,0,1);el.style.pointerEvents="auto";
+    el.style.left=((p.x+1)/2*w2)+"px";el.style.top=((1-p.y)/2*h2)+"px";el.style.fontSize=(w2<640?clamp(260/d,10.5,14):clamp(330/d,12,19))+"px"});
+  drawMini(theta);
+  renderer.render(scene,camera);
+  if(document.getElementById("loading"))document.getElementById("loading").remove();
+  requestAnimationFrame(frame);
 }
-
-// catch link clicks inside the framed page
-function wire(){
-  if(!view) return;
-  const d = view.contentDocument;
-  if(!d) return;
-  d.addEventListener("click", e => {
-    const a = e.target.closest && e.target.closest("a[href]");
-    if(!a) return;
-    const href = a.getAttribute("href");
-    const m = href.match(/^(?:\.\/)?([\w-]+)\.html(?:#([\w-]+))?$/);
-    if(m){
-      e.preventDefault();
-      const page = m[1] === "index" ? "home" : m[1];
-      go(toHash(page, m[2]));
-      return;
-    }
-    if(href.startsWith("#") && href.length > 1 && !e.defaultPrevented){
-      const t = d.getElementById(href.slice(1));
-      if(t){ e.preventDefault(); t.scrollIntoView({behavior:"smooth", block:"start"}); }
-    }
-  });
+requestAnimationFrame(frame);
+// click a plot in the garden to enter it
+const ray=new THREE.Raycaster(), ptr=new THREE.Vector2();
+function pickZone(e){const r=canvas.getBoundingClientRect();ptr.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(ptr,camera);
+  const hits=ray.intersectObjects(stationGroups,true);for(const h of hits){let o=h.object;while(o&&o.userData.k===undefined)o=o.parent;if(o&&h.distance<60)return o.userData.k}return -1}
+canvas.addEventListener("click",e=>{const k=pickZone(e);if(k>=0)openZone(ZONES[k].id)});
+let hoverT=0;canvas.addEventListener("pointermove",e=>{const n=performance.now();if(n-hoverT<80)return;hoverT=n;const k=pickZone(e);canvas.style.cursor=k>=0?"pointer":"default";tags.forEach((t,i)=>t.style.transform=i===k?"translate(-50%,-100%) scale(1.12)":"")});
+// deep link: #expo etc.
+const h=location.hash.slice(1),k=ZONES.findIndex(z=>z.id===h);
+if(k>=0){setTimeout(()=>{scrollToZone(k);setTimeout(()=>openZone(ZONES[k].id,true),900)},300)}
+addEventListener("hashchange",()=>{const k=ZONES.findIndex(z=>z.id===location.hash.slice(1));if(k>=0)openZone(ZONES[k].id,true)});
 }
-
-window.addEventListener("hashchange", route);
-route();
 </script>
 </body>
 </html>
