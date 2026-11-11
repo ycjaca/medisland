@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>家醫星圖｜ycjacademy 觀星台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#070b1d; --night-2:#0d1430; --ink:#e9ecf8; --ink-soft:#a3abc9; --ink-dim:#6c7499; --line:#283158;
+  --gold:#f2d16b; --accent:#7f86c9;
+  --display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--night);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.sky{position:fixed;inset:0;background:
+  radial-gradient(120% 80% at 70% 110%,#1d2550 0%,rgba(29,37,80,0) 60%),
+  radial-gradient(90% 70% at 10% -10%,#16204a 0%,rgba(22,32,74,0) 55%),
+  linear-gradient(180deg,#060918 0%,#0b1230 55%,#121a3e 100%)}
+#map{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#map.dragging{cursor:grabbing}
+
+/* stars */
+.dust circle{fill:#fff}
+@keyframes tw{0%,100%{opacity:var(--o)}50%{opacity:calc(var(--o)*.25)}}
+.dust circle.t{animation:tw var(--d) ease-in-out infinite}
+.edge{stroke:#b9c3ff;stroke-opacity:.3;stroke-width:1;fill:none;vector-effect:non-scaling-stroke}
+.edge.x{stroke-opacity:.07}
+.edge.inf{stroke-dasharray:4 4}
+.edge.hot{stroke:var(--gold);stroke-opacity:.9;stroke-width:1.6}
+.cname{font-family:var(--display);fill:#c9cff5;fill-opacity:.32;text-anchor:middle;pointer-events:none;letter-spacing:.2em}
+.csub{font-family:var(--body);fill:#c9cff5;fill-opacity:.28;text-anchor:middle;pointer-events:none;font-size:13px;letter-spacing:.08em}
+.star{cursor:pointer}
+.star .hit{fill:transparent}
+.star .core{transition:r .2s}
+.star .spike{stroke-width:1;vector-effect:non-scaling-stroke}
+.star text{font-size:13px;fill:var(--ink);paint-order:stroke;stroke:#070b1d;stroke-width:3.5px;stroke-linejoin:round;pointer-events:none;opacity:0;transition:opacity .2s}
+.star.lbl text,.star:hover text,.star:focus text,.zoomed .star text{opacity:.92}
+.star:focus{outline:none}
+.star:focus .core{stroke:var(--gold);stroke-width:2;vector-effect:non-scaling-stroke}
+.dim .star:not(.on){opacity:.16}
+.dim .edge:not(.hot){stroke-opacity:.05}
+.dim .star.on text{opacity:.95}
+.sel .core{stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke}
+
+/* HUD */
+header{position:fixed;left:clamp(14px,2.4vw,28px);top:clamp(12px,2.2vw,24px);z-index:5;pointer-events:none;max-width:min(520px,70vw)}
+.back{pointer-events:auto;display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);text-decoration:none;margin-bottom:6px}
+.back:hover{color:var(--ink)}
+h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(28px,4vw,44px);line-height:1.05;letter-spacing:.04em;text-shadow:0 2px 20px rgba(127,134,201,.45)}
+.lede{margin:6px 0 0;color:var(--ink-soft);font-size:14px}
+
+.tools{position:fixed;right:clamp(14px,2.4vw,28px);top:clamp(14px,2.2vw,24px);z-index:5;display:flex;gap:8px;align-items:center}
+.search{position:relative}
+.search input{width:min(230px,42vw);background:rgba(13,20,48,.75);border:1px solid var(--line);border-radius:20px;padding:7px 14px;font-size:14px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.search input::placeholder{color:var(--ink-dim)}
+.sugg{position:absolute;right:0;top:calc(100% + 6px);width:min(280px,80vw);background:#0f1736;border:1px solid var(--line);border-radius:10px;list-style:none;margin:0;padding:4px;display:none;max-height:50vh;overflow:auto}
+.sugg.open{display:block}
+.sugg button{width:100%;text-align:left;background:none;border:0;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;gap:10px}
+.sugg button:hover,.sugg button.act{background:#1b2550}
+.sugg small{color:var(--ink-dim);font-family:var(--mono);font-size:11px}
+.zbtn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(13,20,48,.75);cursor:pointer;font-size:17px;line-height:1;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.zbtn:hover{border-color:var(--accent)}
+
+.guide{position:fixed;left:clamp(14px,2.4vw,28px);bottom:clamp(14px,2.4vw,28px);z-index:5;width:min(330px,calc(100vw - 28px));max-height:min(62vh,560px);display:flex;flex-direction:column;
+  background:rgba(11,17,42,.86);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.guide.min .gbody{display:none}
+.ghead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 8px 16px;border-bottom:1px solid var(--line)}
+.guide.min .ghead{border-bottom:0}
+.ghead h2{margin:0;font-family:var(--display);font-size:18px;font-weight:700}
+.tabs{display:flex;gap:4px}
+.tab{background:none;border:1px solid transparent;border-radius:14px;padding:2px 10px;font-size:12.5px;cursor:pointer;color:var(--ink-soft)}
+.tab[aria-selected=true]{border-color:var(--accent);color:var(--ink)}
+.mini{background:none;border:0;cursor:pointer;color:var(--ink-soft);font-size:18px;width:28px;height:28px;border-radius:50%}
+.gbody{overflow:auto;padding:8px 10px 12px}
+.row{width:100%;display:flex;align-items:center;gap:10px;background:none;border:0;border-radius:8px;padding:7px 8px;cursor:pointer;text-align:left}
+.row:hover,.row.act{background:#18214a}
+.row b{font-family:var(--display);font-weight:700;font-size:16px;min-width:4.2em}
+.row span{font-size:13px;color:var(--ink-soft);flex:1}
+.row i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--ink-dim)}
+.sw{width:10px;height:10px;border-radius:50%;flex:none}
+.note{font-size:12.5px;color:var(--ink-soft);margin:4px 8px 8px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin:10px 8px 2px;font-size:12px;color:var(--ink-soft)}
+.legend span{display:flex;align-items:center;gap:5px}
+.bridge{padding:8px;border-radius:8px;cursor:pointer;background:none;border:0;width:100%;text-align:left}
+.bridge:hover{background:#18214a}
+.bridge strong{font-weight:500;font-size:14px}
+.bridge p{margin:2px 0 0;font-size:12.5px;color:var(--ink-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.chip{font-size:11.5px;border-radius:10px;padding:0 8px;border:1px solid currentColor;line-height:18px;white-space:nowrap}
+
+/* detail panel */
+aside{position:fixed;z-index:6;top:0;right:0;height:100%;width:min(420px,100%);background:#0c1333;border-left:1px solid var(--line);transform:translateX(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+aside.open{transform:none}
+.p-head{padding:22px 22px 14px;border-bottom:1px solid var(--line);position:relative}
+.p-head .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em}
+.p-head h2{font-family:var(--display);font-size:30px;margin:2px 44px 6px 0;line-height:1.15}
+.p-head p{margin:0;color:var(--ink-soft);font-size:14.5px}
+.close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:20px;line-height:1}
+.p-body{overflow-y:auto;padding:12px 22px 28px}
+.p-body h3{font-size:12px;font-family:var(--mono);letter-spacing:.1em;color:var(--ink-dim);margin:16px 0 8px;font-weight:400}
+.pages{display:flex;flex-direction:column;gap:6px}
+.pages a{display:flex;align-items:center;gap:10px;text-decoration:none;padding:9px 12px;border-radius:10px;background:#141c44;border-left:3px solid var(--c)}
+.pages a:hover{background:#1b2552}
+.pages a span{flex:1}
+.nbr{display:flex;flex-direction:column;gap:2px}
+.nbr button{display:flex;gap:10px;align-items:baseline;background:none;border:0;border-bottom:1px dashed var(--line);padding:8px 2px;text-align:left;cursor:pointer}
+.nbr button:hover strong{color:var(--gold)}
+.nbr strong{font-weight:500;font-size:14.5px;white-space:nowrap}
+.nbr span{font-size:13px;color:var(--ink-soft);flex:1}
+.nbr em{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--gold);border:1px solid;border-radius:8px;padding:0 5px;white-space:nowrap}
+.const{margin-top:6px;font-size:13px;color:var(--ink-soft)}
+footer{position:fixed;right:clamp(14px,2.4vw,28px);bottom:clamp(10px,1.6vw,18px);z-index:4;font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-align:right;max-width:min(560px,36vw)}
+footer a{color:var(--ink-soft)}
+.hint{position:fixed;left:50%;top:clamp(18px,3vh,30px);transform:translateX(-50%);z-index:4;font-size:13px;color:var(--ink-soft);pointer-events:none;transition:opacity .6s;white-space:nowrap}
+@media (max-width:760px){
+  .guide{max-height:46vh}
+  footer{display:none}
+  .hint{display:none}
+  .lede{font-size:13px}
+  aside{top:auto;bottom:0;height:auto;max-height:78%;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;transform:translateY(102%)}
+  .tools{top:158px;left:14px;right:14px}
+  .search{flex:1}.search input{width:100%}
+}
+@media (prefers-reduced-motion:reduce){.dust circle.t{animation:none}aside{transition:none}}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<svg id="map" role="application" aria-label="家醫星圖：拖曳移動、滾輪縮放、點星星看關聯" aria-describedby="lede"></svg>
+
+<header>
+  <a class="back" href="../#observatory">← 回到花園・觀星台</a>
+  <h1>家醫星圖</h1>
+  <p class="lede" id="lede">把秋季會七個深入頁和高血壓專區裡的概念連起來。每顆星是一個概念，線是頁面裡寫到的關聯，越亮的星橫跨越多頁。</p>
+</header>
+
+<div class="tools">
+  <div class="search">
+    <input id="q" type="search" placeholder="找一顆星：SGLT2、OSA…" aria-label="搜尋概念" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sugg">
+    <ul class="sugg" id="sugg" role="listbox"></ul>
+  </div>
+  <button class="zbtn" id="zin" type="button" aria-label="放大">+</button>
+  <button class="zbtn" id="zout" type="button" aria-label="縮小">−</button>
+  <button class="zbtn" id="zfit" type="button" aria-label="看全部" title="看全部">◎</button>
+</div>
+
+<section class="guide" id="guide" aria-label="星圖導覽">
+  <div class="ghead">
+    <h2>導覽</h2>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-t="const">星座</button>
+      <button class="tab" role="tab" aria-selected="false" data-t="pages">講題</button>
+      <button class="tab" role="tab" aria-selected="false" data-t="bright">亮星</button>
+    </div>
+    <button class="mini" id="gmin" type="button" aria-label="收合導覽" aria-expanded="true">–</button>
+  </div>
+  <div class="gbody" id="gbody"></div>
+</section>
+
+<aside id="panel" role="dialog" aria-modal="false" aria-labelledby="pTitle" aria-hidden="true">
+  <div class="p-head"><div class="k" id="pKind"></div><h2 id="pTitle"></h2><p id="pDesc"></p><div class="const" id="pConst"></div><button class="close" id="pClose" aria-label="關閉">×</button></div>
+  <div class="p-body" id="pBody"></div>
+</aside>
+
+<div class="hint" id="hint">拖曳移動・滾輪或雙指縮放・點星星看它連到哪裡</div>
+<footer>用 <a href="https://pypi.org/project/graphifyy/" target="_blank" rel="noopener">graphify</a> 建圖與分群；概念與關聯由 Claude 閱讀規劃文件抽出，虛線為推論。<span id="built"></span>・<a href="data/GRAPH_REPORT.md">圖譜報告</a>・<a href="data/graph.json">graph.json</a></footer>
+
+<script src="stars-data.js"></script>
+<script>
+(()=>{
+const S=window.STARS, NS="http://www.w3.org/2000/svg";
+const KINDS={"疾病":"#f4a582","治療":"#8fd8c8","評估":"#f2d16b","健保與制度":"#cdb0f5","試驗":"#9fb8ff","指引":"#b8e08a","原則":"#ffffff"};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const byId=Object.fromEntries(S.nodes.map(n=>[n.id,n]));
+const cons=Object.fromEntries(S.constellations.map(c=>[c.id,c]));
+const adj={};S.nodes.forEach(n=>adj[n.id]=[]);
+S.edges.forEach((e,i)=>{adj[e.s].push({o:e.t,e,i});adj[e.t].push({o:e.s,e,i})});
+document.getElementById("built").textContent=`・${S.built} 建立`;
+const [VW,VH]=S.view;
+const svg=document.getElementById("map");
+const el=(t,a={},p)=>{const x=document.createElementNS(NS,t);for(const k in a)x.setAttribute(k,a[k]);if(p)p.appendChild(x);return x};
+
+// defs
+const defs=el("defs",{},svg);
+const f=el("filter",{id:"glow",x:"-200%",y:"-200%",width:"500%",height:"500%"},defs);
+el("feGaussianBlur",{stdDeviation:"3.2",result:"b"},f);
+const m=el("feMerge",{},f);el("feMergeNode",{in:"b"},m);el("feMergeNode",{in:"SourceGraphic"},m);
+
+const world=el("g",{id:"world"},svg);
+
+// background dust (deterministic)
+let seed=20261112;const rnd=()=>(seed=(seed*1664525+1013904223)%4294967296)/4294967296;
+const dust=el("g",{class:"dust","aria-hidden":"true"},world);
+for(let i=0;i<520;i++){const o=(.15+rnd()*.5).toFixed(2);const c=el("circle",{cx:(rnd()*VW*1.6-VW*.3).toFixed(1),cy:(rnd()*VH*1.6-VH*.3).toFixed(1),r:(rnd()*1.1+.2).toFixed(2)},dust);
+  c.style.setProperty("--o",o);c.style.opacity=o;if(rnd()<.35){c.classList.add("t");c.style.setProperty("--d",(2.5+rnd()*5).toFixed(1)+"s");c.style.animationDelay=(-rnd()*6).toFixed(1)+"s"}}
+
+// constellation names at centroid (pushed to the outer side)
+const nameG=el("g",{"aria-hidden":"true"},world);
+const cx0=VW/2,cy0=VH/2;
+S.constellations.forEach(c=>{
+  const ms=c.members.map(id=>byId[id]);
+  const x=ms.reduce((a,n)=>a+n.x,0)/ms.length, y=ms.reduce((a,n)=>a+n.y,0)/ms.length;
+  const ymin=Math.min(...ms.map(n=>n.y)), ymax=Math.max(...ms.map(n=>n.y));
+  const ty=ymax+44;
+  c.cx=x;c.cy=y;c.bbox=[Math.min(...ms.map(n=>n.x)),ymin,Math.max(...ms.map(n=>n.x)),ymax];
+  el("text",{x,y:ty,class:"cname","font-size":34},nameG).textContent=c.name;
+  el("text",{x,y:ty+22,class:"csub"},nameG).textContent=c.sub;
+});
+
+// edges
+const edgeG=el("g",{},world);
+const edgeEls=S.edges.map(e=>{const a=byId[e.s],b=byId[e.t];
+  return el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:"edge"+(a.c!==b.c?" x":"")+(e.conf!=="EXTRACTED"?" inf":"")},edgeG)});
+
+// stars
+const starG=el("g",{},world);
+const starEls={};
+const ALWAYS=n=>n.deg>=8||n.pages.length>=4;
+S.nodes.forEach(n=>{
+  const col=KINDS[n.kind]||"#fff", bright=n.pages.length>=3, r=2.2+Math.sqrt(n.deg)*1.25+(bright?1:0);
+  const g=el("g",{class:"star"+(ALWAYS(n)?" lbl":""),transform:`translate(${n.x},${n.y})`,tabindex:"0",role:"button","aria-label":`${n.label}（${n.kind}），連到 ${n.deg} 個概念`},starG);
+  el("circle",{class:"hit",r:Math.max(13,r+8)},g);
+  if(bright){const L=r*3.2;el("path",{class:"spike",d:`M${-L} 0H${L}M0 ${-L}V${L}`,stroke:col,"stroke-opacity":.55},g)}
+  el("circle",{class:"core",r,fill:col,filter:"url(#glow)"},g);
+  el("text",{x:r+5,y:4.5},g).textContent=n.label;
+  g.addEventListener("click",ev=>{ev.stopPropagation();select(n.id)});
+  g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();select(n.id)}});
+  starEls[n.id]=g;
+});
+
+// ── view transform
+let T={k:1,x:0,y:0};
+function apply(){world.setAttribute("transform",`translate(${T.x},${T.y}) scale(${T.k})`);svg.classList.toggle("zoomed",T.k>1.7)}
+function fit(b,pad=1){const w=svg.clientWidth,h=svg.clientHeight;
+  const mobile=w<760, po=document.getElementById("panel").classList.contains("open"), top=mobile?212:110, bottom=mobile?(po?h*.62:Math.min(h*.46,330)+20):60, left=mobile?16:(w>1100&&!document.getElementById("guide").classList.contains("min")?360:30), right=(!mobile&&po)?Math.min(440,w*.45):30;
+
+  const aw=w-left-right, ah=h-top-bottom, bw=(b[2]-b[0])||1, bh=(b[3]-b[1])||1;
+  const k=Math.min(4,Math.min(aw/Math.max(bw,1),Math.max(ah,80)/bh)*pad); T={k,x:left+(aw-bw*k)/2-b[0]*k,y:top+(ah-bh*k)/2-b[1]*k};}
+function anim(to,ms=600){const fr={...T},t0=performance.now(),red=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(red){T=to;apply();return}
+  const step=t=>{const p=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-p,3);T={k:fr.k+(to.k-fr.k)*e,x:fr.x+(to.x-fr.x)*e,y:fr.y+(to.y-fr.y)*e};apply();if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+function fitTo(b,pad,ms){const keep={...T};fit(b,pad);const to={...T};T=keep;anim(to,ms)}
+const ALL=[60,40,VW-60,VH-30];
+function zoomAt(f,px,py){const k=Math.max(.4,Math.min(6,T.k*f));const r=k/T.k;T={k,x:px-(px-T.x)*r,y:py-(py-T.y)*r};apply()}
+fit(ALL,.98);apply();
+addEventListener("resize",()=>{fit(ALL,.98);apply()});
+
+svg.addEventListener("wheel",e=>{e.preventDefault();const b=svg.getBoundingClientRect();zoomAt(Math.exp(-e.deltaY*.0015),e.clientX-b.left,e.clientY-b.top);hideHint()},{passive:false});
+const ptrs=new Map();let last=null,moved=0,pinch0=null;
+svg.addEventListener("pointerdown",e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;if(ptrs.size===1)last={x:e.clientX,y:e.clientY};
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),k:T.k}}});
+svg.addEventListener("pointermove",e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===2&&pinch0){const [a,b]=[...ptrs.values()],d=Math.hypot(a.x-b.x,a.y-b.y),r=svg.getBoundingClientRect();zoomAt(pinch0.k*d/pinch0.d/T.k,(a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top);moved+=10;return}
+  if(last){const dx=e.clientX-last.x,dy=e.clientY-last.y;moved+=Math.abs(dx)+Math.abs(dy);
+    if(moved>4){if(!svg.hasPointerCapture(e.pointerId))svg.setPointerCapture(e.pointerId);svg.classList.add("dragging");T.x+=dx;T.y+=dy;apply();hideHint()}last={x:e.clientX,y:e.clientY}}});
+const up=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!ptrs.size){last=null;svg.classList.remove("dragging")}};
+svg.addEventListener("pointerup",up);svg.addEventListener("pointercancel",up);
+svg.addEventListener("click",e=>{if(moved<5&&(e.target===svg||e.target.closest(".dust")))clearSel()});
+const cen=()=>[svg.clientWidth/2,svg.clientHeight/2];
+document.getElementById("zin").onclick=()=>zoomAt(1.4,...cen());
+document.getElementById("zout").onclick=()=>zoomAt(1/1.4,...cen());
+document.getElementById("zfit").onclick=()=>{clearSel();fitTo(ALL,.98)};
+const hint=document.getElementById("hint");function hideHint(){hint.style.opacity=0}
+setTimeout(hideHint,7000);
+
+// ── highlight & selection
+let selId=null,activeRow=null;
+function highlight(ids,edgeIdx){
+  world.classList.add("dim");
+  Object.values(starEls).forEach(g=>g.classList.remove("on","sel"));
+  edgeEls.forEach(x=>x.classList.remove("hot"));
+  ids.forEach(id=>starEls[id]&&starEls[id].classList.add("on"));
+  (edgeIdx||[]).forEach(i=>edgeEls[i].classList.add("hot"));
+}
+function clearHL(){world.classList.remove("dim");Object.values(starEls).forEach(g=>g.classList.remove("on","sel"));edgeEls.forEach(x=>x.classList.remove("hot"));
+  if(activeRow){activeRow.classList.remove("act");activeRow=null}}
+function clearSel(){selId=null;clearHL();closePanel()}
+const panel=document.getElementById("panel");
+function select(id,fly){
+  const n=byId[id];if(!n)return;selId=id;hideHint();
+  const nb=adj[id];highlight([id,...nb.map(x=>x.o)],nb.map(x=>x.i));starEls[id].classList.add("sel");
+  const kc=KINDS[n.kind];
+  document.getElementById("pKind").innerHTML=`<span style="color:${kc}">● ${esc(n.kind)}</span>`;
+  document.getElementById("pTitle").textContent=n.label;
+  document.getElementById("pDesc").textContent=n.desc;
+  const c=cons[n.c];document.getElementById("pConst").innerHTML=`屬於 <b>${esc(c.name)}</b>・${esc(c.sub)}`;
+  let h=`<h3>出現在 ${n.pages.length} 頁</h3><div class="pages">`+n.pages.map(p=>{const P=S.pages[p];const ext=/^https?:/.test(P.url);
+    return `<a href="${esc(P.url)}" style="--c:${P.color}"${ext?' target="_blank" rel="noopener"':""}><span>${esc(P.name)}</span>→</a>`}).join("")+`</div>`;
+  const sorted=[...nb].sort((a,b)=>(byId[b.o].pages.length-byId[a.o].pages.length)||(byId[b.o].deg-byId[a.o].deg));
+  h+=`<h3>連到 ${nb.length} 顆星</h3><div class="nbr">`+sorted.map(x=>{const o=byId[x.o];
+    return `<button type="button" data-id="${o.id}"><strong style="color:${KINDS[o.kind]}">${esc(o.label)}</strong><span>${esc(x.e.note||"")}</span>${x.e.conf!=="EXTRACTED"?"<em>推論</em>":""}</button>`}).join("")+`</div>`;
+  const hy=S.hyper.filter(H=>H.nodes.includes(id));
+  if(hy.length) h+=`<h3>一起構成</h3>`+hy.map(H=>`<p class="note" style="margin:4px 0">${esc(H.label)}：${H.nodes.map(x=>esc(byId[x].label)).join("、")}</p>`).join("");
+  const body=document.getElementById("pBody");body.innerHTML=h;body.scrollTop=0;
+  body.querySelectorAll(".nbr button").forEach(b=>b.onclick=()=>select(b.dataset.id,true));
+  panel.classList.add("open");panel.setAttribute("aria-hidden","false");
+  if(fly){const pts=[n,...nb.map(x=>byId[x.o])];fitTo([Math.min(...pts.map(p=>p.x)),Math.min(...pts.map(p=>p.y)),Math.max(...pts.map(p=>p.x)),Math.max(...pts.map(p=>p.y))],.8)}
+  try{history.replaceState(null,"","#"+id)}catch(e){}
+}
+function closePanel(){panel.classList.remove("open");panel.setAttribute("aria-hidden","true");try{history.replaceState(null,"",location.pathname)}catch(e){}}
+document.getElementById("pClose").onclick=clearSel;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){clearSel();closeSugg()}});
+
+// ── guide
+const gbody=document.getElementById("gbody");
+function rowHL(btn,ids,b){clearSel();if(activeRow===btn){activeRow=null;fitTo(ALL,.98);return}
+  highlight(ids,S.edges.map((e,i)=>ids.includes(e.s)&&ids.includes(e.t)?i:-1).filter(i=>i>=0));activeRow=btn;btn.classList.add("act");if(b)fitTo(b,.85)}
+function bboxOf(ids){const p=ids.map(i=>byId[i]);return[Math.min(...p.map(n=>n.x)),Math.min(...p.map(n=>n.y)),Math.max(...p.map(n=>n.x)),Math.max(...p.map(n=>n.y))]}
+const legend=`<div class="legend">${Object.entries(KINDS).map(([k,c])=>`<span><i class="sw" style="background:${c}"></i>${k}</span>`).join("")}</div>
+  <p class="note">星越大連線越多；有十字光芒的是橫跨 3 頁以上的亮星。虛線是推論出來的關聯。</p>`;
+const TABS={
+  const(){return `<p class="note">graphify 依連線疏密自動分出 ${S.constellations.length} 個星座，點一下飛過去。</p>`+
+    S.constellations.map(c=>`<button class="row" data-c="${c.id}"><b>${esc(c.name)}</b><span>${esc(c.sub)}</span><i>${c.members.length}</i></button>`).join("")+legend},
+  pages(){return `<p class="note">點講題，看它的概念散在哪些星座裡。</p>`+
+    Object.entries(S.pages).map(([k,p])=>{const n=S.nodes.filter(x=>x.pages.includes(k)).length;
+      return `<button class="row" data-p="${k}"><i class="sw" style="background:${p.color}"></i><span style="color:var(--ink)">${esc(p.name)}</span><i>${n}</i></button>`}).join("")},
+  bright(){const br=S.nodes.filter(n=>n.pages.length>=3).sort((a,b)=>b.pages.length-a.pages.length||b.deg-a.deg);
+    return `<p class="note">橫跨 3 頁以上的概念，是梳理看診思路時最值得串起來的地方。</p>`+
+    br.map(n=>`<button class="bridge" data-id="${n.id}"><strong style="color:${KINDS[n.kind]}">${esc(n.label)}</strong><div class="chips">${n.pages.map(p=>`<span class="chip" style="color:${S.pages[p].color}">${esc(S.pages[p].name)}</span>`).join("")}</div></button>`).join("")+
+    `<p class="note" style="margin-top:14px">graphify 找到的跨星座連線：</p>`+
+    S.bridges.map(b=>{const s=S.nodes.find(n=>n.label===b.s)||byId[b.s],t=S.nodes.find(n=>n.label===b.t)||byId[b.t];if(!s||!t)return"";
+      const e=S.edges.find(e=>(e.s===s.id&&e.t===t.id)||(e.s===t.id&&e.t===s.id));
+      return `<button class="bridge" data-id="${s.id}"><strong>${esc(s.label)} — ${esc(t.label)}</strong><p>${esc(e&&e.note||"推論的關聯")}${e&&e.conf!=="EXTRACTED"?"（推論）":""}</p></button>`}).join("")}
+};
+function showTab(t){document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===t));gbody.innerHTML=TABS[t]();
+  gbody.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{const c=cons[b.dataset.c];rowHL(b,c.members,bboxOf(c.members))});
+  gbody.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const ids=S.nodes.filter(n=>n.pages.includes(b.dataset.p)).map(n=>n.id);rowHL(b,ids,null)});
+  gbody.querySelectorAll(".bridge").forEach(b=>b.onclick=()=>select(b.dataset.id,true));}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{clearSel();showTab(b.dataset.t)});
+showTab("const");
+const gmin=document.getElementById("gmin"),guide=document.getElementById("guide");
+gmin.onclick=()=>{const m=guide.classList.toggle("min");gmin.textContent=m?"+":"–";gmin.setAttribute("aria-expanded",!m)};
+if(innerWidth<760){guide.classList.add("min");gmin.textContent="+";gmin.setAttribute("aria-expanded","false")}
+
+// ── search
+const q=document.getElementById("q"),sugg=document.getElementById("sugg");let hits=[],hi=0;
+const norm=s=>s.toLowerCase().replace(/[\s\-–／/・]/g,"");
+function closeSugg(){sugg.classList.remove("open");q.setAttribute("aria-expanded","false")}
+function renderSugg(){sugg.innerHTML=hits.map((n,i)=>`<li><button type="button" role="option" class="${i===hi?"act":""}" data-id="${n.id}"><span>${esc(n.label)}</span><small>${esc(n.kind)}</small></button></li>`).join("");
+  sugg.querySelectorAll("button").forEach(b=>b.onmousedown=e=>{e.preventDefault();pick(b.dataset.id)});}
+function pick(id){closeSugg();q.value=byId[id].label;q.blur();select(id,true)}
+q.addEventListener("input",()=>{const v=norm(q.value);if(!v){closeSugg();return}
+  hits=S.nodes.filter(n=>norm(n.label+n.desc).includes(v)).sort((a,b)=>norm(a.label).includes(v)===norm(b.label).includes(v)?b.deg-a.deg:norm(a.label).includes(v)?-1:1).slice(0,8);hi=0;
+  if(!hits.length){sugg.innerHTML=`<li style="padding:8px 10px;color:var(--ink-dim);font-size:13px">找不到</li>`}else renderSugg();
+  sugg.classList.add("open");q.setAttribute("aria-expanded","true")});
+q.addEventListener("keydown",e=>{if(!hits.length)return;
+  if(e.key==="ArrowDown"){hi=(hi+1)%hits.length;renderSugg();e.preventDefault()}
+  else if(e.key==="ArrowUp"){hi=(hi-1+hits.length)%hits.length;renderSugg();e.preventDefault()}
+  else if(e.key==="Enter"){pick(hits[hi].id);e.preventDefault()}});
+q.addEventListener("blur",()=>setTimeout(closeSugg,120));
+
+// deep link
+const fromHash=()=>{const h=decodeURIComponent(location.hash.slice(1));if(byId[h]&&h!==selId)select(h,true)};setTimeout(fromHash,300);addEventListener("hashchange",fromHash);
+})();
+</script>
+</body>
+</html>
