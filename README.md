@@ -10,6 +10,8 @@ facilitate med learning...
 |---|---|
 | `index.html` | ycjacademy 方塊花園：Minecraft 風的 3D 世界。電腦用 WASD＋滑鼠，手機用搖桿；準星對著區域按 E 進入。左上角選單有導覽模式、區域列表、地圖與設定 |
 | `islands/` | 展覽會場第一檔：家醫群島（台灣家庭醫學醫學會 115 年度秋季學術研討會） |
+| `clinic/` | 門診實務：`index.html` 目錄、`hypertension.html` 高血壓、`diabetes.html` 糖尿病、`ckd.html` 慢性腎臟病 |
+| `scripts/sync_clinic.py` | 從 claude.ai artifact 複製新版門診頁後，跑這支把站內連結改成相對路徑 |
 
 ### islands/（家醫群島）
 

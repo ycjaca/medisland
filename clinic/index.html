@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>門診實務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Index of the clinic handbooks; same light handbook look as the pages it lists. */
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef; --card:#ffffff; --ink:#22261f; --mute:#5d6258; --line:#dad8cd; --red:#bb3f26;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header{background:var(--ink);color:#f3f1e8;padding:22px 0 20px}
+.crumb{font:13px var(--mono);color:#c2bfa9}
+.crumb a{color:inherit}
+h1{font:700 32px/1.3 var(--display);margin:4px 0 6px}
+header p{margin:0;color:#dcd9cb;font-size:15px}
+main.wrap{padding:22px 16px 50px;display:flex;flex-direction:column;gap:14px}
+a.card{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:start;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:6px;padding:16px 18px}
+a.card:hover{border-color:var(--c)}
+a.card:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.num{grid-row:span 2;font:700 30px/1 var(--display);color:var(--c);padding-top:2px}
+.card h2{margin:0;font:700 22px/1.35 var(--display)}
+.card p{margin:0;color:var(--mute);font-size:14.5px}
+.note{font-size:13px;color:var(--mute);margin:6px 0 0}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="crumb"><a href="../">ycjacademy</a>／門診實務</div>
+  <h1>門診實務</h1>
+  <p>依看診順序整理的門診手冊：初診、檢查、選藥、追蹤，看診時可以直接拿來用。每頁都有「門診模式」，只留下看診要用的部分。</p>
+</div></header>
+<main class="wrap">
+  <a class="card" href="hypertension.html" style="--c:#bb3f26"><span class="num">1</span><h2>高血壓</h2><p>初診評估、選藥與藥物動力學、調藥、追蹤時程與健保規定。</p></a>
+  <a class="card" href="diabetes.html" style="--c:#a3520c"><span class="num">2</span><h2>糖尿病</h2><p>確診、分流、收案、目標；照健保路徑的處方產生器、劑量表、胰島素滴定、追蹤排程。</p></a>
+  <a class="card" href="ckd.html" style="--c:#7a2f4f"><span class="num">3</span><h2>慢性腎臟病</h2><p>eGFR 與 G/A 熱圖、KFRE、收案判斷；四大支柱處方產生器、腎劑量表、高血鉀處理、追蹤與轉診。</p></a>
+  <p class="note">內容仍在製作中，藥物與健保規定請以最新仿單及健保署公告為準。</p>
+</main>
+</body>
+</html>

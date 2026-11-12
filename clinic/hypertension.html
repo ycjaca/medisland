@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高血壓門診實務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a clinic handbook. One column of visit steps; each step ends in a working tool. Clinic mode hides the reading and keeps the tools. */
+:root{
+  color-scheme:light;
+  --bg:#f3f6f4; --card:#ffffff; --ink:#172a2e; --mute:#566a6c; --line:#d3dcd8;
+  --accent:#bb3f26; --accent-soft:#f8e7e1;
+  --ok:#2f7d55; --ok-soft:#e1f1e8; --warn:#a86a08; --warn-soft:#fbf0d9; --crit:#b3261e; --crit-soft:#fbe3e0;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:#f0f5f2;padding:22px 0 18px}
+header.top .crumb{font:13px var(--mono);color:#a9c0bb}
+header.top .crumb a{color:inherit}
+header.top h1{font:700 32px/1.3 var(--display);margin:4px 0 6px;text-wrap:balance}
+header.top p{margin:0;color:#cfdcd8;font-size:15px}
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:8px;padding-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);font:500 14px var(--body);padding:6px 13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.jump{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0}
+.jump a{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap;padding:4px 7px;border-radius:4px}
+.jump a:hover{background:var(--bg);color:var(--ink)}
+.draft{background:var(--warn-soft);border-left:4px solid var(--warn);padding:10px 14px;margin:18px 0;font-size:14.5px}
+section{padding:26px 0 8px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.no{font:13px var(--mono);color:var(--accent)}
+h2{font:700 25px/1.35 var(--display);margin:2px 0 10px;text-wrap:balance}
+h3{font:700 17px/1.5 var(--body);margin:18px 0 6px}
+p{margin:8px 0;max-width:65ch}
+ul,ol{margin:8px 0;padding-left:1.3em}
+li{margin:3px 0}
+.tag{display:inline-block;font:500 11.5px/1.5 var(--mono);padding:0 6px;border-radius:3px;background:#e6edea;color:var(--mute);vertical-align:1px;white-space:nowrap}
+.tag.tw{background:#dcecf0;color:#1c5a68}.tag.us{background:#e7e4f3;color:#4a3f85}.tag.eu{background:#e5eedc;color:#476a22}.tag.me{background:#eee7dc;color:#6a5533}.tag.todo{background:var(--warn-soft);color:var(--warn)}
+.case{background:var(--accent-soft);border-radius:8px;padding:12px 16px;margin:12px 0;font-size:15.5px}
+.case b{color:var(--accent)}
+.tool{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:16px 0}
+.tool>h3{margin:0 0 10px;font-size:16px}
+.fields{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+label.num{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input[type=number]{width:92px;font:500 19px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:#fff}
+textarea{width:100%;min-height:74px;font:14px/1.6 var(--mono);padding:8px;border:1px solid var(--line);border-radius:5px;color:var(--ink)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px 14px;margin:6px 0}
+.checks label{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:15px;cursor:pointer;line-height:1.5}
+input[type=checkbox]{margin-top:4px;width:17px;height:17px;accent-color:var(--accent);flex:none}
+button.act{font:500 14px var(--body);background:var(--card);border:1px solid var(--ink);border-radius:5px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.out{margin-top:12px;padding:10px 14px;border-radius:5px;background:var(--bg);border-left:4px solid var(--mute)}
+.out.ok{background:var(--ok-soft);border-color:var(--ok)}.out.warn{background:var(--warn-soft);border-color:var(--warn)}.out.crit{background:var(--crit-soft);border-color:var(--crit)}
+.out b.big{font:700 19px var(--display);display:block}
+.out small{color:var(--mute);font-size:13px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.tri>div{border:1px solid var(--line);border-radius:5px;padding:9px 11px;font-size:14px;line-height:1.55;background:#fff}
+.tri h4{margin:0 0 3px;font:500 13px var(--mono);color:var(--mute)}
+.tri strong{display:block;font:700 16px var(--display);margin-bottom:3px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--bg)}
+td.n{font:14px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+details{margin:12px 0;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-weight:500;font-size:15px}
+details>div{padding:0 12px 10px}
+.hits{margin:10px 0 0;padding:0;list-style:none}
+.hits li{border-top:1px solid var(--line);padding:8px 0;font-size:14.5px}
+.hits b{color:var(--accent)}
+.next{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.next div{border:1px dashed var(--line);border-radius:6px;padding:10px 12px;font-size:14.5px;color:var(--mute)}
+.next b{display:block;color:var(--ink)}
+.part{margin:34px 0 0;padding:10px 14px;background:var(--ink);color:#f0f5f2;font:700 19px var(--display);border-radius:5px}
+.part span{font:12px var(--mono);color:#a9c0bb;display:block}
+select{font:15px var(--body);padding:8px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink)}
+input[type=date]{font:15px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font:14px var(--body);padding:4px 11px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rxlist{font:700 17px var(--body);margin-top:6px;display:grid;gap:3px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:14px;padding:3px 10px;border-radius:4px}
+.pill.g{background:var(--ok-soft);color:var(--ok)}
+.pill.u{background:var(--warn-soft);color:var(--warn)}
+tr.flag td,tr.flag th{background:var(--crit-soft)}
+#doseTable{min-width:640px}
+#pkTable{min-width:760px}
+#pkTable th:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+#pkTable tr.flag th:first-child{background:var(--crit-soft)}
+#pkTable th{white-space:nowrap}
+footer{padding:22px 0 44px;font-size:13.5px;color:var(--mute)}
+footer a{color:inherit}
+footer ul{padding-left:1.2em}
+body.clinic .learn{display:none}
+body.clinic section{padding-top:12px;border-bottom:0}
+body.clinic h2{font-size:18px}
+body.clinic .tool{margin:8px 0}
+@media (max-width:560px){.tri{grid-template-columns:1fr}header.top h1{font-size:27px}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media print{.bar{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../">ycjacademy</a>／門診實務／高血壓</div>
+  <h1>高血壓門診實務</h1>
+  <p>從第一次看到血壓高的病人，到選藥、調藥與長期追蹤。</p>
+</div></header>
+
+<nav class="bar" aria-label="頁面工具"><div class="wrap">
+  <div class="seg" role="group" aria-label="閱讀模式">
+    <button id="mLearn" type="button" aria-pressed="true">學習</button>
+    <button id="mClinic" type="button" aria-pressed="false">門診</button>
+  </div>
+  <div class="jump">
+    <a href="#real">確認</a><a href="#grade">分級</a><a href="#triage">分流</a><a href="#hx">問診</a><a href="#labs">檢查</a><a href="#secondary">續發性</a><a href="#start">開藥</a><a href="#lifestyle">生活</a><a href="#choose">處方</a><a href="#pk">藥動</a><a href="#combo">複方</a><a href="#adjust">調藥</a><a href="#follow">追蹤</a><a href="#nhi">健保</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+<div class="draft learn"><b>v0.6 草稿，最後核對 2026-11-10。</b>台灣 2022 指引第 2–8 章已對照原文，藥動資料取自文獻回顧與部分仿單，健保規定未能全部讀到（見 STEP 14）。美歐指引依官方新聞稿與摘要。校對前請勿當臨床依據。</div>
+
+<div class="learn">
+<div class="case"><b>陳先生，52 歲，計程車司機（虛構）。</b>成人健檢血壓 148/94，今天來門診複查 146/92。BMI 28，太太說他會打呼，腰痛時常自己買止痛藥。他問：「我要吃一輩子的藥嗎？」</div>
+<h3>今天要做的五件事</h3>
+<ol>
+  <li>排除今天就要處理的急症。</li>
+  <li><b>H</b>：標準測量，發 722 回家量，確認診斷。</li>
+  <li><b>E</b>：找會推高血壓的藥物、物質與續發性原因。</li>
+  <li><b>R</b>：開初診檢查，依風險圖分期。</li>
+  <li>開始 S-ABCDE，再決定藥物與單藥或合併。</li>
+</ol>
+<p>台灣指引把開藥前評估稱為 <b>HER</b>。<span class="tag tw">台灣 圖 5</span></p>
+</div>
+
+<section id="real">
+  <div class="no">STEP 1</div>
+  <h2>這個血壓是真的嗎</h2>
+  <div class="learn">
+    <p>台灣指引把 722 居家血壓當作診斷和分級的基礎 <span class="tag tw">台灣 COR I</span>，平均 ≥130/80 即診斷高血壓。沒有居家血壓時才用標準化診間血壓。</p>
+    <h3>診間標準測量</h3>
+    <ul>
+      <li>測量前 30 分鐘不喝咖啡、不運動、不抽菸；先排空膀胱，安靜坐 5 分鐘不說話。</li>
+      <li>靠背坐、雙腳平放、手臂放桌上，壓脈帶中心與右心房同高，下緣高於肘窩至少 2.5 cm。</li>
+      <li>氣囊寬度 ≥ 上臂圍 40%，長度 ≥ 80%。</li>
+      <li>初診量雙手：差距 &lt;15 mmHg 時以較高側為準。</li>
+      <li>每次至少量 2 回、間隔 1 分鐘取平均；站立 1 分鐘與 3 分鐘各量一次看姿勢性低血壓。</li>
+      <li>至少 2 次就診、每次至少 2 回才估定血壓。 <span class="tag tw">台灣 表 6</span></li>
+    </ul>
+    <h3>教病人量 722</h3>
+    <ul>
+      <li><b>7</b>：連續 7 天（至少 4 天）。</li>
+      <li><b>2</b>：早上起床 1 小時內（進食、吃藥前）、晚上睡前 1 小時內。</li>
+      <li><b>2</b>：每回至少量 2 次、間隔 1 分鐘。心房顫動至少 3 次。 <span class="tag tw">台灣 表 7</span></li>
+      <li>計算時捨棄第 1 天，早上、晚上分開平均；調藥 2 週後再做一輪。 <span class="tag tw">台灣 8.1</span></li>
+    </ul>
+  </div>
+  <div class="tool" id="t722">
+    <h3>722 平均計算</h3>
+    <label for="bpText" style="font-size:13px;color:var(--mute)">貼上或輸入血壓，格式如 142/90，以空白或換行分開</label>
+    <label style="display:flex;gap:8px;font-size:14px;margin:0 0 6px"><input type="checkbox" id="dropDay" checked>捨棄第 1 天（前 4 筆）；依早、早、晚、晚順序輸入可分開平均</label>
+    <textarea id="bpText">144/92 141/90 139/88 142/91 146/93 143/90 140/89 138/87 145/92 142/90 140/88 141/89 143/91 139/88 144/90 142/89 141/90 145/91 140/88 143/92 142/90 138/88 144/91 141/89 143/90 140/89 145/92 142/90</textarea>
+    <div class="out" id="o722"></div>
+  </div>
+  <div class="tool" id="tPheno">
+    <h3>血壓型態判定</h3>
+    <div class="fields">
+      <label class="num">診間收縮壓<input id="oS" type="number" value="146"></label>
+      <label class="num">診間舒張壓<input id="oD" type="number" value="92"></label>
+      <label class="num">居家收縮壓<input id="hS" type="number" value="142"></label>
+      <label class="num">居家舒張壓<input id="hD" type="number" value="90"></label>
+    </div>
+    <div class="seg" role="group" aria-label="切點" style="margin-top:10px">
+      <button id="thTW" type="button" aria-pressed="true">130/80（台灣）</button>
+      <button id="thEU" type="button" aria-pressed="false">140/90 對應居家 135/85</button>
+    </div>
+    <div class="out" id="oPheno"></div>
+  </div>
+</section>
+
+<section id="grade">
+  <div class="no">STEP 2</div>
+  <h2>血壓分級：同一個數字，三份指引</h2>
+  <div class="tool" id="tGrade">
+    <h3>輸入確認後的血壓</h3>
+    <div class="fields">
+      <label class="num">收縮壓<input id="gS" type="number" value="142"></label>
+      <label class="num">舒張壓<input id="gD" type="number" value="90"></label>
+    </div>
+    <div class="tri" id="oGrade"></div>
+  </div>
+  <p class="learn">台灣分級以 722 居家血壓為準，沒有時用標準化診間血壓；140/90、130/80、120/80 三個切點在居家與診間相同。美歐把診間 140/90 對應居家 135/85。</p>
+  <details class="learn"><summary>指引差異對照</summary><div class="scroll">
+    <table>
+      <tr><th></th><th>台灣 2022</th><th>AHA/ACC 2025</th><th>ESC 2024</th></tr>
+      <tr><th>定義</th><td>≥130/80</td><td>stage 1 起 ≥130/80</td><td>≥140/90；120–139/70–89 為 elevated</td></tr>
+      <tr><th>目標</th><td>&lt;130/80（722）；CVD 或高風險可耐受時收縮壓 &lt;120</td><td>多數成人 &lt;130/80</td><td>收縮壓 120–129，可耐受時</td></tr>
+      <tr><th>起始</th><td>高於目標 ≥20/10：兩藥或單一複方；未達則單藥或單一複方</td><td>stage 2：兩藥，優先單一複方</td><td>多數高血壓：低劑量兩藥單一複方</td></tr>
+      <tr><th>第一線</th><td>ACEi、ARB、BB、CCB、thiazide</td><td>ACEi、ARB、長效 DHP CCB、thiazide 類</td><td>RAS 阻斷劑加 DHP CCB 或利尿劑</td></tr>
+    </table></div></details>
+</section>
+
+<section id="triage">
+  <div class="no">STEP 3</div>
+  <h2>今天要不要送急診</h2>
+  <p class="learn">AHA/ACC 2025 把 urgency 改稱 severe hypertension：&gt;180/120 且無急性器官傷害、非懷孕，在門診用口服藥處理。ESC 則要求 ≥180/110 時評估是否為高血壓急症。關鍵是有沒有急性器官傷害，血壓數字本身不決定送不送。台灣指引沒有獨立的門診分流流程；懷孕重度高血壓定義為 ≥160/110。</p>
+  <div class="tool" id="tTri">
+    <h3>高血壓分流</h3>
+    <div class="fields">
+      <label class="num">收縮壓<input id="tS" type="number" value="146"></label>
+      <label class="num">舒張壓<input id="tD" type="number" value="92"></label>
+    </div>
+    <div class="checks" id="triChecks">
+      <label><input type="checkbox" id="e1">胸痛、疑急性冠心症</label>
+      <label><input type="checkbox" id="e2">喘、肺水腫</label>
+      <label><input type="checkbox" id="e3">撕裂性胸背痛、疑主動脈剝離</label>
+      <label><input type="checkbox" id="e4">神經缺損、抽搐、意識改變</label>
+      <label><input type="checkbox" id="e5">視力急劇變差、眼底出血或視乳突水腫</label>
+      <label><input type="checkbox" id="e6">急性腎損傷</label>
+      <label><input type="checkbox" id="e7">懷孕或產後</label>
+    </div>
+    <div class="out" id="oTri"></div>
+  </div>
+</section>
+
+<section id="hx">
+  <div class="no">STEP 4</div>
+  <h2>初診問診與理學</h2>
+  <div class="learn"><p>依台灣指引 4.1、4.2 與表 12 整理。<span class="tag tw">台灣</span></p></div>
+  <div class="tool">
+    <h3>問診與理學檢核</h3>
+    <div class="checks" id="hxChecks"></div>
+    <div class="out"><small>陳先生要特別追問：止痛藥種類與頻率（NSAID）、打呼與白天嗜睡、輪班與外食。</small></div>
+  </div>
+</section>
+
+<section id="labs">
+  <div class="no">STEP 5</div>
+  <h2>初診 order set</h2>
+  <p class="learn">台灣把 UACR 列在建議項目，但強烈建議測量，因為台灣末期腎病盛行率高；AHA/ACC 2025 則改為所有高血壓都驗。初診勾選時建議直接納入。基本器官傷害篩檢每位初診都要做。<span class="tag tw">台灣 表 9、4.3</span></p>
+  <div class="tool">
+    <h3>勾選後複製到病歷</h3>
+    <div class="checks" id="labChecks"></div>
+    <button class="act" id="copyLabs" type="button">複製已勾項目</button> <span id="copyMsg" style="font-size:13px;color:var(--mute)"></span>
+    <div class="out"><small>預設勾選台灣常規項目與 UACR。TSH 是 AHA/ACC 的基本項，台灣列在續發性評估。年輕、血壓很高或已有器官傷害者要做更完整檢查。健保與成人預防保健涵蓋範圍<span class="tag todo">待核對</span>。</small></div>
+  </div>
+</section>
+
+<section id="secondary">
+  <div class="no">STEP 6</div>
+  <h2>續發性高血壓：誰要查、查什麼</h2>
+  <div class="learn"><p>新診斷或控制不佳時，有下列情況就要篩檢：血壓嚴重升高或惡性高血壓、頑固或藥物誘發、突然發生、原本控制好卻惡化、65 歲以上新發舒張期高血壓、器官傷害與病程不相稱、30 歲前發病、有特定線索（如無誘因低血鉀）。<span class="tag tw">台灣 圖 2</span></p></div>
+  <div class="tool">
+    <h3>勾選線索，看第一步</h3>
+    <div class="checks" id="secChecks"></div>
+    <ul class="hits" id="secHits"></ul>
+  </div>
+  <div class="learn">
+    <h3>原發性醛固酮症：誰要篩</h3>
+    <ul>
+      <li><span class="tag tw">台灣 2022 表 13</span> 血壓持續 &gt;150/110、頑固型、自發或利尿劑引起的低血鉀、腎上腺腫瘤、30 歲前發病或早發家族史、40 歲前中風、一等親有 PA。</li>
+      <li><span class="tag us">AHA/ACC 2025</span> 頑固型都要篩，不論有無低血鉀（Class 1）；stage 2 可考慮；適應症擴及 OSA。</li>
+      <li><span class="tag eu">ESC 2024</span> 所有確診高血壓應考慮用腎素與醛固酮篩檢。</li>
+      <li><span class="tag">Endocrine Society 2025</span> 建議所有高血壓都篩，屬條件式、低信心。</li>
+    </ul>
+    <p>低血鉀只見於約一半 PA 病人，血鉀正常不能排除。</p>
+    <h3>ARR 怎麼判讀</h3>
+    <ul>
+      <li>早上抽血。常用切點 30，台灣 TAIPAI 建議 35 ng/dL per ng/mL/h，且 PAC 需 &gt;10 ng/dL。</li>
+      <li>假陽性：β 阻斷劑、直接腎素抑制劑、中樞 α2 促效劑、NSAID、避孕藥。</li>
+      <li>假陰性：DHP CCB、利尿劑與 MRA、ACEi、ARB、低血鉀、限鈉。</li>
+      <li>ARR 陽性需做確認試驗；自發性低血鉀、PRA 低於偵測下限且 PAC &gt;20 ng/dL 者可能不需要。</li>
+    </ul>
+    <div class="out warn"><b class="big">藥物處理：新舊建議不同</b>台灣 2022 建議受影響藥物至少停 2–4 週（MRA 4–6 週），改用 non-DHP CCB、hydralazine 或 α1 阻斷劑維持血壓。AHA/ACC 與 Endocrine Society 2025 則允許除 MRA 外先不停藥做初篩，判讀時考慮藥物影響。基層可先在不停藥下初篩，異常再轉介做標準化檢查；這是整合建議，請與轉介單位確認。</div>
+  </div>
+</section>
+
+<section id="start">
+  <div class="no">STEP 7</div>
+  <h2>開藥決定</h2>
+  <div class="tool" id="tStart">
+    <h3>輸入確認後血壓與風險</h3>
+    <div class="fields">
+      <label class="num">收縮壓<input id="sS" type="number" value="142"></label>
+      <label class="num">舒張壓<input id="sD" type="number" value="90"></label>
+    </div>
+    <h3 style="font-size:14px;margin:12px 0 0">危險因子（台灣第 1 期計數）</h3>
+    <div class="checks">
+      <label><input type="checkbox" id="f1">年齡 ≥65 歲</label>
+      <label><input type="checkbox" id="f2" checked>男性</label>
+      <label><input type="checkbox" id="f3">血脂異常</label>
+      <label><input type="checkbox" id="f4">吸菸</label>
+      <label><input type="checkbox" id="f5">早發 ASCVD 家族史（&lt;50 歲）</label>
+      <label><input type="checkbox" id="f6">妊娠高血壓、子癲前症或不良妊娠結果</label>
+    </div>
+    <h3 style="font-size:14px;margin:12px 0 0">第 2 期</h3>
+    <div class="checks">
+      <label><input type="checkbox" id="s1">CKD 第 3 期或蛋白尿</label>
+      <label><input type="checkbox" id="s2">糖尿病，無器官傷害</label>
+      <label><input type="checkbox" id="s3">器官傷害（LVH、動脈硬化度增加、頸動脈斑塊或狹窄等）</label>
+    </div>
+    <h3 style="font-size:14px;margin:12px 0 0">第 3 期</h3>
+    <div class="checks">
+      <label><input type="checkbox" id="t1">CKD 第 4–5 期</label>
+      <label><input type="checkbox" id="t2">糖尿病，有器官傷害</label>
+      <label><input type="checkbox" id="t3">非瓣膜性心房顫動</label>
+      <label><input type="checkbox" id="t4">已有心腦血管疾病（中風、MI、血管介入、PAD、心衰、主動脈剝離）</label>
+    </div>
+    <h3 style="font-size:14px;margin:12px 0 0">其他</h3>
+    <div class="checks">
+      <label><input type="checkbox" id="rPrev">PREVENT 10 年 ≥7.5%（美）</label>
+      <label><input type="checkbox" id="rScore">SCORE2 10 年 ≥10%（歐）</label>
+      <label><input type="checkbox" id="rFrail">衰弱、≥85 歲或有症狀姿勢性低血壓</label>
+    </div>
+    <div class="tri" id="oStart"></div>
+    <div class="out"><small>工具只整理指引邏輯，實際處方請依病人判斷。台灣指引認為美歐風險分數未在國人充分驗證，因此用風險圖。「≥20/10」採收縮壓高於目標 ≥20 或舒張壓高於目標 ≥10。65 歲以上收縮壓 ≥130 依第 17 章起始用藥，與圖 4 第 1 期危險因子 <3 的門檻不同，頁面採第 17 章。</small></div>
+  </div>
+  <div class="case learn"><b>陳先生這次：</b>722 平均約 142/90，第 2 級；男性 1 項危險因子，第 1 期。確診後就開藥，目標 &lt;130/80。舒張壓高於目標 10，符合「≥20 或 ≥10」，起始兩藥或單一複方。同時處理 NSAID，安排 OSA 評估。</div>
+</section>
+
+<div class="part"><span>第二部分</span>選藥：開什麼、怎麼加</div>
+
+<section id="lifestyle">
+  <div class="no">STEP 8</div>
+  <h2>S-ABCDE：可以開立的生活處方</h2>
+  <div class="scroll"><table>
+    <tr><th></th><th>處方內容</th><th>預期收縮壓變化</th></tr>
+    <tr><th>S 鈉</th><td>鈉 2–4 g/天（鹽 5–10 g）</td><td>每減 1 g 鈉約 −3.1</td></tr>
+    <tr><th>A 酒</th><td>男 &lt;100 g/週、女 &lt;50 g/週；ALDH2*2 者男 &lt;64 g/週、女 &lt;28 g/週；禁狂飲；沒喝酒的人不要開始</td><td>−2 至 −4</td></tr>
+    <tr><th>B 體重</th><td>BMI 20–24.9</td><td>每減 1 kg 約 −1</td></tr>
+    <tr><th>C 菸</th><td>完全戒除，含電子菸</td><td>無獨立降壓效果</td></tr>
+    <tr><th>D 飲食</th><td>DASH；綠茶或紅茶</td><td>DASH −10 至 −12；茶 −1 至 −2</td></tr>
+    <tr><th>E 運動</th><td>中等強度有氧每次 ≥30 分、每週 5–7 天；可加阻力；太極、瑜伽。收縮壓 &gt;160 不做高強度</td><td>有氧 −3 至 −11；太極等 −6 至 −14</td></tr>
+  </table></div>
+  <p class="learn"><span class="tag tw">台灣 表 14</span> 減重可連到<a href="../islands/#obesity">減重與長期維持</a>。</p>
+</section>
+
+<section id="choose">
+  <div class="no">STEP 9</div>
+  <h2>處方產生器</h2>
+  <div class="tool" id="tRx">
+    <h3>輸入確認後血壓與病人條件</h3>
+    <p style="font-size:13.5px;color:var(--mute);margin:0 0 8px">血壓與 STEP 1 居家血壓、STEP 2、STEP 7 同步。</p>
+    <div class="fields">
+      <label class="num">收縮壓<input id="xS" type="number" value="142"></label>
+      <label class="num">舒張壓<input id="xD" type="number" value="90"></label>
+      <label class="num">年齡<input id="xAge" type="number" value="52"></label>
+      <label class="num">eGFR<input id="xE" type="number" value="90"></label>
+      <label class="num">K<input id="xK" type="number" step="0.1" value="4.2"></label>
+      <label class="num">目前治療<select id="xStage"><option value="0">未用藥</option><option value="1">起始處方未達標</option><option value="2">第 1 步未達標</option><option value="3">第 2 步未達標</option><option value="4">第 3 步未達標</option></select></label>
+    </div>
+    <div class="checks" id="xChecks">
+      <label><input type="checkbox" id="xRF3">危險因子 ≥3 項</label>
+      <label><input type="checkbox" id="xDM">糖尿病</label>
+      <label><input type="checkbox" id="xALB">蛋白尿（UACR ≥30）</label>
+      <label><input type="checkbox" id="xCAD">冠心病或心肌梗塞</label>
+      <label><input type="checkbox" id="xHF">HFrEF</label>
+      <label><input type="checkbox" id="xST">中風或 TIA</label>
+      <label><input type="checkbox" id="xAF">心房顫動</label>
+      <label><input type="checkbox" id="xHMOD">器官傷害（LVH、頸動脈斑塊等）</label>
+      <label><input type="checkbox" id="xGout">痛風</label>
+      <label><input type="checkbox" id="xEd">曾因 CCB 水腫</label>
+      <label><input type="checkbox" id="xAs">氣喘</label>
+      <label><input type="checkbox" id="xAV">心搏過緩或 2、3 度阻斷</label>
+      <label><input type="checkbox" id="xBPH">攝護腺肥大</label>
+      <label><input type="checkbox" id="xSim">併用 simvastatin</label>
+      <label><input type="checkbox" id="xFr">衰弱或姿勢性低血壓</label>
+      <label><input type="checkbox" id="xPr">懷孕或計畫懷孕</label>
+    </div>
+    <div id="oRx"></div>
+    <button class="act" id="copyRx" type="button" style="margin-top:10px">複製今天處方</button> <span id="copyRxMsg" style="font-size:13px;color:var(--mute)"></span>
+  </div>
+  <div class="learn">
+    <p>台灣指引只定類別與藥數，沒有排列具體藥名。這裡的藥名順序是預設方案：ARB＋amlodipine 依台灣 STEP 試驗（olmesartan 20、amlodipine 5–10），複方選台灣查得到規格的品項。院內沒有時改用替代方案。</p>
+    <div class="out warn"><b class="big">起始不開複方</b>指引建議符合條件者初始就用單一複方（COR I），但 Sevikar 與 Exforge 台灣仿單寫明不適合起始治療，所以這裡一律先開單方，未達標再改複方。</div>
+    <p>血壓決定起始強度：高於目標 &lt;20/10 開 1 種；≥20 或 ≥10 開 2 種；≥30 或 ≥20 把 ARB 用足；≥40 或 ≥25 amlodipine 也用 10 mg。後兩層是這裡的整合判斷，指引只分到 ≥20/10。</p>
+  </div>
+  <h3>藥物順序與劑量</h3>
+  <div class="scroll"><table id="doseTable"></table></div>
+  <p class="learn">劑量範圍依 ACC/AHA 2017 用藥表與 VA 速查表；台灣實際規格以院內品項與仿單為準。</p>
+</section>
+
+<section id="pk">
+  <div class="no">STEP 10</div>
+  <h2>藥物動力學：同一類藥怎麼挑</h2>
+  <div class="learn">
+    <ul>
+      <li><b>半衰期不等於作用時間。</b>ACEi、β 阻斷劑的作用時間與血中半衰期關聯不大。選藥先看每日一次能否維持 24 小時，再用早晚居家血壓驗證。</li>
+      <li><b>評估要等到位。</b>調藥 1 週約達 50%、2 週約達 80% 降壓能力。Amlodipine 半衰期 30–50 小時，穩定態需 7–8 天，所以不要太快加量。</li>
+      <li><b>腎功能差先想排泄。</b>lisinopril、atenolol 依賴腎排；fosinopril、telmisartan 較少依賴腎臟。</li>
+      <li><b>併用藥物先想酵素。</b>CCB 走 CYP3A4；metoprolol、carvedilol、nebivolol 走 CYP2D6；losartan、irbesartan 走 CYP2C9。</li>
+    </ul>
+  </div>
+  <div class="tool">
+    <h3>10/5 法則：加藥能降多少</h3>
+    <div class="fields">
+      <label class="num">目前收縮壓<input id="dS" type="number" value="142"></label>
+      <label class="num">目前舒張壓<input id="dD" type="number" value="90"></label>
+      <label class="num">用藥方案
+        <select id="dPlan"><option value="1">標準劑量 1 類</option><option value="2" selected>標準劑量 2 類</option><option value="3">標準劑量 3 類</option><option value="h2">半量 2 類</option><option value="d">單藥劑量加倍</option></select>
+      </label>
+    </div>
+    <div class="out" id="oDose"></div>
+  </div>
+  <div class="tool">
+    <h3>藥動比較</h3>
+    <div class="chips" id="classChips"></div>
+    <div class="checks" id="pkFlags">
+      <label><input type="checkbox" id="pkRen">eGFR &lt;30 或透析</label>
+      <label><input type="checkbox" id="pkHep">嚴重肝功能不全</label>
+      <label><input type="checkbox" id="pk3A">併用 CYP3A4 抑制劑（如 clarithromycin、azole、葡萄柚）</label>
+      <label><input type="checkbox" id="pk2D">併用 CYP2D6 抑制劑（如 paroxetine、fluoxetine）</label>
+      <label><input type="checkbox" id="pk2C">併用 CYP2C9 抑制劑（如 fluconazole）</label>
+    </div>
+    <div class="scroll"><table id="pkTable"></table></div>
+    <div class="out"><small>紅色列表示勾選情況會影響該藥，需查仿單調整。半衰期依文獻範圍，活性代謝物寫在括號內。實際劑量以台灣仿單為準。</small></div>
+  </div>
+  <div class="learn">
+    <h3>重要交互作用</h3>
+    <ul>
+      <li>ACEi＋ARB 不併用；ACEi、ARB、DRI 彼此併用屬禁忌。<span class="tag tw">COR III</span></li>
+      <li>Amlodipine 與 simvastatin：simvastatin 每日不超過 20 mg。atorvastatin 併用 DHP CCB 相對較安全。<span class="tag">FDA 2011；文獻回顧</span></li>
+      <li>Verapamil、diltiazem 走 CYP3A4，交互作用比 DHP 多；diltiazem 同時抑制 CYP3A4 與 P-gp。</li>
+      <li>ACEi＋DPP-4i 可能增加血管性水腫。<span class="tag tw">8.7.1</span></li>
+      <li>Losartan 遇 fluconazole，活性代謝物 AUC 約降 47%。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="combo">
+  <div class="no">STEP 11</div>
+  <h2>單藥、合併與單一複方</h2>
+  <div class="learn">
+    <ul>
+      <li>高於目標 ≥20 <b>或</b> ≥10：兩藥或單一複方（COR I）。</li>
+      <li>未達此幅度：單藥或單一複方；半量合併是合理選擇（COR IIa），衰弱者可考慮半顆。</li>
+      <li>半量的降壓效果只少約 20%，副作用約減半；加另一類藥比同藥加倍有效。</li>
+      <li>eGFR ≥30 用 thiazide 類；eGFR &lt;30 用 loop。<span class="tag tw">8.3</span></li>
+      <li>Thiazide 間沒有直接比較的 RCT。Chlorthalidone 作用較長，CLICK 試驗在 CKD4 仍見療效，台灣供應<span class="tag todo">待核對</span>。</li>
+    </ul>
+    <h3>單一複方</h3>
+    <p>健保品項或院內資料已確認：Exforge（amlodipine／valsartan）、Exforge HCT、Dafiro HCT、Co-Diovan、Co-Vosaa。其他複方的許可與健保代碼<span class="tag todo">待核對</span>。</p>
+    <div class="out warn"><b class="big">指引與仿單的落差</b>指引建議符合條件者初始使用複方。Exforge HCT 仿單寫明不適用於初始治療，Exforge 仿單也偏向單藥控制不佳時使用。屬仿單外的選擇，開立前要確認院內規範。</div>
+  </div>
+</section>
+
+<section id="adjust">
+  <div class="no">STEP 12</div>
+  <h2>治療 4 週未達標：ATGOALs</h2>
+  <div class="tool">
+    <h3>依早晚 722 決定調整方向</h3>
+    <div class="fields">
+      <label class="num">早上收縮壓<input id="aS" type="number" value="138"></label>
+      <label class="num">早上舒張壓<input id="aD" type="number" value="84"></label>
+      <label class="num">晚上收縮壓<input id="pS" type="number" value="126"></label>
+      <label class="num">晚上舒張壓<input id="pD" type="number" value="76"></label>
+    </div>
+    <div class="out" id="oAdj"></div>
+  </div>
+  <div class="tool">
+    <h3>ATGOALs 檢查</h3>
+    <div class="checks">
+      <label><input type="checkbox"><span><b>A</b>：確認服藥，考慮改單一複方</span></label>
+      <label><input type="checkbox"><span><b>T</b>：依早晚血壓調整服藥時間</span></label>
+      <label><input type="checkbox"><span><b>G</b>：增加或用足劑量</span></label>
+      <label><input type="checkbox"><span><b>O</b>：加藥或換其他類別</span></label>
+      <label><input type="checkbox"><span><b>A</b>：換組合或單一複方</span></label>
+      <label><input type="checkbox"><span><b>Ls</b>：生活型態與檢驗（器官傷害）</span></label>
+    </div>
+  </div>
+  <div class="learn">
+    <h3>加藥順序</h3>
+    <p>第一線 A（ACEi 或 ARB，不併用）、B、C、D → 三類仍未達標 → 第二線 MRA、α 阻斷劑、其他血管擴張劑 → 新興 ARNI、SGLT2i。Spironolactone 25–50 mg 是常用第二線。<span class="tag tw">圖 6</span></p>
+    <h3>減藥</h3>
+    <p>居家血壓低於目標 ≥20/10，或出現低灌流症狀時可減藥。一次只減一種、減半量，下一步至少隔 2 週。<span class="tag tw">8.6</span></p>
+  </div>
+</section>
+
+<div class="part"><span>第三部分</span>追蹤：時間、項目與健保</div>
+
+<section id="follow">
+  <div class="no">STEP 13</div>
+  <h2>追蹤時程</h2>
+  <div class="tool">
+    <h3>從開藥日排出追蹤日期</h3>
+    <div class="fields">
+      <label class="num">開藥或調藥日<input id="fDate" type="date"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="fRas" checked>ACEi／ARB／ARNI</label>
+      <label><input type="checkbox" id="fDiu">利尿劑</label>
+      <label><input type="checkbox" id="fMra">MRA</label>
+      <label><input type="checkbox" id="fCkd">CKD 或有蛋白尿</label>
+    </div>
+    <div class="scroll"><table id="fTable"></table></div>
+  </div>
+  <div class="tool">
+    <h3>抽血回來怎麼判讀（ACEi／ARB）</h3>
+    <div class="fields">
+      <label class="num">用藥前 Cr<input id="c0" type="number" step="0.01" value="1.0"></label>
+      <label class="num">用藥後 Cr<input id="c1" type="number" step="0.01" value="1.2"></label>
+      <label class="num">用藥後 K<input id="k1" type="number" step="0.1" value="4.8"></label>
+    </div>
+    <div class="out" id="oLab"></div>
+  </div>
+  <h3>依藥物追蹤什麼</h3>
+  <div class="scroll"><table>
+    <tr><th>藥物</th><th>追蹤項目</th><th>依據</th></tr>
+    <tr><th>ACEi／ARB</th><td>Cr、K、血壓；ACEi 問咳嗽、血管性水腫</td><td>KDIGO：起始或加量 2–4 週內</td></tr>
+    <tr><th>Thiazide 類</th><td>Na、K、尿酸、血糖、血脂；低血鈉病史者要監測 Na</td><td>台灣 8.7.6、健保審查注意事項</td></tr>
+    <tr><th>MRA</th><td>K、Cr；spironolactone 問男性女乳、月經異常</td><td>台灣 8.3；時機為臨床整理</td></tr>
+    <tr><th>CCB</th><td>水腫、牙齦增生；non-DHP 看心率、傳導</td><td>台灣 8.7.5</td></tr>
+    <tr><th>β 阻斷劑</th><td>心率、傳導、喘；不可突然停藥</td><td>台灣 8.7.4</td></tr>
+    <tr><th>全部</th><td>722、心電圖、尿液分析至少每年；風險分期至少每年；器官傷害定期複評</td><td>台灣 6.2、8.5</td></tr>
+  </table></div>
+</section>
+
+<section id="nhi">
+  <div class="no">STEP 14</div>
+  <h2>健保規定</h2>
+  <div class="scroll"><table>
+    <tr><th>項目</th><th>規定</th><th>門診怎麼用</th></tr>
+    <tr><th>慢性病連續處方箋</th><td>病情穩定、長期使用同一處方；最多 90 日、每次 ≤30 日；每次給藥 ≥28 天可免藥品部分負擔</td><td>調藥期先開一般處方，血壓穩定後再轉慢箋</td></tr>
+    <tr><th>用藥禁忌審查</th><td>懷孕禁 ACEi／ARB；高鉀病史避免保鉀利尿劑或 MRA；氣喘、COPD、支氣管痙攣不宜 BB；二、三度傳導阻斷未裝節律器不宜 BB；低血鈉病史用 thiazide 要監測 Na</td><td>懷孕用 ACEi／ARB 另有基層不予支付指標</td></tr>
+    <tr><th>檢查必要性</th><td>審查注意事項舉例：高血壓無心血管併發症者，無心臟超音波檢查之必要</td><td>指引把心臟超音波列為建議項，健保開立要有適應症並寫在病歷</td></tr>
+    <tr><th>代謝症候群防治計畫</th><td>符合 5 項中 ≥3 項（血壓 ≥130/85 或已用藥）；收案到追蹤、追蹤之間、追蹤到年度評估各至少 10 週（≥70 天）；回診前 7 天做 722</td><td>收案 900 點、追蹤 200 點、年度 500 點（111 年版）。年齡與主管機關已有更新，見下</td></tr>
+    <tr><th>品質指標</th><td>數位照護計畫的高血壓控制良好定義：收縮壓 &lt;130 且舒張壓 &lt;80，以當年最後一次為準</td><td>與指引目標一致</td></tr>
+    <tr><th>開立資格</th><td>查到的審查共識：符合高血壓診斷即可開立，第一線沒有規定，非禁忌通常不核刪。沒有像血脂的風險分級給付表</td><td>病歷寫診斷與血壓；是否用藥依指引風險圖</td></tr>
+    <tr><th>併用</th><td>ACEi＋ARB、同類藥不併用；曾有核刪：Exforge＋verapamil、Co-Diovan＋降尿酸藥。三種藥不再要求含利尿劑（105 年）；第四種藥無禁忌時無特別限制（103 年）；高血鉀或 eGFR &lt;30 不宜 spironolactone</td><td>高屏區審查共識與審查醫師投影片（2019），非健保署條文</td></tr>
+    <tr><th>檢驗</th><td>初診：血脂、尿液常規、Cr、血糖、尿酸、Na、K、Ca、EKG。年度：血脂、尿液常規、Cr、血糖、尿酸。利尿劑加驗 Na、K；ACEi／ARB 可加驗 K</td><td>同上（103 年共識）</td></tr>
+    <tr><th>非適應症</th><td>Entresto 台灣適應症為心衰竭，沒有高血壓適應症</td><td>單純高血壓不用</td></tr>
+  </table></div>
+  <div class="draft"><b>還沒查到或未讀全文：</b>
+    <ul style="margin:4px 0 0">
+      <li>健保署條文未查到高血壓追蹤檢驗頻率；上面檢驗項目來自區域審查共識，時程來自指引與 KDIGO。</li>
+      <li>藥品給付規定第 2 節：未能讀到完整現行版。目前能看到的修訂多為血脂、肺高壓、心衰竭等章節，未見一般降血壓藥的專章，但無法確認。</li>
+      <li>家醫計畫 115 年版的高血壓追蹤指標未能讀取；代謝計畫 113 年底起改由國健署公告，收案年齡出現 20–64 與 20–69 兩種版本，115 年起併入預防保健注意事項。申報前請以最新公告為準。</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <p>資料來源（核對日 2026-11-08）</p>
+  <ul>
+    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9121756">2022 TSOC/THS 高血壓指引</a>：第 2–8、17 章已對照 PDF 原文</li>
+    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/7677637">2020 THS/TSOC 居家血壓共識</a></li>
+    <li><a href="https://www.acc.org/about-acc/press-releases/2025/08/13/20/03/new-high-blood-pressure-guideline-emphasizes-prevention-early-treatment-to-reduce-cvd-risk">AHA/ACC 2025 新聞稿</a>、<a href="https://immattersacp.org/weekly/archives/2025/08/19/1.htm">ACP 摘要</a>、<a href="https://www.2minutemedicine.com/guidelines/high-blood-pressure/">2 Minute Medicine 速查</a></li>
+    <li><a href="https://academic.oup.com/eurheartj/article/45/44/4682/7823549">ESC 2024 重點</a>、<a href="https://pcronline.com/Cases-resources-images/Tools-and-Practice/The-Essentials/Hypertension/A-review-of-the-2024-ESC-Guidelines-on-elevated-blood-pressure-and-hypertension">PCR 摘要</a></li>
+    <li>ARB 藥動：<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4303500">Am J Ther/PMC4303500</a>、<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3212426/table/t1-vhrm-7-605">VHRM 2011</a>、<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1448692/table/tbl1">IJCP 2006</a>；ACEi：<a href="https://ncbi.nlm.nih.gov/books/NBK61779/table/introduction.t1">AHRQ</a>、<a href="https://derangedphysiology.com/main/cicm-primary-exam/required-reading/cardiovascular-system/Chapter%20951/ace-inhibitors-and-angiotensin-receptor-blockers">Deranged Physiology</a>；CCB：<a href="https://pubmed.ncbi.nlm.nih.gov/1532771/">Clin Pharmacokinet 1992</a>、<a href="https://www.hopkinsguides.com/hopkins/view/Johns_Hopkins_Diabetes_Guide/547022/0/Calcium_Channel_Blockers">Hopkins</a>、<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3873236">CCB-statin 回顧</a>；利尿劑：<a href="https://www.dovepress.com/which-thiazide-to-choose-as-add-on-therapy-for-hypertension-peer-reviewed-article-IBPC">IBPC 2014</a>、<a href="https://www.ncbi.nlm.nih.gov/books/NBK532918/">StatPearls</a>；β 阻斷劑：<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2291309/table/tbl1">VHRM 2007</a>、<a href="https://www.hopkinsguides.com/hopkins/view/Johns_Hopkins_Diabetes_Guide/547016/all/Beta_blockers">Hopkins</a></li>
+    <li>劑量：<a href="https://www.pbm.va.gov/PBM/AcademicDetailingService/Documents/508/10-1686_HTN_QuickReferenceGuide_P97123.pdf">VA 速查表</a>、<a href="https://nachc.org/wp-content/uploads/2024/07/hypertension-medication-treatment-protocol.pdf">AMA 處方流程</a>、<a href="https://www.nps.org.au/news/up-titrating-heart-failure-medicines">HFrEF 劑量</a>；台灣規格：<a href="https://818h.mnd.gov.tw/btWeb/doc_med/EXF.pdf">Exforge 仿單</a>、<a href="https://kb.commonhealth.com.tw/drugs/12799.html">Sevikar</a>、<a href="https://kb.commonhealth.com.tw/drugs/12911.html">Sevikar HCT</a>；<a href="https://www.epocrates.com/online/article/acc-lays-out-stepwise-strategy-for-resistant-hypertension">2026 ACC 頑固型路徑</a></li>
+    <li><a href="https://www.slideshare.net/slideshow/1081219/207986599">高血壓及降血脂藥物健保規範（2019，審查醫師投影片）</a></li>
+    <li>監測：<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8763146">CJASN KDIGO 解讀</a>、<a href="https://www.theisn.org/wp-content/uploads/2023/11/RAASi-Nuts-and-Bolts_English.pdf">ISN RAASi</a></li>
+    <li>健保：<a href="https://www.rootlaw.com.tw/LawArticle.aspx?LawID=A040170081021800-0900226">慢箋作業要點</a>、<a href="https://health.udn.com/health/story/5959/8760600">元氣網健保數據</a>、<a href="https://www.nhi.gov.tw/ch/dl-37892-f20f5acaeb754c369fc91cdd063f5a33-1.pdf">審查注意事項－內科</a>、<a href="https://www.nhi.gov.tw/ch/dl-55898-26f74b502f8f44cbbe82e7263167107a-1.pdf">代謝症候群防治計畫（111 年版）</a>、<a href="https://www.nhi.gov.tw/ch/dl-93112-a4f570e079194ae289cff9cb2cbdb767-1.pdf">數位照護獎勵計畫</a></li>
+    <li><a href="https://www.ccjm.org/content/93/9/515">Endocrine Society 2025 PA 指引解讀（CCJM 2026）</a></li>
+  </ul>
+</div></footer>
+
+<script>
+/*LOGIC*/
+function parseBP(t,drop){let r=[];const re=/(\d{2,3})\s*\/\s*(\d{2,3})/g;let m;while((m=re.exec(t)))r.push([+m[1],+m[2]]);if(!r.length)return null;const raw=r.length;let dropped=false;if(drop&&r.length>=8&&r.length%4===0){r=r.slice(4);dropped=true;}const av=(l,i)=>Math.round(l.reduce((s,x)=>s+x[i],0)/l.length);const o={raw:raw,n:r.length,dropped:dropped,s:av(r,0),d:av(r,1)};if(r.length%4===0){const am=r.filter((x,i)=>i%4<2),pm=r.filter((x,i)=>i%4>=2);o.am=[av(am,0),av(am,1)];o.pm=[av(pm,0),av(pm,1)];}return o;}
+function phenotype(os,od,hs,hd,mode){const T=mode==="eu"?{o:[140,90],h:[135,85]}:{o:[130,80],h:[130,80]};const O=os>=T.o[0]||od>=T.o[1],H=hs>=T.h[0]||hd>=T.h[1];if(O&&H)return{k:"crit",t:"持續性高血壓",d:"診間與居家都偏高。"};if(O)return{k:"warn",t:"白袍現象",d:"診間高、居家正常。未用藥者稱白袍高血壓，已用藥者稱白袍未控制；先不加藥，持續追蹤居家血壓。"};if(H)return{k:"warn",t:"隱匿性高血壓",d:"診間正常、居家偏高，風險不應被診間數字掩蓋。"};return{k:"ok",t:"血壓未達切點",d:"診間與居家都低於切點。"};}
+function gradeTW(s,d){if(s>=140||d>=90)return{t:"第 2 級高血壓",k:"crit"};if(s>=130||d>=80)return{t:"第 1 級高血壓",k:"warn"};if(s>=120)return{t:"血壓偏高",k:"warn"};return{t:"正常",k:"ok"};}
+function gradeUS(s,d){const g=gradeTW(s,d);return{t:{"第 2 級高血壓":"Stage 2","第 1 級高血壓":"Stage 1","血壓偏高":"Elevated","正常":"Normal"}[g.t],k:g.k};}
+function gradeEU(s,d){if(s>=140||d>=90)return{t:"Hypertension",k:"crit"};if(s>=120||d>=70)return{t:"Elevated BP",k:"warn"};return{t:"Non-elevated",k:"ok"};}
+function triage(s,d,flags){const sev=s>180||d>120,eu=s>=180||d>=110,organ=flags.slice(0,6).some(Boolean),preg=flags[6];
+ if(organ&&(sev||eu))return{k:"crit",t:"疑高血壓急症：轉急診",d:"血壓極高且有急性器官傷害表現，需住院等級處理與靜脈降壓評估。"};
+ if(preg&&(s>=160||d>=110))return{k:"crit",t:"懷孕或產後重度高血壓：立即轉產科或急診",d:"不適用非懷孕族群的門診流程，切點請依產科指引確認。"};
+ if(organ)return{k:"warn",t:"血壓未達極高，但症狀需要先處理",d:"依症狀本身評估，胸痛、神經缺損等仍可能需要急診。"};
+ if(sev)return{k:"warn",t:"重度高血壓，無急性器官傷害：門診處理",d:"用口服藥開始或調整，查誘因與服藥狀況，避免快速降壓，安排短期回診（間隔依臨床判斷）。"};
+ if(eu)return{k:"warn",t:"達 ESC 180/110：評估是否為急症",d:"目前未勾選急性器官傷害，完成評估後依門診流程處理。"};
+ return{k:"ok",t:"未達極高血壓",d:"依一般初診流程。"};}
+function startAdvice(s,d,r){const us=()=>{if(s>=140||d>=90)return{t:"生活型態＋兩藥",d:"優先單一複方。"};if(s>=130||d>=80){if(r.cvd||r.dm||r.ckd||r.prev)return{t:"生活型態＋藥物",d:"有 CVD、DM、CKD 或 PREVENT ≥7.5%。"};return{t:"先生活型態 3–6 個月",d:"仍 ≥130/80 再加藥。"};}if(s>=120)return{t:"生活型態",d:"Elevated，追蹤血壓。"};return{t:"維持健康生活",d:""};};
+ const eu=()=>{if(s>=140||d>=90)return r.frail?{t:"生活型態＋藥物",d:"衰弱或姿勢性低血壓可考慮單藥起始，目標採可耐受範圍。"}:{t:"生活型態＋兩藥",d:"低劑量單一複方。"};if(s>=120||d>=70){if(r.cvd||r.dm||r.ckd||r.hmod||r.score){if(s>=130||d>=80)return{t:"生活型態 3 個月",d:"仍 ≥130/80 則用藥。"};return{t:"生活型態",d:"高風險，未達 130/80。"};}return{t:"生活型態",d:"低或中風險。"};}return{t:"維持健康生活",d:""};};
+ const tw=()=>{const st=r.st3?3:r.st2?2:1,pre="第 "+st+" 期："+(st===3?"目標 <130/80，可耐受時 <120/80。":"目標 <130/80。");const ds=s-130,dd=d-80,both=ds>=20||dd>=10;const n=both?"高於目標 ≥20 或 ≥10：兩藥或單一複方。":"單藥或單一複方"+(r.frail?"，衰弱者可考慮半顆。":"。");
+  if(s<120&&d<80)return{t:"維持健康生活",d:"722 每年一輪。"};
+  if(s<130&&d<80)return st===3?{t:"確診後可開始用藥",d:pre+n}:{t:"生活型態",d:"S-ABCDE，722 每 6 個月一輪。"};
+  if(s<140&&d<90)return st===1&&r.n<3&&!(r.age65&&s>=130)?{t:"生活型態",d:"第 1 期、危險因子 <3，開藥門檻 ≥140/90；722 每 3 個月一輪。"}:{t:"生活型態＋藥物",d:pre+n};
+  return{t:"生活型態＋藥物",d:pre+n};};
+ return{tw:tw(),us:us(),eu:eu()};}
+/*END*/
+if(typeof document!=="undefined"){
+const $=id=>document.getElementById(id);
+const num=id=>parseFloat($(id).value)||0;
+function setOut(id,k,t,d){const o=$(id);o.className="out "+k;o.innerHTML='<b class="big">'+t+'</b>'+d;}
+function card(h,g){return '<div><h4>'+h+'</h4><strong>'+g.t+'</strong>'+(g.d||"")+'</div>';}
+let th="tw";
+function r722(){const p=parseBP($("bpText").value,$("dropDay").checked);if(!p){setOut("o722","warn","沒有讀到血壓","請用 142/90 的格式輸入。");return;}
+ const need=p.n<12?"採計讀數偏少，建議補量（至少 4 天）。":"";
+ const high=p.s>=130||p.d>=80,sub=p.am?"早 "+p.am.join("/")+"，晚 "+p.pm.join("/")+"。":"";setOut("o722",high?"crit":"ok","平均 "+p.s+"/"+p.d+"（採計 "+p.n+" 筆）",sub+(high?"達 ≥130/80。":"未達 130/80。")+need);}
+function rPheno(){const g=phenotype(num("oS"),num("oD"),num("hS"),num("hD"),th);setOut("oPheno",g.k,g.t,g.d);}
+function rGrade(){const s=num("gS"),d=num("gD");$("oGrade").innerHTML=card("台灣 2022",gradeTW(s,d))+card("AHA/ACC 2025",gradeUS(s,d))+card("ESC 2024",gradeEU(s,d));}
+function rTri(){const f=[1,2,3,4,5,6,7].map(i=>$("e"+i).checked);const g=triage(num("tS"),num("tD"),f);setOut("oTri",g.k,g.t,g.d);}
+function rStart(){const c=(p,a)=>a.some(i=>$(p+i).checked);const n=[1,2,3,4,5,6].filter(i=>$("f"+i).checked).length;const st2=c("s",[1,2,3]),st3=c("t",[1,2,3,4]);const a=startAdvice(num("sS"),num("sD"),{age65:$("f1").checked,n:n,st2:st2,st3:st3,cvd:$("t4").checked||$("t3").checked,dm:$("s2").checked||$("t2").checked,ckd:$("s1").checked||$("t1").checked,hmod:$("s3").checked,prev:$("rPrev").checked,score:$("rScore").checked,frail:$("rFrail").checked});$("oStart").innerHTML=card("台灣 2022",a.tw)+card("AHA/ACC 2025",a.us)+card("ESC 2024",a.eu);}
+const HX=["過去血壓、發病時間、病程","降壓藥效果、不耐受、服藥順從性","冠心病、中風／TIA、糖尿病、血脂、心衰、腎臟病、PAD","打呼、睡眠呼吸中止","高血壓與早發 CVD 家族史","飲食、鹽、酒、吸菸、運動、心理狀態","NSAID、COX-2、類固醇、口服避孕藥","抗偏頭痛藥、抗憂鬱藥、感冒藥（甘草、偽麻黃鹼）、麻黃","EPO、calcineurin 抑制劑、抗 VEGF、TKI、興奮劑","懷孕計畫（影響選藥）","BMI","Cushing 或肢端肥大外觀","眼底（眼底鏡或眼底攝影）","甲狀腺觸診","頸動脈、腹部、股動脈雜音","背部雜音（主動脈狹窄）","心肺：LVH、奔馬律","腹部：腎腫大、腫塊、主動脈搏動","下肢水腫與脈搏","神經學檢查"];
+const LAB=[["血色素／血容比",1,"常規"],["肌酸酐／eGFR",1,"常規"],["鈉、鉀、鈣",1,"常規"],["空腹血糖與 HbA1c",1,"常規"],["總膽固醇、LDL、HDL、TG",1,"常規"],["尿酸",1,"常規"],["尿液分析",1,"常規"],["心電圖",1,"常規"],["胸部 X 光",1,"常規"],["UACR",1,"台灣強烈建議；美國必驗"],["TSH",0,"美國基本；台灣依線索"],["hs-CRP",0,"建議"],["眼底",0,"建議"],["心臟超音波",0,"建議"],["頸動脈超音波",0,"建議"],["ABPM",0,"建議"],["ABI",0,"建議"],["PWV",0,"建議"],["醛固酮／腎素",0,"依線索"]];
+const SEC=[["頑固型、低血鉀、肌肉無力或抽筋、腎上腺腫瘤、OSA、早發高血壓或中風家族史","原發性醛固酮症","PAC、PRA、ARR；陽性做確認試驗並轉介"],["打呼、睡眠中呼吸暫停、睡不飽、白天嗜睡","阻塞性睡眠呼吸中止","Berlin、Epworth、夜間血氧；確診用 PSG"],["Cr 升高、尿液異常、血尿、止痛藥濫用、多囊腎家族史","腎實質疾病","Cr、腎臟超音波、尿液分析"],["突然發病或惡化、難控制、閃電性肺水腫、腹部雜音；年輕女性想到 FMD","腎動脈狹窄","腎動脈 duplex、CT 或 MRA"],["NSAID、避孕藥、環孢素、感冒藥、減肥藥、酒、咖啡因、麻黃、興奮劑","藥物或物質誘發","停用疑似藥物看反應；必要時尿液或毛髮藥檢"],["陣發高血壓、頭痛、冒汗、心悸、蒼白、咖啡牛奶斑、腎上腺偶發瘤","嗜鉻細胞瘤","24 小時尿或血漿 metanephrines"],["體重快速增加、滿月臉、寬紫紋、近端無力","Cushing 症候群","過夜 1 mg DST、24 小時尿 cortisol 或午夜唾液 cortisol"],["甲狀腺功能低下或亢進症狀、甲狀腺腫","甲狀腺疾病","TSH、free T4"],["30 歲前、上肢血壓高於下肢、股動脈脈搏消失、背部雜音","主動脈狹窄","心臟超音波；CT 血管攝影或 MRA"],["高血鈣","原發性副甲狀腺亢進","血鈣；副甲狀腺素"]];
+function mk(id,items,fn){$(id).innerHTML=items.map((x,i)=>'<label><input type="checkbox" id="'+id+i+'"'+(fn(x,i)?" checked":"")+'><span>'+(Array.isArray(x)?x[0]:x)+(x[2]&&id==="labChecks"?' <span class="tag">'+x[2]+'</span>':'')+'</span></label>').join("");}
+mk("hxChecks",HX,()=>false);mk("labChecks",LAB,x=>x[1]===1);mk("secChecks",SEC,(x,i)=>i===1||i===4);
+function rSec(){const h=SEC.filter((x,i)=>$("secChecks"+i).checked);$("secHits").innerHTML=h.length?h.map(x=>'<li><b>'+x[1]+'</b>：'+x[2]+'</li>').join(""):'<li>沒有勾選線索。</li>';}
+$("copyLabs").addEventListener("click",async()=>{const t="初診檢查："+LAB.filter((x,i)=>$("labChecks"+i).checked).map(x=>x[0]).join("、");try{await navigator.clipboard.writeText(t);$("copyMsg").textContent="已複製";}catch(e){$("copyMsg").textContent=t;}});
+function setSeg(a,b,on){a.setAttribute("aria-pressed",on);b.setAttribute("aria-pressed",!on);}
+$("thTW").onclick=()=>{th="tw";setSeg($("thTW"),$("thEU"),true);rPheno();};
+$("thEU").onclick=()=>{th="eu";setSeg($("thTW"),$("thEU"),false);rPheno();};
+function mode(c){document.body.classList.toggle("clinic",c);setSeg($("mLearn"),$("mClinic"),!c);try{localStorage.setItem("htnMode",c?"c":"l");}catch(e){}}
+$("mLearn").onclick=()=>mode(false);$("mClinic").onclick=()=>mode(true);
+try{if(localStorage.getItem("htnMode")==="c")mode(true);}catch(e){}
+if(location.hash==="#clinic")mode(true);
+const LINK=[["hS","gS","sS","xS","dS"],["hD","gD","sD","xD","dD"]];
+function setBP(a,b){LINK[0].forEach(i=>$(i).value=a);LINK[1].forEach(i=>$(i).value=b);}
+document.addEventListener("input",e=>{const id=e.target.id;for(const g of LINK){if(g.indexOf(id)>=0)g.forEach(i=>{if(i!==id)$(i).value=e.target.value;});}if(id==="bpText"||id==="dropDay"){const p=parseBP($("bpText").value,$("dropDay").checked);if(p)setBP(p.s,p.d);}},true);
+document.addEventListener("input",()=>{r722();rPheno();rGrade();rTri();rStart();rSec();});
+r722();rPheno();rGrade();rTri();rStart();rSec();
+
+/*LOGIC2*/
+function tenFive(s,d,plan){const pS=Math.max(0,10+(s-154)/10*1.0),pD=Math.max(0,5+(d-97)/10*1.1);let ds,dd;if(plan==="d"){ds=pS+2;dd=pD+1;}else if(plan==="h2"){ds=2*pS*0.8;dd=2*pD*0.8;}else{ds=pS*(+plan);dd=pD*(+plan);}return{s:Math.round(s-ds),d:Math.round(d-dd),ds:Math.round(ds),dd:Math.round(dd)};}
+function adjustPlan(as,ad,ps,pd){const am=as>=130||ad>=80,pm=ps>=130||pd>=80;if(am&&pm)return{k:"crit",t:"早晚都未達標",d:"確認服藥與生活型態，需要時加藥或調整類別與劑量。"};if(am)return{k:"warn",t:"早上未達標",d:"確認服藥；可考慮改睡前服藥，或換較長效的藥。"};if(pm)return{k:"warn",t:"晚上未達標",d:"確認服藥；優先換較長效的藥。"};if(as<=110&&ad<=70&&ps<=110&&pd<=70)return{k:"warn",t:"低於目標 ≥20/10",d:"可考慮減藥：一次一種、減半量，至少隔 2 週。"};return{k:"ok",t:"早晚都達標",d:"看器官傷害是否進展；有進展再安排 ABPM。"};}
+function labRead(c0,c1,k){const p=c0>0?Math.round((c1-c0)/c0*100):0;let out;if(k>=6)out={k:"crit",t:"K ≥6.0：今天處理",d:"依高血鉀流程評估心電圖與急性處理，暫停相關藥物。"};else if(k>5.5)out={k:"warn",t:"K >5.5：先找原因並處理",d:"檢查 NSAID、保鉀藥、鉀鹽與飲食，考慮減量或併用排鉀方式，短期複驗。"};else if(p>30)out={k:"warn",t:"Cr 上升 "+p+"%：超過 30%",d:"查脫水、NSAID、顯影劑與腎動脈狹窄，考慮減量或暫停，短期複驗。"};else out={k:"ok",t:"Cr 上升 "+p+"%：可接受",d:"Cr 上升 ≤30% 且 K 可控制時繼續用藥。"};return out;}
+function addDays(iso,n){const t=new Date(iso+"T00:00:00Z");t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10);}
+/*END2*/
+const PK=[
+["A","Captopril","<2–3","否","腎為主","多次給藥，作用短","","r","" ],
+["A","Enalapril","11","前驅藥","腎為主","腎功能差會累積","","r",""],
+["A","Lisinopril","12","否","幾乎全腎排","不經肝代謝；肝病可用，腎差要調","","r",""],
+["A","Ramipril","13–17","前驅藥","腎、肝","腎功能差半衰期可達 40 小時","","r",""],
+["A","Perindopril","約 10","前驅藥","腎為主","腎功能差要調","","r",""],
+["A","Fosinopril","12","前驅藥","腎、肝各半","CKD 累積較少","","",""],
+["R","Losartan","2（6–9）","活性代謝物","糞 60／尿 35","CYP2C9 活化；有降尿酸作用","50–100","","c"],
+["R","Valsartan","6–7","否","糞 83／尿 13","幾乎不經 CYP","80–320","",""],
+["R","Irbesartan","11–15","否","肝膽 80／腎 20","生體可用率最高（60–80%）","150–300","","c"],
+["R","Candesartan","9–12","前驅藥","肝膽 67／腎 33","CYP 影響小","8–32","",""],
+["R","Telmisartan","24","否","幾乎全膽道","半衰期最長，不經 CYP；肝病與膽道阻塞要小心","20–80","h",""],
+["R","Olmesartan","13","前驅藥","肝膽 60／腎 40","CYP 影響小","20–40","",""],
+["C","Amlodipine","30–50","否","肝 90%，尿中原形 10%","穩定態 7–8 天；併 simvastatin 限 20 mg","2.5–10","h","3"],
+["C","Felodipine","11–16","否","肝，首渡效應大","CYP3A4 影響大","","h","3"],
+["N","Verapamil","5–12","否","肝，多種 CYP","負性心率與收縮力；交互作用多","","h","3"],
+["N","Diltiazem","4–9.5","否","肝","CYP3A4 受質兼抑制劑，P-gp 抑制","","h","3"],
+["D","HCTZ","6–15","否","腎，原形","作用約 6–12 小時；eGFR <30 改 loop","25–50","r",""],
+["D","Chlorthalidone","40–60","否","腎，原形為主","作用 48–72 小時，低鉀較多；台灣供應待核對","12.5–25","",""],
+["D","Indapamide","14–25","否","肝，CYP3A4、2C9","尿酸、血糖影響較少","1.25–2.5","r","3"],
+["B","Atenolol","6–9","否","腎，原形","ESRD 可達 15–35 小時","","r",""],
+["B","Bisoprolol","9–12","否","腎、肝各半","藥動變異小；CrCl <40 半衰期延長","5–10","r",""],
+["B","Metoprolol","3–7","否","肝 CYP2D6","快慢代謝者差異大","","h","2"],
+["B","Carvedilol","6–10","否","肝 CYP2D6、2C9","併 α 阻斷，首渡效應大","","h","2c"],
+["B","Nebivolol","12（慢代謝 19）","否","肝 CYP2D6、葡萄糖醛酸化","血管擴張；生體可用率個體差異大","","h","2"],
+["B","Propranolol","3–6","否","肝 CYP2D6、1A2","非選擇性；一天多次","","h","2"]
+];
+const PKC={all:"全部",A:"ACEi",R:"ARB",C:"DHP CCB",N:"non-DHP",D:"Thiazide 類",B:"β 阻斷劑"};
+let pkClass="all";
+/*LOGIC3*/
+function rxPlan(p){
+ const s=p.s,d=p.d,k=p.stage||0,gs=s-130,gd=d-80,tier=(gs>=40||gd>=25)?4:(gs>=30||gd>=20)?3:(gs>=20||gd>=10)?2:1;
+ let r=rxCore(p);
+ if(k>0&&s<130&&d<80){r.today=["維持目前處方"];r.alts=[];r.ladder=["穩定後可開慢性病連續處方箋；722 每 3 個月一輪"];r.n=0;r.done=true;r.nhi=["慢箋：病情穩定、同一處方，最多 90 日、每次 ≤30 日"];r.est="";return r;}
+ if(k>0)r=rxCore(Object.assign({},p,{s:150,d:90,rf3:true,stage:0}));
+ r.est="";
+ const ts=gs>=40?4:gs>=30?3:gs>=20?2:1,td=gd>=25?4:gd>=20?3:gd>=10?2:1;
+ r.why=(k===0&&r.n>0&&!p.preg&&!p.hf)?"高於目標：收縮壓 "+(gs>=0?"+":"")+gs+"、舒張壓 "+(gd>=0?"+":"")+gd+"，起始強度由"+(td>ts?"舒張壓":ts>td?"收縮壓":"收縮壓與舒張壓")+"決定（第 "+tier+" 層）":"";
+ if(k===0&&r.n>0&&r.n<=2&&!p.preg&&!p.fr){const e=tenFive(s,d,String(r.n)),up=(tier===3?[2,1]:tier===4?[4,2]:[0,0]);const es=e.s-up[0],ed=e.d-up[1];r.est="預估治療後約 "+es+"/"+ed+"（10/5 法則）"+((es>=130||ed>=80)?"，可能還要往下一步":"");}
+ if(k>0){const st=[r.today.join(" + ")].concat(r.ladder),idx=Math.min(k+(tier>=3?1:0),st.length-1);r.today=[st[idx]];r.ladder=st.slice(idx+1);r.alts=[];r.stepNo=idx;}
+ const nhi=[];
+ if(k===0)nhi.push("起始開單方：Sevikar、Exforge 仿單寫不適合起始治療");else nhi.push("改複方前，病歷記錄前次單方與血壓未達標");
+ nhi.push("ACEi＋ARB、同類藥不併用");
+ const all=r.today.concat(r.ladder).join(" ");
+ if(/HCT|Indapamide/.test(all))nhi.push("痛風發作或尿酸 >9 避開 thiazide 類；indapamide 病歷寫使用理由");
+ if(/Spironolactone/.test(all))nhi.push("高血鉀或 eGFR <30 不開 spironolactone");
+ r.nhi=nhi;
+ return r;}
+function rxCore(p){
+ const s=p.s,d=p.d,st3=p.cad||p.st||p.af||p.hf||p.e<30,st2=p.dm||p.e<60||p.alb||p.hmod,stage=st3?3:st2?2:1;
+ const tgt=stage===3?"<130/80，可耐受時 <120/80":"<130/80";
+ const out={n:0,today:[],alts:[],ladder:[],labs:[],notes:[],stage:stage,tgt:tgt,kind:"ok"};
+ if(s>=180||d>=120)out.notes.push("血壓 ≥180/120：先完成 STEP 3 分流，排除急症。");
+ if(p.preg){out.n=(s>=160||d>=110)?2:1;out.today=out.n===2?["Nifedipine ER 30 mg QD","Labetalol 100 mg BID"]:["Nifedipine ER 30 mg QD"];out.alts=["Labetalol 100 mg BID","Methyldopa 250 mg BID"];out.ladder=["Nifedipine ER 加至 60 mg，最高 90 mg QD","加或加量 Labetalol 200 mg BID，最高 400 mg BID"];out.notes.push("停用 ACEi、ARB、ARNI、MRA、SGLT2i。轉介產科；≥160/110 當天處理。");out.tgt="<140/90";out.kind="warn";return out;}
+ if(p.hf){out.n=4;out.today=["Sacubitril/valsartan 24/26 mg BID（或 Valsartan 40 mg BID）","Bisoprolol 1.25 mg QD","Spironolactone 25 mg QD（K <5、eGFR >30）","Dapagliflozin 或 Empagliflozin 10 mg QD"];out.alts=["ACEi：Enalapril 2.5 mg BID","β 阻斷劑：Carvedilol 3.125 mg BID"];out.ladder=["一次調一種，每 2–4 週加倍","目標：Sacubitril/valsartan 97/103 mg BID、Bisoprolol 10 mg QD、Spironolactone 25–50 mg QD","血壓仍高才加 Amlodipine 5 mg QD"];out.labs=["Cr、K：起始或調量 1–2 週內"];out.notes.push("HFrEF 依心衰竭治療，建議會診心臟科。避免 non-DHP CCB。ARNI 與 SGLT2i 需符合健保條件。");if(p.as||p.av)out.notes.push("氣喘或傳導阻斷：β 阻斷劑先不用，會診心臟科。");out.kind="warn";return out;}
+ const norm=s<120&&d<80,elev=s<130&&d<80,g1=s<140&&d<90;
+ let need=true;
+ if(norm)need=false;else if(elev)need=stage===3;else if(g1&&stage===1&&!p.rf3&&!(p.age>=65&&s>=130))need=false;
+ if(!need){out.n=0;out.today=["先不用藥：S-ABCDE"];out.ladder=[norm?"722 每年一輪":elev?"722 每 6 個月一輪":"722 每 3 個月一輪；≥140/90 再用藥"];return out;}
+ const gs=s-130,gd=d-80,tier=(gs>=40||gd>=25)?4:(gs>=30||gd>=20)?3:(gs>=20||gd>=10)?2:1;
+ const two=tier>=2&&!p.fr;
+ out.n=two?2:1;
+ const fr=p.fr;
+ const spiroOK=p.e>=30&&p.k<5;
+ const fourth=spiroOK?"加 Spironolactone 25 mg QD，可到 50 mg（1–2 週驗 K、Cr）":(p.as||p.av?"加 Doxazosin 1 mg HS，逐步加量":"加 Bisoprolol 5 mg QD，可到 10 mg；或 Doxazosin 1 mg HS");
+ const bphN=p.bph?"有攝護腺肥大：第四線可優先 Doxazosin 1 mg HS，注意姿勢性低血壓":"";
+ if(p.e<30){out.n=2;const ras=p.k<5;out.today=ras?["Amlodipine 5 mg QD","Valsartan 80 mg QD"]:["Amlodipine 5 mg QD","Furosemide 20 mg BID"];out.alts=ras?["Amlodipine 5 mg QD＋Furosemide 20 mg BID"]:["Amlodipine 5 mg QD＋Bisoprolol 2.5 mg QD"];out.ladder=["Amlodipine 加至 10 mg",ras?"加 Furosemide 20 mg BID，最高 80 mg BID":"Furosemide 加量，最高 80 mg BID","加 Bisoprolol 2.5 mg，可到 10 mg"];out.labs=["Cr、K：起始或調量 2–4 週內"];out.notes.push("eGFR <30：不用 thiazide 複方與 MRA，建議會診腎臟科。");out.kind="warn";return out;}
+ if(p.k>=5){out.today=two?["Amlodipine 5 mg QD","Indapamide 1.25 mg QD"]:["Amlodipine 5 mg QD"];out.alts=["Amlodipine 5 mg QD＋Bisoprolol 2.5 mg QD"];out.ladder=[two?"Amlodipine 加至 10 mg":"加 Indapamide 1.25 mg QD","Indapamide 加至 2.5 mg","加 Bisoprolol 5 mg，可到 10 mg"];out.notes.push("K ≥5：先找原因，暫不用 ACEi、ARB、MRA；K 正常後再評估 ARB。");out.labs=["K、Cr：1–2 週內複驗"];out.kind="warn";return out;}
+ const arb=p.gout?{n:"Losartan",a:fr?25:(tier>=3?100:50),b:100}:{n:"Olmesartan",a:fr?10:(tier>=3?40:20),b:40};
+ const a0=arb.n+" "+arb.a+" mg QD"+(fr&&!p.gout?"（半顆）":"");
+ const amlo=fr?"Amlodipine 2.5 mg QD":(tier>=4?"Amlodipine 10 mg QD":"Amlodipine 5 mg QD");
+ const bb=(p.cad||p.af)&&!p.as&&!p.av;
+ if(bb){out.n=2;out.today=[a0,"Bisoprolol 2.5 mg QD"];out.alts=["Valsartan 80 mg QD＋Bisoprolol 2.5 mg QD","Olmesartan 20 mg QD＋Carvedilol 6.25 mg BID"];out.ladder=["Bisoprolol 加至 5 mg（心率允許）",arb.n+" 加至 "+arb.b+" mg",p.ed?(p.gout?null:"加 Indapamide 1.25 mg QD，可到 2.5 mg"):"加 Amlodipine 5 mg，可到 10 mg",(p.gout||p.ed)?null:"加 Indapamide 1.25 mg QD，可到 2.5 mg",fourth].filter(Boolean);if(p.af)out.notes.push("心房顫動：另評估抗凝，量血壓每回至少 3 次。");}
+ else if(p.ed){out.today=two?[a0,"Indapamide 1.25 mg QD"]:[a0];out.alts=two?["Valsartan 80 mg QD＋Indapamide 1.25 mg QD"]:["Valsartan 80 mg QD"];out.ladder=[two?arb.n+" 加至 "+arb.b+" mg":"加 Indapamide 1.25 mg QD","Indapamide 加至 2.5 mg",fourth];}
+ else if(p.gout){out.today=two?[a0,amlo]:[a0];out.alts=two?["Amlodipine＋Bisoprolol 2.5 mg QD"]:[amlo];out.ladder=[two?"Losartan 加至 100 mg":"加 Amlodipine 5 mg","Amlodipine 加至 10 mg",fourth];out.notes.push("痛風：避開 thiazide 與含 HCTZ 複方；Losartan 有降尿酸作用。");}
+ else{
+  if(two){const v=tier>=3?160:80,t=tier>=3?80:40,o=arb.a;const am=tier>=4?10:5;out.today=["Amlodipine "+am+" mg QD","Olmesartan "+o+" mg QD"];out.alts=["Amlodipine "+am+" mg＋Valsartan "+v+" mg QD","Amlodipine "+am+" mg＋Telmisartan "+t+" mg QD","Olmesartan "+o+" mg＋Indapamide 1.25 mg QD"];out.ladder=tier===2?["改 Sevikar 5/20（已用過單方）","Sevikar 5/40","Sevikar HCT 40/5/12.5","Sevikar HCT 40/10/12.5",fourth]:tier===3?["改 Sevikar 5/40（已用過單方）","Sevikar HCT 40/5/12.5","Sevikar HCT 40/10/12.5",fourth]:["Sevikar HCT 40/10/12.5（已用過單方）",fourth];}
+  else{out.today=[a0];out.alts=[amlo,"Valsartan 80 mg QD","Telmisartan 40 mg QD"];out.ladder=fr?["加 Amlodipine 2.5 mg","Olmesartan 加至 20 mg","Amlodipine 加至 5 mg（等同 Sevikar 5/20）","之後一次只調一種，參考一般階梯"]:["加 Amlodipine 5 mg（等同 Sevikar 5/20）","Sevikar 5/40","Sevikar HCT 40/5/12.5","Sevikar HCT 40/10/12.5",fourth];}
+ }
+ if(!p.gout&&!p.ed&&!bb)out.notes.push("替代路徑：Exforge 5/80 → 5/160 → 10/160 → Exforge HCT 5/160/12.5 → 10/160/12.5 → 10/160/25。");
+ if(p.dm||p.alb)out.notes.push((p.alb?"蛋白尿：ARB 先用足量。":"")+(p.dm?"糖尿病：符合條件可加 SGLT2i 10 mg QD。":""));
+ if(p.sim&&!p.ed)out.notes.push("Simvastatin 與 amlodipine 併用：simvastatin 每日 ≤20 mg，或改 atorvastatin。");
+ if(p.e<60)out.notes.push("eGFR <60：起始 2–4 週一定要驗 Cr、K。");
+ if(bphN)out.notes.push(bphN);
+ if(fr)out.notes.push("衰弱：一次只調一種，每次回診量站立血壓。");
+ out.ladder=out.ladder.filter(x=>!(arb.a===arb.b&&x===arb.n+" 加至 "+arb.b+" mg")&&!(tier>=4&&!fr&&x==="Amlodipine 加至 10 mg"));
+ out.labs=["Cr、K：起始或加量 2–4 週內（ARB、利尿劑）","Na、尿酸：加 thiazide 類 2–4 週內"];
+ return out;}
+/*END3*/
+const DOSE=[["ARB","1","Olmesartan（Olmetec）","20","40","QD","台灣 STEP 用藥"],["ARB","2","Valsartan（Diovan）","80","160–320","QD","複方選擇多"],["ARB","3","Telmisartan（Micardis）","40","80","QD","半衰期最長，腎排少"],["ARB","4","Losartan（Cozaar）","50","100","QD","痛風優先"],["ARB","5","Candesartan","8","32","QD",""],["ARB","6","Irbesartan（Aprovel）","150","300","QD","糖尿病腎病變有適應症"],["ACEi","1","Lisinopril","10","40","QD","腎排，ARB 不可得時"],["ACEi","2","Enalapril","5","40","QD–BID",""],["ACEi","3","Ramipril（Tritace）","2.5","20","QD–BID",""],["ACEi","4","Fosinopril","10","40","QD","CKD 累積較少"],["CCB","1","Amlodipine（Norvasc）","5（衰弱 2.5）","10","QD","基本選擇"],["CCB","2","Felodipine","5","10","QD",""],["CCB","3","Nifedipine ER","30","90","QD","懷孕可用"],["Non-DHP","1","Diltiazem ER","120","360","QD","心率控制；避開 HFrEF"],["Non-DHP","2","Verapamil ER","120","360","QD","不併 BB"],["利尿","1","Indapamide","1.25","2.5","QD","痛風慎用"],["利尿","2","HCTZ","12.5","25–50","QD","多在複方內"],["利尿","3","Chlorthalidone","12.5","25","QD","台灣供應待核對"],["利尿","4","Furosemide","20 BID","80 BID","BID","eGFR <30"],["BB","1","Bisoprolol（Concor）","2.5","10","QD","HFrEF 從 1.25"],["BB","2","Carvedilol","6.25 BID","25 BID","BID","HFrEF 從 3.125 BID"],["BB","3","Nebivolol","2.5","10","QD",""],["BB","4","Metoprolol ER","25","200","QD",""],["第二線","1","Spironolactone","25","50","QD","K <5、eGFR ≥30"],["第二線","2","Eplerenone","50","100","QD–BID","男性女乳時換"],["第二線","3","Doxazosin","1 HS","8–16","QD",""],["懷孕","1","Labetalol","100 BID","400 BID","BID",""],["懷孕","2","Methyldopa","250 BID","見仿單","BID–TID","產後避免"]];
+$("doseTable").innerHTML='<tr><th>類別</th><th>順序</th><th>藥物</th><th>起始</th><th>最大</th><th>頻次</th><th>備註</th></tr>'+DOSE.map(r=>'<tr><th>'+r[0]+'</th><td class="n">'+r[1]+'</td><td>'+r[2]+'</td><td class="n">'+r[3]+'</td><td class="n">'+r[4]+'</td><td class="n">'+r[5]+'</td><td>'+r[6]+'</td></tr>').join("");
+function rxIn(){const c=id=>$(id).checked;return{s:num("xS"),d:num("xD"),age:num("xAge"),e:num("xE"),k:num("xK"),rf3:c("xRF3"),dm:c("xDM"),alb:c("xALB"),cad:c("xCAD"),hf:c("xHF"),st:c("xST"),af:c("xAF"),hmod:c("xHMOD"),gout:c("xGout"),ed:c("xEd"),as:c("xAs"),av:c("xAV"),bph:c("xBPH"),sim:c("xSim"),fr:c("xFr"),preg:c("xPr"),stage:+$("xStage").value};}
+let rxLast=null;
+function rRx(){const r=rxPlan(rxIn());rxLast=r;const li=a=>a.map(x=>"<li>"+x+"</li>").join("");$("oRx").innerHTML='<div class="out '+(r.kind==="warn"?"warn":"ok")+'"><b class="big">'+(r.done?"已達標":r.stepNo?"下一步（第 "+r.stepNo+" 步）":r.n?r.n+" 種藥":"不用藥")+"；目標 "+r.tgt+'</b><div class="rxlist">'+r.today.map(x=>"<div>"+x+"</div>").join("")+"</div>"+(r.why?"<small>"+r.why+"</small><br>":"")+(r.est?"<small>"+r.est+"</small>":"")+"</div>"+(r.alts.length?"<h3>替代方案</h3><ul>"+li(r.alts)+"</ul>":"")+(r.ladder.length?"<h3>未達標，依序</h3><ol>"+li(r.ladder)+"</ol><p style='font-size:13.5px;color:var(--mute)'>"+(r.n?"調藥 2 週做 722，4 週未達標先查服藥再往下一步。":"")+"</p>":"")+(r.labs.length?"<h3>抽血</h3><ul>"+li(r.labs)+"</ul>":"")+(r.nhi&&r.nhi.length?"<h3>健保</h3><ul>"+li(r.nhi)+"</ul>":"")+(r.notes.length?"<h3>注意</h3><ul>"+li(r.notes)+"</ul>":"");}
+$("copyRx").addEventListener("click",async()=>{if(!rxLast)return;const t=rxLast.today.join("\n");try{await navigator.clipboard.writeText(t);$("copyRxMsg").textContent="已複製";}catch(e){$("copyRxMsg").textContent=t;}});
+
+function rDose(){const r=tenFive(num("dS"),num("dD"),$("dPlan").value);setOut("oDose","ok","預估約 "+r.s+"/"+r.d,"下降約 "+r.ds+"/"+r.dd+"。依 10/5 法則的教學估計，個人差異大。");}
+function rPK(){const fl={r:$("pkRen").checked,h:$("pkHep").checked};const e3=$("pk3A").checked,e2=$("pk2D").checked,eC=$("pk2C").checked;const rows=PK.filter(p=>pkClass==="all"||p[0]===pkClass).map(p=>{const warn=(fl.r&&p[7]==="r")||(fl.h&&p[7]==="h")||(e3&&p[8].indexOf("3")>=0)||(e2&&p[8].indexOf("2")>=0)||(eC&&p[8].indexOf("c")>=0);return '<tr class="'+(warn?"flag":"")+'"><th>'+p[1]+'</th><td class="n">'+p[2]+'</td><td>'+p[3]+'</td><td>'+p[4]+'</td><td>'+p[5]+'</td><td class="n">'+(p[6]||"見仿單")+'</td></tr>';}).join("");$("pkTable").innerHTML='<tr><th>藥物</th><th>t½（h）</th><th>前驅藥</th><th>代謝／排泄</th><th>選藥重點</th><th>常用劑量 mg/天</th></tr>'+rows;}
+$("classChips").innerHTML=Object.keys(PKC).map(k=>'<button type="button" class="chip" data-c="'+k+'" aria-pressed="'+(k==="all")+'">'+PKC[k]+'</button>').join("");
+$("classChips").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;pkClass=b.dataset.c;$("classChips").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));rPK();});
+function rAdj(){const g=adjustPlan(num("aS"),num("aD"),num("pS"),num("pD"));setOut("oAdj",g.k,g.t,g.d);}
+function rFollow(){const d=$("fDate").value;if(!d){$("fTable").innerHTML="";return;}const lab=$("fRas").checked||$("fDiu").checked||$("fMra").checked;const items=[[14,"722 一輪，評估藥效","台灣 8.1"]];if(lab){const w=[];if($("fRas").checked)w.push("Cr、K");if($("fDiu").checked)w.push("Na、K");if($("fMra").checked)w.push("K、Cr");items.push([14,"抽血開始窗口："+[...new Set(w)].join("、"),"KDIGO 2–4 週"]);items.push([28,"抽血窗口結束","KDIGO 2–4 週"]);}items.push([28,"血壓未達標：執行 ATGOALs","台灣 8.5"]);items.push([56,"若仍未控制：每月 722","台灣 表 7"]);items.push([91,"已控制：每 3 個月 722；可評估轉慢箋","台灣 表 7"]);items.push([365,"心電圖、尿液分析、風險分期、器官傷害"+($("fCkd").checked?"、eGFR、UACR":""),"台灣 6.2、8.5"]);items.sort((a,b)=>a[0]-b[0]);$("fTable").innerHTML='<tr><th>日期</th><th>距開藥</th><th>要做什麼</th><th>依據</th></tr>'+items.map(x=>'<tr><td class="n">'+addDays(d,x[0])+'</td><td class="n">'+x[0]+' 天</td><td>'+x[1]+'</td><td>'+x[2]+'</td></tr>').join("");}
+function rLab(){const g=labRead(num("c0"),num("c1"),num("k1"));setOut("oLab",g.k,g.t,g.d+" KDIGO 2–4 週監測原則；K 切點為臨床整理。");}
+(function(){const t=new Date(),p=n=>String(n).padStart(2,"0");$("fDate").value=t.getFullYear()+"-"+p(t.getMonth()+1)+"-"+p(t.getDate());})();
+function rPart2(){rRx();rDose();rPK();rAdj();rFollow();rLab();}
+document.addEventListener("input",rPart2);document.addEventListener("change",rPart2);
+rPart2();
+
+}
+</script>
+</body>
+</html>

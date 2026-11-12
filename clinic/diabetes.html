@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>糖尿病門診實務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Same clinic-handbook layout as the hypertension page; amber accent for glucose. */
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef; --card:#ffffff; --ink:#22261f; --mute:#5d6258; --line:#dad8cd;
+  --accent:#a3520c; --accent-soft:#f8ead9;
+  --ok:#2f7d55; --ok-soft:#e1f1e8; --warn:#8f6400; --warn-soft:#fbf0d9; --crit:#b3261e; --crit-soft:#fbe3e0;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:#f3f1e8;padding:22px 0 18px}
+header.top .crumb{font:13px var(--mono);color:#c2bfa9}
+header.top .crumb a{color:inherit}
+header.top h1{font:700 32px/1.3 var(--display);margin:4px 0 6px;text-wrap:balance}
+header.top p{margin:0;color:#dcd9cb;font-size:15px}
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:8px;padding-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);font:500 14px var(--body);padding:6px 13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.jump{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0}
+.jump a{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap;padding:4px 7px;border-radius:4px}
+.jump a:hover{background:var(--bg);color:var(--ink)}
+.draft{background:var(--warn-soft);border-left:4px solid var(--warn);padding:10px 14px;margin:18px 0;font-size:14.5px}
+section{padding:26px 0 8px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.no{font:13px var(--mono);color:var(--accent)}
+h2{font:700 25px/1.35 var(--display);margin:2px 0 10px;text-wrap:balance}
+h3{font:700 17px/1.5 var(--body);margin:18px 0 6px}
+p{margin:8px 0;max-width:65ch}
+ul,ol{margin:8px 0;padding-left:1.3em}
+li{margin:3px 0}
+a{color:var(--accent)}
+.tag{display:inline-block;font:500 11.5px/1.5 var(--mono);padding:0 6px;border-radius:3px;background:#ebe9e0;color:var(--mute);vertical-align:1px;white-space:nowrap}
+.tag.tw{background:#dcecf0;color:#1c5a68}.tag.us{background:#e7e4f3;color:#4a3f85}.tag.me{background:#eee7dc;color:#6a5533}.tag.todo{background:var(--warn-soft);color:var(--warn)}.tag.pay{background:#f3e1ec;color:#7c2d5c}
+.case{background:var(--accent-soft);border-radius:8px;padding:12px 16px;margin:12px 0;font-size:15.5px}
+.case b{color:var(--accent)}
+.tool{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:16px 0}
+.tool>h3{margin:0 0 10px;font-size:16px}
+.fields{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+label.num{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input[type=number]{width:96px;font:500 19px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:#fff}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px 14px;margin:6px 0}
+.checks label{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:15px;cursor:pointer;line-height:1.5}
+input[type=checkbox]{margin-top:4px;width:17px;height:17px;accent-color:var(--accent);flex:none}
+button.act{font:500 14px var(--body);background:var(--card);border:1px solid var(--ink);border-radius:5px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.out{margin-top:12px;padding:10px 14px;border-radius:5px;background:var(--bg);border-left:4px solid var(--mute)}
+.out.ok{background:var(--ok-soft);border-color:var(--ok)}.out.warn{background:var(--warn-soft);border-color:var(--warn)}.out.crit{background:var(--crit-soft);border-color:var(--crit)}
+.out b.big{font:700 19px var(--display);display:block}
+.out small{color:var(--mute);font-size:13px;display:block;margin-top:4px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--bg)}
+td.n{font:14px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.flag td,tr.flag th{background:var(--crit-soft)}
+tr.dim td,tr.dim th{color:#9a9d93}
+details{margin:12px 0;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-weight:500;font-size:15px}
+details>div{padding:0 12px 10px}
+.part{margin:34px 0 0;padding:10px 14px;background:var(--ink);color:#f3f1e8;font:700 19px var(--display);border-radius:5px}
+.part span{font:12px var(--mono);color:#c2bfa9;display:block}
+select{font:15px var(--body);padding:8px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);max-width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font:14px var(--body);padding:4px 11px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rx{display:grid;gap:8px;margin-top:8px}
+.rx .item{background:#fff;border:1px solid var(--line);border-radius:5px;padding:8px 11px}
+.rx .item b{font:700 17px var(--body)}
+.rx .item div{font-size:14px;color:var(--mute);line-height:1.6}
+.pill{display:inline-block;font-size:12.5px;padding:0 8px;border-radius:4px;margin-left:4px;vertical-align:2px}
+.pill.g{background:var(--ok-soft);color:var(--ok)}.pill.u{background:#f3e1ec;color:#7c2d5c}.pill.c{background:var(--warn-soft);color:var(--warn)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.cols>div{border:1px solid var(--line);border-radius:5px;padding:9px 11px;background:#fff;font-size:14.5px;line-height:1.6}
+.cols h4{margin:0 0 4px;font:500 13px var(--mono);color:var(--mute)}
+.why{font-size:13.5px;color:var(--mute);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+.sched{list-style:none;padding:0;margin:8px 0 0}
+.sched li{display:grid;grid-template-columns:7.5em 1fr;gap:8px;border-top:1px solid var(--line);padding:6px 0;font-size:14.5px}
+.sched li b{font:500 13.5px var(--mono);color:var(--accent)}
+.next{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.next a{display:block;border:1px dashed var(--line);border-radius:6px;padding:10px 12px;font-size:14.5px;color:var(--mute);text-decoration:none}
+.next a b{display:block;color:var(--ink)}
+footer{padding:22px 0 44px;font-size:13.5px;color:var(--mute)}
+footer a{color:inherit}
+footer ul{padding-left:1.2em}
+#doseTable{min-width:700px}
+#doseTable th:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+#doseTable tr.flag th:first-child{background:var(--crit-soft)}
+body.clinic .learn{display:none}
+body.clinic section{padding-top:12px;border-bottom:0}
+body.clinic h2{font-size:18px}
+body.clinic .tool{margin:8px 0}
+@media (max-width:560px){.cols{grid-template-columns:1fr}header.top h1{font-size:27px}.sched li{grid-template-columns:6em 1fr}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media print{.bar{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../">ycjacademy</a>／門診實務／糖尿病</div>
+  <h1>糖尿病門診實務</h1>
+  <p>成人第二型糖尿病：確診、分流、收案、照健保開藥與長期追蹤。</p>
+</div></header>
+
+<nav class="bar" aria-label="頁面工具"><div class="wrap">
+  <div class="seg" role="group" aria-label="閱讀模式">
+    <button id="mLearn" type="button" aria-pressed="true">學習</button>
+    <button id="mClinic" type="button" aria-pressed="false">門診</button>
+  </div>
+  <div class="jump">
+    <a href="#dx">確診</a><a href="#flag">分流</a><a href="#hx">問診</a><a href="#labs">檢查</a><a href="#enrol">收案</a><a href="#goal">目標</a><a href="#life">生活</a><a href="#comorb">共病</a><a href="#rx">處方</a><a href="#dose">劑量</a><a href="#combo">複方</a><a href="#insulin">胰島素</a><a href="#gap">落差</a><a href="#follow">追蹤</a><a href="#labback">報告</a><a href="#safety">安全</a><a href="#notgoal">未達標</a><a href="#elder">減藥</a><a href="#screen">併發症</a><a href="#nhi">健保</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+<div class="draft learn"><b>v0.1 草稿，最後核對 2026-11-12。</b>主軸是 ADA Standards of Care 2026 與健保藥品給付規定 5.1；5.1 全文本次未能逐條讀到，條件引自二手整理（標 <span class="tag todo">待核對</span>）。劑量依常見仿單與文獻整理，未逐項對照台灣仿單。校對前請勿當臨床依據。</div>
+
+<div class="learn">
+<div class="case"><b>林先生，55 歲，業務（虛構）。</b>成人健檢空腹血糖 138，今天來門診複查。BMI 27.5，血壓 138/86，父親有糖尿病。他問：「是不是一定要吃藥？會不會傷腎？」</div>
+<h3>今天要做的五件事</h3>
+<ol>
+  <li>確診：一次數值不夠，沒有症狀要再驗一次。</li>
+  <li>分流：有沒有今天就要處理的高血糖急症，或不像第二型的線索。</li>
+  <li>問診、理學、開初診檢驗，順便找併發症。</li>
+  <li>收進共照或家醫計畫，排好每年固定檢驗。</li>
+  <li>訂目標，開生活處方，決定第一顆藥。</li>
+</ol>
+</div>
+
+<div class="part"><span>第一部分</span>初診：確診、分流、收案</div>
+
+<section id="dx">
+  <div class="no">STEP 1</div>
+  <h2>確診：數字夠不夠</h2>
+  <p class="learn">任一項達標即符合，但<b>沒有典型高血糖症狀時要兩項異常</b>：同一次抽血兩種檢驗都異常，或隔天以後再驗一次。隨機血糖 ≥200 只有在有症狀時才能單獨確診。<span class="tag us">ADA 2026 §2</span></p>
+  <div class="tool">
+    <h3>確診判定器</h3>
+    <div class="fields">
+      <label class="num">空腹血糖 mg/dL<input type="number" id="dFpg" inputmode="decimal"></label>
+      <label class="num">HbA1c %<input type="number" id="dA1c" step="0.1" inputmode="decimal"></label>
+      <label class="num">OGTT 2 小時<input type="number" id="dOgtt" inputmode="decimal"></label>
+      <label class="num">隨機血糖<input type="number" id="dRand" inputmode="decimal"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="dSym">有典型症狀（多喝、多尿、體重下降）</label>
+      <label><input type="checkbox" id="dRepeat">上面的異常值已是第二次（隔天以後）</label>
+    </div>
+    <div class="out" id="dOut" aria-live="polite">輸入數值後顯示。</div>
+  </div>
+  <details class="learn"><summary>HbA1c 什麼時候不準</summary><div>
+    <ul>
+      <li><b>偏低</b>：紅血球壽命短，例如溶血、出血後、懷孕中後期、透析、用 EPO、輸血後。</li>
+      <li><b>偏高</b>：缺鐵性貧血、脾臟切除後。</li>
+      <li><b>海洋性貧血帶因</b>在台灣常見，部分方法受血紅素變異干擾；HbA1c 和血糖對不起來時，改看空腹血糖、OGTT，或用果糖胺、糖化白蛋白輔助。</li>
+    </ul>
+    <p>機制與鑑別細節見<a href="../islands/#type2-diabetes">群島糖尿病深入頁</a>。</p>
+  </div></details>
+</section>
+
+<section id="flag">
+  <div class="no">STEP 2</div>
+  <h2>今天要不要送急診？這是第二型嗎？</h2>
+  <p class="learn">兩件事要在開藥前先排除：高血糖急症，以及其實不是第二型（第一型、LADA、單基因型、續發性）。後者會改變第一顆藥。</p>
+  <div class="tool">
+    <h3>分流</h3>
+    <div class="checks" id="flagChecks">
+      <label><input type="checkbox" value="er" data-w="er">意識改變、嚴重脫水、呼吸深快、腹痛嘔吐</label>
+      <label><input type="checkbox" value="ket" data-w="er">尿酮或血酮陽性，且血糖高</label>
+      <label><input type="checkbox" value="hhs" data-w="er">血糖 ≥600</label>
+      <label><input type="checkbox" value="cat" data-w="ins">血糖 ≥300 或 HbA1c ≥10%，有明顯症狀或體重下降</label>
+      <label><input type="checkbox" value="young" data-w="t1">&lt;35 歲且 BMI &lt;25</label>
+      <label><input type="checkbox" value="fast" data-w="t1">數月內體重明顯下降、很快需要胰島素</label>
+      <label><input type="checkbox" value="ai" data-w="t1">本人或家人有自體免疫疾病（甲狀腺、白斑、第一型）</label>
+      <label><input type="checkbox" value="mody" data-w="mody">三代都有人早發糖尿病（&lt;35 歲），且不胖</label>
+      <label><input type="checkbox" value="sec" data-w="sec">胰臟炎、胰臟手術、類固醇、庫欣或肢端肥大線索</label>
+    </div>
+    <div class="out" id="flagOut" aria-live="polite">沒有勾選：照第二型處理，往下走。</div>
+  </div>
+</section>
+
+<section id="hx">
+  <div class="no">STEP 3</div>
+  <h2>問診與理學</h2>
+  <div class="scroll"><table>
+    <tr><th>問什麼</th><th>為什麼</th></tr>
+    <tr><td>症狀、體重變化、上次健檢數值</td><td>病程長短、有無分解代謝</td></tr>
+    <tr><td>正在用的藥：類固醇、抗精神病藥（olanzapine、clozapine）、高劑量 thiazide、免疫抑制劑、HIV 藥</td><td>會升血糖的藥，能停就停</td></tr>
+    <tr><td>低血糖經驗、開車或高處工作、獨居</td><td>決定能不能用 SU 與胰島素</td></tr>
+    <tr><td>生育計畫、避孕方式</td><td>懷孕前要換藥；GLP-1 類藥物要提早停</td></tr>
+    <tr><td>飲食型態、輪班、外食、飲酒、抽菸</td><td>生活處方要開得出來</td></tr>
+    <tr><td>視力、手腳麻、勃起功能、胸悶、跛行</td><td>併發症線索</td></tr>
+    <tr><td>家族史：糖尿病、早發心血管病</td><td>風險與分型</td></tr>
+  </table></div>
+  <h3>理學</h3>
+  <p>身高、體重、腰圍、血壓；黑色棘皮症；<b>足部</b>：視診、足背脈搏、10 g 單股纖維＋一項其他感覺檢查（震動、針刺或踝反射）。<span class="tag us">ADA §12</span></p>
+</section>
+
+<section id="labs">
+  <div class="no">STEP 4</div>
+  <h2>初診 order set</h2>
+  <div class="tool">
+    <h3>勾選要開的項目</h3>
+    <div class="checks" id="orderChecks">
+      <label><input type="checkbox" checked>HbA1c、空腹血糖 <span class="tag tw">共照</span></label>
+      <label><input type="checkbox" checked>血脂：TC、TG、HDL、LDL <span class="tag tw">共照</span></label>
+      <label><input type="checkbox" checked>Cr、eGFR <span class="tag tw">共照</span></label>
+      <label><input type="checkbox" checked>UACR（隨機尿） <span class="tag tw">共照</span></label>
+      <label><input type="checkbox" checked>ALT、AST、血小板 → FIB-4</label>
+      <label><input type="checkbox" checked>眼底檢查（轉眼科或眼底攝影）</label>
+      <label><input type="checkbox">尿液常規</label>
+      <label><input type="checkbox">CBC（貧血會影響 HbA1c）</label>
+      <label><input type="checkbox">K（準備用 ACEi／ARB）</label>
+      <label><input type="checkbox">TSH（有症狀或女性中年）</label>
+      <label><input type="checkbox">心電圖（有症狀或高風險）</label>
+      <label><input type="checkbox">GAD 抗體、C-peptide（STEP 2 有紅旗）</label>
+      <label><input type="checkbox">B12（已長期用 metformin）</label>
+    </div>
+    <button class="act" type="button" id="orderCopy">複製清單</button> <span id="orderMsg" style="font-size:13px;color:var(--mute)"></span>
+  </div>
+  <div class="tool">
+    <h3>FIB-4 計算（MASLD 分流）</h3>
+    <div class="fields">
+      <label class="num">年齡<input type="number" id="fAge" data-sync="age" value="55"></label>
+      <label class="num">AST<input type="number" id="fAst"></label>
+      <label class="num">ALT<input type="number" id="fAlt"></label>
+      <label class="num">血小板 ×10³/µL<input type="number" id="fPlt"></label>
+    </div>
+    <div class="out" id="fOut" aria-live="polite">輸入後顯示。</div>
+  </div>
+</section>
+
+<section id="enrol">
+  <div class="no">STEP 5</div>
+  <h2>收案：把每年固定的事排好</h2>
+  <p class="learn">基層常見的收案管道有三個，條件與支付細節每年改，以院所參加的方案為準。</p>
+  <div class="scroll"><table>
+    <tr><th>方案</th><th>做什麼</th><th>固定檢驗</th></tr>
+    <tr><td>糖尿病及初期 CKD 照護整合方案（P4P）</td><td>收案、衛教、定期追蹤、上傳檢驗值</td><td>每年 3 次 HbA1c；每年 LDL、UACR 或 UPCR、身高體重血壓、抽菸與戒菸服務 <span class="tag tw">健保署方案</span></td></tr>
+    <tr><td>家庭醫師整合性照護計畫</td><td>會員照護；家醫 2.0 有 DM／CKD 控制良率指標</td><td>HbA1c、LDL、UACR 由上傳檔自動轉入</td></tr>
+    <tr><td>代謝症候群防治計畫</td><td>糖尿病前期、代謝症候群的生活型態管理</td><td>依計畫規定 <span class="tag todo">待核對 115 年版</span></td></tr>
+  </table></div>
+</section>
+
+<section id="goal">
+  <div class="no">STEP 6</div>
+  <h2>個人化目標</h2>
+  <div class="tool">
+    <h3>這位病人的 HbA1c 目標</h3>
+    <div class="chips" id="goalHealth" role="group" aria-label="健康狀態">
+      <button type="button" class="chip" data-v="young" aria-pressed="false">年輕、病程短、無心血管病</button>
+      <button type="button" class="chip" data-v="std" aria-pressed="true">一般成人</button>
+      <button type="button" class="chip" data-v="old" aria-pressed="false">長者，健康、認知正常</button>
+      <button type="button" class="chip" data-v="complex" aria-pressed="false">長者，多重慢性病或輕中度認知障礙</button>
+      <button type="button" class="chip" data-v="vcomplex" aria-pressed="false">長照、末期病、重度認知障礙</button>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="gHypo">反覆或嚴重低血糖、無感性低血糖</label>
+    </div>
+    <div class="out" id="goalOut" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table>
+    <tr><th>項目</th><th>多數成人</th><th>連結</th></tr>
+    <tr><td>血壓</td><td>&lt;130/80</td><td><a href="hypertension.html">高血壓專區</a></td></tr>
+    <tr><td>LDL-C</td><td>依健保 115/9/1 新制的風險分級決定目標與起始值</td><td><a href="../islands/#ldl-c">LDL-C 頁分級器</a></td></tr>
+    <tr><td>體重</td><td>減 5–7% 以上；減越多，血糖越好</td><td>減重頁</td></tr>
+    <tr><td>TIR（用 CGM 者）</td><td>70–180 mg/dL 時間 &gt;70%，&lt;70 的時間 &lt;4%</td><td></td></tr>
+  </table></div>
+</section>
+
+<div class="part"><span>第二部分</span>選藥：開什麼、怎麼加</div>
+
+<div class="learn">
+<div class="case"><b>一個月後，林先生帶報告回來。</b>HbA1c 7.8%、LDL 128、UACR 45、eGFR 85、FIB-4 1.1。目標 HbA1c &lt;7%，高於目標 0.8%：先 metformin。三個月後 7.4%，加第二種。</div>
+</div>
+
+<section id="life">
+  <div class="no">STEP 7</div>
+  <h2>非藥物處方</h2>
+  <div class="scroll"><table>
+    <tr><th>處方</th><th>寫給病人的版本</th></tr>
+    <tr><td>減重</td><td>半年內減 5–7%（例如 80 kg 減 4–6 kg）；減 10–15% 有機會緩解 <span class="tag us">ADA §8</span></td></tr>
+    <tr><td>飲食</td><td>一餐的盤子：一半蔬菜、四分之一蛋白質、四分之一全穀；含糖飲料換無糖；先吃菜和肉、最後吃飯</td></tr>
+    <tr><td>有氧</td><td>每週 ≥150 分鐘中等強度，分 3 天以上，不連續 2 天不動；飯後走 10–15 分鐘</td></tr>
+    <tr><td>阻力</td><td>每週 2–3 次，大肌群；長者加平衡訓練（連肌少症頁）</td></tr>
+    <tr><td>久坐</td><td>每 30 分鐘起來動 3 分鐘</td></tr>
+    <tr><td>菸、酒、睡眠</td><td>戒菸轉介；睡眠 7–8 小時，打呼評估睡眠呼吸中止</td></tr>
+  </table></div>
+</section>
+
+<section id="comorb">
+  <div class="no">STEP 8</div>
+  <h2>共病分流：先看器官，再看血糖</h2>
+  <p class="learn">ADA 把有心、腎、肥胖的病人放在血糖之前：這些人不論 HbA1c 多少，都該用有器官保護證據的藥。健保則照血糖分線，兩者的落差見 STEP 13。</p>
+  <div class="scroll"><table>
+    <tr><th>共病</th><th>優先</th><th>避免或小心</th></tr>
+    <tr><td>ASCVD 或高風險</td><td>GLP-1 RA 或 SGLT2i（有心血管證據者）</td><td>saxagliptin、alogliptin 在心衰竭時避免</td></tr>
+    <tr><td>心衰竭</td><td>SGLT2i</td><td>pioglitazone、saxagliptin</td></tr>
+    <tr><td>CKD（eGFR 20–60 或 UACR ≥30）</td><td>SGLT2i（eGFR ≥20 可起始）；不能用時 GLP-1 RA</td><td>metformin 依 eGFR 減量；SU 低血糖</td></tr>
+    <tr><td>肥胖</td><td>GLP-1 RA、tirzepatide；SGLT2i 次之</td><td>SU、pioglitazone、胰島素會增重</td></tr>
+    <tr><td>MASLD（FIB-4 偏高）</td><td>pioglitazone、GLP-1 RA、tirzepatide</td><td></td></tr>
+    <tr><td>衰弱、低血糖高風險</td><td>DPP-4i、metformin</td><td>SU（尤其 glibenclamide）、胰島素強化</td></tr>
+  </table></div>
+</section>
+
+<section id="rx">
+  <div class="no">STEP 9</div>
+  <h2>處方產生器</h2>
+  <p class="learn">主處方照健保路徑；旁邊並列 ADA 做法與自費選項。第二步 SGLT2i 與 DPP-4i 依病人條件自動切換，結果下方寫出由哪個條件決定。</p>
+  <div class="tool" id="rxTool">
+    <h3>輸入病人</h3>
+    <div class="fields">
+      <label class="num">HbA1c %<input type="number" id="rA1c" step="0.1" data-sync="a1c" value="7.4"></label>
+      <label class="num">目標 %<input type="number" id="rTgt" step="0.5" data-sync="tgt" value="7"></label>
+      <label class="num">eGFR<input type="number" id="rEgfr" data-sync="egfr" value="85"></label>
+      <label class="num">年齡<input type="number" id="rAge" data-sync="age" value="55"></label>
+      <label class="num">BMI<input type="number" id="rBmi" step="0.1" value="27.5"></label>
+      <label class="num">體重 kg<input type="number" id="rWt" data-sync="wt" value="78"></label>
+    </div>
+    <p style="margin:12px 0 4px;font-size:13px;color:var(--mute)">目前治療</p>
+    <select id="rStep" style="width:100%">
+      <option value="0">尚未用藥</option>
+      <option value="1">Metformin（已到最大耐受劑量）</option>
+      <option value="2">Metformin＋SGLT2i 或 DPP-4i，未滿 6 個月</option>
+      <option value="3">Metformin＋SGLT2i 或 DPP-4i，已滿 6 個月</option>
+      <option value="4">Metformin＋SGLT2i/DPP-4i 複方，或三種口服，已滿 6 個月</option>
+      <option value="5">GLP-1 RA（加 metformin 等）</option>
+      <option value="6">基礎胰島素（加口服）</option>
+    </select>
+    <div class="checks" style="margin-top:8px">
+      <label><input type="checkbox" id="rAscvd">ASCVD：MI、血管再通術、缺血性中風</label>
+      <label><input type="checkbox" id="rHirisk">無 ASCVD，但心血管高風險</label>
+      <label><input type="checkbox" id="rHf">心衰竭</label>
+      <label><input type="checkbox" id="rUacr">UACR ≥30</label>
+      <label><input type="checkbox" id="rFrail">衰弱、跌倒或脫水風險</label>
+      <label><input type="checkbox" id="rGu">反覆泌尿道或生殖器感染</label>
+      <label><input type="checkbox" id="rCat">明顯症狀、體重下降，或血糖 ≥300</label>
+      <label><input type="checkbox" id="rMetX">Metformin 無法耐受或禁忌</label>
+      <label><input type="checkbox" id="rPay">病人願意自費</label>
+    </div>
+    <div class="out" id="rOut" aria-live="polite"></div>
+  </div>
+  <details class="learn"><summary>健保條件整理（5.1，二手整理）</summary><div>
+    <ul>
+      <li>原則先用 metformin。TZD、DPP-4i、SGLT2i 及含這三類的複方，限已用最大耐受劑量 metformin 仍控制不佳者。</li>
+      <li>SGLT2i 與 DPP-4i（含複方）宜二擇一；只有複方能同時拿到兩種成分。</li>
+      <li>SGLT2i／DPP-4i 複方（Glyxambi、Qtern）：用足 metformin，且併用其中一個單方成分 ≥6 個月，HbA1c 仍 &gt;7.5%，每日 1 粒。</li>
+      <li>GLP-1 RA：用足 metformin 及／或 SU，再併用 SGLT2i、DPP-4i、其複方或胰島素之一 ≥6 個月，HbA1c 仍 &gt;8.5%；<b>不得與 DPP-4i、SGLT2i 併用</b>。</li>
+      <li>MI、血管再通術、動脈硬化缺血性中風者，用足 metformin 後可直接用 liraglutide、dulaglutide、semaglutide（109/12/1）。</li>
+      <li>心衰竭與 CKD 另有 SGLT2i 給付路徑（限 dapagliflozin、empagliflozin 10 mg，不須有糖尿病），條件見 STEP 20。</li>
+      <li>口服降血糖藥最多四種成分（105/5/1 起）。有整理稱 114/6/1 已刪除，與健保署版本不一致 <span class="tag todo">待核對</span></li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="dose">
+  <div class="no">STEP 10</div>
+  <h2>藥物順序劑量表</h2>
+  <p class="learn">拖動 eGFR，表格會標出要減量或停用的藥。半衰期決定一天吃幾次；服藥時間影響低血糖與腸胃副作用。</p>
+  <div class="tool">
+    <h3>eGFR <span id="eLbl" style="font-family:var(--mono)">85</span> mL/min/1.73m²</h3>
+    <input type="range" id="eSlider" min="10" max="120" value="85" data-sync="egfr" aria-label="eGFR">
+    <div class="scroll" style="margin-top:8px"><table id="doseTable"></table></div>
+  </div>
+</section>
+
+<section id="combo">
+  <div class="no">STEP 11</div>
+  <h2>複方</h2>
+  <p class="learn">複方減少顆數、提升順從；健保限每日顆數。品項與規格以院內實際品項為準。<span class="tag todo">規格待核對</span></p>
+  <div class="scroll"><table>
+    <tr><th>組合</th><th>品項</th><th>健保每日</th><th>何時換</th></tr>
+    <tr><td>DPP-4i＋metformin</td><td>Janumet、Janumet XR、Galvus Met、Trajenta Duo</td><td>依各品項</td><td>Metformin＋該 DPP-4i 穩定後減顆數</td></tr>
+    <tr><td>SGLT2i＋metformin</td><td>Jardiance Duo（每日 2 粒）、Xigduo XR（每日 1 粒）</td><td>如左</td><td>同上</td></tr>
+    <tr><td>SGLT2i＋DPP-4i</td><td>Glyxambi（empa＋lina）、Qtern（dapa＋saxa）</td><td>1 粒</td><td>單方成分 ≥6 個月且 HbA1c &gt;7.5%</td></tr>
+    <tr><td>基礎胰島素＋GLP-1 RA</td><td>Soliqua（glargine＋lixisenatide）</td><td>依劑量</td><td>同 GLP-1 RA 條件但 HbA1c &gt;8.0%、胰島素 &lt;60 U；不得併用 DPP-4i、SGLT2i</td></tr>
+    <tr><td>預混胰島素</td><td>NovoMix 30、Humalog Mix</td><td></td><td>飲食規律、不想多次注射者</td></tr>
+  </table></div>
+  <p style="font-size:14px;color:var(--mute)">Qtern 含 saxagliptin，心衰竭者改 Glyxambi。Steglujan 已停產（113/1）。</p>
+</section>
+
+<section id="insulin">
+  <div class="no">STEP 12</div>
+  <h2>基礎胰島素：起始與滴定</h2>
+  <div class="tool">
+    <h3>滴定小幫手</h3>
+    <div class="fields">
+      <label class="num">體重 kg<input type="number" id="iWt" data-sync="wt" value="78"></label>
+      <label class="num">目前劑量 U<input type="number" id="iDose" value="0"></label>
+      <label class="num">近 3 天空腹平均<input type="number" id="iFpg" value="168"></label>
+      <label class="num">睡前血糖<input type="number" id="iBed" placeholder="可空白"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="iHypo">這 3 天有血糖 &lt;70</label>
+      <label><input type="checkbox" id="iOld">長者、衰弱或 eGFR &lt;30</label>
+    </div>
+    <div class="out" id="iOut" aria-live="polite"></div>
+  </div>
+  <ul>
+    <li><b>起始</b>：10 U 或 0.1–0.2 U/kg，睡前（glargine、degludec 可固定任一時間）。空腹目標多為 80–130。<span class="tag us">ADA §9</span></li>
+    <li><b>口服藥</b>：metformin 留；SGLT2i、DPP-4i 可留；SU 開始胰島素時減半或停；pioglitazone 合併胰島素易水腫，考慮停。</li>
+    <li><b>過度基礎化</b>：劑量 &gt;0.5 U/kg、睡前到早上差 ≥50、低血糖、血糖波動大。這時不要再加基礎，改加 GLP-1 RA（或換 Soliqua）或主餐前速效 4 U（或基礎量的 10%）。</li>
+  </ul>
+</section>
+
+<section id="gap">
+  <div class="no">STEP 13</div>
+  <h2>健保和指引不一樣的地方</h2>
+  <div class="scroll"><table>
+    <tr><th>情境</th><th>ADA 2026</th><th>健保</th><th>門診做法</th></tr>
+    <tr><td>初診 HbA1c 高於目標 ≥1.5%</td><td>考慮起始雙藥，可含 SGLT2i、GLP-1 RA</td><td>DPP-4i、SGLT2i、TZD 要先用足 metformin</td><td>Metformin＋SU，快速遞增；自費可直接加</td></tr>
+    <tr><td>有 ASCVD、HF、CKD</td><td>不論 HbA1c，加 SGLT2i 或 GLP-1 RA</td><td>仍須先用足 metformin；ASCVD 有 GLP-1 RA 捷徑；HF、CKD 有 SGLT2i 獨立路徑</td><td>確認是否符合心腎給付路徑</td></tr>
+    <tr><td>SGLT2i＋DPP-4i</td><td>可合併</td><td>宜二擇一，只有複方可同時用，且要 ≥6 個月、&gt;7.5%</td><td>先單方，滿 6 個月再換複方</td></tr>
+    <tr><td>GLP-1 RA＋SGLT2i</td><td>心腎高風險者合併有益</td><td>不得併用</td><td>擇一給付，另一種自費</td></tr>
+    <tr><td>GLP-1 RA 時機</td><td>肥胖、ASCVD 可早用</td><td>第三線，HbA1c &gt;8.5% 且併用 ≥6 個月</td><td>記錄 6 個月的 HbA1c 以利申報</td></tr>
+    <tr><td>Tirzepatide、口服 semaglutide</td><td>減重與降糖效果最強的選項之一</td><td>未給付</td><td>自費</td></tr>
+  </table></div>
+</section>
+
+<div class="part"><span>第三部分</span>追蹤：達標與維持</div>
+
+<div class="learn">
+<div class="case"><b>一年後。</b>林先生用 metformin 2000＋empagliflozin 10 滿 6 個月，HbA1c 8.9%。他說最近常加班吃便當。先查 STEP 17 的原因，再依健保走 GLP-1 RA 或基礎胰島素。</div>
+</div>
+
+<section id="follow">
+  <div class="no">STEP 14</div>
+  <h2>追蹤排程器</h2>
+  <div class="tool">
+    <h3>依控制與用藥排出追蹤</h3>
+    <div class="chips" id="fuCtl" role="group" aria-label="控制狀態">
+      <button type="button" class="chip" data-v="new" aria-pressed="true">剛開始或剛調藥</button>
+      <button type="button" class="chip" data-v="off" aria-pressed="false">未達標</button>
+      <button type="button" class="chip" data-v="on" aria-pressed="false">穩定達標</button>
+    </div>
+    <div class="checks" id="fuMeds">
+      <label><input type="checkbox" value="met" checked>Metformin</label>
+      <label><input type="checkbox" value="sglt">SGLT2i</label>
+      <label><input type="checkbox" value="dpp">DPP-4i</label>
+      <label><input type="checkbox" value="su">SU 或 glinide</label>
+      <label><input type="checkbox" value="tzd">Pioglitazone</label>
+      <label><input type="checkbox" value="glp">GLP-1 RA 或 tirzepatide</label>
+      <label><input type="checkbox" value="ins">胰島素</label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="fuCkd">CKD（eGFR &lt;60 或 UACR ≥30）</label>
+      <label><input type="checkbox" id="fuRet">已有視網膜病變</label>
+      <label><input type="checkbox" id="fuFoot">足部高風險（神經病變、PAD、足潰瘍史）</label>
+    </div>
+    <ul class="sched" id="fuOut"></ul>
+  </div>
+</section>
+
+<section id="labback">
+  <div class="no">STEP 15</div>
+  <h2>報告回來怎麼辦</h2>
+  <div class="tool">
+    <h3>HbA1c 判讀</h3>
+    <div class="fields">
+      <label class="num">上次 HbA1c<input type="number" id="lPrev" step="0.1" value="7.8"></label>
+      <label class="num">這次 HbA1c<input type="number" id="lNow" step="0.1" data-sync="a1c" value="7.4"></label>
+      <label class="num">目標<input type="number" id="lTgt" step="0.5" data-sync="tgt" value="7"></label>
+      <label class="num">距上次調藥（月）<input type="number" id="lMon" value="3"></label>
+    </div>
+    <div class="out" id="lOut" aria-live="polite"></div>
+  </div>
+  <div class="tool">
+    <h3>開 SGLT2i 後 eGFR 下降</h3>
+    <div class="fields">
+      <label class="num">用藥前 eGFR<input type="number" id="sPre" value="62"></label>
+      <label class="num">用藥後 eGFR<input type="number" id="sPost" value="55"></label>
+      <label class="num">開藥後幾週<input type="number" id="sWk" value="4"></label>
+    </div>
+    <div class="out" id="sOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="no">STEP 16</div>
+  <h2>低血糖、病假規則、手術前</h2>
+  <h3>低血糖</h3>
+  <ul>
+    <li><b>第 1 級</b> &lt;70；<b>第 2 級</b> &lt;54；<b>第 3 級</b>：需要別人協助。<span class="tag us">ADA §6</span></li>
+    <li>清醒時用 <b>15-15 法則</b>：吃 15 g 葡萄糖（方糖 3–4 顆或果汁 120–150 mL），15 分鐘後再測，仍 &lt;70 再吃一次；回穩後吃正餐或點心。</li>
+    <li>用 SU 或胰島素發生第 2、3 級：檢討劑量，SU 低血糖可持續很久，需要觀察。</li>
+  </ul>
+  <h3>病假規則：吐、拉、吃不下、發燒脫水時暫停</h3>
+  <div class="scroll"><table>
+    <tr><th>暫停</th><th>原因</th></tr>
+    <tr><td>SGLT2i</td><td>正常血糖酮酸中毒、脫水</td></tr>
+    <tr><td>Metformin</td><td>脫水造成腎功能下降時的乳酸中毒</td></tr>
+    <tr><td>SU、glinide</td><td>吃不下會低血糖</td></tr>
+    <tr><td>ACEi、ARB、利尿劑、NSAID</td><td>急性腎損傷</td></tr>
+    <tr><td>GLP-1 RA</td><td>嘔吐脫水時暫停</td></tr>
+    <tr><td><b>胰島素不要自行停</b></td><td>基礎量通常維持或減 10–20%，多測血糖，與醫師聯絡</td></tr>
+  </table></div>
+  <p>能吃能喝 24–48 小時後恢復。給病人的版本在 STEP 20。</p>
+  <h3>手術、檢查前</h3>
+  <ul>
+    <li><b>SGLT2i</b>：術前 3 天停（ertugliflozin 4 天）。<span class="tag us">FDA 仿單</span></li>
+    <li><b>Metformin</b>：手術當天停；顯影劑檢查依 eGFR 與院內規範。</li>
+    <li><b>GLP-1 RA、tirzepatide</b>：2024 多學會共識多數可續用，腸胃症狀明顯或高風險者術前 24 小時清流質；每日劑型當天停、每週劑型前一週停的舊做法仍有醫院使用。依院內麻醉科規範。</li>
+    <li><b>基礎胰島素</b>：術前晚上給 75–80%。</li>
+  </ul>
+</section>
+
+<section id="notgoal">
+  <div class="no">STEP 17</div>
+  <h2>沒達標，先查這張表</h2>
+  <div class="checks">
+    <label><input type="checkbox">真的有吃？一天幾次、會不會怕腸胃不適自己減量</label>
+    <label><input type="checkbox">飲食改變：加班、外食、節慶、含糖飲料</label>
+    <label><input type="checkbox">新加的升糖藥：類固醇（含關節注射）、抗精神病藥</label>
+    <label><input type="checkbox">急慢性感染、牙周病、足部傷口</label>
+    <label><input type="checkbox">HbA1c 失真：貧血、輸血、海洋性貧血帶因</label>
+    <label><input type="checkbox">劑量不足：metformin 還沒加到 2000、SGLT2i 在 eGFR &lt;45 降糖力弱</label>
+    <label><input type="checkbox">漏診的 LADA：瘦、很快失效 → 驗 GAD、C-peptide</label>
+    <label><input type="checkbox">憂鬱、糖尿病困擾、經濟負擔（自費藥停掉）</label>
+  </div>
+  <p>查完仍未達標：3 個月內就調整，不要等到下一次年度檢查。<span class="tag us">ADA §6、§9</span></p>
+</section>
+
+<section id="elder">
+  <div class="no">STEP 18</div>
+  <h2>長者減藥</h2>
+  <p>HbA1c 低於個人目標，又用 SU 或胰島素，就是減藥的訊號。<span class="tag us">ADA §13</span></p>
+  <ol>
+    <li>先停或減 <b>SU</b>（尤其 glibenclamide、glimepiride）。</li>
+    <li>胰島素：多次注射簡化成每日一次基礎；基礎量減 10–20%。</li>
+    <li>體重過輕、食慾差：停 SGLT2i、GLP-1 RA。</li>
+    <li>保留 metformin（eGFR 允許）與 DPP-4i。</li>
+    <li>放寬目標到 &lt;8%；臥床或末期只求沒有症狀、沒有低血糖。</li>
+  </ol>
+</section>
+
+<section id="screen">
+  <div class="no">STEP 19</div>
+  <h2>併發症篩檢與轉介</h2>
+  <div class="scroll"><table>
+    <tr><th>項目</th><th>頻率</th><th>轉介</th></tr>
+    <tr><td>視網膜</td><td>確診時；無病變且控制好可每 1–2 年，否則每年</td><td>眼科：任何視網膜病變、黃斑水腫</td></tr>
+    <tr><td>腎：UACR、eGFR</td><td>每年；CKD 依分期 1–4 次</td><td>腎臟科：eGFR &lt;30、快速下降、UACR &gt;300 且持續上升、診斷不明</td></tr>
+    <tr><td>足部</td><td>每年完整檢查；高風險者每次看診都看</td><td>足部傷口、Charcot、PAD 症狀</td></tr>
+    <tr><td>MASLD：FIB-4</td><td>確診時，之後定期</td><td>FIB-4 ≥1.3 做 VCTE；≥2.67 或彈性高轉肝膽科</td></tr>
+    <tr><td>心血管</td><td>每年評估危險因子；有症狀才做進一步檢查</td><td>心臟科</td></tr>
+    <tr><td>周邊神經</td><td>每年</td><td>疼痛難控、自律神經症狀</td></tr>
+    <tr><td>牙周、聽力、骨質、情緒</td><td>每年問</td><td>依情況</td></tr>
+  </table></div>
+  <h3>疫苗</h3>
+  <p>流感每年；肺炎鏈球菌；B 型肝炎（未免疫的成人）；帶狀疱疹重組疫苗（≥50 歲）；COVID-19；RSV（較高齡或高風險者）。公費條件依疾管署當年度公告。<span class="tag todo">公費條件待核對</span></p>
+</section>
+
+<section id="nhi">
+  <div class="no">STEP 20</div>
+  <h2>健保與文件實務</h2>
+  <ul>
+    <li><b>慢箋</b>：病情穩定的慢性病可開慢性病連續處方箋。</li>
+    <li><b>處方金額</b>：GLP-1 RA 加胰島素、血壓、血脂藥，單張處方容易偏高，常被抽審；病歷寫清楚給付條件（哪 6 個月、哪些 HbA1c 值）。</li>
+    <li><b>SGLT2i 心衰竭路徑</b>：限 dapagliflozin、empagliflozin 10 mg；LVEF ≤40%，或 41–49% 且曾因心衰竭住院或心臟專科診斷（114/3）。</li>
+    <li><b>SGLT2i CKD 路徑</b>：參加初期 CKD 照護整合方案或 Pre-ESRD 計畫、ACEi／ARB 最大耐受劑量 ≥4 週、eGFR 25–60、UACR 200–5000；eGFR &lt;15 停藥（114/3）。</li>
+    <li><b>自費</b>：tirzepatide、口服 semaglutide、CGM、不符合條件的 GLP-1 RA。</li>
+  </ul>
+  <div class="tool">
+    <h3>衛教單（可截圖或複製給病人）</h3>
+    <button class="act" type="button" id="printSick">顯示：病假與低血糖卡</button>
+    <div id="sickCard" hidden>
+      <h2>生病時怎麼吃藥（給病人）</h2>
+      <p>吐、拉、吃不下、發燒時，先暫停：SGLT2 抑制劑、metformin、磺醯脲類、利尿劑、血壓藥（ACEi／ARB）、止痛藥（NSAID）。胰島素不要自己停，多量血糖並聯絡醫師。能正常吃喝 1–2 天後再恢復。</p>
+      <h2>低血糖（血糖低於 70）</h2>
+      <p>吃 15 公克糖：方糖 3–4 顆或果汁半杯。15 分鐘後再量，還是低就再吃一次。好了以後吃正餐或點心。</p>
+    </div>
+  </div>
+</section>
+
+<section class="learn">
+  <h2>帶走十件事</h2>
+  <ol>
+    <li>沒有症狀，一次異常不能確診。</li>
+    <li>開藥前先排除急症與「不像第二型」。</li>
+    <li>初診就驗 UACR、算 FIB-4、排眼底。</li>
+    <li>目標依人訂：一般 &lt;7%，衰弱長者 &lt;8%。</li>
+    <li>健保第一步 metformin；高於目標 ≥1.5% 加 SU。</li>
+    <li>第二步 SGLT2i 或 DPP-4i 二擇一，依心腎、年齡與衰弱切換。</li>
+    <li>複方要滿 6 個月且 &gt;7.5%；GLP-1 RA 要滿 6 個月且 &gt;8.5%，不能和 SGLT2i、DPP-4i 併用。</li>
+    <li>基礎胰島素超過 0.5 U/kg 不要再加，改加 GLP-1 RA 或餐前。</li>
+    <li>3 個月沒達標就調整。</li>
+    <li>每個用藥病人都要拿到病假規則。</li>
+  </ol>
+  <div class="next">
+    <a href="../islands/#type2-diabetes"><b>糖尿病深入頁</b>機制、鑑別、年輕型</a>
+    <a href="hypertension.html"><b>高血壓專區</b>血壓目標 &lt;130/80</a>
+    <a href="../islands/#ldl-c"><b>LDL-C 頁</b>健保新制分級</a>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <p>主要來源</p>
+  <ul>
+    <li>American Diabetes Association. Standards of Care in Diabetes—2026. Diabetes Care 2026;49(Suppl 1).</li>
+    <li>全民健康保險藥品給付規定 5.1 糖尿病用藥（依 114/3、114/6 修訂之二手整理；全文待核對）。衛福部 105/5/1 口服降血糖藥最多四種成分新聞稿。</li>
+    <li>健保署「糖尿病及初期慢性腎臟病照護整合方案」；家庭醫師整合性照護計畫。</li>
+    <li>中華民國糖尿病學會。2022 第 2 型糖尿病臨床照護指引。</li>
+    <li>各藥劑量與半衰期：美國 FDA 仿單與常見藥物手冊，未逐項對照台灣仿單。</li>
+  </ul>
+  <p>ycjacademy 門診實務｜不代表任何講者或廠商立場。</p>
+</div></footer>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const num=id=>{const v=parseFloat($(id).value);return isNaN(v)?null:v;};
+const ck=id=>$(id).checked;
+
+/* ---------- mode ---------- */
+function setMode(c){document.body.classList.toggle('clinic',c);$('mClinic').setAttribute('aria-pressed',c);$('mLearn').setAttribute('aria-pressed',!c);
+  try{history.replaceState(null,'',c?'#clinic':location.pathname+location.search);}catch(e){}}
+$('mClinic').onclick=()=>setMode(true);$('mLearn').onclick=()=>setMode(false);
+if(location.hash==='#clinic')setMode(true);
+
+/* ---------- sync ---------- */
+document.querySelectorAll('[data-sync]').forEach(el=>{
+  el.addEventListener('input',()=>{
+    const k=el.dataset.sync;
+    document.querySelectorAll('[data-sync="'+k+'"]').forEach(o=>{if(o!==el)o.value=el.value;});
+    renderAll();
+  });
+});
+document.querySelectorAll('input,select').forEach(el=>{if(!el.dataset.sync)el.addEventListener('input',renderAll);el.addEventListener('change',renderAll);});
+
+function out(id,cls,html){const o=$(id);o.className='out'+(cls?' '+cls:'');o.innerHTML=html;}
+
+/* ---------- STEP 1 ---------- */
+function dx(){
+  const f=num('dFpg'),a=num('dA1c'),o=num('dOgtt'),r=num('dRand'),sym=ck('dSym'),rep=ck('dRepeat');
+  if(f==null&&a==null&&o==null&&r==null){out('dOut','','輸入數值後顯示。');return;}
+  const hit=[],pre=[];
+  if(f!=null){if(f>=126)hit.push('空腹 '+f);else if(f>=100)pre.push('空腹 '+f);}
+  if(a!=null){if(a>=6.5)hit.push('HbA1c '+a+'%');else if(a>=5.7)pre.push('HbA1c '+a+'%');}
+  if(o!=null){if(o>=200)hit.push('OGTT 2 小時 '+o);else if(o>=140)pre.push('OGTT 2 小時 '+o);}
+  const rHi=r!=null&&r>=200;
+  if(rHi&&sym){out('dOut','crit','<b class="big">確診糖尿病</b>有典型症狀且隨機血糖 '+r+' ≥200，一次即可確診。<small>同時驗 HbA1c 作為基準值。</small>');return;}
+  if(hit.length>=2){out('dOut','crit','<b class="big">確診糖尿病</b>'+hit.join('、')+'：兩項異常，同一次抽血即可確診。');return;}
+  if(hit.length===1&&rep){out('dOut','crit','<b class="big">確診糖尿病</b>'+hit[0]+'，第二次仍異常。');return;}
+  if(hit.length===1){out('dOut','warn','<b class="big">需要再驗一次</b>'+hit[0]+' 異常，只有一項'+(sym?'；有症狀可加驗隨機血糖':'')+'。<small>隔天以後重驗同一項，或同次加驗另一項。兩次不一致時，以異常的那項再驗。</small>');return;}
+  if(rHi){out('dOut','warn','<b class="big">隨機血糖 '+r+'，但沒有症狀</b>不能單獨確診，請驗空腹血糖或 HbA1c。');return;}
+  if(pre.length){out('dOut','warn','<b class="big">糖尿病前期</b>'+pre.join('、')+'。<small>生活型態處方、減重 5–7%；每年追蹤。BMI ≥35、&lt;60 歲或曾有妊娠糖尿病者可考慮 metformin（ADA）。</small>');return;}
+  out('dOut','ok','<b class="big">未達糖尿病或前期</b>依篩檢頻率再追蹤。');
+}
+
+/* ---------- STEP 2 ---------- */
+function flags(){
+  const g={};document.querySelectorAll('#flagChecks input:checked').forEach(i=>g[i.dataset.w]=1);
+  if(g.er){out('flagOut','crit','<b class="big">今天送急診</b>懷疑 DKA 或 HHS：驗血糖、血酮、電解質、血液氣體，不要在門診開口服藥回家。');return;}
+  const m=[];let cls='warn';
+  if(g.ins)m.push('<b>高血糖有症狀</b>：門診可起始基礎胰島素（0.1–0.2 U/kg），加 metformin；1–2 週回診。驗尿酮，陽性改送急診。血糖穩定後可再評估降階。');
+  if(g.t1)m.push('<b>不像典型第二型</b>：驗 GAD 抗體與 C-peptide（同時測血糖）。C-peptide 低或抗體陽性：以胰島素為主、避免只用 SU，轉介內分泌。');
+  if(g.mody)m.push('<b>考慮單基因糖尿病</b>：轉介內分泌；HNF1A／4A 型對低劑量 SU 很敏感，GCK 型多不需治療。基因檢測多自費。');
+  if(g.sec)m.push('<b>找續發性原因</b>：胰臟影像、停或減類固醇、內分泌檢查。');
+  if(!m.length){out('flagOut','','沒有勾選：照第二型處理，往下走。');return;}
+  out('flagOut',cls,m.join('<br>')+'<small>細節見群島糖尿病深入頁的鑑別工具。</small>');
+}
+
+/* ---------- STEP 4 ---------- */
+function fib4(){
+  const a=num('fAge'),s=num('fAst'),l=num('fAlt'),p=num('fPlt');
+  if(!a||!s||!l||!p){out('fOut','','輸入後顯示。');return;}
+  const v=a*s/(p*Math.sqrt(l)),lo=a>=65?2.0:1.3;
+  const t='FIB-4 = <b>'+v.toFixed(2)+'</b>　';
+  if(v<lo)out('fOut','ok',t+'低風險，1–3 年再算一次。'+(a>=65?'<small>≥65 歲低切點用 2.0。</small>':''));
+  else if(v<=2.67)out('fOut','warn',t+'不確定區：安排 VCTE（FibroScan），或轉介。');
+  else out('fOut','crit',t+'高風險：轉介肝膽腸胃科。');
+}
+
+/* ---------- STEP 6 ---------- */
+let goalV='std';
+document.querySelectorAll('#goalHealth .chip').forEach(b=>b.onclick=()=>{goalV=b.dataset.v;document.querySelectorAll('#goalHealth .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));goal(true);});
+$('gHypo').addEventListener('change',()=>goal(true));
+function goal(push){
+  const h=ck('gHypo');
+  const T={young:[6.5,'&lt;6.5%','可以安全達到、沒有明顯低血糖時，訂更嚴格的目標。'],
+    std:[7,'&lt;7%','多數非懷孕成人。'],
+    old:[7.5,'&lt;7.0–7.5%','健康長者，ADA 範圍 7.0–7.5%。'],
+    complex:[8,'&lt;8%','多重慢性病或輕中度認知障礙。'],
+    vcomplex:[8.5,'不設 HbA1c 數字','避免低血糖與症狀性高血糖；以生活品質為主。']};
+  let [v,txt,note]=T[goalV];
+  if(h&&goalV==='young'){v=7;txt='&lt;7%';note+=' 但有低血糖，回到 7%。';}
+  else if(h&&(goalV==='std')){v=7.5;txt='&lt;7.5%';note+=' 有低血糖風險，放寬並避開 SU、胰島素強化。';}
+  else if(h){note+=' 有低血糖：優先減 SU 與胰島素。';}
+  out('goalOut','ok','<b class="big">HbA1c 目標 '+txt+'</b>'+note+'<small>這個目標已帶入 STEP 9 處方產生器與 STEP 15。</small>');
+  if(push){['rTgt','lTgt'].forEach(id=>$(id).value=v);}
+}
+
+/* ---------- STEP 9 prescription ---------- */
+const P={g:'<span class="pill g">健保</span>',u:'<span class="pill u">自費</span>',c:'<span class="pill c">健保待核對</span>'};
+function metDose(e){if(e>=45)return'500 mg bid 隨餐起始，每週加 500 mg，目標 1000 mg bid（XR 可 2000 mg 晚餐一次）';if(e>=30)return'eGFR 30–44：不建議新開；已在用者上限 500 mg bid';return null;}
+function sgltDrug(e,cardioRenal){
+  if(e<20)return null;
+  const n=e<45?' eGFR <45 降糖效果小，主要是心腎保護。':'';
+  return{name:'Empagliflozin 10 mg qd（或 dapagliflozin 10 mg）',dose:(cardioRenal?'心腎保護劑量即 10 mg，不必加量。':'早上服用；需要時 empagliflozin 可加至 25 mg。')+n+' 多喝水、注意生殖器衛生、病假暫停。'};
+}
+function dppDrug(e,hf){
+  if(e<30)return{name:'Linagliptin 5 mg qd',dose:'經膽道排除，不需調腎劑量。'};
+  if(hf)return{name:'Linagliptin 5 mg 或 sitagliptin 100 mg qd',dose:'心衰竭避免 saxagliptin、alogliptin。'+(e<45?' Sitagliptin 在 eGFR 30–44 改 50 mg。':'')};
+  return{name:'Sitagliptin 100 mg qd（或 linagliptin 5 mg）',dose:(e<45?'eGFR 30–44：sitagliptin 50 mg。':'任何時間服用，不受餐點影響。')};
+}
+function choose2(v){
+  const sR=[],dR=[];
+  if(v.ascvd)sR.push('ASCVD');if(v.hirisk)sR.push('心血管高風險');if(v.hf)sR.push('心衰竭');
+  if(v.uacr||v.e<60)sR.push('CKD（'+(v.uacr?'UACR ≥30':'eGFR <60')+'）');if(v.bmi>=27)sR.push('BMI ≥27');
+  if(v.age>=75)dR.push('≥75 歲');if(v.frail)dR.push('衰弱或脫水風險');if(v.bmi&&v.bmi<22)dR.push('BMI <22');if(v.gu)dR.push('反覆泌尿生殖道感染');
+  if(v.e<20)return{k:'dpp',why:'eGFR <20，不新開 SGLT2i → DPP-4i'};
+  if(sR.length&&dR.length)return{k:'sglt',why:'SGLT2i：'+sR.join('、')+'（器官保護優先）；同時有 '+dR.join('、')+'，加強病假規則與水分衛教',caution:true};
+  if(sR.length)return{k:'sglt',why:'SGLT2i：'+sR.join('、')};
+  if(dR.length)return{k:'dpp',why:'DPP-4i：'+dR.join('、')};
+  return{k:'sglt',why:'SGLT2i：沒有偏向任何一類的條件，預設 SGLT2i'};
+}
+function rx(){
+  const v={a1c:num('rA1c'),tgt:num('rTgt')||7,e:num('rEgfr'),age:num('rAge')||0,bmi:num('rBmi')||0,wt:num('rWt')||70,step:+$('rStep').value,
+    ascvd:ck('rAscvd'),hirisk:ck('rHirisk'),hf:ck('rHf'),uacr:ck('rUacr'),frail:ck('rFrail'),gu:ck('rGu'),cat:ck('rCat'),metX:ck('rMetX'),pay:ck('rPay')};
+  if(v.a1c==null||v.e==null){out('rOut','','輸入 HbA1c 與 eGFR。');return;}
+  const gap=+(v.a1c-v.tgt).toFixed(1),items=[],ada=[],pay=[],why=[],warn=[];
+  const old=v.age>=75||v.frail,ckd=v.uacr||v.e<60,cr=v.ascvd||v.hf||ckd;
+  const metOK=!v.metX&&v.e>=30;
+  const add=(name,dose,p)=>items.push({name,dose,p});
+  let head='';
+  why.push('HbA1c '+v.a1c+'%，目標 '+v.tgt+'%，'+(gap>0?'高於目標 '+gap+'%':'已達標'));
+  if(v.e<30&&!v.metX)warn.push('eGFR <30：metformin 停用。');
+  if(v.e>=30&&v.e<45)warn.push('eGFR 30–44：metformin 上限 1000 mg/日。');
+
+  const insulinStart=()=>{const d=Math.max(10,Math.round(v.wt*(old?0.1:0.15)));
+    add('基礎胰島素 glargine U100 或 degludec '+d+' U 睡前','約 '+(old?'0.1':'0.15')+' U/kg；依空腹血糖每 3 天調整（STEP 12）。','g');};
+
+  if(gap<=0&&v.step>0){
+    head='已達標：維持目前處方';
+    add('維持現有藥物，開慢箋','HbA1c 每 3–6 個月；每年 UACR、eGFR、血脂、眼底、足部。','');
+    if(old&&gap<=-0.5&&v.step>=4)warn.push('高齡或衰弱且 HbA1c 低於目標 ≥0.5%：若有 SU 或胰島素，考慮減藥（STEP 18）。');
+  } else if(gap<=0&&v.step===0){
+    head='未用藥且已達標：生活型態處方';
+    add('生活型態處方（STEP 7）','3–6 個月複查 HbA1c。','');
+  } else if((v.cat||v.a1c>=10)&&v.step<=4){
+    head='高血糖明顯：起始基礎胰島素';
+    insulinStart();
+    if(metOK&&v.step===0)add('Metformin',metDose(v.e),'g');
+    why.push(v.cat?'有症狀或體重下降、血糖 ≥300':'HbA1c ≥10%');
+    ada.push('有分解代謝症狀或 HbA1c ≥10%、血糖 ≥300 時優先胰島素；穩定後可降階或改 GLP-1 RA。');
+  } else if(v.step===0){
+    if(!metOK){
+      head='Metformin 不能用：直接第二類';
+      const c=choose2(v);why.push(c.why);
+      const d=c.k==='sglt'?sgltDrug(v.e,cr):dppDrug(v.e,v.hf);
+      if(d)add(d.name,d.dose,'c');
+      warn.push('健保條文要求先用足 metformin；metformin 禁忌或不耐受時能否直接給付 DPP-4i／SGLT2i 待核對。另一選擇：gliclazide MR 30 mg（eGFR ≥30）或胰島素，健保無此限制。');
+    } else if(gap>=1.5&&!old){
+      head='初始雙藥（照健保）：metformin＋SU';
+      add('Metformin',metDose(v.e),'g');
+      add('Gliclazide MR 30 mg 早餐前','每 2–4 週依空腹血糖加 30 mg，最大 120 mg；教低血糖辨識。','g');
+      why.push('高於目標 ≥1.5% → 起始雙藥；健保下 DPP-4i、SGLT2i 需先用足 metformin，所以第二顆是 SU');
+      ada.push('Metformin＋SGLT2i 或 GLP-1 RA（依共病），或其他組合。');
+      pay.push('想避開 SU：直接自費 SGLT2i 或 DPP-4i，用足 metformin 後轉健保。');
+    } else {
+      head='第一步：metformin';
+      add('Metformin',metDose(v.e),'g');
+      if(gap>=1.5)why.push('高於目標 ≥1.5%，但高齡或衰弱：不加 SU，快速遞增；1–2 個月內未改善考慮基礎胰島素');
+      else why.push('高於目標 <1.5% → 單藥');
+      ada.push('Metformin 起始；高於目標 ≥1.5% 考慮雙藥。');
+    }
+    if(cr){ada.push('有 ASCVD、心衰竭或 CKD：不論 HbA1c，加有器官保護證據的 SGLT2i 或 GLP-1 RA。');
+      if(v.hf)warn.push('心衰竭給付路徑：dapagliflozin／empagliflozin 10 mg 可依心衰竭條件申請，不受糖尿病線別限制（STEP 20）。');
+      if(ckd)warn.push('CKD 給付路徑：eGFR 25–60、UACR 200–5000、ACEi／ARB 足量 ≥4 週、參加 CKD 方案（STEP 20）。');}
+  } else if(v.step===1){
+    const c=choose2(v);why.push(c.why);
+    const d=c.k==='sglt'?sgltDrug(v.e,cr):dppDrug(v.e,v.hf);
+    head='第二步：加 '+(c.k==='sglt'?'SGLT2i':'DPP-4i');
+    if(metOK)add('Metformin 維持',v.e>=45?'維持最大耐受劑量。':metDose(v.e),'g');
+    if(d)add(d.name,d.dose,'g');
+    if(gap>=1.5&&!old)add('可同時加 gliclazide MR 30 mg','高於目標 ≥1.5%；或改基礎胰島素。','g');
+    if(v.ascvd)warn.push('ASCVD 捷徑：也可改直接用 GLP-1 RA（dulaglutide 或 semaglutide）；走這條就不能再給付 SGLT2i、DPP-4i。');
+    ada.push(cr?'ASCVD 或高風險：GLP-1 RA 或 SGLT2i；HF、CKD：SGLT2i。':'依體重、低血糖與費用選擇；肥胖優先 GLP-1 RA、tirzepatide。');
+    pay.push('想同時拿到 SGLT2i 與 DPP-4i：一種自費，或等滿 6 個月換複方。');
+  } else if(v.step===2){
+    head='第二步未滿 6 個月：加量或加第三種';
+    add('先確認 metformin 已足量、服藥順從（STEP 17）','','');
+    if(!old)add('加 gliclazide MR 30 mg 早餐前','最大 120 mg；或 STEP 12 基礎胰島素。','g');
+    else if(!v.hf)add('加 pioglitazone 15 mg qd','可加到 30 mg；注意水腫、體重、骨折。高齡衰弱避開 SU。','g');
+    else add('基礎胰島素或等滿 6 個月換複方','高齡衰弱且心衰竭：避開 SU 與 pioglitazone。','g');
+    why.push('健保複方要求單方成分 ≥6 個月且 HbA1c >7.5%；未滿 6 個月先加口服或胰島素');
+    ada.push('加第三類；肥胖或 ASCVD 者 GLP-1 RA。');
+    pay.push('GLP-1 RA 或 tirzepatide 自費。');
+  } else if(v.step===3){
+    if(v.a1c>7.5){
+      head='換 SGLT2i＋DPP-4i 複方';
+      if(metOK)add('Metformin 維持','','g');
+      add(v.hf?'Glyxambi 10/5 mg qd（empagliflozin＋linagliptin）':'Glyxambi 10/5 mg（或 Qtern 10/5 mg）qd','每日 1 粒，取代原本的單方。'+(v.hf?'心衰竭不用 Qtern（含 saxagliptin）。':''),'g');
+      why.push('單方成分已 ≥6 個月且 HbA1c '+v.a1c+'% >7.5%');
+    } else {
+      head='HbA1c ≤7.5%：還不能換複方';
+      if(!old)add('加 gliclazide MR 30 mg','或基礎胰島素。','g');else if(!v.hf)add('加 pioglitazone 15 mg','','g');else add('基礎胰島素','','g');
+      why.push('複方門檻是 HbA1c >7.5%');
+    }
+    ada.push('SGLT2i＋DPP-4i、SU、TZD 或 GLP-1 RA，依共病與體重。');
+    pay.push('Tirzepatide 或 GLP-1 RA 自費。');
+  } else if(v.step===4){
+    if(v.a1c>8.5){
+      const g=v.bmi>=25||v.ascvd;
+      head=g?'第三線：GLP-1 RA（或基礎胰島素）':'第三線：基礎胰島素（或 GLP-1 RA）';
+      const glp=()=>add('Semaglutide 每週 0.25 mg ×4 週 → 0.5 → 1 mg（或 dulaglutide 0.75 → 1.5 mg）','停用 SGLT2i、DPP-4i（健保不得併用）；保留 metformin、SU 可減量。','g');
+      if(g){glp();insulinStart();items[1].name='或 '+items[1].name;}else{insulinStart();glp();items[1].name='或 '+items[1].name;}
+      why.push('併用 ≥6 個月且 HbA1c '+v.a1c+'% >8.5% → 符合 GLP-1 RA 條件；'+(g?'BMI ≥25 或 ASCVD，先選 GLP-1 RA':'體重不高，先選胰島素'));
+      pay.push('保留 SGLT2i（心腎）自費＋GLP-1 RA 健保；或改 tirzepatide 自費。');
+    } else {
+      head='HbA1c ≤8.5%：還不能用健保 GLP-1 RA';
+      insulinStart();
+      if(!old)add('或加 SU（gliclazide MR 30 mg）','注意口服成分數上限。','g');
+      why.push('GLP-1 RA 門檻 HbA1c >8.5%；胰島素無此限制');
+      pay.push('GLP-1 RA 或 tirzepatide 自費。');
+    }
+    ada.push('GLP-1 RA 或 tirzepatide 優先於胰島素（減重、低血糖少）；需要時再加胰島素。');
+  } else if(v.step===5){
+    head='GLP-1 RA 未達標';
+    add('先加到最大劑量','Semaglutide 1 mg（每 4 週加量）或 dulaglutide 1.5 mg。','g');
+    insulinStart();items[1].name='再加 '+items[1].name;
+    if(v.a1c>8)add('或換 Soliqua（glargine＋lixisenatide）','HbA1c >8.0%、胰島素需要 <60 U。','g');
+    ada.push('加基礎胰島素；或換 tirzepatide。');
+    pay.push('換 tirzepatide 自費。');
+    why.push('GLP-1 RA 已用，下一步是胰島素');
+  } else if(v.step===6){
+    head='基礎胰島素未達標';
+    add('先看劑量是否 >0.5 U/kg（STEP 12）','未超過：繼續滴定。','');
+    add('超過或有低血糖：加 GLP-1 RA','用胰島素 ≥6 個月且 HbA1c >8.5%；停 SGLT2i、DPP-4i。或換 Soliqua（HbA1c >8.0%、<60 U）。','g');
+    add('或主餐前速效胰島素 4 U','最大一餐前；之後每 3 天依餐後血糖調 1–2 U。','g');
+    ada.push('優先加 GLP-1 RA 或 tirzepatide，再考慮餐前胰島素。');
+    pay.push('Tirzepatide 自費。');
+    why.push('基礎胰島素未達標的下一步');
+  }
+  if(v.step===3||v.step===4){if(/SU|gliclazide|pioglitazone/i.test(items.map(i=>i.name).join('')))warn.push('口服成分可能已到 4 種上限（metformin＋SGLT2i＋DPP-4i＋第四種），此規定是否仍有效待核對。');}
+  const h=items.map(it=>'<div class="item"><b>'+it.name+'</b>'+(P[it.p]||'')+(it.dose?'<div>'+it.dose+'</div>':'')+'</div>').join('');
+  let html='<b class="big">'+head+'</b><div class="rx">'+h+'</div>';
+  if(warn.length)html+='<div class="why" style="color:var(--warn)">'+warn.join('<br>')+'</div>';
+  html+='<div class="cols"><div><h4>ADA 2026</h4>'+(ada.join('<br>')||'同左')+'</div><div><h4>自費選項</h4>'+(v.pay?(pay.join('<br>')||'無'):'病人未勾選願意自費。'+(pay.length?'<br><span style="color:var(--mute)">'+pay.join('<br>')+'</span>':''))+'</div></div>';
+  html+='<div class="why">依據：'+why.join('；')+'</div>';
+  out('rOut',gap>0?'warn':'ok',html);
+}
+
+/* ---------- STEP 10 dose table ---------- */
+const D=[
+ ['Metformin','Glucophage、Glucophage XR','500 mg bid → 1000 mg bid；XR 最大 2000 qd','隨餐；XR 晚餐','約 6 h',e=>e>=45?['不調整','']:e>=30?['上限 1000 mg/日；不新開','a']:['停用','s'],'腸胃、B12 缺乏、顯影劑'],
+ ['Empagliflozin','Jardiance','10 mg → 25 mg','早上','約 12 h',e=>e>=45?['不調整','']:e>=20?['10 mg；降糖弱，保護心腎','a']:['不新開','s'],'生殖器感染、正常血糖 DKA、脫水'],
+ ['Dapagliflozin','Forxiga','10 mg','早上','約 13 h',e=>e>=45?['不調整','']:e>=25?['10 mg；降糖弱，保護心腎','a']:['不新開','s'],'同上'],
+ ['Sitagliptin','Januvia','100 mg','任何時間','約 12 h',e=>e>=45?['100 mg','']:e>=30?['50 mg','a']:['25 mg','a'],'關節痛、類天疱瘡（少見）'],
+ ['Linagliptin','Trajenta','5 mg','任何時間','長（膽道排除）',e=>['不調整',''],'腎功能差首選 DPP-4i'],
+ ['Vildagliptin','Galvus','50 mg bid','任何時間','約 2 h',e=>e>=50?['50 mg bid','']:['50 mg qd','a'],'肝功能監測'],
+ ['Saxagliptin','Onglyza','5 mg','任何時間','約 2.5 h',e=>e>45?['5 mg','']:['2.5 mg','a'],'心衰竭避免'],
+ ['Gliclazide MR','Diamicron MR','30 → 120 mg','早餐前','約 16 h',e=>e>=30?['不調整（低血糖風險）','']:['避免','s'],'低血糖、體重增加'],
+ ['Glimepiride','Amaryl','1–2 → 4 mg','早餐前','5–8 h（作用 24 h）',e=>e>=60?['不調整','']:e>=30?['1 mg 起','a']:['避免','s'],'長者低血糖'],
+ ['Pioglitazone','Actos','15 → 45 mg','任何時間','代謝物 16–24 h',e=>['不調整',''],'水腫、心衰竭、骨折、體重'],
+ ['Acarbose','Glucobay','25–50 → 100 mg tid','第一口飯','局部作用',e=>e>=25?['不調整','']:['不建議','s'],'脹氣；低血糖要用葡萄糖'],
+ ['Liraglutide','Victoza','0.6 → 1.2 → 1.8 mg qd','每日固定時間','約 13 h',e=>e>=15?['不調整','']:['經驗少','a'],'噁心、膽囊、胰臟炎'],
+ ['Dulaglutide','Trulicity','0.75 → 1.5 mg 每週','每週固定一天','約 5 天',e=>e>=15?['不調整','']:['經驗少','a'],'同上'],
+ ['Semaglutide','Ozempic','0.25 → 0.5 → 1 mg 每週','每週固定一天','約 7 天',e=>e>=15?['不調整','']:['經驗少','a'],'同上；視網膜病變惡化需追蹤'],
+ ['Tirzepatide','Mounjaro（自費）','2.5 → 每 4 週加 2.5，最大 15 mg 每週','每週固定一天','約 5 天',e=>['不調整',''],'降低口服避孕藥效果'],
+ ['基礎胰島素','Lantus、Toujeo、Tresiba 等','10 U 或 0.1–0.2 U/kg','睡前或固定時間','glargine 約 24 h；degludec >42 h',e=>e>=30?['依血糖滴定','']:['起始量減少、慢滴定','a'],'低血糖、體重']
+];
+function doses(){
+  const e=+$('eSlider').value;$('eLbl').textContent=e;
+  let h='<tr><th>藥物</th><th>常見商品名</th><th>起始 → 最大</th><th>eGFR '+e+'</th><th>服藥時間</th><th>半衰期</th><th>注意</th></tr>';
+  D.forEach(r=>{const [t,f]=r[5](e);h+='<tr class="'+(f==='s'?'flag':'')+'"><th>'+r[0]+'</th><td>'+r[1]+'</td><td>'+r[2]+'</td><td style="font-weight:'+(f?'700':'400')+';color:'+(f==='s'?'var(--crit)':f==='a'?'var(--warn)':'inherit')+'">'+t+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td><td>'+r[6]+'</td></tr>';});
+  $('doseTable').innerHTML=h;
+}
+
+/* ---------- STEP 12 insulin ---------- */
+function ins(){
+  const wt=num('iWt')||70,d=num('iDose')||0,f=num('iFpg'),b=num('iBed'),hy=ck('iHypo'),old=ck('iOld');
+  const hiT=old?150:130,loT=old?90:80;
+  if(!d){const s=Math.max(10,Math.round(wt*(old?0.1:0.15)));out('iOut','','<b class="big">起始 '+s+' U 睡前</b>約 '+(old?'0.1':'0.15')+' U/kg（或固定 10 U）。空腹目標 '+loT+'–'+hiT+'，每 3 天調整一次。');return;}
+  const perKg=d/wt,ob=[];
+  if(perKg>0.5)ob.push('劑量 '+perKg.toFixed(2)+' U/kg >0.5');
+  if(b!=null&&f!=null&&b-f>=50)ob.push('睡前到早上下降 '+(b-f)+' ≥50');
+  if(hy)ob.push('有低血糖');
+  let nd=d,msg;
+  if(hy){nd=Math.round(d*0.85);msg='有血糖 <70：減 10–20% → <b>'+nd+' U</b>，找原因（漏餐、運動、SU）。';}
+  else if(f==null){msg='輸入近 3 天空腹平均。';}
+  else if(f>180){nd=d+4;msg='空腹 '+f+' >180：加 4 U → <b>'+nd+' U</b>。';}
+  else if(f>hiT){nd=d+2;msg='空腹 '+f+' 高於 '+hiT+'：加 2 U → <b>'+nd+' U</b>。';}
+  else if(f<loT){nd=Math.round(d*0.9);msg='空腹 '+f+' 低於 '+loT+'：減 10% → <b>'+nd+' U</b>。';}
+  else msg='空腹 '+f+' 在目標內：維持 <b>'+d+' U</b>。';
+  let cls=hy?'crit':'ok';
+  let tail='<small>簡化滴定規則（教學用），實際依院內常規。</small>';
+  if(ob.length&&!hy){cls='warn';msg+='<br><b>過度基礎化：</b>'+ob.join('、')+'。不要再加基礎量，改加 GLP-1 RA 或主餐前速效（STEP 9 選「基礎胰島素」）。';}
+  else if(ob.length&&hy){msg+='<br>同時有過度基礎化線索：'+ob.join('、')+'。';}
+  out('iOut',cls,msg+tail);
+}
+
+/* ---------- STEP 14 follow ---------- */
+let fuV='new';
+document.querySelectorAll('#fuCtl .chip').forEach(b=>b.onclick=()=>{fuV=b.dataset.v;document.querySelectorAll('#fuCtl .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));fu();});
+function fu(){
+  const m={};document.querySelectorAll('#fuMeds input:checked').forEach(i=>m[i.value]=1);
+  const ckd=ck('fuCkd'),ret=ck('fuRet'),foot=ck('fuFoot');
+  const L=[];const p=(t,x)=>L.push('<li><b>'+t+'</b><span>'+x+'</span></li>');
+  if(fuV==='new'){p('2–4 週','回診看副作用、遵從性、自我血糖'+(m.ins?'；胰島素滴定期每週聯絡':'')+(m.glp?'；GLP-1 遞增期每 4 週加量一次':''));p('3 個月','HbA1c；未達標就調整');}
+  if(fuV==='off'){p('每 3 個月','HbA1c；每次回診檢討處方，不要拖');}
+  if(fuV==='on'){p('每 3–6 個月','HbA1c（穩定者每年至少 2 次）；開慢箋');}
+  p('每次回診','血壓、體重、低血糖詢問'+(foot?'、足部視診':'')+(m.su||m.ins?'（用 SU／胰島素特別問）':''));
+  p(ckd?'每 3–6 個月':'每年','UACR、eGFR'+(ckd?'、K（依 CKD 分期）':''));
+  p('每年','血脂；完整足部檢查；神經病變；FIB-4');
+  p(ret?'每年或依眼科':'每 1–2 年','眼底'+(ret?'':'（無病變且控制好）'));
+  if(m.met)p('Metformin','長期使用或有神經病變：定期驗 B12；eGFR <60 時每 3–6 個月看腎功能');
+  if(m.sglt)p('SGLT2i','起始後 eGFR 可能小降（STEP 15）；每次問生殖器感染、脫水；病假暫停');
+  if(m.dpp)p('DPP-4i','依 eGFR 調劑量；水疱要想到類天疱瘡');
+  if(m.su)p('SU','低血糖紀錄；長者考慮減藥');
+  if(m.tzd)p('Pioglitazone','水腫、體重、心衰竭症狀');
+  if(m.glp)p('GLP-1 RA','腸胃症狀、膽囊與胰臟炎症狀、體重；有視網膜病變者 semaglutide 開始後追蹤眼底');
+  if(m.ins)p('胰島素','滴定期每天測空腹；注射部位脂肪增生；低血糖');
+  $('fuOut').innerHTML=L.join('');
+}
+
+/* ---------- STEP 15 ---------- */
+function lab(){
+  const a=num('lPrev'),b=num('lNow'),t=num('lTgt')||7,mo=num('lMon');
+  if(a==null||b==null){out('lOut','','輸入數值。');return;}
+  const d=+(b-a).toFixed(1);
+  const ch=d===0?'持平':(d<0?'下降 '+(-d):'上升 '+d)+'%';
+  if(b<=t){out('lOut','ok','<b class="big">達標（'+ch+'）</b>維持處方，3–6 個月再驗。'+(b<t-1?'<small>明顯低於目標：用 SU 或胰島素者檢查低血糖，考慮減藥。</small>':''));return;}
+  if(mo!=null&&mo<3){out('lOut','warn','<b class="big">還太早判斷（'+ch+'）</b>HbA1c 反映約 3 個月平均；距調藥 '+mo+' 個月，先確認順從與副作用，滿 3 個月再評估。');return;}
+  const small=d>-0.5;
+  out('lOut','crit','<b class="big">未達標，今天就調整（'+ch+'）</b>'+(small?'降幅 <0.5%：先查 STEP 17 的原因，再加下一步。':'有進步但未達標：照 STEP 9 走下一步。')+'<small>HbA1c 已同步到處方產生器。</small>');
+}
+function sglt(){
+  const a=num('sPre'),b=num('sPost'),w=num('sWk');
+  if(!a||b==null){out('sOut','','輸入數值。');return;}
+  const p=Math.round((a-b)/a*100);
+  if(p<=0)out('sOut','ok','<b class="big">eGFR 沒有下降</b>繼續用。');
+  else if(p<=30&&(w==null||w<=12))out('sOut','ok','<b class="big">下降 '+p+'%，屬預期內</b>SGLT2i 降低腎絲球內壓，前幾週 eGFR 小降是保護作用的表現，<b>不要停藥</b>，之後多會穩定。');
+  else if(p<=30)out('sOut','warn','<b class="big">下降 '+p+'%，但已超過 12 週</b>不像起始時的血行動力變化：找其他原因（脫水、NSAID、利尿劑、腎病進展）。');
+  else out('sOut','crit','<b class="big">下降 '+p+'%，超過 30%</b>評估脫水、利尿劑與 ACEi／ARB 併用、NSAID，1–2 週複驗；持續下降轉介腎臟科。');
+}
+
+/* ---------- misc ---------- */
+$('orderCopy').onclick=()=>{
+  const t=[...document.querySelectorAll('#orderChecks input:checked')].map(i=>i.parentElement.childNodes[1].textContent.trim()).join('\n');
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>$('orderMsg').textContent='已複製',()=>{$('orderMsg').textContent='無法自動複製，請手動選取';});
+};
+$('printSick').onclick=()=>{const c=$('sickCard');c.hidden=!c.hidden;$('printSick').textContent=c.hidden?'顯示：病假與低血糖卡':'收起衛教單';};
+
+function renderAll(){dx();flags();fib4();rx();doses();ins();fu();lab();sglt();}
+goal(false);renderAll();
+})();
+</script>
+</body>
+</html>

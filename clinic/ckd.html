@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>慢性腎臟病門診實務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Same clinic-handbook layout as the hypertension and diabetes pages; plum accent for kidney. */
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef; --card:#ffffff; --ink:#22261f; --mute:#5d6258; --line:#dad8cd;
+  --accent:#7a2f4f; --accent-soft:#f4e3ea;
+  --ok:#2f7d55; --ok-soft:#e1f1e8; --warn:#8f6400; --warn-soft:#fbf0d9; --crit:#b3261e; --crit-soft:#fbe3e0;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:#f3f1e8;padding:22px 0 18px}
+header.top .crumb{font:13px var(--mono);color:#c2bfa9}
+header.top .crumb a{color:inherit}
+header.top h1{font:700 32px/1.3 var(--display);margin:4px 0 6px;text-wrap:balance}
+header.top p{margin:0;color:#dcd9cb;font-size:15px}
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:8px;padding-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);font:500 14px var(--body);padding:6px 13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.jump{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0}
+.jump a{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap;padding:4px 7px;border-radius:4px}
+.jump a:hover{background:var(--bg);color:var(--ink)}
+.draft{background:var(--warn-soft);border-left:4px solid var(--warn);padding:10px 14px;margin:18px 0;font-size:14.5px}
+section{padding:26px 0 8px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.no{font:13px var(--mono);color:var(--accent)}
+h2{font:700 25px/1.35 var(--display);margin:2px 0 10px;text-wrap:balance}
+h3{font:700 17px/1.5 var(--body);margin:18px 0 6px}
+p{margin:8px 0;max-width:65ch}
+ul,ol{margin:8px 0;padding-left:1.3em}
+li{margin:3px 0}
+a{color:var(--accent)}
+.tag{display:inline-block;font:500 11.5px/1.5 var(--mono);padding:0 6px;border-radius:3px;background:#ebe9e0;color:var(--mute);vertical-align:1px;white-space:nowrap}
+.tag.tw{background:#dcecf0;color:#1c5a68}.tag.kd{background:#e7e4f3;color:#4a3f85}.tag.todo{background:var(--warn-soft);color:var(--warn)}
+.case{background:var(--accent-soft);border-radius:8px;padding:12px 16px;margin:12px 0;font-size:15.5px}
+.case b{color:var(--accent)}
+.tool{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:16px 0}
+.tool>h3{margin:0 0 10px;font-size:16px}
+.fields{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+label.num{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input[type=number]{width:96px;font:500 19px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:#fff}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px 14px;margin:6px 0}
+.checks label{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:15px;cursor:pointer;line-height:1.5}
+input[type=checkbox]{margin-top:4px;width:17px;height:17px;accent-color:var(--accent);flex:none}
+button.act{font:500 14px var(--body);background:var(--card);border:1px solid var(--ink);border-radius:5px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.out{margin-top:12px;padding:10px 14px;border-radius:5px;background:var(--bg);border-left:4px solid var(--mute)}
+.out.ok{background:var(--ok-soft);border-color:var(--ok)}.out.warn{background:var(--warn-soft);border-color:var(--warn)}.out.crit{background:var(--crit-soft);border-color:var(--crit)}
+.out b.big{font:700 19px var(--display);display:block}
+.out small{color:var(--mute);font-size:13px;display:block;margin-top:4px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--bg)}
+tr.flag td,tr.flag th{background:var(--crit-soft)}
+details{margin:12px 0;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-weight:500;font-size:15px}
+details>div{padding:0 12px 10px}
+.part{margin:34px 0 0;padding:10px 14px;background:var(--ink);color:#f3f1e8;font:700 19px var(--display);border-radius:5px}
+.part span{font:12px var(--mono);color:#c2bfa9;display:block}
+select{font:15px var(--body);padding:8px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);max-width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font:14px var(--body);padding:4px 11px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rx{display:grid;gap:8px;margin-top:8px}
+.rx .item{background:#fff;border:1px solid var(--line);border-radius:5px;padding:8px 11px}
+.rx .item b{font:700 17px var(--body)}
+.rx .item div{font-size:14px;color:var(--mute);line-height:1.6}
+.pill{display:inline-block;font-size:12.5px;padding:0 8px;border-radius:4px;margin-left:4px;vertical-align:2px}
+.pill.g{background:var(--ok-soft);color:var(--ok)}.pill.u{background:#f3e1ec;color:#7c2d5c}.pill.c{background:var(--warn-soft);color:var(--warn)}.pill.n{background:#ebe9e0;color:var(--mute)}
+.why{font-size:13.5px;color:var(--mute);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+.sched{list-style:none;padding:0;margin:8px 0 0}
+.sched li{display:grid;grid-template-columns:7.5em 1fr;gap:8px;border-top:1px solid var(--line);padding:6px 0;font-size:14.5px}
+.sched li b{font:500 13.5px var(--mono);color:var(--accent)}
+.next{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.next a{display:block;border:1px dashed var(--line);border-radius:6px;padding:10px 12px;font-size:14.5px;color:var(--mute);text-decoration:none}
+.next a b{display:block;color:var(--ink)}
+/* heat map */
+.heat{border-collapse:separate;border-spacing:3px;font-size:13px;min-width:460px}
+.heat th,.heat td{border:0;text-align:center;padding:6px 4px;border-radius:3px}
+.heat th{background:transparent;font-weight:500;color:var(--mute);font-size:12px}
+.heat td{font:500 13px var(--mono);color:#22261f}
+.heat td.h0{background:#cfe8d6}.heat td.h1{background:#f6e7a9}.heat td.h2{background:#f4c08e}.heat td.h3{background:#e9908a}
+.heat td.on{outline:3px solid var(--ink);outline-offset:-1px;font-weight:700}
+footer{padding:22px 0 44px;font-size:13.5px;color:var(--mute)}
+footer a{color:inherit}
+footer ul{padding-left:1.2em}
+#doseTable{min-width:640px}
+#doseTable th:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+#doseTable tr.flag th:first-child{background:var(--crit-soft)}
+body.clinic .learn{display:none}
+body.clinic section{padding-top:12px;border-bottom:0}
+body.clinic h2{font-size:18px}
+body.clinic .tool{margin:8px 0}
+@media (max-width:560px){header.top h1{font-size:27px}.sched li{grid-template-columns:6em 1fr}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media print{.bar{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../">ycjacademy</a>／門診實務／慢性腎臟病</div>
+  <h1>慢性腎臟病門診實務</h1>
+  <p>成人 CKD：確認、分期、找原因、收案，四大支柱用藥與腎劑量，長期追蹤與轉診。</p>
+</div></header>
+
+<nav class="bar" aria-label="頁面工具"><div class="wrap">
+  <div class="seg" role="group" aria-label="閱讀模式">
+    <button id="mLearn" type="button" aria-pressed="true">學習</button>
+    <button id="mClinic" type="button" aria-pressed="false">門診</button>
+  </div>
+  <div class="jump">
+    <a href="#stage">分期</a><a href="#flag">分流</a><a href="#cause">原因</a><a href="#labs">檢查</a><a href="#kfre">KFRE</a><a href="#enrol">收案</a><a href="#life">生活</a><a href="#bp">血壓</a><a href="#rx">處方</a><a href="#dose">腎劑量</a><a href="#k">高血鉀</a><a href="#comp">併發症</a><a href="#gap">落差</a><a href="#follow">追蹤</a><a href="#trend">趨勢</a><a href="#refer">轉診</a><a href="#safety">病假</a><a href="#nhi">健保</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+<div class="draft learn"><b>v0.1 草稿，最後核對 2026-11-12。</b>主軸是 KDIGO 2024 CKD 指引（另參考 KDIGO 2021 血壓、2022 糖尿病合併 CKD）、健保 Early CKD 與 Pre-ESRD 計畫、藥品給付規定 2.16。Finerenone 健保給付與部分計畫細節尚未查到正式公告（標 <span class="tag todo">待核對</span>）。腎劑量依 FDA 仿單與常見藥物手冊整理，未逐項對照台灣仿單與院內處方集。校對前請勿當臨床依據。</div>
+
+<div class="learn">
+<div class="case"><b>陳太太，62 歲，退休教師（虛構）。</b>糖尿病 10 年、高血壓 8 年，在家醫科拿藥。成人健檢 Cr 1.2 mg/dL，尿蛋白 1+。她問：「是不是要洗腎了？以後還能吃止痛藥嗎？」</div>
+<h3>今天要做的五件事</h3>
+<ol>
+  <li>確認：一次異常不是 CKD，要持續 &gt;3 個月；先排除急性腎損傷。</li>
+  <li>分期：eGFR（G）＋白蛋白尿（A），兩個都要有。</li>
+  <li>找原因、停腎毒性藥物，開初診檢查。</li>
+  <li>算風險（KFRE），收進 Early CKD 或轉 Pre-ESRD。</li>
+  <li>開四大支柱：RAS 阻斷、SGLT2i、statin，糖尿病再考慮 ns-MRA 與 GLP-1 RA。</li>
+</ol>
+</div>
+
+<div class="part"><span>第一部分</span>初診：確認、分期、收案</div>
+
+<section id="stage">
+  <div class="no">STEP 1</div>
+  <h2>確認與分期：G 和 A 都要</h2>
+  <p class="learn">CKD 是<b>腎臟結構或功能異常持續 &gt;3 個月</b>，且影響健康：eGFR &lt;60，或有腎損傷標記（UACR ≥30、尿沉渣異常、腎小管病變、影像或病理異常、腎移植）。分期一定同時寫 G 與 A，例如「CKD G3a A3」。<span class="tag kd">KDIGO 2024 §1</span></p>
+  <div class="tool">
+    <h3>eGFR 計算與 G/A 分期</h3>
+    <div class="fields">
+      <label class="num">Cr mg/dL<input type="number" id="sCr" step="0.01" value="1.2" inputmode="decimal"></label>
+      <label class="num">年齡<input type="number" id="sAge" data-sync="age" value="62"></label>
+      <label class="num">性別<select id="sSex" data-sync="sex"><option value="F" selected>女</option><option value="M">男</option></select></label>
+      <label class="num">Cystatin C mg/L<input type="number" id="sCys" step="0.01" placeholder="可空白" inputmode="decimal"></label>
+    </div>
+    <div class="fields" style="margin-top:10px">
+      <label class="num">UACR mg/g<input type="number" id="sAcr" data-sync="acr" value="350" inputmode="decimal"></label>
+      <label class="num">或 UPCR mg/g<input type="number" id="sPcr" placeholder="可空白" inputmode="decimal"></label>
+      <label class="num">或試紙<select id="sDip"><option value="">—</option><option value="0">陰性</option><option value="t">微量</option><option value="1">1+</option><option value="2">≥2+</option></select></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="s3m">異常已持續 &gt;3 個月（或有之前的紀錄）</label>
+    </div>
+    <div class="out" id="sOut" aria-live="polite"></div>
+    <div class="scroll" style="margin-top:10px"><table class="heat" id="heat"></table></div>
+    <p style="font-size:13px;color:var(--mute);margin:4px 0 0">綠：低風險；黃：中度；橘：高；紅：極高。框起來的是這位病人。</p>
+  </div>
+  <details class="learn"><summary>eGFR 什麼時候不準，要驗 cystatin C</summary><div>
+    <ul>
+      <li><b>肌肉量極端</b>：肌少症、截肢、癱瘓、長期臥床（Cr 偏低，高估 eGFR）；健美、高肉類飲食、肌酸補充（低估）。</li>
+      <li><b>藥物干擾 Cr 分泌</b>：trimethoprim、cimetidine、dolutegravir 會讓 Cr 升高但 GFR 沒變。</li>
+      <li><b>決定重大處置</b>：藥物劑量邊界、腎捐贈評估時，用 eGFRcr-cys 或量測 GFR。KDIGO 2024 建議能做 cystatin C 時多用。</li>
+      <li>健保 Pre-ESRD 計畫文件寫的是 <b>Simplified MDRD</b>，檢驗科可能報 CKD-EPI；兩者在邊界值可能跨分期，申報以計畫規定為準 <span class="tag todo">待核對院內報告公式</span>。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="flag">
+  <div class="no">STEP 2</div>
+  <h2>今天要不要送急診？這是慢性的嗎？</h2>
+  <p class="learn">第一次看到 Cr 偏高，先當作「可能是急性」：沒有舊數值時，1–2 週內複驗，並找可逆原因（脫水、NSAID、阻塞、感染）。</p>
+  <div class="tool">
+    <h3>分流</h3>
+    <div class="checks" id="flagChecks">
+      <label><input type="checkbox" data-w="er">K ≥6.0，或心電圖有高血鉀變化</label>
+      <label><input type="checkbox" data-w="er">尿毒症狀：意識改變、心包膜摩擦音、頑固嘔吐</label>
+      <label><input type="checkbox" data-w="er">水腫合併喘、肺水腫</label>
+      <label><input type="checkbox" data-w="er">尿量明顯減少或無尿</label>
+      <label><input type="checkbox" data-w="rpgn">血尿＋蛋白尿，合併皮疹、咳血、關節痛或數週內 Cr 上升</label>
+      <label><input type="checkbox" data-w="aki">Cr 比 3 個月內舊值上升 ≥50%</label>
+      <label><input type="checkbox" data-w="ob">排尿困難、尿滯留，或超音波水腎</label>
+      <label><input type="checkbox" data-w="neph">全身水腫、泡泡尿，白蛋白低</label>
+      <label><input type="checkbox" data-w="new">第一次發現，沒有任何舊數值</label>
+    </div>
+    <div class="out" id="flagOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="cause">
+  <div class="no">STEP 3</div>
+  <h2>問診：找原因、找腎毒性</h2>
+  <div class="scroll"><table>
+    <tr><th>問什麼</th><th>為什麼</th></tr>
+    <tr><td>糖尿病、高血壓病程；有沒有視網膜病變</td><td>糖尿病腎病變多合併視網膜病變；沒有視網膜病變、蛋白尿突然變多，要想其他腎絲球疾病</td></tr>
+    <tr><td><b>止痛藥</b>：NSAID（含貼布以外的口服、針劑）、COX-2</td><td>台灣門診最常見的可避免腎傷害</td></tr>
+    <tr><td><b>來源不明的中草藥、偏方、藥粉、保健食品</b></td><td>馬兜鈴酸腎病變與上泌尿道癌；重金屬</td></tr>
+    <tr><td>PPI 長期使用、lithium、calcineurin 抑制劑、tenofovir（TDF）、化療</td><td>間質性腎炎或腎小管毒性</td></tr>
+    <tr><td>最近有沒有做顯影劑檢查、腹瀉嘔吐、感染住院</td><td>急性腎損傷後的 CKD</td></tr>
+    <tr><td>家族史：多囊腎、洗腎、聽力障礙（Alport）</td><td>遺傳性腎病，轉介腎臟科</td></tr>
+    <tr><td>反覆結石、反覆泌尿道感染、攝護腺症狀</td><td>阻塞或逆流</td></tr>
+    <tr><td>痛風、自體免疫症狀（皮疹、口腔潰瘍、關節炎）</td><td>尿酸腎病、狼瘡腎炎</td></tr>
+  </table></div>
+  <h3>理學</h3>
+  <p>血壓（坐姿、必要時站姿）、體重、水腫、眼底（或眼科紀錄）、腹部腫塊（多囊腎）、膀胱漲、皮疹、周邊動脈。</p>
+</section>
+
+<section id="labs">
+  <div class="no">STEP 4</div>
+  <h2>初診 order set</h2>
+  <div class="tool">
+    <h3>勾選要開的項目</h3>
+    <div class="checks" id="orderChecks">
+      <label><input type="checkbox" checked><span>Cr、eGFR</span> <span class="tag tw">計畫</span></label>
+      <label><input type="checkbox" checked><span>UACR（隨機尿，最好晨尿）</span> <span class="tag tw">計畫</span></label>
+      <label><input type="checkbox" checked><span>UPCR（非糖尿病、蛋白尿多時）</span></label>
+      <label><input type="checkbox" checked><span>尿液常規＋沉渣</span></label>
+      <label><input type="checkbox" checked><span>Na、K</span></label>
+      <label><input type="checkbox" checked><span>CBC</span></label>
+      <label><input type="checkbox" checked><span>HbA1c 或空腹血糖</span></label>
+      <label><input type="checkbox" checked><span>血脂</span></label>
+      <label><input type="checkbox" checked><span>腎臟超音波</span></label>
+      <label><input type="checkbox"><span>尿酸</span></label>
+      <label><input type="checkbox"><span>Ca、P、ALP（G3a 以上）</span></label>
+      <label><input type="checkbox"><span>PTH、25-OH 維生素 D（G3a 以上）</span></label>
+      <label><input type="checkbox"><span>HCO₃⁻ 或靜脈血氣（G3b 以上）</span></label>
+      <label><input type="checkbox"><span>Fe、TIBC、ferritin（有貧血）</span></label>
+      <label><input type="checkbox"><span>HBsAg、anti-HBs、anti-HCV</span></label>
+      <label><input type="checkbox"><span>Cystatin C（eGFRcr 不可靠）</span></label>
+      <label><input type="checkbox"><span>ANA、C3/C4、免疫電泳（懷疑腎絲球病）</span></label>
+    </div>
+    <button class="act" type="button" id="orderCopy">複製清單</button> <span id="orderMsg" style="font-size:13px;color:var(--mute)"></span>
+  </div>
+  <p class="learn">白蛋白尿要<b>確認</b>：發燒、劇烈運動、月經、泌尿道感染、高血糖失控都會讓 UACR 暫時升高。3–6 個月內 3 次有 2 次異常才算。</p>
+</section>
+
+<section id="kfre">
+  <div class="no">STEP 5</div>
+  <h2>算風險：KFRE</h2>
+  <p class="learn">KDIGO 2024 建議 G3–G5 用 Kidney Failure Risk Equation 預估 2 年、5 年需要透析或移植的機率，用來決定轉診與透析準備，而不是只看 eGFR。<span class="tag kd">KDIGO 2024 §2</span></p>
+  <div class="tool">
+    <h3>4 變項 KFRE（非北美校正版）</h3>
+    <div class="fields">
+      <label class="num">年齡<input type="number" id="kAge" data-sync="age" value="62"></label>
+      <label class="num">性別<select id="kSex" data-sync="sex"><option value="F" selected>女</option><option value="M">男</option></select></label>
+      <label class="num">eGFR<input type="number" id="kEgfr" data-sync="egfr" value="49"></label>
+      <label class="num">UACR mg/g<input type="number" id="kAcr" data-sync="acr" value="350"></label>
+    </div>
+    <div class="out" id="kOut" aria-live="polite"></div>
+  </div>
+  <div class="scroll"><table>
+    <tr><th>KFRE</th><th>做什麼</th></tr>
+    <tr><td>5 年 ≥3–5%</td><td>轉介腎臟科（或收 Pre-ESRD）</td></tr>
+    <tr><td>2 年 &gt;10%</td><td>多專業團隊照護、腎臟替代治療衛教（SDM）</td></tr>
+    <tr><td>2 年 &gt;40%</td><td>準備透析通路、移植評估</td></tr>
+  </table></div>
+</section>
+
+<section id="enrol">
+  <div class="no">STEP 6</div>
+  <h2>收案：Early CKD、DKD 還是 Pre-ESRD</h2>
+  <p class="learn">健保 CKD 照護分兩段：初期（G1–G3a）在 Early CKD，可由受訓過的家醫科收；G3b 以上或明顯蛋白尿轉 Pre-ESRD。這也是非糖尿病 CKD 拿到健保 SGLT2i 的前提。</p>
+  <div class="tool">
+    <h3>這位病人可以收哪一個</h3>
+    <div class="checks">
+      <label><input type="checkbox" id="eDm" data-sync="dm" checked>糖尿病，已在糖尿病照護方案</label>
+    </div>
+    <div class="out" id="eOut" aria-live="polite"></div>
+    <small style="font-size:13px;color:var(--mute)">eGFR、UACR、UPCR 取自 STEP 1。</small>
+  </div>
+  <div class="scroll"><table>
+    <tr><th>方案</th><th>對象</th><th>誰可以收</th></tr>
+    <tr><td>Early CKD（糖尿病及初期 CKD 照護整合方案）</td><td>G1–G2：UPCR ≥150（糖尿病 UACR ≥30）；G3a：eGFR 45–59.9。收案前 90 天內曾在該院就醫，以 CKD 為主診斷。114/5/1 起 UACR 與 UPCR 擇一 <span class="tag tw">健保署</span></td><td>腎臟、心臟、新陳代謝專科可直接申請；<b>家醫科等其他專科需上滿 6 小時 CKD 照護課程</b></td></tr>
+    <tr><td>DKD 共病照護</td><td>糖尿病合併初期 CKD；UACR 為必填，不能用 UPCR 取代</td><td>同上</td></tr>
+    <tr><td>Pre-ESRD</td><td>G3b、G4、G5，或 UPCR &gt;1000 的蛋白尿（不限分期）；需符合 CKD 定義（3 個月以上病史）</td><td>具腎臟專科醫師、衛教護理師、營養師的團隊院所</td></tr>
+  </table></div>
+  <p style="font-size:14px;color:var(--mute)">Early CKD 結案轉 Pre-ESRD：<b>UPCR ≥1000 或 eGFR &lt;45</b>。同一病人不能同時在兩個計畫收案。</p>
+</section>
+
+<div class="part"><span>第二部分</span>延緩進展：生活、血壓、四大支柱</div>
+
+<div class="learn">
+<div class="case"><b>三個月後，陳太太回來。</b>Cr 1.2、eGFR 51、UACR 380，第二次仍異常：CKD G3a A3。KFRE 5 年約 2%，但 UACR 持續 &gt;300 本身就是轉介條件。她在吃 metformin 1000 bid、amlodipine 5 mg，膝蓋痛時會去藥局買止痛藥。</div>
+</div>
+
+<section id="life">
+  <div class="no">STEP 7</div>
+  <h2>非藥物處方</h2>
+  <div class="scroll"><table>
+    <tr><th>處方</th><th>寫給病人的版本</th></tr>
+    <tr><td>蛋白質</td><td>G3–G5 每天每公斤 0.8 g（60 kg 約 48 g：一個手掌大的肉＋一杯豆漿＋一顆蛋），避免 &gt;1.3 g/kg；不用刻意低蛋白，老人與衰弱者更不要 <span class="tag kd">KDIGO §3</span></td></tr>
+    <tr><td>鹽</td><td>鈉 &lt;2 g／天（鹽 5 g，約一茶匙）；少醬料、湯不喝完、少加工品</td></tr>
+    <tr><td>鉀、磷</td><td>不必一律限制；<b>血鉀高才限</b>，先查藥物與便祕。低鈉鹽含鉀，血鉀高或 G4 以上不要用</td></tr>
+    <tr><td>飲食型態</td><td>多蔬菜、全穀、植物性蛋白；少加工肉與含糖飲料</td></tr>
+    <tr><td>運動、體重</td><td>每週 ≥150 分鐘中等強度；過重者減重</td></tr>
+    <tr><td>戒菸</td><td>戒菸轉介</td></tr>
+    <tr><td><b>藥物</b></td><td>止痛先用 acetaminophen，不買成藥止痛；不吃來源不明的中草藥；看其他科、做顯影劑檢查時主動說「我腎臟不好」</td></tr>
+  </table></div>
+</section>
+
+<section id="bp">
+  <div class="no">STEP 8</div>
+  <h2>血壓與 RAS 阻斷</h2>
+  <ul>
+    <li><b>目標</b>：能耐受時收縮壓 &lt;120（標準化量測）。老人、衰弱、姿勢性低血壓者個人化。<span class="tag kd">KDIGO 2021 BP</span></li>
+    <li><b>有白蛋白尿就用 ACEi 或 ARB</b>，並加到最大耐受劑量：糖尿病 A2–A3、非糖尿病 A3 為強建議；非糖尿病 A2 為建議。不要 ACEi＋ARB 併用。</li>
+    <li>開始或加量後 <b>2–4 週</b>驗 Cr、K。Cr 上升 &lt;30% 是預期內，繼續用。</li>
+  </ul>
+  <div class="tool">
+    <h3>開 ACEi／ARB（或 SGLT2i）後 Cr 上升</h3>
+    <div class="fields">
+      <label class="num">用藥前 Cr<input type="number" id="aPre" step="0.01" value="1.20"></label>
+      <label class="num">用藥後 Cr<input type="number" id="aPost" step="0.01" value="1.38"></label>
+      <label class="num">用藥後 K<input type="number" id="aK" step="0.1" value="5.1"></label>
+    </div>
+    <div class="out" id="aOut" aria-live="polite"></div>
+  </div>
+  <p>血壓其他選擇：CCB、thiazide 類（chlorthalidone 在 G4 也有效）、loop 利尿劑（水腫、eGFR 低）。高血壓細節見<a href="hypertension.html">高血壓專區</a>。</p>
+</section>
+
+<section id="rx">
+  <div class="no">STEP 9</div>
+  <h2>四大支柱處方產生器</h2>
+  <p class="learn">KDIGO 把 CKD 的藥物治療分層：所有人都要 RAS 阻斷（有白蛋白尿時）、SGLT2i、statin；第二型糖尿病再加 ns-MRA、GLP-1 RA。每一項旁邊寫健保能不能給付、從哪條路。</p>
+  <div class="tool" id="rxTool">
+    <h3>輸入病人</h3>
+    <div class="fields">
+      <label class="num">eGFR<input type="number" id="rEgfr" data-sync="egfr" value="49"></label>
+      <label class="num">UACR mg/g<input type="number" id="rAcr" data-sync="acr" value="350"></label>
+      <label class="num">K mEq/L<input type="number" id="rK" step="0.1" data-sync="k" value="4.6"></label>
+      <label class="num">收縮壓<input type="number" id="rSbp" value="138"></label>
+      <label class="num">年齡<input type="number" id="rAge" data-sync="age" value="62"></label>
+    </div>
+    <p style="margin:12px 0 4px;font-size:13px;color:var(--mute)">目前 RAS 阻斷</p>
+    <select id="rRas" style="width:100%">
+      <option value="0">沒有用 ACEi／ARB</option>
+      <option value="1" selected>有用，還沒到最大耐受劑量</option>
+      <option value="2">最大耐受劑量 ≥4 週</option>
+      <option value="3">無法使用（過敏、血管性水腫、高血鉀）</option>
+    </select>
+    <p style="margin:12px 0 4px;font-size:13px;color:var(--mute)">健保計畫</p>
+    <select id="rProg" style="width:100%">
+      <option value="0">未收案</option>
+      <option value="1">Early CKD 或 DKD</option>
+      <option value="2">Pre-ESRD</option>
+    </select>
+    <div class="checks" style="margin-top:8px">
+      <label><input type="checkbox" id="rDm" data-sync="dm" checked>第二型糖尿病</label>
+      <label><input type="checkbox" id="rHf">心衰竭</label>
+      <label><input type="checkbox" id="rAscvd">ASCVD：MI、血管再通術、中風</label>
+      <label><input type="checkbox" id="rRecent">12 週內 MI、不穩定心絞痛、中風或 TIA</label>
+      <label><input type="checkbox" id="rStatin">已在用 statin</label>
+      <label><input type="checkbox" id="rSglt">已在用 SGLT2i</label>
+      <label><input type="checkbox" id="rPay">病人願意自費</label>
+    </div>
+    <div class="out" id="rOut" aria-live="polite"></div>
+  </div>
+  <details class="learn"><summary>健保 SGLT2i 用在 CKD 的兩條路</summary><div>
+    <ul>
+      <li><b>有糖尿病</b>：照糖尿病給付規定 5.1；已在 DKD 收案者適用 5.1.5，<b>不必符合 2.16</b>。條件見<a href="diabetes.html">糖尿病專區</a>。</li>
+      <li><b>沒有糖尿病</b>：給付規定 2.16（114/3/1 起），限 dapagliflozin、empagliflozin 10 mg：參加 Early CKD 或 Pre-ESRD、在收案院所由計畫合格醫師開立、eGFR 25–60、UACR 200–5000（<b>不能用 UPCR 取代</b>）、ACEi／ARB 最大耐受劑量 ≥4 週；12 週內 MI、不穩定心絞痛、中風或 TIA 排除；用藥後 eGFR &lt;15 停藥。其他排除條件（如第一型糖尿病、多囊腎、免疫抑制治療中的腎病）<span class="tag todo">待核對全文</span></li>
+      <li>自費轉健保：病歷要有 ACEi／ARB 處方紀錄，附近 3 個月內 eGFR 與 UACR。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="dose">
+  <div class="no">STEP 10</div>
+  <h2>腎劑量表：家醫門診常用藥</h2>
+  <p class="learn">藥物仿單多用 Cockcroft-Gault 算的 CrCl，不是 eGFR。體重極端、老人時兩者差很多，邊界值用 CrCl 判斷。</p>
+  <div class="tool">
+    <h3>Cockcroft-Gault CrCl</h3>
+    <div class="fields">
+      <label class="num">年齡<input type="number" id="cAge" data-sync="age" value="62"></label>
+      <label class="num">體重 kg<input type="number" id="cWt" value="58"></label>
+      <label class="num">Cr<input type="number" id="cCr" step="0.01" value="1.2"></label>
+      <label class="num">性別<select id="cSex" data-sync="sex"><option value="F" selected>女</option><option value="M">男</option></select></label>
+    </div>
+    <div class="out" id="cOut" aria-live="polite"></div>
+  </div>
+  <div class="tool">
+    <h3>腎功能 <span id="eLbl" style="font-family:var(--mono)">49</span> mL/min</h3>
+    <input type="range" id="eSlider" min="5" max="120" value="49" aria-label="腎功能">
+    <button class="act" type="button" id="useCg" style="margin-top:6px">帶入上面的 CrCl</button>
+    <div class="chips" id="doseCat" role="group" aria-label="藥物類別" style="margin-top:10px">
+      <button type="button" class="chip" data-v="all" aria-pressed="true">全部</button>
+      <button type="button" class="chip" data-v="dm" aria-pressed="false">降糖</button>
+      <button type="button" class="chip" data-v="pain" aria-pressed="false">止痛神經</button>
+      <button type="button" class="chip" data-v="gout" aria-pressed="false">痛風</button>
+      <button type="button" class="chip" data-v="abx" aria-pressed="false">抗生素抗病毒</button>
+      <button type="button" class="chip" data-v="cv" aria-pressed="false">心血管抗凝</button>
+      <button type="button" class="chip" data-v="gi" aria-pressed="false">腸胃其他</button>
+    </div>
+    <div class="scroll" style="margin-top:8px"><table id="doseTable"></table></div>
+  </div>
+</section>
+
+<section id="k">
+  <div class="no">STEP 11</div>
+  <h2>高血鉀：先處理鉀，不要先停 RAS 阻斷</h2>
+  <div class="tool">
+    <h3>血鉀判讀</h3>
+    <div class="fields">
+      <label class="num">K mEq/L<input type="number" id="hK" step="0.1" data-sync="k" value="4.6"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="hEcg">心電圖異常（T 波高尖、QRS 變寬）或症狀</label>
+      <label><input type="checkbox" id="hHemo">抽血困難、溶血或放置過久</label>
+    </div>
+    <div class="out" id="hOut" aria-live="polite"></div>
+  </div>
+  <h3>查這張表</h3>
+  <div class="checks">
+    <label><input type="checkbox">NSAID、TMP-SMX、spironolactone、β-blocker、heparin、calcineurin 抑制劑</label>
+    <label><input type="checkbox">鉀補充、低鈉鹽、運動飲料、中草藥、果汁</label>
+    <label><input type="checkbox">便祕（腸道排鉀減少）</label>
+    <label><input type="checkbox">代謝性酸中毒（HCO₃⁻ &lt;18）</label>
+    <label><input type="checkbox">血糖失控、脫水</label>
+  </div>
+</section>
+
+<section id="comp">
+  <div class="no">STEP 12</div>
+  <h2>併發症：從 G3a 開始找</h2>
+  <div class="scroll"><table>
+    <tr><th>項目</th><th>何時查</th><th>處理</th></tr>
+    <tr><td>貧血</td><td>G3 每年，G4–5 每半年</td><td>先查鐵：TSAT ≤30% 且 ferritin ≤500 補鐵；排除出血、B12、葉酸。Hb &lt;10 考慮 ESA，轉腎臟科 <span class="tag todo">健保 ESA 條件待核對</span></td></tr>
+    <tr><td>代謝性酸中毒</td><td>G3b 以上</td><td>HCO₃⁻ &lt;18 考慮小蘇打（sodium bicarbonate），不要超過正常上限 <span class="tag kd">KDIGO §3</span></td></tr>
+    <tr><td>礦物質骨病變</td><td>G3a 起：Ca、P、PTH、25-OH D</td><td>看趨勢不看單次；P 高先減加工食品；PTH 持續上升轉腎臟科；避免過量鈣片</td></tr>
+    <tr><td>高尿酸</td><td>有症狀時</td><td><b>無症狀高尿酸不為了護腎而降尿酸</b>；痛風則治療，allopurinol 前驗 HLA-B*5801（漢人）</td></tr>
+    <tr><td>心血管</td><td>每次</td><td>CKD 本身就是高心血管風險：statin、血壓、戒菸；阿斯匹靈只用在次級預防</td></tr>
+    <tr><td>疫苗</td><td>每年回顧</td><td>流感、肺炎鏈球菌、COVID-19、帶狀疱疹；G4 起未免疫者打 B 肝（劑量可能需加倍）<span class="tag todo">公費條件待核對</span></td></tr>
+  </table></div>
+</section>
+
+<section id="gap">
+  <div class="no">STEP 13</div>
+  <h2>健保和 KDIGO 不一樣的地方</h2>
+  <div class="scroll"><table>
+    <tr><th>情境</th><th>KDIGO 2024</th><th>健保</th><th>門診做法</th></tr>
+    <tr><td>非糖尿病 SGLT2i 的 eGFR</td><td>eGFR ≥20 可起始，用到透析</td><td>eGFR 25–60</td><td>eGFR 20–24 或 &gt;60 自費</td></tr>
+    <tr><td>非糖尿病 SGLT2i 的白蛋白尿</td><td>UACR ≥200 強建議；eGFR 20–45 即使 UACR &lt;200 也建議</td><td>UACR 200–5000，且一定要 UACR</td><td>驗 UACR，不要只驗 UPCR</td></tr>
+    <tr><td>SGLT2i 的前提</td><td>不必先用足 RAS 阻斷</td><td>ACEi／ARB 最大耐受 ≥4 週，且要在計畫內</td><td>先收案、加滿 ARB，4 週後開</td></tr>
+    <tr><td>Finerenone</td><td>T2D、eGFR ≥25、UACR ≥30、K 正常，加在 RAS 阻斷上</td><td>專家會議建議給付，正式條件未確認 <span class="tag todo">待核對</span></td><td>多數仍自費；開前先確認院內是否已有健保品項</td></tr>
+    <tr><td>eGFR 公式</td><td>CKD-EPI（不分種族），能做就加 cystatin C</td><td>Pre-ESRD 計畫文件寫 MDRD</td><td>申報看計畫規定，臨床判斷看 CKD-EPI</td></tr>
+  </table></div>
+</section>
+
+<div class="part"><span>第三部分</span>追蹤、轉診、安全</div>
+
+<div class="learn">
+<div class="case"><b>一年後。</b>陳太太用 losartan 100、empagliflozin 10、atorvastatin 20，UACR 降到 160，eGFR 45。她想知道「腎功能這樣算變好還是變差？」</div>
+</div>
+
+<section id="follow">
+  <div class="no">STEP 14</div>
+  <h2>追蹤排程器</h2>
+  <div class="tool">
+    <h3>依熱圖與用藥排出追蹤</h3>
+    <div class="out" id="fuHead" style="margin-top:0"></div>
+    <div class="checks" id="fuMeds">
+      <label><input type="checkbox" value="ras" checked>ACEi／ARB</label>
+      <label><input type="checkbox" value="sglt">SGLT2i</label>
+      <label><input type="checkbox" value="mra">Finerenone 或 spironolactone</label>
+      <label><input type="checkbox" value="met" checked>Metformin</label>
+      <label><input type="checkbox" value="diu">利尿劑</label>
+    </div>
+    <ul class="sched" id="fuOut"></ul>
+    <small style="font-size:13px;color:var(--mute)">分期取自 STEP 1。</small>
+  </div>
+</section>
+
+<section id="trend">
+  <div class="no">STEP 15</div>
+  <h2>報告回來：變好還是變差</h2>
+  <p class="learn">eGFR 每次會跳動 ±10–15%。看的是<b>趨勢</b>：持續的分期下降且 eGFR 掉 ≥25%，或每年下降 &gt;5，才叫進展；UACR 下降 ≥30% 是治療有效的訊號。</p>
+  <div class="tool">
+    <h3>eGFR 斜率與 UACR 變化</h3>
+    <div class="fields">
+      <label class="num">之前 eGFR<input type="number" id="tE0" value="51"></label>
+      <label class="num">現在 eGFR<input type="number" id="tE1" value="45"></label>
+      <label class="num">相隔（月）<input type="number" id="tMo" value="12"></label>
+      <label class="num">之前 UACR<input type="number" id="tA0" value="380"></label>
+      <label class="num">現在 UACR<input type="number" id="tA1" value="160"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="tStart" checked>這段期間有開始 SGLT2i 或 ACEi／ARB</label>
+    </div>
+    <div class="out" id="tOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="refer">
+  <div class="no">STEP 16</div>
+  <h2>轉介腎臟科</h2>
+  <div class="tool">
+    <h3>勾選符合的條件</h3>
+    <div class="checks" id="refChecks">
+      <label><input type="checkbox" data-u="2">eGFR &lt;30</label>
+      <label><input type="checkbox" data-u="2">KFRE 5 年 ≥3–5%</label>
+      <label><input type="checkbox" data-u="2">UACR 持續 ≥300（或 UPCR ≥500）</label>
+      <label><input type="checkbox" data-u="2">eGFR &lt;45 或 UPCR ≥1000（轉 Pre-ESRD）</label>
+      <label><input type="checkbox" data-u="2">快速進展：每年掉 &gt;5，或持續 eGFR 掉 ≥25% 且跨分期</label>
+      <label><input type="checkbox" data-u="3">急性腎損傷，或 eGFR 突然持續下降</label>
+      <label><input type="checkbox" data-u="2">原因不明的血尿：RBC &gt;20/HPF 或紅血球圓柱</label>
+      <label><input type="checkbox" data-u="2">頑固性高血壓：用到 ≥4 種藥</label>
+      <label><input type="checkbox" data-u="2">持續高血鉀或低血鉀</label>
+      <label><input type="checkbox" data-u="2">反覆或大量結石</label>
+      <label><input type="checkbox" data-u="2">遺傳性腎病（多囊腎、Alport）</label>
+      <label><input type="checkbox" data-u="2">懷孕或計畫懷孕的 CKD</label>
+    </div>
+    <div class="out" id="refOut" aria-live="polite"></div>
+  </div>
+  <p class="learn">轉出去不是結束：家醫科繼續管血壓、血糖、疫苗、藥物整合，每次幫病人擋掉 NSAID 和重複用藥。</p>
+</section>
+
+<section id="safety">
+  <div class="no">STEP 17</div>
+  <h2>病假規則與顯影劑</h2>
+  <h3>吐、拉、吃不下、發燒脫水時暫停（SADMANS）</h3>
+  <div class="scroll"><table>
+    <tr><th>暫停</th><th>原因</th></tr>
+    <tr><td>S：SU 類</td><td>吃不下會低血糖</td></tr>
+    <tr><td>A：ACEi（含 ARNI）</td><td>脫水時腎灌流下降</td></tr>
+    <tr><td>D：利尿劑、直接腎素抑制劑</td><td>脫水</td></tr>
+    <tr><td>M：Metformin</td><td>乳酸中毒</td></tr>
+    <tr><td>A：ARB</td><td>同 ACEi</td></tr>
+    <tr><td>N：NSAID</td><td>急性腎損傷</td></tr>
+    <tr><td>S：SGLT2i</td><td>正常血糖酮酸中毒、脫水</td></tr>
+  </table></div>
+  <p>能正常吃喝 24–48 小時後恢復。<b>恢復時記得把藥加回來</b>：住院後 ACEi／ARB、SGLT2i 常被停掉沒再開。</p>
+  <h3>顯影劑</h3>
+  <ul>
+    <li>靜脈碘顯影劑：eGFR &lt;30（且非透析）考慮預防性靜脈輸液；30–44 依風險個別判斷。<span class="tag">ACR／NKF 2020 共識</span></li>
+    <li>Metformin：eGFR &lt;30 或急性腎損傷時，檢查當天停，48 小時後確認腎功能再恢復。</li>
+    <li>MRI 釓顯影劑：eGFR &lt;30 用第二類（group II）藥劑。</li>
+  </ul>
+</section>
+
+<section id="nhi">
+  <div class="no">STEP 18</div>
+  <h2>健保與文件實務</h2>
+  <ul>
+    <li><b>家醫科要先受訓</b>：上滿 6 小時 CKD 照護課程才能申請 Early CKD；年度追蹤率 &lt;20% 經輔導未改善會被暫停申報。</li>
+    <li><b>DKD 檢驗</b>：UACR 可採計前 6 個月；eGFR 等可採計前後 3 個月，但不能和前次申報同一天。</li>
+    <li><b>SGLT2i（2.16）</b>：非收案院所不得開；病歷寫 ACEi／ARB 最大耐受劑量與日期、近 3 個月 eGFR 與 UACR。</li>
+    <li><b>慢箋</b>：病情穩定可開慢性病連續處方箋；CKD 用 SGLT2i、ACEi／ARB 剛起始的前 1–2 個月不建議直接開長期。</li>
+  </ul>
+  <div class="tool">
+    <h3>衛教單（可截圖或複製給病人）</h3>
+    <button class="act" type="button" id="printSick">顯示：護腎卡</button>
+    <div id="sickCard" hidden>
+      <h2>護腎五件事（給病人）</h2>
+      <ol>
+        <li>止痛藥只吃醫師開的，藥局買的止痛藥、來路不明的中草藥不要吃。</li>
+        <li>看別科、做電腦斷層或打顯影劑前，說「我腎臟不好」。</li>
+        <li>鹽一天一茶匙以內；不用低鈉鹽（含鉀）。</li>
+        <li>吐、拉、吃不下、發燒時，先暫停：降血糖藥（metformin、SGLT2 抑制劑、磺醯脲類）、血壓藥（ACEi／ARB）、利尿劑、止痛藥。能正常吃喝 1–2 天後再恢復，並回診。</li>
+        <li>每 3–6 個月抽血驗尿一次，數字自己記下來。</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="learn">
+  <h2>帶走十件事</h2>
+  <ol>
+    <li>一次異常不是 CKD：持續 &gt;3 個月，先排除急性。</li>
+    <li>分期寫 G 和 A，白蛋白尿和 eGFR 一樣重要。</li>
+    <li>每個 CKD 病人都問止痛藥和中草藥。</li>
+    <li>G3–G5 算 KFRE，5 年 ≥3–5% 轉腎臟科。</li>
+    <li>有白蛋白尿用 ACEi 或 ARB，加到最大耐受劑量；Cr 升 &lt;30% 不要停。</li>
+    <li>SGLT2i eGFR ≥20 可起始；非糖尿病健保要收案、eGFR 25–60、UACR 200–5000、ARB 足量 4 週。</li>
+    <li>≥50 歲的 CKD 都用 statin。</li>
+    <li>高血鉀先找原因、加利尿劑或降鉀藥，盡量留住 RAS 阻斷。</li>
+    <li>看趨勢：每年掉 &gt;5 或 UACR 上升才是進展。</li>
+    <li>每個用藥病人都拿到病假規則。</li>
+  </ol>
+  <div class="next">
+    <a href="diabetes.html"><b>糖尿病專區</b>DKD 的降糖選藥與健保 5.1</a>
+    <a href="hypertension.html"><b>高血壓專區</b>選藥與調藥</a>
+    <a href="../islands/#ldl-c"><b>LDL-C 頁</b>健保新制分級</a>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <p>主要來源</p>
+  <ul>
+    <li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease. Kidney Int 2024;105(4S).</li>
+    <li>KDIGO 2021 Blood Pressure in CKD；KDIGO 2022 Diabetes Management in CKD；KDIGO 2013 Lipid Management in CKD。</li>
+    <li>Tangri N, et al. Multinational assessment of accuracy of equations for predicting risk of kidney failure. JAMA 2016;315:164–74（4 變項 KFRE 係數）。</li>
+    <li>健保署：支付標準第八部第二章（Early CKD）及問答集；末期腎臟病前期（Pre-ESRD）之病人照護與衛教計畫；藥品給付規定 2.16 修訂（114/3/1）及問答集。</li>
+    <li>ACR／NKF 2020 Consensus on IV iodinated contrast in kidney disease。</li>
+    <li>腎劑量：美國 FDA 仿單與常見藥物手冊，未逐項對照台灣仿單。</li>
+  </ul>
+  <p>ycjacademy 門診實務｜不代表任何講者或廠商立場。</p>
+</div></footer>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const num=id=>{const v=parseFloat($(id).value);return isNaN(v)?null:v;};
+const ck=id=>$(id).checked;
+function out(id,cls,html){const o=$(id);o.className='out'+(cls?' '+cls:'');o.innerHTML=html;}
+const r1=x=>Math.round(x*10)/10;
+
+/* ---------- mode ---------- */
+function setMode(c){document.body.classList.toggle('clinic',c);$('mClinic').setAttribute('aria-pressed',c);$('mLearn').setAttribute('aria-pressed',!c);
+  try{history.replaceState(null,'',c?'#clinic':location.pathname+location.search);}catch(e){}}
+$('mClinic').onclick=()=>setMode(true);$('mLearn').onclick=()=>setMode(false);
+if(location.hash==='#clinic')setMode(true);
+
+/* ---------- sync ---------- */
+function syncFrom(el){
+  const k=el.dataset.sync;
+  document.querySelectorAll('[data-sync="'+k+'"]').forEach(o=>{if(o===el)return;if(o.type==='checkbox')o.checked=el.checked;else o.value=el.value;});
+}
+document.querySelectorAll('input,select').forEach(el=>{
+  const h=()=>{if(el.dataset.sync)syncFrom(el);if(el.closest('#stage'))stage(true);renderAll();if(el.closest('#stage'))doses();};
+  el.addEventListener('input',h);el.addEventListener('change',h);
+});
+
+/* ---------- formulas ---------- */
+function ckdEpiCr(cr,age,f){const k=f?0.7:0.9,a=f?-0.241:-0.302;return 142*Math.pow(Math.min(cr/k,1),a)*Math.pow(Math.max(cr/k,1),-1.2)*Math.pow(0.9938,age)*(f?1.012:1);}
+function ckdEpiCrCys(cr,cys,age,f){const k=f?0.7:0.9,a=f?-0.219:-0.144;return 135*Math.pow(Math.min(cr/k,1),a)*Math.pow(Math.max(cr/k,1),-0.544)*Math.pow(Math.min(cys/0.8,1),-0.323)*Math.pow(Math.max(cys/0.8,1),-0.778)*Math.pow(0.9961,age)*(f?0.963:1);}
+function mdrd(cr,age,f){return 186*Math.pow(cr,-1.154)*Math.pow(age,-0.203)*(f?0.742:1);}
+function gCat(e){return e>=90?'G1':e>=60?'G2':e>=45?'G3a':e>=30?'G3b':e>=15?'G4':'G5';}
+function aCat(acr){return acr<30?'A1':acr<=300?'A2':'A3';}
+const GI={G1:0,G2:0,G3a:1,G3b:2,G4:3,G5:4},AI={A1:0,A2:1,A3:2};
+const HEAT=[[0,1,2],[1,2,3],[2,3,3],[3,3,3],[3,3,3]];
+const FREQ=[['1*','1','2'],['1','2','3'],['2','3','3'],['3','3','4+'],['4+','4+','4+']];
+const RISK=['低風險','中度風險','高風險','極高風險'];
+function kfre(age,male,egfr,acr){
+  const x=-0.2201*(age/10-7.036)+0.2467*((male?1:0)-0.5642)-0.5567*(egfr/5-7.222)+0.4510*(Math.log(acr)-5.137);
+  return{y2:1-Math.pow(0.9832,Math.exp(x)),y5:1-Math.pow(0.9365,Math.exp(x))};
+}
+
+/* shared state from STEP 1 */
+const S={egfr:null,g:null,a:null,acr:null,pcr:null,ckd:false};
+
+/* ---------- STEP 1 ---------- */
+function stage(push){
+  const cr=num('sCr'),age=num('sAge'),f=$('sSex').value==='F',cys=num('sCys');
+  const acr=num('sAcr'),pcr=num('sPcr'),dip=$('sDip').value,m3=ck('s3m');
+  if(!cr||!age){out('sOut','','輸入 Cr 與年齡。');drawHeat(null,null);return;}
+  const eCr=ckdEpiCr(cr,age,f),eMd=mdrd(cr,age,f);
+  let e=eCr,lab='CKD-EPI 2021（Cr）';
+  if(cys){e=ckdEpiCrCys(cr,cys,age,f);lab='CKD-EPI 2021（Cr＋cystatin C）';}
+  const g=gCat(e);
+  let a=null,aSrc='';
+  if(acr!=null){a=aCat(acr);aSrc='UACR '+acr;}
+  else if(pcr!=null){a=pcr<150?'A1':pcr<=500?'A2':'A3';aSrc='UPCR '+pcr+'（換算）';}
+  else if(dip){a=dip==='0'?'A1':dip==='t'?'A2':dip==='1'?'A2':'A3';aSrc='試紙（只能粗估，請驗 UACR）';}
+  S.egfr=Math.round(e);S.g=g;S.a=a;S.acr=acr;S.pcr=pcr;
+  const marker=e<60||(a&&a!=='A1');
+  S.ckd=marker&&m3;
+  if(push){document.querySelectorAll('[data-sync="egfr"]').forEach(o=>o.value=Math.round(e));$('eSlider').value=Math.round(e);$('cCr').value=cr;}
+  let html='<b class="big">eGFR '+Math.round(e)+'（'+g+(a?' '+a:'')+'）</b>'+lab;
+  if(!cys)html+='；MDRD（健保計畫用）'+Math.round(eMd)+(gCat(eMd)!==g?'，<b>分期不同：'+gCat(eMd)+'</b>':'');
+  if(a)html+='<br>白蛋白尿：'+aSrc;
+  let cls='ok';
+  if(!marker){html+='<small>eGFR ≥60 且沒有白蛋白尿：目前不符合 CKD；有危險因子者每年驗 eGFR 與 UACR。</small>';}
+  else if(!m3){cls='warn';html+='<small><b>還不能診斷 CKD</b>：異常要持續 &gt;3 個月。先看 STEP 2 排除急性，3 個月內複驗。</small>';}
+  else{const h=HEAT[GI[g]][a?AI[a]:0];cls=h>=3?'crit':h>=1?'warn':'ok';
+    html+='<small><b>CKD '+g+' '+(a||'A?')+'</b>：'+RISK[h]+'；每年至少監測 '+FREQ[GI[g]][a?AI[a]:0]+' 次。'+(a?'':'請補 UACR 才能完整分期。')+'</small>';}
+  out('sOut',cls,html);
+  drawHeat(g,a);
+}
+function drawHeat(g,a){
+  const gs=[['G1','≥90'],['G2','60–89'],['G3a','45–59'],['G3b','30–44'],['G4','15–29'],['G5','<15']];
+  let h='<tr><th></th><th>A1<br>&lt;30</th><th>A2<br>30–300</th><th>A3<br>&gt;300</th></tr>';
+  gs.forEach(([k,r])=>{h+='<tr><th>'+k+'<br>'+r+'</th>';[0,1,2].forEach(j=>{const v=HEAT[GI[k]][j];const on=(k===g&&a&&AI[a]===j);h+='<td class="h'+v+(on?' on':'')+'">'+FREQ[GI[k]][j]+'</td>';});h+='</tr>';});
+  $('heat').innerHTML=h;
+}
+
+/* ---------- STEP 2 ---------- */
+function flags(){
+  const g={};document.querySelectorAll('#flagChecks input:checked').forEach(i=>g[i.dataset.w]=1);
+  if(g.er){out('flagOut','crit','<b class="big">今天送急診</b>高血鉀、尿毒症、肺水腫或寡尿：驗電解質、血氣、心電圖，可能需要緊急透析。');return;}
+  const m=[];let cls='warn';
+  if(g.rpgn){cls='crit';m.push('<b>懷疑急進性腎絲球腎炎</b>：當天聯絡腎臟科，驗尿沉渣、ANCA、anti-GBM、ANA、C3/C4。');}
+  if(g.aki){cls='crit';m.push('<b>急性腎損傷</b>：停 NSAID、ACEi／ARB、利尿劑、metformin、SGLT2i；評估容積與阻塞，48–72 小時內複驗；持續上升轉急診或腎臟科。');}
+  if(g.ob)m.push('<b>阻塞</b>：導尿或轉泌尿科；水腎解除後再評估腎功能。');
+  if(g.neph)m.push('<b>腎病症候群</b>：驗 UPCR、白蛋白、血脂，轉腎臟科評估切片；成人膜性腎病驗 anti-PLA2R。');
+  if(g.new)m.push('<b>沒有舊數值</b>：還不能說是慢性。1–2 週內複驗 Cr；穩定的話 3 個月後再驗 eGFR 與 UACR 確認。腎臟超音波看腎臟大小：兩側萎縮支持慢性。');
+  if(!m.length){out('flagOut','','沒有勾選：照 CKD 評估，往下走。');return;}
+  out('flagOut',cls,m.join('<br>'));
+}
+
+/* ---------- STEP 5 KFRE ---------- */
+function kf(){
+  const age=num('kAge'),male=$('kSex').value==='M',e=num('kEgfr'),acr=num('kAcr');
+  if(!age||!e||!acr){out('kOut','','輸入年齡、eGFR、UACR。');return;}
+  const r=kfre(age,male,e,Math.max(acr,1));
+  const p2=(r.y2*100),p5=(r.y5*100);
+  const t='2 年 <b>'+p2.toFixed(1)+'%</b>　5 年 <b>'+p5.toFixed(1)+'%</b>';
+  let note=e>=60?'<small>KFRE 驗證於 eGFR &lt;60（G3–G5），G1–G2 只能參考。</small>':(acr<10?'<small>UACR 很低時 KFRE 風險本來就低，以實際數值為準。</small>':'');
+  if(p2>40)out('kOut','crit','<b class="big">2 年 &gt;40%：準備透析通路與移植評估</b>'+t+note);
+  else if(p2>10)out('kOut','crit','<b class="big">2 年 &gt;10%：多專業團隊、腎臟替代治療衛教</b>'+t+note);
+  else if(p5>=3)out('kOut','warn','<b class="big">5 年 ≥3%：轉介腎臟科</b>'+t+(p5<5?'（3–5% 屬 KDIGO 建議的轉介範圍，依病人與在地資源判斷）':'')+note);
+  else out('kOut','ok','<b class="big">5 年 &lt;3%：基層繼續照護</b>'+t+note);
+}
+
+/* ---------- STEP 6 enrol ---------- */
+function enrol(){
+  const e=S.egfr,acr=S.acr,pcr=S.pcr,dm=ck('eDm');
+  if(e==null){out('eOut','','先在 STEP 1 輸入數值。');return;}
+  const prot=(pcr!=null&&pcr>1000);
+  const m=[];let cls='ok',head;
+  if(e<45||prot){head='Pre-ESRD';cls='warn';m.push((e<45?'eGFR '+e+' &lt;45':'UPCR '+pcr+' &gt;1000')+'：轉介有 Pre-ESRD 團隊的院所（多為腎臟科）。');}
+  else{
+    const s12=e>=60;
+    const okProt=dm?(acr!=null&&acr>=30)||(pcr!=null&&pcr>=150):(pcr!=null&&pcr>=150)||(acr!=null&&acr>=30);
+    if(!s12){head='Early CKD（G3a）';m.push('eGFR 45–59.9：符合 Early CKD，不論蛋白尿。');}
+    else if(okProt){head='Early CKD（'+gCat(e)+'）';m.push('eGFR ≥60 且有蛋白尿：符合。'+(dm?'':'非糖尿病原條文為 UPCR ≥150；114/5/1 起 UACR、UPCR 擇一，UACR 門檻 <span class="tag todo">待核對</span>'));}
+    else{head='目前不符合收案';cls='';m.push('eGFR ≥60 且沒有達標的蛋白尿。');}
+    if(dm&&head.startsWith('Early'))m.push('糖尿病病人收 <b>DKD 共病照護</b>：UACR 必填。');
+  }
+  if(!S.ckd)m.push('<b>要先符合 CKD 定義（&gt;3 個月）</b>，STEP 1 還沒勾。');
+  out('eOut',cls,'<b class="big">'+head+'</b>'+m.join('<br>'));
+}
+
+/* ---------- STEP 8 ---------- */
+function ras(){
+  const a=num('aPre'),b=num('aPost'),k=num('aK');
+  if(!a||!b){out('aOut','','輸入 Cr。');return;}
+  const p=Math.round((b-a)/a*100);const m=[];let cls='ok';
+  if(p<=0)m.push('Cr 沒有上升，繼續用並可加量。');
+  else if(p<30)m.push('Cr 上升 '+p+'%：<b>預期內</b>（腎絲球內壓下降），繼續用；2–4 週後再驗。');
+  else{cls='crit';m.push('Cr 上升 '+p+'% ≥30%：找原因（脫水、NSAID、利尿劑過量、腎動脈狹窄）；減量或暫停，1–2 週複驗。');}
+  if(k!=null){
+    if(k>=6){cls='crit';m.push('K '+k+'：見 STEP 11，今天處理。');}
+    else if(k>5.5){cls=cls==='crit'?'crit':'warn';m.push('K '+k+' &gt;5.5：先降鉀（STEP 11），RAS 阻斷暫不加量，必要時減量。');}
+    else if(k>5){m.push('K '+k+'：飲食與藥物檢討，可加 thiazide 或 loop 利尿劑；繼續用。');}
+  }
+  out('aOut',cls,m.join('<br>'));
+}
+
+/* ---------- STEP 9 four pillars ---------- */
+const P={g:'<span class="pill g">健保</span>',u:'<span class="pill u">自費</span>',c:'<span class="pill c">健保待核對</span>',n:'<span class="pill n">非藥物</span>'};
+function rx(){
+  const v={e:num('rEgfr'),acr:num('rAcr'),k:num('rK'),sbp:num('rSbp'),age:num('rAge')||0,ras:+$('rRas').value,prog:+$('rProg').value,
+    dm:ck('rDm'),hf:ck('rHf'),ascvd:ck('rAscvd'),recent:ck('rRecent'),statin:ck('rStatin'),sglt:ck('rSglt'),pay:ck('rPay')};
+  if(v.e==null||v.acr==null){out('rOut','','輸入 eGFR 與 UACR。');return;}
+  const items=[],why=[],warn=[];
+  const add=(name,dose,p)=>items.push({name,dose,p});
+  const a=aCat(v.acr),kHigh=v.k!=null&&v.k>5.5,kMid=v.k!=null&&v.k>5.0;
+  why.push(gCat(v.e)+' '+a+'，eGFR '+v.e+'、UACR '+v.acr);
+
+  /* 1. RAS */
+  const rasStrong=(v.dm&&v.acr>=30)||(!v.dm&&v.acr>300);
+  const rasSuggest=!v.dm&&v.acr>=30&&v.acr<=300;
+  if(v.ras===3){add('RAS 阻斷：無法使用','以 SGLT2i、其他降壓藥替代；高血鉀造成者，先用降鉀藥再重新嘗試。','n');}
+  else if(rasStrong||rasSuggest){
+    if(kHigh&&v.ras<2)add('ACEi／ARB：先處理高血鉀，暫不起始或加量','K '+v.k+' &gt;5.5（STEP 11）。','g');
+    else if(v.ras===0)add('起始 ACEi 或 ARB','例：losartan 50 mg qd → 100 mg；或 ramipril 2.5 → 10 mg。2–4 週驗 Cr、K。'+(rasStrong?'（強建議）':'（建議）'),'g');
+    else if(v.ras===1)add('ACEi／ARB 加到最大耐受劑量','每 2–4 週加量並驗 Cr、K；Cr 上升 &lt;30% 繼續。','g');
+    else add('ACEi／ARB 維持最大耐受劑量','','g');
+  } else {
+    add('RAS 阻斷：沒有白蛋白尿時非必要','有高血壓時可用，與其他降壓藥同等級；不要 ACEi＋ARB 併用。','n');
+  }
+
+  /* 2. SGLT2i */
+  let sNote='',sPay='g',sName='';
+  if(v.sglt){add('SGLT2i 繼續用','用到透析或移植；eGFR 下降不用停（健保 2.16 路徑 eGFR &lt;15 停）。','g');}
+  else if(v.e<20){add('SGLT2i：eGFR &lt;20 不新開','已在用者可繼續。','n');}
+  else{
+    let kd='';
+    if(v.dm||v.hf||v.acr>=200)kd='強建議（1A）';else if(v.e<45)kd='建議（2B）：eGFR 20–45 即使 UACR &lt;200';
+    else kd='';
+    if(!kd){add('SGLT2i：KDIGO 未建議','非糖尿病、無心衰竭、eGFR ≥45 且 UACR &lt;200。','n');}
+    else{
+      sName='Empagliflozin 10 mg 或 dapagliflozin 10 mg qd';
+      if(v.dm){sNote='糖尿病：照給付規定 5.1（已收 DKD 者 5.1.5，不必符合 2.16），見糖尿病專區。';sPay='g';}
+      else if(v.hf){sNote='心衰竭：2.16 心衰竭路徑（LVEF 條件）。';sPay='c';}
+      else{
+        const miss=[];
+        if(v.prog===0)miss.push('未收 Early CKD／Pre-ESRD');
+        if(v.e<25||v.e>60)miss.push('eGFR 不在 25–60');
+        if(v.acr<200||v.acr>5000)miss.push('UACR 不在 200–5000');
+        if(v.ras!==2)miss.push('ACEi／ARB 未達最大耐受 ≥4 週');
+        if(v.recent)miss.push('12 週內心血管或中風事件');
+        if(miss.length){sPay='u';sNote='健保 2.16 不符合：'+miss.join('、')+'。'+(v.prog===0&&v.e>=25&&v.e<=60&&v.acr>=200?'先收案（STEP 6）。':'');}
+        else{sPay='g';sNote='符合 2.16：病歷記錄 ARB 劑量與日期、近 3 個月 eGFR 與 UACR。';}
+      }
+      add(sName,kd+'。不用加量；起始後 eGFR 可能小降（STEP 15）。'+sNote,sPay);
+    }
+  }
+
+  /* 3. statin */
+  if(v.statin)add('Statin 繼續用','LDL 目標依健保新制分級（LDL-C 頁）。','g');
+  else if(v.age>=50||v.dm||v.ascvd)add('Statin','≥50 歲 CKD（非透析）都用；18–49 歲有糖尿病、ASCVD 或 10 年風險 &gt;10% 也用。例：atorvastatin 10–20 mg、rosuvastatin 5–10 mg（eGFR &lt;30 rosuvastatin 起始 5 mg、上限 10 mg）。','g');
+  else add('Statin：&lt;50 歲依風險','有糖尿病、ASCVD、10 年風險 &gt;10% 時用。','n');
+
+  /* 4. ns-MRA */
+  if(v.dm){
+    if(v.e>=25&&v.acr>=30&&(v.k==null||v.k<=5.0)&&v.ras>=1&&v.ras<3){
+      add('Finerenone '+(v.e>=60?'20':'10')+' mg qd','加在 RAS 阻斷上。4 週驗 K：≤4.8 可加到 20 mg；&gt;5.5 暫停。'+(v.ras<2?'先把 ACEi／ARB 加滿再加。':''),'c');
+      warn.push('Finerenone 健保：114/3 專家會議建議納入，正式給付條件與生效日未確認；開前先查院內品項。');
+    } else {
+      const r=[];if(v.e<25)r.push('eGFR &lt;25');if(v.acr<30)r.push('UACR &lt;30');if(v.k!=null&&v.k>5.0)r.push('K &gt;5.0');if(v.ras===0||v.ras===3)r.push('未用 RAS 阻斷');
+      add('Finerenone：目前不適用','原因：'+r.join('、')+'。','n');
+    }
+    add('GLP-1 RA（semaglutide 等）','血糖未達標或不能用 SGLT2i 時優先；FLOW 試驗有腎臟保護。健保照 5.1 第三線條件，見糖尿病專區。','c');
+    if(v.e<30)warn.push('eGFR &lt;30：metformin 停用；30–44 上限 1000 mg/日。');
+    else if(v.e<45)warn.push('eGFR 30–44：metformin 上限 1000 mg/日，不新開。');
+  }
+
+  /* BP */
+  if(v.sbp!=null){
+    if(v.sbp>=120)add('血壓：目標收縮壓 &lt;120（能耐受時）','目前 '+v.sbp+'。RAS 阻斷加滿後再加 CCB 或利尿劑；老人與衰弱者個人化。','g');
+    else add('血壓已達 &lt;120','注意姿勢性低血壓與病假暫停。','n');
+  }
+  if(kMid&&!kHigh)warn.push('K '+v.k+'：檢討飲食、藥物；加利尿劑可同時降壓降鉀。');
+  if(kHigh)warn.push('K '+v.k+' &gt;5.5：先照 STEP 11 處理，處理好再回來加藥。');
+  if(v.hf&&!v.dm)warn.push('心衰竭另有 MRA（spironolactone）與 ARNI 的適應症，見心衰竭治療。');
+
+  const h=items.map(it=>'<div class="item"><b>'+it.name+'</b>'+(P[it.p]||'')+(it.dose?'<div>'+it.dose+'</div>':'')+'</div>').join('');
+  let html='<b class="big">'+gCat(v.e)+' '+a+(v.dm?'，第二型糖尿病':'')+'</b><div class="rx">'+h+'</div>';
+  if(warn.length)html+='<div class="why" style="color:var(--warn)">'+warn.join('<br>')+'</div>';
+  if(!v.pay&&items.some(i=>i.p==='u'))html+='<div class="why">標「自費」的項目病人未勾選願意自費，可先討論。</div>';
+  html+='<div class="why">依據：'+why.join('；')+'。KDIGO 2024 §3、KDIGO 2022 糖尿病合併 CKD。</div>';
+  out('rOut',kHigh?'crit':'warn',html);
+}
+
+/* ---------- STEP 10 CrCl + dose table ---------- */
+function cg(){
+  const a=num('cAge'),w=num('cWt'),c=num('cCr'),f=$('cSex').value==='F';
+  if(!a||!w||!c){out('cOut','','輸入年齡、體重、Cr。');return null;}
+  const v=(140-a)*w/(72*c)*(f?0.85:1);
+  out('cOut','','CrCl <b>'+Math.round(v)+'</b> mL/min（實際體重）<small>肥胖者實際體重會高估；BMI ≥30 可改用調整體重。</small>');
+  return Math.round(v);
+}
+$('useCg').onclick=()=>{const v=cg();if(v!=null){$('eSlider').value=Math.min(120,Math.max(5,v));doses();}};
+let doseCat='all';
+document.querySelectorAll('#doseCat .chip').forEach(b=>b.onclick=()=>{doseCat=b.dataset.v;document.querySelectorAll('#doseCat .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));doses();});
+/* [category, drug, usual dose, rule(e) -> [text, flag ''|'a'|'s'], note] */
+const D=[
+ ['dm','Metformin','500 mg bid → 1000 mg bid',e=>e>=45?['不調整','']:e>=30?['上限 1000 mg/日；不新開','a']:['停用','s'],'顯影劑、病假暫停'],
+ ['dm','Empagliflozin／dapagliflozin','10 mg qd',e=>e>=45?['不調整','']:e>=20?['10 mg；降糖弱，護腎心','a']:['不新開；已用可續用','a'],'起始後 eGFR 小降屬預期'],
+ ['dm','Sitagliptin','100 mg qd',e=>e>=45?['100 mg','']:e>=30?['50 mg','a']:['25 mg','a'],''],
+ ['dm','Linagliptin','5 mg qd',e=>['不調整',''],'腎差首選 DPP-4i'],
+ ['dm','Gliclazide MR','30–120 mg',e=>e>=30?['小心低血糖','']:['避免','s'],'Glibenclamide 在 CKD 避免'],
+ ['dm','GLP-1 RA（dulaglutide、semaglutide）','每週一次',e=>e>=15?['不調整','']:['經驗少','a'],'脫水時暫停'],
+ ['pain','NSAID（含 COX-2）','—',e=>e>=60?['短期、最低劑量','a']:e>=30?['避免長期使用','a']:['避免','s'],'與 ACEi／ARB＋利尿劑併用最危險'],
+ ['pain','Acetaminophen','500 mg q6h',e=>['不調整；≤3 g/日','' ],'CKD 止痛首選'],
+ ['pain','Tramadol','50 mg q6h',e=>e>=30?['不調整','']:['q12h，上限 200 mg/日','a'],'癲癇、血清素症候群'],
+ ['pain','Morphine、codeine','—',e=>e>=30?['減量','a']:['避免','s'],'代謝物蓄積'],
+ ['pain','Gabapentin','300 mg tid（≤3600）',e=>e>=60?['900–3600 mg/日','']:e>=30?['400–1400 mg/日','a']:e>=15?['200–700 mg/日','a']:['100–300 mg/日','s'],'嗜睡、跌倒'],
+ ['pain','Pregabalin','75 mg bid（≤600）',e=>e>=60?['150–600 mg/日','']:e>=30?['75–300 mg/日','a']:e>=15?['25–150 mg/日','a']:['25–75 mg/日','s'],''],
+ ['pain','Baclofen','5–10 mg tid',e=>e>=60?['不調整','']:e>=30?['減量','a']:['避免','s'],'腎差易致腦病變'],
+ ['gout','Allopurinol','起始 100 mg',e=>e>=30?['100 mg 起，慢慢加','a']:['50 mg 起，慢慢加','a'],'漢人先驗 HLA-B*5801；依尿酸目標加量'],
+ ['gout','Febuxostat','40 mg qd',e=>e>=30?['不調整','']:['上限 40 mg（資料少）','a'],'心血管疾病者小心'],
+ ['gout','Colchicine','0.5 mg qd–bid',e=>e>=30?['不調整，留意交互作用','']:['減量（如 0.5 mg 隔日）；急性發作 2 週內不重複療程','a'],'避免併用 clarithromycin'],
+ ['abx','Amoxicillin/clavulanate','875/125 mg bid',e=>e>=30?['不調整','']:e>=10?['500/125 mg q12h；不用 875','a']:['500/125 mg q24h','s'],''],
+ ['abx','Cephalexin','500 mg q6–8h',e=>e>=30?['不調整','']:e>=15?['250–500 mg q8–12h','a']:['250–500 mg q24h','s'],''],
+ ['abx','Levofloxacin','500–750 mg qd',e=>e>=50?['不調整','']:e>=20?['首劑後 250 mg qd（500 方案）或 750 q48h','a']:['首劑後 250 mg q48h','s'],'QT、肌腱、老人譫妄'],
+ ['abx','Nitrofurantoin','100 mg bid',e=>e>=30?['可用','']:['避免','s'],'Beers：CrCl &lt;30 避免'],
+ ['abx','TMP-SMX','1 DS bid',e=>e>=30?['不調整','']:e>=15?['半量','a']:['避免','s'],'升 K、假性升 Cr'],
+ ['abx','Valacyclovir（帶狀疱疹）','1 g tid',e=>e>=50?['不調整','']:e>=30?['1 g q12h','a']:e>=10?['1 g q24h','a']:['500 mg q24h','s'],'過量致神經毒性'],
+ ['abx','Oseltamivir（治療）','75 mg bid',e=>e>60?['不調整','']:e>30?['30 mg bid','a']:e>=10?['30 mg qd','a']:['依透析','s'],''],
+ ['cv','Apixaban（AF）','5 mg bid',e=>e>=25?['5 mg；年齡≥80、體重≤60、Cr≥1.5 三項中兩項時 2.5 mg','']:e>=15?['資料少，依上述條件','a']:['避免或依專科','s'],''],
+ ['cv','Rivaroxaban（AF）','20 mg qd 隨餐',e=>e>50?['20 mg','']:e>=15?['15 mg','a']:['避免','s'],'用 CrCl'],
+ ['cv','Dabigatran（AF）','150 mg bid',e=>e>50?['150 mg（高齡或出血風險 110）','']:e>=30?['110 mg bid','a']:['禁用','s'],'用 CrCl'],
+ ['cv','Edoxaban（AF）','60 mg qd',e=>e>50?['60 mg','']:e>=15?['30 mg','a']:['避免','s'],''],
+ ['cv','Spironolactone','12.5–25 mg qd',e=>e>=45?['K ≤5.0 可用','']:e>=30?['12.5 mg，密切驗 K','a']:['避免','s'],''],
+ ['cv','Fenofibrate','—',e=>e>=60?['不調整','']:e>=30?['減量','a']:['避免','s'],'會升 Cr'],
+ ['cv','Digoxin','0.125 mg',e=>e>=50?['依血中濃度','']:['減量、隔日或驗濃度','a'],''],
+ ['gi','Famotidine','20 mg bid',e=>e>=50?['不調整','']:['20 mg qd','a'],'老人譫妄'],
+ ['gi','氧化鎂（MgO）','250–500 mg tid',e=>e>=30?['監測 Mg','a']:['避免','s'],'台灣常用軟便劑，高鎂血症'],
+ ['gi','磷酸鹽灌腸、磷酸鈉清腸','—',e=>e>=60?['小心','a']:['避免','s'],'急性磷酸鹽腎病變'],
+ ['gi','Lithium','—',e=>e>=60?['監測濃度、Cr','a']:['避免，與精神科討論','s'],'慢性間質性腎炎']
+];
+function doses(){
+  const e=+$('eSlider').value;$('eLbl').textContent=e;
+  let h='<tr><th>藥物</th><th>一般劑量</th><th>腎功能 '+e+'</th><th>注意</th></tr>';
+  D.filter(r=>doseCat==='all'||r[0]===doseCat).forEach(r=>{const [t,f]=r[3](e);h+='<tr class="'+(f==='s'?'flag':'')+'"><th>'+r[1]+'</th><td>'+r[2]+'</td><td style="font-weight:'+(f?'700':'400')+';color:'+(f==='s'?'var(--crit)':f==='a'?'var(--warn)':'inherit')+'">'+t+'</td><td>'+r[4]+'</td></tr>';});
+  $('doseTable').innerHTML=h;
+}
+
+/* ---------- STEP 11 K ---------- */
+function hk(){
+  const k=num('hK'),ecg=ck('hEcg'),hemo=ck('hHemo');
+  if(k==null){out('hOut','','輸入 K。');return;}
+  if(hemo&&k>5&&!ecg){out('hOut','warn','<b class="big">先重抽</b>可能是假性高血鉀：止血帶時間短、不要握拳、盡快送驗；白血球或血小板很高時驗血漿鉀。');return;}
+  if(k>=6.5||(k>=6&&ecg)||(ecg&&k>5.5)){out('hOut','crit','<b class="big">今天送急診</b>K '+k+(ecg?'，心電圖異常':'')+'：鈣劑、胰島素＋葡萄糖、β2 致效劑；評估透析。');return;}
+  if(k>=6){out('hOut','crit','<b class="big">K '+k+'：當天處理</b>做心電圖；停 NSAID、鉀補充、spironolactone；RAS 阻斷暫停或減量；給降鉀藥（calcium polystyrene sulfonate 或 SZC），24–72 小時內複驗。');return;}
+  if(k>5.5){out('hOut','warn','<b class="big">K '+k+'：減量但盡量留住</b>RAS 阻斷先減量（不急著停）；加 loop 或 thiazide 利尿劑、治療便祕與酸中毒；考慮降鉀藥（SZC、patiromer、calcium polystyrene sulfonate）以便維持 RAS 阻斷。1 週內複驗。<small>SZC 等新型降鉀藥健保條件 <span class="tag todo">待核對</span></small>');return;}
+  if(k>5){out('hOut','warn','<b class="big">K '+k+'：輕度，繼續 RAS 阻斷</b>查下表的原因，飲食衛教（先查藥物，不要一開始就嚴格限鉀），加利尿劑；2–4 週複驗。');return;}
+  if(k<3.5){out('hOut','warn','<b class="big">K '+k+'：低血鉀</b>常見於利尿劑；補鉀或加 RAS 阻斷、MRA 時注意反彈。');return;}
+  out('hOut','ok','<b class="big">K '+k+'：正常</b>可以起始或加量 RAS 阻斷、finerenone（≤5.0）。');
+}
+
+/* ---------- STEP 14 follow ---------- */
+function fu(){
+  const g=S.g,a=S.a||'A1';
+  if(!g){out('fuHead','','先在 STEP 1 輸入數值。');$('fuOut').innerHTML='';return;}
+  const gi=GI[g],ai=AI[a],h=HEAT[gi][ai],f=FREQ[gi][ai];
+  out('fuHead',h>=3?'crit':h>=1?'warn':'ok','<b class="big">'+g+' '+a+'：'+RISK[h]+'，每年監測 '+f+' 次 eGFR 與 UACR</b>'+(S.a?'':'<small>沒有 UACR，暫以 A1 計。</small>'));
+  const m={};document.querySelectorAll('#fuMeds input:checked').forEach(i=>m[i.value]=1);
+  const L=[];const p=(t,x)=>L.push('<li><b>'+t+'</b><span>'+x+'</span></li>');
+  const per=f==='1*'||f==='1'?'每 12 個月':f==='2'?'每 6 個月':f==='3'?'每 4 個月':'每 3 個月或更密';
+  p(per,'Cr／eGFR、UACR'+(gi>=1?'、K':''));
+  p('每次回診','血壓、體重、水腫；問止痛藥與中草藥；藥物腎劑量檢查');
+  if(m.ras||m.sglt||m.mra||m.diu)p('起始或加量後 2–4 週','Cr、K'+(m.mra?'（finerenone 4 週一定要驗 K）':''));
+  if(gi>=1)p('每年','CBC（G3）；Ca、P、ALP；PTH 依基準值與趨勢；25-OH D');
+  if(gi>=2)p('每 6–12 個月','HCO₃⁻；CBC（G4–5 每 6 個月）');
+  p('每年','血脂、血糖或 HbA1c、疫苗回顧'+(gi>=2?'、KFRE 重算':''));
+  if(m.met)p('Metformin','eGFR &lt;60 每 3–6 個月看腎功能；eGFR 降到 45 以下調整（STEP 10）；長期用驗 B12');
+  if(m.diu)p('利尿劑','Na、K、尿酸；脫水時暫停');
+  $('fuOut').innerHTML=L.join('');
+}
+
+/* ---------- STEP 15 trend ---------- */
+function trend(){
+  const e0=num('tE0'),e1=num('tE1'),mo=num('tMo'),a0=num('tA0'),a1=num('tA1'),st=ck('tStart');
+  if(!e0||!e1||!mo){out('tOut','','輸入 eGFR 與相隔月數。');return;}
+  const drop=e0-e1,pct=Math.round(drop/e0*100),slope=r1(drop/mo*12);
+  const m=[];let cls='ok';
+  const certain=gCat(e1)!==gCat(e0)&&e1<e0&&pct>=25;
+  if(certain){cls='crit';m.push('<b>確定性進展</b>：跨分期（'+gCat(e0)+' → '+gCat(e1)+'）且下降 '+pct+'%。');}
+  if(slope>5&&mo>=6){cls='crit';m.push('每年下降約 <b>'+slope+'</b> &gt;5：快速進展，找原因（血壓、血糖、蛋白尿、腎毒性、阻塞），考慮轉介。');}
+  else if(slope>0){m.push('每年下降約 '+slope+(slope<=3?'，接近一般年齡相關下降（約 1/年）或略快':'')+'。');}
+  else m.push('eGFR 持平或上升。');
+  if(st&&pct>0&&pct<=30&&mo<=3){m.push('剛開始 SGLT2i 或 ACEi／ARB 的前幾週小降屬<b>預期</b>，不要停藥，之後斜率通常變緩。');if(cls==='crit'&&!certain)cls='warn';}
+  if(a0&&a1){const ap=Math.round((a1-a0)/a0*100);
+    if(ap<=-30)m.push('UACR 下降 '+(-ap)+'%：<b>治療有效</b>（≥30% 下降與較低的腎衰竭風險相關）。');
+    else if(ap>=30){if(cls==='ok')cls='warn';m.push('UACR 上升 '+ap+'%：檢查血壓、血糖、RAS 阻斷劑量與服藥順從；若從 A2 跳到 A3 或倍增，視為進展。');}
+    else m.push('UACR 變化 '+ap+'%，在檢驗變異範圍內。');}
+  out('tOut',cls,m.join('<br>'));
+}
+
+/* ---------- STEP 16 refer ---------- */
+function refer(){
+  const c=[...document.querySelectorAll('#refChecks input:checked')];
+  if(!c.length){out('refOut','','沒有勾選：基層繼續照護。');return;}
+  const urgent=c.some(i=>i.dataset.u==='3');
+  out('refOut',urgent?'crit':'warn','<b class="big">'+(urgent?'盡快轉介（當週，必要時急診）':'轉介腎臟科')+'</b>符合 '+c.length+' 項。轉診單附：近一年 eGFR 與 UACR 趨勢、用藥清單（含自購藥）、超音波、KFRE。');
+}
+
+/* ---------- misc ---------- */
+$('orderCopy').onclick=()=>{
+  const t=[...document.querySelectorAll('#orderChecks input:checked')].map(i=>i.nextElementSibling.textContent.trim()).join('\n');
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>$('orderMsg').textContent='已複製',()=>{$('orderMsg').textContent='無法自動複製，請手動選取';});
+};
+$('printSick').onclick=()=>{const c=$('sickCard');c.hidden=!c.hidden;$('printSick').textContent=c.hidden?'顯示：護腎卡':'收起衛教單';};
+$('eSlider').addEventListener('input',doses);
+
+function renderAll(){stage();flags();kf();enrol();ras();rx();cg();hk();fu();trend();refer();}
+stage(true);renderAll();doses();
+window.__ckd={ckdEpiCr,ckdEpiCrCys,mdrd,kfre,gCat,aCat,S};
+})();
+</script>
+</body>
+</html>
