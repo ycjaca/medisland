@@ -1,6 +1,6 @@
 """Rewrite a 門診實務 page copied from its claude.ai artifact so it works inside this site.
 
-usage: python3 scripts/sync_clinic.py clinic/hypertension.html clinic/diabetes.html clinic/ckd.html
+usage: python3 scripts/sync_clinic.py clinic/hypertension.html clinic/diabetes.html clinic/ckd.html clinic/dyslipidemia.html
 
 Links to other pages of this site become relative paths and open in the same tab.
 Run it after copying a newer artifact version over a file in clinic/.
@@ -12,6 +12,7 @@ SITE = {
     "https://claude.ai/artifact/GoW34KJ2JKNixjYsTUm3gv": "hypertension.html",
     "https://claude.ai/artifact/MduFP3DfAx3cnTSzD9FSef": "diabetes.html",
     "https://claude.ai/artifact/QvQEDByHShRVr2o1tnkenz": "ckd.html",
+    "https://claude.ai/artifact/3TxLrfTt9gsgi9pV9jN3w9": "dyslipidemia.html",
     "https://claude.ai/artifact/XAGh8aTC6b3aEaNrSYWRgx": "../islands/#ldl-c",
     "https://claude.ai/artifact/YFqwB8sBG1N1NjVyNtmLXp": "../islands/#type2-diabetes",
     "https://claude.ai/artifact/AsRZrXcHpEmiWy2jMqytGM": "../islands/#obesity",
