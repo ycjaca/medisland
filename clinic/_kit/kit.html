@@ -1,0 +1,399 @@
+<!-- clinic-kit v1 start | shared by every 門診實務 page. Edit clinic/_kit/kit.html, then run: python3 scripts/add_kit.py clinic/*.html -->
+<style id="ck-style">
+/* ---- collapsible parts and steps ---- */
+.ck-tools{display:flex;gap:4px;flex:none}
+.ck-tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13px var(--body);padding:5px 9px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.ck-tools button:hover{border-color:var(--ink)}
+.ck-tog{all:unset;box-sizing:border-box;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;width:100%;cursor:pointer}
+.ck-tog:focus-visible,.ck-part:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.ck-chev{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;margin-top:3px;transition:transform .2s}
+.ck-chev::before{content:"";width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+[aria-expanded="true"]>.ck-chev{transform:rotate(180deg)}
+section.ck-step>.no{cursor:pointer}
+section.ck-closed>.ck-body{display:none}
+section.ck-closed{padding-bottom:12px}
+section.ck-closed h2{margin-bottom:0}
+.ck-part{cursor:pointer;display:flex!important;justify-content:space-between;align-items:center;gap:10px;user-select:none}
+.ck-part .ck-chev{border-color:rgba(255,255,255,.45);background:transparent;margin:0}
+.ck-part .ck-chev::before{border-color:currentColor}
+.ck-group.ck-closed{display:none}
+@media (prefers-reduced-motion:reduce){.ck-chev{transition:none}}
+
+/* ---- handout form ---- */
+.ck-lead{color:var(--mute);font-size:15px}
+.ck-form{display:flex;flex-direction:column;gap:12px}
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ck-form label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mute)}
+.ck-form input,.ck-form textarea{font:15px var(--body);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:6px 8px;width:100%}
+.ck-form textarea{resize:vertical;line-height:1.6}
+.ck-form fieldset{border:1px solid var(--line);border-radius:6px;padding:8px 12px 10px;margin:0}
+.ck-form legend{font-size:13px;color:var(--mute);padding:0 4px}
+.ck-checks{display:flex;flex-wrap:wrap;gap:6px 16px}
+.ck-checks label{flex-direction:row;align-items:center;gap:6px;color:var(--ink);font-size:14px;cursor:pointer}
+.ck-checks input{width:auto}
+.ck-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ck-btn{border:1px solid var(--ink);background:var(--card);color:var(--ink);font:500 14px var(--body);padding:7px 14px;border-radius:6px;cursor:pointer}
+.ck-btn.ck-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.ck-btn:hover{filter:brightness(.95)}
+#ckPrintNote{font-size:13px;color:var(--mute)}
+#ckPrintNote a{color:var(--accent)}
+.ck-sheetwrap{margin:18px 0 10px;padding:14px;background:#e9e7df;border-radius:8px;overflow:hidden}
+
+/* ---- the handout sheet ---- */
+.ck-sheet{--a:var(--accent);--a2:var(--accent-soft,#f5ece6);max-width:760px;margin:0 auto;background:#fffdf8;color:#2a2622;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.12);
+  padding:22px 24px 18px;font:15.5px/1.7 var(--body);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ck-sheet *{box-sizing:border-box}
+.ck-sh{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:var(--a);color:#fff}
+.ck-sh svg{width:62px;height:62px;flex:none}
+.ck-sh h3{margin:0;font:700 26px/1.25 var(--display);color:#fff}
+.ck-sh p{margin:2px 0 0;font-size:13.5px;opacity:.92}
+.ck-sec{margin-top:16px;break-inside:avoid}
+.ck-sec>h4{display:flex;align-items:center;gap:8px;margin:0 0 8px;font:700 19px/1.3 var(--display);color:#2a2622}
+.ck-sec>h4 svg{width:30px;height:30px;flex:none}
+.ck-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.ck-num{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 12px 8px}
+.ck-nl{font-size:13px;color:#6b645a}
+.ck-nv{font:700 28px/1.2 var(--display);color:var(--a)}
+.ck-nv small{font:13px var(--body);color:#6b645a;margin-left:4px}
+.ck-num>svg{display:block;width:100%;max-width:420px;height:auto;margin:4px 0 2px}
+.ck-num p{margin:2px 0 0;font-size:13.5px;line-height:1.6;color:#4a443c}
+.ck-meds{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ck-med{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start;background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:9px 12px}
+.ck-med svg.ck-pillsvg{width:44px;height:44px}
+.ck-med b{font-size:17px;color:#2a2622}
+.ck-what{display:inline-block;margin-left:8px;font-size:13px;color:#fff;background:var(--a);border-radius:20px;padding:0 9px;vertical-align:2px}
+.ck-times{display:flex;flex-wrap:wrap;gap:5px;margin:3px 0 0}
+.ck-time{display:inline-flex;align-items:center;gap:3px;font-size:13px;background:#f4efe4;border-radius:20px;padding:1px 9px 1px 4px}
+.ck-time svg{width:20px;height:20px}
+.ck-how{margin:2px 0 0;font-size:14.5px}
+.ck-tip{margin:3px 0 0;font-size:13.5px;color:#6a4a12;background:#fff4d9;border-radius:6px;padding:2px 8px}
+.ck-note{background:#fff;border:1.5px dashed #d8cfbd;border-radius:12px;padding:10px 14px;margin:0}
+.ck-two{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:start}
+.ck-plate>svg{display:block;width:100%;height:auto}
+.ck-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0;font-size:13.5px}
+.ck-legend span{display:inline-flex;align-items:center;gap:5px}
+.ck-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.ck-sheet ul{margin:0;padding-left:1.2em}
+.ck-sheet li{margin:2px 0}
+.ck-move>svg{display:block;width:100%;max-width:260px;height:auto;margin:0 auto 4px}
+.ck-pans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.ck-pan{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-pan h5{display:flex;align-items:center;gap:8px;margin:0 0 6px;font:700 17px var(--display)}
+.ck-pan h5 svg{width:34px;height:34px;flex:none}
+.ck-pan .ck-art{display:block;width:100%;max-width:300px;height:auto;margin:2px auto 6px}
+.ck-warn{border:2.5px solid #c8352b;background:#fff3f1;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-warn h5{display:flex;align-items:center;gap:8px;margin:0 0 4px;font:700 18px var(--display);color:#b3261e}
+.ck-warn h5 svg{width:30px;height:30px}
+.ck-next{display:flex;gap:14px;align-items:center;background:var(--a2);border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-next svg{width:74px;height:74px;flex:none}
+.ck-next b{font-size:17px}
+.ck-foot{margin-top:12px;padding-top:8px;border-top:1px dashed #d8cfbd;font-size:12px;color:#7a7266;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media (max-width:620px){.ck-sheet{padding:14px 12px;font-size:15px}.ck-two{grid-template-columns:1fr}.ck-sh h3{font-size:22px}.ck-sheetwrap{padding:6px}}
+
+/* ---- print: only the sheet ---- */
+#ckPrintHost{display:none}
+@media print{
+  @page{size:A4;margin:10mm}
+  body.ck-printing>*:not(#ckPrintHost){display:none!important}
+  body.ck-printing{background:#fff!important}
+  body.ck-printing #ckPrintHost{display:block}
+  #ckPrintHost .ck-sheet{box-shadow:none;max-width:none;padding:0;font-size:11pt;border-radius:0}
+  #ckPrintHost .ck-two{grid-template-columns:1.25fr 1fr}
+  #ckPrintHost .ck-sh h3{font-size:20pt}
+  body:not(.ck-printing) .ck-group.ck-closed,body:not(.ck-printing) section.ck-closed>.ck-body{display:block!important}
+}
+</style>
+<script id="ck-script">
+(function(){
+"use strict";
+const C=window.CK_CONFIG||null;
+const main=document.querySelector("main");if(!main)return;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chev='<i class="ck-chev" aria-hidden="true"></i>';
+let gid=0;
+
+/* =========================================================
+   1. Handout section (built first so it gets grouped too)
+   ========================================================= */
+if(C){
+  const part=document.createElement("div");part.className="part";part.innerHTML="<span>最後</span>衛教單張";
+  const sec=document.createElement("section");sec.id="handout";
+  const ins=(C.inputs||[]).map(f=>'<label>'+esc(f.label)+'<input type="number" id="ck_'+f.k+'"'+(f.step?' step="'+f.step+'"':"")+'></label>').join("");
+  sec.innerHTML='<div class="no">給病人</div><h2>衛教單張產生器</h2>'+
+   '<p class="ck-lead">數值和處方會從上面的工具帶進來，也可以直接改。勾選要放的內容，可以把這張單張直接給病人看，或列印、存成 PDF 帶回家。</p>'+
+   '<div class="tool ck-form">'+
+    '<div class="ck-grid"><label>稱呼<input id="ckName" placeholder="例：陳先生"></label><label>日期<input type="date" id="ckDate"></label>'+
+    '<label>下次回診<input type="date" id="ckNext"></label><label>院所／醫師<input id="ckDoc" placeholder="可留空"></label>'+ins+'</div>'+
+    '<label>我的藥（一行一種，「｜」後面寫怎麼吃；可以直接改）<textarea id="ckMeds" rows="4" placeholder="例：Amlodipine 5 mg｜每天 1 次，早上"></textarea></label>'+
+    '<fieldset><legend>要放進單張的內容</legend><div class="ck-checks" id="ckPanels"></div></fieldset>'+
+    '<div class="ck-actions"><button type="button" class="ck-btn" id="ckPull">重新帶入上面的資料</button><button type="button" class="ck-btn ck-primary" id="ckPrint">列印／存成 PDF</button><span id="ckPrintNote"></span></div>'+
+   '</div><div class="ck-sheetwrap"><article class="ck-sheet" id="ckSheet" aria-label="衛教單張預覽"></article></div>';
+  main.append(part,sec);
+  const jump=document.querySelector(".bar .jump");
+  if(jump&&!jump.querySelector('a[href="#handout"]')){const a=document.createElement("a");a.href="#handout";a.textContent="衛教單";jump.appendChild(a);}
+}
+
+/* =========================================================
+   2. Collapsible parts and steps
+   ========================================================= */
+function setStep(sec,open){sec.classList.toggle("ck-closed",!open);const b=sec.querySelector(":scope>h2>.ck-tog");if(b)b.setAttribute("aria-expanded",String(open));if(open&&sec.id==="handout")onHandoutOpen();}
+function setPart(p,open){const g=$(p.getAttribute("aria-controls"));if(!g)return;g.classList.toggle("ck-closed",!open);p.setAttribute("aria-expanded",String(open));}
+[...main.children].reduce((group,el)=>{
+  if(el.classList.contains("part")){
+    const g=document.createElement("div");g.className="ck-group";g.id="ck-g"+(++gid);el.after(g);
+    el.classList.add("ck-part");el.innerHTML='<span class="ck-ptxt">'+el.innerHTML+"</span>"+chev;
+    el.setAttribute("role","button");el.tabIndex=0;el.setAttribute("aria-controls",g.id);
+    const t=()=>setPart(el,g.classList.contains("ck-closed"));
+    el.addEventListener("click",t);el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t();}});
+    setPart(el,true);return g;
+  }
+  if(!group)return null;
+  if(el.tagName==="SECTION"&&!el.querySelector(":scope>.no"))return null; // closing sections (帶走…) stay outside
+  group.appendChild(el);return group;
+},null);
+const steps=[...main.querySelectorAll("section")].filter(s=>s.querySelector(":scope>.no")&&s.querySelector(":scope>h2"));
+steps.forEach(sec=>{
+  const no=sec.querySelector(":scope>.no"),h2=sec.querySelector(":scope>h2");
+  sec.classList.add("ck-step");
+  const body=document.createElement("div");body.className="ck-body";body.id="ck-b"+(++gid);
+  [...sec.children].forEach(c=>{if(c!==no&&c!==h2)body.appendChild(c);});
+  sec.appendChild(body);
+  const b=document.createElement("button");b.type="button";b.className="ck-tog";b.setAttribute("aria-controls",body.id);
+  b.innerHTML="<span>"+h2.innerHTML+"</span>"+chev;h2.innerHTML="";h2.appendChild(b);
+  const t=()=>setStep(sec,sec.classList.contains("ck-closed"));
+  b.addEventListener("click",t);no.addEventListener("click",t);
+  setStep(sec,false);
+});
+const parts=[...main.querySelectorAll(".ck-part")];
+function all(open){parts.forEach(p=>setPart(p,open||true));steps.forEach(s=>setStep(s,open));}
+const barWrap=document.querySelector(".bar .wrap");
+if(barWrap){const t=document.createElement("div");t.className="ck-tools";t.innerHTML='<button type="button" id="ckOpenAll">全部展開</button><button type="button" id="ckCloseAll">全部收合</button>';barWrap.appendChild(t);
+  $("ckOpenAll").onclick=()=>all(true);$("ckCloseAll").onclick=()=>all(false);}
+function reveal(el){
+  if(!el)return;
+  const g=el.closest(".ck-group");if(g&&g.classList.contains("ck-closed")){const p=document.querySelector('[aria-controls="'+g.id+'"]');if(p)setPart(p,true);}
+  const s=el.closest("section.ck-step");if(s&&s.classList.contains("ck-closed"))setStep(s,true);
+}
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;const id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id||id==="clinic")return;reveal($(id));},true);
+function fromHash(){const id=decodeURIComponent(location.hash.slice(1));if(!id||id==="clinic")return;const t=$(id);if(t){reveal(t);requestAnimationFrame(()=>t.scrollIntoView());}}
+addEventListener("hashchange",fromHash);
+addEventListener("beforeprint",()=>{if(!document.body.classList.contains("ck-printing"))all(true);});
+
+if(!C)return;
+
+/* =========================================================
+   3. Drawings (all inline SVG, no image files)
+   ========================================================= */
+const SK="#f6d2b4",INK="#3b332b";
+const face=(x,y,s)=>'<circle cx="'+(x-9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/><circle cx="'+(x+9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/>'+
+  '<path d="M'+(x-7*s)+' '+(y+9*s)+' Q'+x+' '+(y+16*s)+' '+(x+7*s)+' '+(y+9*s)+'" fill="none" stroke="'+INK+'" stroke-width="'+2.6*s+'" stroke-linecap="round"/>'+
+  '<circle cx="'+(x-16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/><circle cx="'+(x+16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/>';
+const MASCOT={
+  heart:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 90C20 68 5 52 5 33 5 18 16 8 30 8c10 0 16 6 20 13 4-7 10-13 20-13 14 0 25 10 25 25 0 19-15 35-45 57z" fill="#ff6b6b" stroke="#fff" stroke-width="4"/>'+face(50,42,1)+'</svg>',
+  drop:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 5C50 5 17 45 17 64c0 19 15 31 33 31s33-12 33-31C83 45 50 5 50 5z" fill="#ffb347" stroke="#fff" stroke-width="4"/>'+face(50,64,1)+'</svg>',
+  kidney:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M60 8c22-1 35 18 33 42-2 27-20 44-43 42-21-2-23-21-12-31 7-6 7-15-2-21C20 31 32 9 60 8z" fill="#c96b8c" stroke="#fff" stroke-width="4"/>'+face(62,46,0.9)+'</svg>',
+  leaf:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M15 85C15 40 45 12 90 10c-2 45-30 75-75 75z" fill="#6cbf55" stroke="#fff" stroke-width="4"/>'+face(52,48,1)+'</svg>'
+};
+const ICON={
+  sun:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="8" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.5 3.5M28.5 28.5 32 32M8 32l3.5-3.5M28.5 11.5 32 8"/></g></svg>',
+  noon:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="#ffa53d"/><circle cx="20" cy="20" r="6" fill="#ffd36b"/></svg>',
+  moon:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M26 6a14 14 0 1 0 8 25A12 12 0 0 1 26 6z" fill="#7c86d8"/><circle cx="30" cy="10" r="1.6" fill="#ffd36b"/></svg>',
+  bed:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M24 6a12 12 0 1 0 8 21A10 10 0 0 1 24 6z" fill="#5b63b8"/><text x="27" y="15" font-size="10" font-weight="700" fill="#5b63b8">z</text></svg>',
+  cuff:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="6" y="10" width="30" height="40" rx="6" fill="#e8f1f6" stroke="#4b7f99" stroke-width="2.5"/><rect x="11" y="16" width="20" height="12" rx="2" fill="#bfe3c7"/><text x="21" y="26" font-size="8" text-anchor="middle" font-weight="700" fill="#2c5a3a">120</text><circle cx="21" cy="38" r="4" fill="#4b7f99"/><path d="M36 30c10 0 12 8 18 8" fill="none" stroke="#4b7f99" stroke-width="2.5"/><rect x="44" y="34" width="12" height="18" rx="3" fill="#7fb3cf"/></svg>',
+  meter:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="26" height="44" rx="7" fill="#eef1fb" stroke="#5864a8" stroke-width="2.5"/><rect x="14" y="12" width="18" height="12" rx="2" fill="#cfe9d5"/><text x="23" y="21.5" font-size="7.5" text-anchor="middle" font-weight="700" fill="#2c5a3a">110</text><circle cx="23" cy="36" r="4" fill="#5864a8"/><path d="M48 22c0 0-7 9-7 14a7 7 0 0 0 14 0c0-5-7-14-7-14z" fill="#e2493b"/></svg>',
+  walk:'<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="32" cy="10" r="6" fill="'+SK+'"/><g stroke="#2f8f6b" stroke-width="5" stroke-linecap="round" fill="none"><path d="M31 18l-3 16M30 22l-9 8M30 22l9 6"/></g><g stroke="#3b5d8a" stroke-width="5" stroke-linecap="round"><path d="M28 34l-8 14M28 34l9 13"/></g></svg>',
+  leaf:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M8 52C8 26 26 9 54 8c-1 27-19 44-46 44z" fill="#6cbf55"/><path d="M12 48C26 34 36 24 48 14" stroke="#3f8a3a" stroke-width="2.5" fill="none"/></svg>',
+  warn:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 38 36H2z" fill="#e2493b"/><rect x="18" y="14" width="4" height="12" rx="2" fill="#fff"/><circle cx="20" cy="31" r="2.4" fill="#fff"/></svg>',
+  candy:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M6 22l10 8-10 8zM54 22l-10 8 10 8z" fill="#ff9fb6"/><ellipse cx="30" cy="30" rx="15" ry="11" fill="#ff6b8a"/><path d="M20 24c4 6 16 6 20 12" stroke="#fff" stroke-width="3" fill="none" opacity=".8"/></svg>',
+  thermo:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="24" y="6" width="12" height="34" rx="6" fill="#fff" stroke="#c8352b" stroke-width="2.5"/><rect x="28" y="18" width="4" height="22" fill="#e2493b"/><circle cx="30" cy="46" r="9" fill="#e2493b"/></svg>',
+  foot:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M22 54c-9 0-11-10-9-20 2-9 4-16 13-16s11 9 9 18c-2 8-3 18-13 18z" fill="'+SK+'" stroke="#c48a63" stroke-width="2"/><g fill="'+SK+'" stroke="#c48a63" stroke-width="1.6"><circle cx="38" cy="14" r="5"/><circle cx="30" cy="9" r="4"/><circle cx="22" cy="9" r="3.4"/><circle cx="16" cy="12" r="3"/><circle cx="12" cy="17" r="2.6"/></g></svg>',
+  eye:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M4 30C14 14 46 14 56 30 46 46 14 46 4 30z" fill="#fff" stroke="#4b7f99" stroke-width="2.5"/><circle cx="30" cy="30" r="9" fill="#4b7f99"/><circle cx="30" cy="30" r="4" fill="#173a4c"/><circle cx="33" cy="27" r="2" fill="#fff"/></svg>',
+  kidney:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M36 6c13-1 20 11 19 25-1 16-12 25-25 24-12-1-13-12-7-18 4-4 4-9-1-12C12 18 19 6 36 6z" fill="#c96b8c"/></svg>',
+  pills:'<svg viewBox="0 0 60 60" aria-hidden="true"><g transform="rotate(-35 30 30)"><rect x="10" y="22" width="40" height="16" rx="8" fill="#fff" stroke="#8a7f70" stroke-width="2"/><path d="M30 22h12a8 8 0 0 1 0 16H30z" fill="#e2493b"/></g><circle cx="46" cy="46" r="7" fill="#ffd36b" stroke="#8a7f70" stroke-width="2"/></svg>',
+  check:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="40" height="50" rx="5" fill="#fff" stroke="#6b645a" stroke-width="2.5"/><rect x="22" y="2" width="16" height="9" rx="3" fill="#6b645a"/><g stroke="#2f8f6b" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M17 22l4 4 7-8M17 36l4 4 7-8"/></g><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M33 23h10M33 37h10"/></g></svg>',
+  salt:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M20 22h20l3 30H17z" fill="#f2f2f2" stroke="#8a8a8a" stroke-width="2"/><path d="M21 12h18l2 10H19z" fill="#bdbdbd"/><g fill="#6b6b6b"><circle cx="26" cy="16" r="1.4"/><circle cx="30" cy="16" r="1.4"/><circle cx="34" cy="16" r="1.4"/></g><circle cx="30" cy="34" r="22" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M14 18 46 50" stroke="#e2493b" stroke-width="4"/></svg>'
+};
+function pill(color){return '<svg class="ck-pillsvg" viewBox="0 0 44 44" aria-hidden="true"><g transform="rotate(-35 22 22)"><rect x="5" y="15" width="34" height="14" rx="7" fill="#fff" stroke="#8a7f70" stroke-width="1.8"/><path d="M22 15h10a7 7 0 0 1 0 14H22z" fill="'+color+'"/><rect x="9" y="18" width="9" height="3" rx="1.5" fill="#fff" opacity=".8"/></g></svg>';}
+const PILLC=["#e2493b","#3c8dbc","#f0a020","#5aa469","#8e6bbf","#d96a9a","#3aa6a0"];
+function meter(m){
+  const W=300,x0=10,x1=290,lo=m.min,hi=m.max,f=v=>{if(m.log){v=Math.log10(Math.max(v,1e-3));return x0+(Math.min(Math.max(v,Math.log10(lo)),Math.log10(hi))-Math.log10(lo))/(Math.log10(hi)-Math.log10(lo))*(x1-x0);}return x0+(Math.min(Math.max(v,lo),hi)-lo)/(hi-lo)*(x1-x0);};
+  let s='<svg viewBox="0 0 '+W+' 62" aria-hidden="true">';
+  s+='<defs><clipPath id="ckc'+(++gid)+'"><rect x="'+x0+'" y="20" width="'+(x1-x0)+'" height="14" rx="7"/></clipPath></defs><g clip-path="url(#ckc'+gid+')">';
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);s+='<rect x="'+a+'" y="20" width="'+Math.max(0,b-a)+'" height="14" fill="'+z[2]+'"/>';});
+  s+="</g>";
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);if(b-a>24)s+='<text x="'+(a+b)/2+'" y="46" font-size="9" text-anchor="middle" fill="#6b645a">'+esc(z[3])+"</text>";});
+  if(m.target!=null){const t=f(m.target);s+='<line x1="'+t+'" x2="'+t+'" y1="16" y2="38" stroke="#2a2622" stroke-width="2" stroke-dasharray="3 2"/><text x="'+t+'" y="59" font-size="9" text-anchor="middle" font-weight="700" fill="#2a2622">'+esc(m.targetLabel||"目標")+"</text>";}
+  if(m.v!=null&&!isNaN(m.v)){const x=f(m.v);s+='<path d="M'+(x-7)+' 4h14l-7 11z" fill="#2a2622"/><circle cx="'+x+'" cy="27" r="5.5" fill="#fff" stroke="#2a2622" stroke-width="2.5"/>';}
+  return s+"</svg>";
+}
+/* the plate: fr = [vegetables, protein, grains]; side = extra items beside it */
+function plate(p){
+  const cx=128,cy=122,R=88;let s='<svg viewBox="0 0 360 250" aria-hidden="true">';
+  s+='<ellipse cx="'+cx+'" cy="'+(cy+6)+'" rx="104" ry="100" fill="#000" opacity=".06"/><circle cx="'+cx+'" cy="'+cy+'" r="102" fill="#fff" stroke="#ddd5c4" stroke-width="3"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(R+3)+'" fill="#fbf8f1" stroke="#ece5d6" stroke-width="2"/>';
+  const secs=[{k:"veg",f:p.fr[0],c:"#e2f2d6",l:"蔬菜"},{k:"pro",f:p.fr[1],c:"#fbe1d6",l:p.proLabel||"豆魚蛋肉"},{k:"grain",f:p.fr[2],c:"#f6e9cc",l:"全穀雜糧"}];
+  let a=-Math.PI/2;const P=(r,t)=>[cx+r*Math.cos(t),cy+r*Math.sin(t)];
+  const items=[];
+  secs.forEach(sc=>{const b=a+sc.f*Math.PI*2,[x0,y0]=P(R,a),[x1,y1]=P(R,b);
+    s+='<path d="M'+cx+" "+cy+"L"+x0.toFixed(1)+" "+y0.toFixed(1)+"A"+R+" "+R+" 0 "+(sc.f>.5?1:0)+" 1 "+x1.toFixed(1)+" "+y1.toFixed(1)+'Z" fill="'+sc.c+'" stroke="#fff" stroke-width="4"/>';
+    items.push({k:sc.k,a0:a,a1:b,l:sc.l,f:sc.f});a=b;});
+  const draw={
+    broc:(x,y)=>'<rect x="'+(x-3)+'" y="'+(y)+'" width="6" height="12" rx="2" fill="#8bbf5a"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+(x+6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+x+'" cy="'+(y-8)+'" r="8" fill="#4ea845"/>',
+    leaf:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="12" ry="6" fill="#74c25b" transform="rotate(-30 '+x+" "+y+')"/><path d="M'+(x-9)+" "+(y+5)+"L"+(x+9)+" "+(y-5)+'" stroke="#3f8a3a" stroke-width="1.4"/>',
+    carrot:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7" fill="#f08a24"/><circle cx="'+x+'" cy="'+y+'" r="3" fill="#f7b267"/>',
+    tomato:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7.5" fill="#e8463b"/><path d="M'+(x-3)+" "+(y-7)+"l3 2 3-2"+'" stroke="#3f8a3a" stroke-width="2" fill="none"/>',
+    fish:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="20" ry="10" fill="#f4a582"/><path d="M'+(x+17)+" "+y+"l12-9v18z"+'" fill="#f08a6a"/><circle cx="'+(x-11)+'" cy="'+(y-2)+'" r="2" fill="'+INK+'"/><path d="M'+(x-3)+" "+(y-6)+"q4 6 0 12"+'" stroke="#e57b5c" stroke-width="1.6" fill="none"/>',
+    egg:(x,y)=>'<path d="M'+(x-13)+" "+y+"c0-9 7-12 13-11s14 3 13 11-6 10-13 10-13-2-13-10z"+'" fill="#fff" stroke="#eadfcf"/><circle cx="'+(x+1)+'" cy="'+(y+1)+'" r="5.5" fill="#f7c548"/>',
+    tofu:(x,y)=>'<rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="18" rx="3" fill="#f3e3b5" stroke="#e2cf98"/><rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="5" rx="2" fill="#faf0d0"/>',
+    rice:(x,y,big)=>{const r=big?27:20;let t='<ellipse cx="'+x+'" cy="'+y+'" rx="'+r+'" ry="'+r*.72+'" fill="#fffaf0" stroke="#e8dcc0" stroke-width="1.5"/>';for(let i=0;i<14;i++){const u=(i*137.5)%360*Math.PI/180,d=(i%5+1)/6*r*.75;t+='<ellipse cx="'+(x+Math.cos(u)*d).toFixed(1)+'" cy="'+(y+Math.sin(u)*d*.7).toFixed(1)+'" rx="2.6" ry="1.3" fill="#c79a5e" transform="rotate('+(i*40)+" "+(x+Math.cos(u)*d).toFixed(1)+" "+(y+Math.sin(u)*d*.7).toFixed(1)+')"/>';}return t;},
+    potato:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="13" ry="8" fill="#b5524a" transform="rotate(20 '+x+" "+y+')"/><ellipse cx="'+x+'" cy="'+y+'" rx="9" ry="5" fill="#f2b75a" transform="rotate(20 '+x+" "+y+')"/>'
+  };
+  const at=(it,r,frac)=>{const t=it.a0+(it.a1-it.a0)*frac;return P(r,t).map(v=>+v.toFixed(1));};
+  items.forEach(it=>{
+    if(it.k==="veg"){const n=Math.max(4,Math.round(it.f*14)),kinds=["broc","leaf","carrot","broc","tomato","leaf","carrot"];
+      for(let i=0;i<n;i++){const [x,y]=at(it,i%2?62:36,(i+.5)/n);s+=draw[kinds[i%kinds.length]](x,y);}}
+    if(it.k==="pro"){const [x,y]=at(it,52,.5);s+=draw.fish(x,y);if(it.f>.2){const [a,b]=at(it,70,.2);s+=draw.egg(a,b);const [c,d]=at(it,30,.8);s+=draw.tofu(c,d);}else{const [c,d]=at(it,74,.75);s+=draw.tofu(c,d);}}
+    if(it.k==="grain"){const [x,y]=at(it,48,.5);s+=draw.rice(x,y,it.f>.28);if(it.f>.2){const [a,b]=at(it,74,.25);s+=draw.potato(a,b);}}
+    const [lx,ly]=at(it,R*.55,.5);
+    s+='<text x="'+lx+'" y="'+(ly+(it.k==="veg"?32:30))+'" font-size="13" font-weight="700" text-anchor="middle" fill="#2a2622" stroke="#fffdf8" stroke-width="4" paint-order="stroke">'+esc(it.l)+"</text>";
+  });
+  // beside the plate
+  const SIDE={
+    fruit:(x,y)=>'<circle cx="'+x+'" cy="'+(y+4)+'" r="18" fill="#e2493b"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="5" fill="#fff" opacity=".35"/><path d="M'+x+" "+(y-14)+"q2-8 6-10"+'" stroke="#6b4a2b" stroke-width="3" fill="none"/><ellipse cx="'+(x+9)+'" cy="'+(y-20)+'" rx="8" ry="4" fill="#5cae4a" transform="rotate(-25 '+(x+9)+" "+(y-20)+')"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#4a443c">水果 1 拳頭</text>',
+    milk:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#9aa8b5" stroke-width="2"/><path d="M'+(x-13)+" "+(y-12)+"h26l-2.3 29h-21.4z"+'" fill="#f1f4f8"/><text x="'+x+'" y="'+(y+5)+'" font-size="11" text-anchor="middle" font-weight="700" fill="#6c7d8c">奶</text><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">低脂奶 1 杯</text>',
+    water:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#7fb3cf" stroke-width="2"/><path d="M'+(x-12.6)+" "+(y-8)+"h25.2l-2 25.6h-21.2z"+'" fill="#bfe3f3"/><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">白開水</text>',
+    salt:(x,y)=>'<g transform="translate('+(x-24)+" "+(y-30)+') scale(.8)">'+ICON.salt.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">少鹽</text>',
+    boba:(x,y)=>'<path d="M'+(x-14)+" "+(y-20)+"h28l-4 40h-20z"+'" fill="#e9d2b0" stroke="#a5835a" stroke-width="2"/><rect x="'+(x-15)+'" y="'+(y-24)+'" width="30" height="5" rx="2" fill="#a5835a"/><path d="M'+(x+3)+" "+(y-24)+"l5-14"+'" stroke="#e2493b" stroke-width="3"/><g fill="#4a3426"><circle cx="'+(x-6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+x+'" cy="'+(y+15)+'" r="3"/><circle cx="'+(x+6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+(x-2)+'" cy="'+(y+9)+'" r="3"/></g><circle cx="'+x+'" cy="'+y+'" r="25" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-18)+"L"+(x+17)+" "+(y+18)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不喝含糖飲料</text>',
+    star:(x,y)=>{let pts="";for(let i=0;i<10;i++){const r=i%2?8:19,t=-Math.PI/2+i*Math.PI/5;pts+=(x+r*Math.cos(t)).toFixed(1)+","+(y+r*Math.sin(t)).toFixed(1)+" ";}
+      return '<polygon points="'+pts+'" fill="#f5d33c" stroke="#d9a90d" stroke-width="2"/><circle cx="'+x+'" cy="'+y+'" r="24" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-17)+"L"+(x+17)+" "+(y+17)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不吃楊桃</text>';}
+  };
+  (p.side||[]).slice(0,3).forEach((k,i)=>{if(SIDE[k])s+=SIDE[k](300,40+i*84);});
+  return s+"</svg>";
+}
+function walker(){
+  return '<svg viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="96" width="260" height="24" rx="12" fill="#e2f2d6"/><path d="M10 104h240" stroke="#c6dfb3" stroke-width="3" stroke-dasharray="10 8"/>'+
+   '<circle cx="222" cy="26" r="14" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M222 4v5M222 43v5M200 26h5M239 26h5"/></g>'+
+   '<g transform="translate(70 6)"><circle cx="30" cy="16" r="11" fill="'+SK+'"/><path d="M19 13c2-9 20-10 23 0-6-3-15-3-23 0z" fill="#3b332b"/>'+
+   '<g stroke-linecap="round" fill="none"><path d="M29 28 25 60" stroke="#2f8f6b" stroke-width="10"/><path d="M28 34 14 48M28 34l15 10" stroke="#2f8f6b" stroke-width="6"/><path d="M25 60 12 86M25 60l16 24" stroke="#3b5d8a" stroke-width="8"/></g>'+
+   '<ellipse cx="9" cy="89" rx="8" ry="4" fill="#e2493b"/><ellipse cx="45" cy="87" rx="8" ry="4" fill="#e2493b"/><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M-16 34h-14M-12 48h-20M-16 62h-12"/></g></g>'+
+   '<g transform="translate(150 50)"><circle cx="20" cy="20" r="18" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M20 8v12l8 5" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="46" y="18" font-size="14" font-weight="700" fill="#2a2622">30 分</text><text x="46" y="35" font-size="12" fill="#6b645a">× 每週 5 天</text></g></svg>';
+}
+function calendar(dateStr){
+  const d=dateStr?new Date(dateStr+"T00:00:00"):null;
+  const m=d?(d.getMonth()+1)+" 月":"",day=d?d.getDate():"?",wd=d?"週"+"日一二三四五六"[d.getDay()]:"";
+  return '<svg viewBox="0 0 74 74" aria-hidden="true"><rect x="4" y="10" width="66" height="60" rx="9" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M4 19a9 9 0 0 1 9-9h48a9 9 0 0 1 9 9v9H4z" fill="var(--a,#bb3f26)"/>'+
+   '<rect x="18" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><rect x="51" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><text x="37" y="25" font-size="11" text-anchor="middle" fill="#fff" font-weight="700">'+m+'</text>'+
+   '<text x="37" y="54" font-size="24" text-anchor="middle" font-weight="700" fill="#2a2622">'+day+'</text><text x="37" y="66" font-size="9.5" text-anchor="middle" fill="#6b645a">'+wd+"</text></svg>";
+}
+/* small illustrated strips used by panels */
+const ART={
+  r722:()=>{let s='<svg class="ck-art" viewBox="0 0 300 70" aria-hidden="true">';for(let i=0;i<7;i++){const x=8+i*41;s+='<rect x="'+x+'" y="6" width="36" height="58" rx="6" fill="#fff" stroke="#d8cfbd" stroke-width="1.5"/><text x="'+(x+18)+'" y="19" font-size="10" text-anchor="middle" fill="#6b645a">第'+(i+1)+'天</text>'+
+     '<g transform="translate('+(x+3)+' 23) scale(.4)">'+ICON.sun.replace(/<\/?svg[^>]*>/g,"")+'</g><g transform="translate('+(x+17)+' 23) scale(.4)">'+ICON.moon.replace(/<\/?svg[^>]*>/g,"")+'</g>'+
+     '<text x="'+(x+18)+'" y="56" font-size="9" text-anchor="middle" fill="#2f8f6b" font-weight="700">×2 遍</text>';}return s+"</svg>";},
+  r1515:()=>'<svg class="ck-art" viewBox="0 0 300 74" aria-hidden="true"><g transform="translate(4 10) scale(.85)">'+ICON.candy.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="30" y="70" font-size="11" text-anchor="middle" fill="#4a443c">吃 15 克糖</text>'+
+     '<path d="M64 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><defs><marker id="ckar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b9b1a4"/></marker></defs>'+
+     '<circle cx="128" cy="32" r="22" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M128 18v14l9 6" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="128" y="70" font-size="11" text-anchor="middle" fill="#4a443c">等 15 分鐘</text>'+
+     '<path d="M158 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><g transform="translate(196 4) scale(.95)">'+ICON.meter.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="226" y="70" font-size="11" text-anchor="middle" fill="#4a443c">再量一次</text>'+
+     '<text x="286" y="40" font-size="22" text-anchor="middle" fill="#e2493b" font-weight="700">↺</text></svg>',
+  plate5:()=>'',
+};
+
+/* =========================================================
+   4. Form state, pulling from the page, rendering
+   ========================================================= */
+const today=()=>{const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const addDays=(iso,n)=>{const t=new Date(iso+"T00:00:00");t.setDate(t.getDate()+n);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const pageVal=id=>{const e=$(id);if(!e)return "";return e.type==="checkbox"?e.checked:e.value;};
+let medsDirty=false,panelOn={};
+function readForm(){const v={name:$("ckName").value.trim(),date:$("ckDate").value,next:$("ckNext").value,doc:$("ckDoc").value.trim()};
+  (C.inputs||[]).forEach(f=>{const x=parseFloat($("ck_"+f.k).value);v[f.k]=isNaN(x)?null:x;});return v;}
+function freqOf(s){
+  let how=[];const t=[];
+  if(/\bTID\b|三餐/i.test(s)){how.push("每天 3 次");t.push("早","中","晚");}
+  else if(/\bBID\b|早晚/i.test(s)){how.push("每天 2 次");t.push("早","晚");}
+  else if(/\bHS\b|睡前/i.test(s)){how.push("睡前");t.push("睡前");}
+  else if(/\bQD\b|每天 ?1 ?次|每日一次/i.test(s)){how.push("每天 1 次");t.push(/早餐|早上/.test(s)?"早":"早");}
+  else if(/每週/.test(s)){how.push("每週 1 次，固定同一天");}
+  if(/早餐前/.test(s))how.push("早餐前");else if(/隨餐|飯後|餐後/.test(s))how.push("吃飯時或飯後");
+  return {how:how.join("，"),times:t};
+}
+function cleanName(s){
+  return s.replace(/<[^>]+>/g,"").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/（[^）]*）|\([^)]*\)/g," ")
+    .replace(/^(改|再加|可同時加|加)\s*/,"").split(/[；。]/)[0]
+    .replace(/\b(QD|BID|TID|HS|qd|bid|tid|hs)\b/g,"").replace(/\s{2,}/g," ").trim();
+}
+function pull(){
+  const v0={};(C.inputs||[]).forEach(f=>{const x=pageVal(f.src);v0[f.k]=x;if(x!==""&&x!=null)$("ck_"+f.k).value=x;});
+  const m=C.meds?C.meds():{lines:[]};
+  const lines=(m.lines||[]).map(raw=>{if(raw.includes("｜"))return raw;const f=freqOf(raw),n=cleanName(raw);return n+(f.how?"｜"+f.how:"");}).filter(Boolean);
+  $("ckMeds").value=lines.join("\n");$("ckMeds").dataset.note=m.note||"";medsDirty=false;
+  const pans=allPanels(readForm(),lines.join("\n"));pans.forEach(p=>{panelOn[p.id]=typeof p.on==="function"?!!p.on(readForm(),lines.join("\n")):p.on!==false;});
+  drawChecks();render();
+}
+function allPanels(v,medTxt){
+  const list=[{id:"nums",label:"我的數字"},{id:"meds",label:"我的藥"},{id:"plate",label:"飲食餐盤"},{id:"move",label:"運動"}];
+  (C.panels?C.panels(v,medTxt):[]).forEach(p=>list.push(p));
+  list.push({id:"warn",label:"何時要馬上就醫"},{id:"next",label:"下次回診"});
+  return list;
+}
+function drawChecks(){const v=readForm();$("ckPanels").innerHTML=allPanels(v,$("ckMeds").value).map(p=>'<label><input type="checkbox" data-p="'+p.id+'"'+(panelOn[p.id]!==false?" checked":"")+">"+esc(p.label)+"</label>").join("");}
+function medList(){
+  const txt=$("ckMeds").value.trim();if(!txt)return [];
+  return txt.split(/\n+/).map(l=>l.trim()).filter(Boolean).map((l,i)=>{
+    const [n,h]=l.split(/[｜|]/);const name=n.trim(),how=(h||"").trim()||freqOf(name).how;
+    const info=(C.medInfo||[]).find(r=>r[0].test(name))||[null,"",""];
+    let times=freqOf(how).times;if(!times.length)times=freqOf(name).times;
+    return {name,how,what:info[1],tip:info[2],times,color:PILLC[i%PILLC.length]};});
+}
+const TIMEICON={早:["sun","早上"],中:["noon","中午"],晚:["moon","晚上"],睡前:["bed","睡前"]};
+function render(){
+  const v=readForm(),meds=medList(),on=id=>panelOn[id]!==false,sheet=$("ckSheet");
+  const who=v.name?esc(v.name)+"的":"我的";
+  let h='<header class="ck-sh">'+(MASCOT[C.mascot]||MASCOT.leaf)()+'<div><h3>'+who+esc(C.sheetTitle)+'</h3><p>'+esc(v.date||today())+(v.doc?"　"+esc(v.doc):"")+"</p></div></header>";
+  if(on("nums")){const ns=C.numbers?C.numbers(v):[];if(ns.length)h+='<div class="ck-sec"><h4>'+ICON.check+'我的數字</h4><div class="ck-nums">'+ns.map(n=>'<div class="ck-num"><div class="ck-nl">'+esc(n.label)+'</div><div class="ck-nv">'+esc(n.value)+(n.unit?"<small>"+esc(n.unit)+"</small>":"")+"</div>"+(n.meter?meter(n.meter):"")+(n.text?"<p>"+n.text+"</p>":"")+"</div>").join("")+"</div></div>";}
+  if(on("meds")){const note=$("ckMeds").dataset.note;
+    h+='<div class="ck-sec"><h4>'+ICON.pills+'我的藥</h4>';
+    if(meds.length)h+='<ul class="ck-meds">'+meds.map(m=>'<li class="ck-med">'+pill(m.color)+'<div><b>'+esc(m.name)+"</b>"+(m.what?'<span class="ck-what">'+esc(m.what)+"</span>":"")+
+      (m.times.length?'<div class="ck-times">'+m.times.map(t=>'<span class="ck-time">'+ICON[TIMEICON[t][0]]+TIMEICON[t][1]+"</span>").join("")+"</div>":"")+
+      (m.how?'<p class="ck-how">'+esc(m.how)+"</p>":"")+(m.tip?'<p class="ck-tip">小提醒：'+esc(m.tip)+"</p>":"")+"</div></li>").join("")+"</ul>";
+    else h+='<p class="ck-note">'+esc(note||"目前沒有新的藥，照醫師說的生活習慣開始。")+"</p>";
+    if(meds.length)h+='<p style="font-size:13.5px;margin:6px 0 0;color:#6b645a">藥不要自己停或加量；有不舒服先打電話問或提早回診。</p>';
+    h+="</div>";}
+  const pl=C.plate?C.plate(v,$("ckMeds").value):null;
+  const showPlate=on("plate")&&pl,showMove=on("move");
+  if(showPlate||showMove){h+='<div class="ck-two">';
+    if(showPlate)h+='<div class="ck-sec ck-plate"><h4>'+ICON.leaf+esc(pl.title||"每餐這樣吃")+'</h4>'+plate(pl)+'<div class="ck-legend"><span><i style="background:#9bd27e"></i>蔬菜 '+esc(pl.frLabel[0])+'</span><span><i style="background:#f4b49a"></i>'+esc(pl.proLabel||"豆魚蛋肉")+" "+esc(pl.frLabel[1])+'</span><span><i style="background:#e9cf8f"></i>全穀雜糧 '+esc(pl.frLabel[2])+"</span></div><ul>"+pl.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    if(showMove)h+='<div class="ck-sec ck-move"><h4>'+ICON.walk+'動一動</h4>'+walker()+"<ul>"+(C.move||[]).map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    h+="</div>";}
+  const pans=(C.panels?C.panels(v,$("ckMeds").value):[]).filter(p=>on(p.id));
+  if(pans.length)h+='<div class="ck-sec ck-pans">'+pans.map(p=>'<div class="ck-pan"><h5>'+(ICON[p.icon]||"")+esc(p.title||p.label)+"</h5>"+(p.art&&ART[p.art]?ART[p.art]():"")+(p.html||"")+(p.items?"<ul>"+p.items.map(t=>"<li>"+t+"</li>").join("")+"</ul>":"")+"</div>").join("")+"</div>";
+  if(on("warn")&&C.warn)h+='<div class="ck-sec ck-warn"><h5>'+ICON.warn+'這些情況，馬上就醫</h5><ul>'+C.warn.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+  if(on("next")){const nn=C.nextNote?C.nextNote(v,$("ckMeds").value):"";
+    h+='<div class="ck-sec ck-next">'+calendar(v.next)+'<div><b>下次回診：'+(v.next?esc(v.next.replace(/-/g,"/")):"請跟櫃台約時間")+"</b>"+(nn?'<p style="margin:2px 0">'+nn+"</p>":"")+(C.bring?'<p style="margin:2px 0;font-size:14px">記得帶：'+C.bring.map(esc).join("、")+"</p>":"")+"</div></div>";}
+  h+='<div class="ck-foot"><span>這張單張依醫師今天的評估產生；藥名與劑量以處方箋、藥袋為準。</span><span>ycjacademy 門診實務</span></div>';
+  sheet.innerHTML=h;
+}
+let tm=0;const later=()=>{clearTimeout(tm);tm=setTimeout(render,120);};
+const form=document.querySelector(".ck-form");
+form.addEventListener("input",e=>{if(e.target.id==="ckMeds"){medsDirty=true;$("ckMeds").dataset.note="";}if(e.target.dataset.p){panelOn[e.target.dataset.p]=e.target.checked;}later();});
+form.addEventListener("change",e=>{if(e.target.dataset.p)panelOn[e.target.dataset.p]=e.target.checked;later();});
+$("ckPull").onclick=pull;
+$("ckDate").value=today();$("ckNext").value=addDays(today(),C.days||28);
+function onHandoutOpen(){if(!medsDirty)pull();}
+// printing: only the sheet; window.print is blocked inside the claude.ai preview
+const canPrint=/(^|\.)github\.io$|^localhost$|^127\.|^$/.test(location.hostname)||location.protocol==="file:";
+if(!canPrint&&C.siteUrl){$("ckPrint").textContent="到網站版列印";$("ckPrintNote").innerHTML='預覽畫面不能列印，請開 <a href="'+esc(C.siteUrl)+'#handout" target="_blank" rel="noopener">網站版</a>。';}
+$("ckPrint").onclick=()=>{
+  if(!canPrint&&C.siteUrl){window.open(C.siteUrl+"#handout","_blank","noopener");return;}
+  render();let host=$("ckPrintHost");if(!host){host=document.createElement("div");host.id="ckPrintHost";document.body.appendChild(host);}
+  host.innerHTML="";host.appendChild($("ckSheet").cloneNode(true));document.body.classList.add("ck-printing");
+  try{window.print();}catch(e){}
+  setTimeout(()=>document.body.classList.remove("ck-printing"),400);
+};
+addEventListener("afterprint",()=>document.body.classList.remove("ck-printing"));
+pull();
+fromHash();
+window.CK={pull,render,reveal,setAll:all};
+})();
+</script>
+<!-- clinic-kit v1 end -->
