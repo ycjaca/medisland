@@ -1118,7 +1118,9 @@ function pull(){
   drawChecks();render();
 }
 function allPanels(v,medTxt){
-  const list=[{id:"nums",label:"我的數字"},{id:"meds",label:"我的藥"},{id:"plate",label:"飲食餐盤"},{id:"move",label:"運動"}];
+  const list=[{id:"nums",label:"我的數字"},{id:"meds",label:"我的藥"}];
+  if(C.plate)list.push({id:"plate",label:"飲食餐盤"});
+  if(C.move!==false)list.push({id:"move",label:"運動"}); // a topic with no diet or exercise advice (skin) sets plate undefined and move:false
   (C.panels?C.panels(v,medTxt):[]).forEach(p=>list.push(p));
   list.push({id:"warn",label:"何時要馬上就醫"},{id:"next",label:"下次回診"});
   return list;
@@ -1147,7 +1149,7 @@ function render(){
     if(meds.length)h+='<p style="font-size:13.5px;margin:6px 0 0;color:#6b645a">藥不要自己停或加量；有不舒服先打電話問或提早回診。</p>';
     h+="</div>";}
   const pl=C.plate?C.plate(v,$("ckMeds").value):null;
-  const showPlate=on("plate")&&pl,showMove=on("move");
+  const showPlate=on("plate")&&pl,showMove=on("move")&&C.move!==false;
   if(showPlate||showMove){h+='<div class="ck-two">';
     if(showPlate)h+='<div class="ck-sec ck-plate"><h4>'+ICON.leaf+esc(pl.title||"每餐這樣吃")+'</h4>'+plate(pl)+'<div class="ck-legend"><span><i style="background:#9bd27e"></i>蔬菜 '+esc(pl.frLabel[0])+'</span><span><i style="background:#f4b49a"></i>'+esc(pl.proLabel||"豆魚蛋肉")+" "+esc(pl.frLabel[1])+'</span><span><i style="background:#e9cf8f"></i>全穀雜糧 '+esc(pl.frLabel[2])+"</span></div><ul>"+pl.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
     if(showMove)h+='<div class="ck-sec ck-move"><h4>'+ICON.walk+'動一動</h4>'+walker()+"<ul>"+(C.move||[]).map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";

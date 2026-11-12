@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>常見皮膚疾病門診實務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Same clinic-handbook layout as the other clinic pages; indigo accent for skin. */
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef; --card:#ffffff; --ink:#22261f; --mute:#5d6258; --line:#dad8cd;
+  --accent:#3f4f8f; --accent-soft:#e6e9f5;
+  --ok:#2f7d55; --ok-soft:#e1f1e8; --warn:#8f6400; --warn-soft:#fbf0d9; --crit:#b3261e; --crit-soft:#fbe3e0;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:#f3f1e8;padding:22px 0 18px}
+header.top .crumb{font:13px var(--mono);color:#c2bfa9}
+header.top .crumb a{color:inherit}
+header.top h1{font:700 32px/1.3 var(--display);margin:4px 0 6px;text-wrap:balance}
+header.top p{margin:0;color:#dcd9cb;font-size:15px}
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:8px;padding-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);font:500 14px var(--body);padding:6px 13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.jump{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0}
+.jump a{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap;padding:4px 7px;border-radius:4px}
+.jump a:hover{background:var(--bg);color:var(--ink)}
+.draft{background:var(--warn-soft);border-left:4px solid var(--warn);padding:10px 14px;margin:18px 0;font-size:14.5px}
+section{padding:26px 0 8px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.no{font:13px var(--mono);color:var(--accent)}
+h2{font:700 25px/1.35 var(--display);margin:2px 0 10px;text-wrap:balance}
+h3{font:700 17px/1.5 var(--body);margin:18px 0 6px}
+p{margin:8px 0;max-width:65ch}
+ul,ol{margin:8px 0;padding-left:1.3em}
+li{margin:3px 0}
+a{color:var(--accent)}
+.tag{display:inline-block;font:500 11.5px/1.5 var(--mono);padding:0 6px;border-radius:3px;background:#ebe9e0;color:var(--mute);vertical-align:1px;white-space:nowrap}
+.tag.tw{background:#dcecf0;color:#1c5a68}.tag.kd{background:#e7e4f3;color:#4a3f85}.tag.todo{background:var(--warn-soft);color:var(--warn)}
+.case{background:var(--accent-soft);border-radius:8px;padding:12px 16px;margin:12px 0;font-size:15.5px}
+.case b{color:var(--accent)}
+.tool{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:16px 0}
+.tool>h3{margin:0 0 10px;font-size:16px}
+.fields{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+label.num{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input[type=number]{width:96px;font:500 19px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:#fff}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px 14px;margin:6px 0}
+.checks label{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:15px;cursor:pointer;line-height:1.5}
+input[type=checkbox]{margin-top:4px;width:17px;height:17px;accent-color:var(--accent);flex:none}
+button.act{font:500 14px var(--body);background:var(--card);border:1px solid var(--ink);border-radius:5px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.out{margin-top:12px;padding:10px 14px;border-radius:5px;background:var(--bg);border-left:4px solid var(--mute)}
+.out.ok{background:var(--ok-soft);border-color:var(--ok)}.out.warn{background:var(--warn-soft);border-color:var(--warn)}.out.crit{background:var(--crit-soft);border-color:var(--crit)}
+.out b.big{font:700 19px var(--display);display:block}
+.out small{color:var(--mute);font-size:13px;display:block;margin-top:4px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--bg)}
+tr.flag td,tr.flag th{background:var(--crit-soft)}
+details{margin:12px 0;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-weight:500;font-size:15px}
+details>div{padding:0 12px 10px}
+.part{margin:34px 0 0;padding:10px 14px;background:var(--ink);color:#f3f1e8;font:700 19px var(--display);border-radius:5px}
+.part span{font:12px var(--mono);color:#c2bfa9;display:block}
+select{font:15px var(--body);padding:8px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);max-width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font:14px var(--body);padding:4px 11px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rx{display:grid;gap:8px;margin-top:8px}
+.rx .item{background:#fff;border:1px solid var(--line);border-radius:5px;padding:8px 11px}
+.rx .item b{font:700 17px var(--body)}
+.rx .item div{font-size:14px;color:var(--mute);line-height:1.6}
+.pill{display:inline-block;font-size:12.5px;padding:0 8px;border-radius:4px;margin-left:4px;vertical-align:2px}
+.pill.g{background:var(--ok-soft);color:var(--ok)}.pill.u{background:#f3e1ec;color:#7c2d5c}.pill.c{background:var(--warn-soft);color:var(--warn)}.pill.n{background:#ebe9e0;color:var(--mute)}
+.why{font-size:13.5px;color:var(--mute);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+.sched{list-style:none;padding:0;margin:8px 0 0}
+.sched li{display:grid;grid-template-columns:7.5em 1fr;gap:8px;border-top:1px solid var(--line);padding:6px 0;font-size:14.5px}
+.sched li b{font:500 13.5px var(--mono);color:var(--accent)}
+.next{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.next a{display:block;border:1px dashed var(--line);border-radius:6px;padding:10px 12px;font-size:14.5px;color:var(--mute);text-decoration:none}
+.next a b{display:block;color:var(--ink)}
+footer{padding:22px 0 44px;font-size:13.5px;color:var(--mute)}
+footer a{color:inherit}
+footer ul{padding-left:1.2em}
+body.clinic .learn{display:none}
+body.clinic section{padding-top:12px;border-bottom:0}
+body.clinic h2{font-size:18px}
+body.clinic .tool{margin:8px 0}
+@media (max-width:560px){header.top h1{font-size:27px}.sched li{grid-template-columns:6em 1fr}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media print{.bar{display:none}}
+/* skin page additions */
+.tag.src{background:#e6e9f5;color:#3f4f8f}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:8px 0 14px}
+.tile{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.tile svg{display:block;width:100%;height:auto;background:#fbf6f1}
+.tile figcaption{padding:6px 9px 8px;font-size:13px;line-height:1.5;color:var(--mute)}
+.tile figcaption b{display:block;color:var(--ink);font-size:14px}
+.bodywrap{display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:14px;align-items:start}
+svg.body{display:block;width:100%;height:auto}
+svg.body .reg{fill:#eadfd3;stroke:#b9a892;stroke-width:1}
+svg.body .reg.plain{fill:#f1e9df}
+svg.body .reg.on{fill:var(--accent);stroke:#26305c}
+svg.body .reg.sel{fill:var(--crit);stroke:#7d1a14}
+svg.body [role=button]{cursor:pointer}
+svg.body [role=button]:hover{fill:#c9cfe8}
+svg.body [role=button].sel:hover{fill:var(--crit)}
+svg.body .bl{font:10px var(--body);fill:var(--mute)}
+.siteout h4{margin:0 0 4px;font:700 18px var(--display)}
+.siteout ul{margin:0;font-size:14.5px}
+.grp{margin-bottom:6px}
+.grp>span{display:block;font:12px var(--mono);color:var(--mute);margin-bottom:3px}
+.acard{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+.acard h3{font:700 22px/1.3 var(--display);margin:0 0 8px}
+.acard h4{font:700 15px var(--body);margin:12px 0 2px;color:var(--accent)}
+.en{font:13px var(--mono);color:var(--mute);font-weight:400}
+.afig{display:grid;grid-template-columns:1.25fr 1fr;gap:10px;align-items:start}
+.afig figure{margin:0;border:1px solid var(--line);border-radius:6px;padding:6px;background:#fff}
+.afig figure>svg{display:block;width:100%;height:auto}
+.afig figcaption{font-size:12.5px;color:var(--mute);margin-top:4px;line-height:1.5}
+.tagrow{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 0}
+.tagrow .pill{margin:0}
+.alinks{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:12px}
+a.btn{background:var(--ink);color:#fff;text-decoration:none;border-radius:5px;padding:6px 12px;font-size:14px}
+.ddxi{display:grid;grid-template-columns:92px 1fr;gap:10px}
+.thumb svg{display:block;width:100%;height:auto;border-radius:4px}
+.bar2{height:5px;background:#ebe9e0;border-radius:3px;margin:4px 0;overflow:hidden}
+.bar2 i{display:block;height:100%;background:var(--accent)}
+.ftuwrap{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+.ftuwrap svg{display:block;width:100%;height:auto}
+#steroidTable{min-width:620px}
+#steroidTable th:first-child{border-left:6px solid var(--line);white-space:nowrap}
+#steroidTable tr.p5 th:first-child{border-left-color:#8f1d14}
+#steroidTable tr.p4 th:first-child{border-left-color:#cf5a2a}
+#steroidTable tr.p3 th:first-child{border-left-color:#e0a030}
+#steroidTable tr.p1 th:first-child{border-left-color:#7fb77e}
+th small,td small{font-weight:400;color:var(--mute)}
+.out ul{margin:4px 0 0}
+@media (max-width:560px){.bodywrap,.afig,.ftuwrap{grid-template-columns:1fr}.ftuwrap svg{max-width:170px}.ddxi{grid-template-columns:64px 1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../">ycjacademy</a>／<a href="./">門診實務</a>／常見皮膚疾病</div>
+  <h1>常見皮膚疾病門診實務</h1>
+  <p>從病灶型態、位置、有沒有長在毛囊、癢或痛來鑑別，再接到每種病的治療：外用類固醇強度、抗黴菌藥、口服藥與轉診。</p>
+</div></header>
+
+<nav class="bar" aria-label="頁面工具"><div class="wrap">
+  <div class="seg" role="group" aria-label="閱讀模式">
+    <button id="mLearn" type="button" aria-pressed="true">學習</button>
+    <button id="mClinic" type="button" aria-pressed="false">門診</button>
+  </div>
+  <div class="jump">
+    <a href="#flag">警訊</a><a href="#morph">病灶</a><a href="#ddx">鑑別器</a><a href="#site">部位</a><a href="#pair">易混淆</a><a href="#bedside">檢查</a><a href="#atlas">圖譜卡</a><a href="#rx">處方</a><a href="#steroid">類固醇</a><a href="#antifungal">抗黴菌</a><a href="#other">其他藥</a><a href="#follow">沒好</a><a href="#refer">轉診</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+<div class="draft learn"><b>v0.1 草稿，最後核對 2026-11-13。</b>外用類固醇強度表、抗黴菌藥膏與複方藥膏表依和美永吉外科診所衛教文章整理（標 <span class="tag src">永吉</span>）。健保規定只查到衛福部新聞稿與醫院藥劑公告（標 <span class="tag todo">待核對</span>）。鑑別要點與口服藥劑量是常見教科書與指引的通則，未逐項對照台灣仿單與院內處方集。圖譜是手繪示意圖，不是臨床照片；每張疾病卡附實際照片的搜尋連結。校對前請勿當臨床依據。</div>
+
+<div class="learn">
+<div class="case"><b>林先生，45 歲，貨運司機（虛構）。</b>鼠蹊部紅疹 3 週，很癢。自己到藥局買「四合一」藥膏，擦了會好，一停又長，而且越長越大圈。他問：「是不是濕疹？可以開強一點的藥嗎？」</div>
+<h3>皮膚科門診的五個動作</h3>
+<ol>
+  <li>先排除要當天處理的警訊（STEP 1）。</li>
+  <li>用固定的語言描述：原發疹是什麼、長在哪、有沒有對準毛囊、癢還是痛、多久了（STEP 2）。</li>
+  <li>把描述丟進鑑別器，或從部位反查（STEP 3、4）；分不出來就刮屑做 KOH（STEP 6）。</li>
+  <li>對照疾病卡確認，帶入處方產生器（STEP 7、8）。</li>
+  <li>約 2 週回診；沒好先懷疑診斷，不是先換更強的藥（STEP 12）。</li>
+</ol>
+</div>
+
+<div class="part"><span>第一部分</span>看診：描述病灶，做出鑑別</div>
+
+<section id="flag">
+  <div class="no">STEP 1</div>
+  <h2>先排除警訊：今天就要處理的皮疹</h2>
+  <div class="tool">
+    <h3>勾選有的項目</h3>
+    <div class="checks" id="flagChecks"></div>
+    <div class="out" id="flagOut" aria-live="polite"></div>
+  </div>
+  <details class="learn"><summary>色素病灶什麼時候要切片或轉診：ABCDE</summary><div>
+    <ul>
+      <li><b>A</b>symmetry 不對稱；<b>B</b>order 邊緣不規則；<b>C</b>olor 顏色不均（黑、褐、紅、白、藍混雜）；<b>D</b>iameter &gt;6 mm；<b>E</b>volving 最近變大、變色、流血、癢。</li>
+      <li>「醜小鴨」：跟身上其他痣長得不一樣的那一顆。</li>
+      <li>台灣人的黑色素瘤多長在<b>腳底、手掌、指甲下</b>（肢端型）：腳底新長的不規則黑斑、指甲一條變寬變黑的縱線且延伸到甲褶，都要轉診。</li>
+      <li>珍珠光澤丘疹伴微血管擴張、中央潰瘍（基底細胞癌）；長在日曬處、不會好的角化結節或潰瘍（鱗狀細胞癌）；慢性傷口或疤痕上長出的腫塊。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="morph">
+  <div class="no">STEP 2</div>
+  <h2>病灶的語言：原發疹、續發變化、毛囊</h2>
+  <p class="learn">病歷寫成一句話：<b>「部位＋分布＋數量＋顏色＋原發疹＋續發變化」</b>，例如「雙側肘窩對稱、邊界不清的紅色斑塊，表面抓痕與苔癬化」。寫得出這句話，鑑別就完成一半。</p>
+  <h3>原發疹（疾病本身長出來的）</h3>
+  <div class="tiles" id="xsPrimary"></div>
+  <h3>續發變化（時間、搔抓、感染造成的）</h3>
+  <div class="tiles" id="xsSecondary"></div>
+  <h3>有沒有對準毛囊</h3>
+  <div class="tiles" id="xsFoll"></div>
+  <p>毛囊性病灶：每一顆丘疹或膿疱<b>大小相近、彼此分開、中央有一根毛或一個毛孔</b>，只長在有毛的皮膚（手掌、腳掌、嘴唇不會有）。看到毛囊性，就往毛囊炎、痤瘡、皮屑芽孢菌毛囊炎、毛孔角化症想；濕疹、癬、乾癬的病灶不會一顆一顆對準毛孔。</p>
+  <details class="learn"><summary>分布與排列的用語</summary><div>
+    <ul>
+      <li><b>分布</b>：對稱（內因性：異位性皮膚炎、乾癬、藥物疹）；單側或不對稱（外來：接觸、感染、帶狀疱疹）；曝曬處（臉、頸 V 區、手背）；屈側／伸側；皺摺處。</li>
+      <li><b>排列</b>：環狀（癬、環狀肉芽腫）；線狀（接觸性、抓痕、Koebner 現象）；皮節帶狀（帶狀疱疹）；群聚（疱疹、蟲咬）；網狀。</li>
+      <li><b>邊界</b>：清楚（乾癬、癬、接觸性皮膚炎）；模糊（異位性皮膚炎、蜂窩性組織炎）。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="ddx">
+  <div class="no">STEP 3</div>
+  <h2>鑑別器：型態、位置、毛囊、癢、痛</h2>
+  <div class="tool">
+    <h3>1. 主要的原發疹</h3>
+    <div class="chips" id="cMorph" role="group" aria-label="原發疹"></div>
+    <h3>2. 主要位置</h3>
+    <div class="chips" id="cSite" role="group" aria-label="位置"></div>
+    <h3>3. 有沒有對準毛囊</h3>
+    <div class="chips" id="cFol" role="group" aria-label="毛囊"></div>
+    <h3>4. 癢、痛、多久</h3>
+    <div class="chips" id="cItch" role="group" aria-label="癢"></div>
+    <div class="chips" id="cPain" role="group" aria-label="痛"></div>
+    <div class="chips" id="cTime" role="group" aria-label="病程"></div>
+    <h3>5. 其他特徵（可複選）</h3>
+    <div class="checks" id="featChecks"></div>
+    <p><button class="act" type="button" id="ddxReset">清除重選</button></p>
+    <div class="out" id="ddxOut" aria-live="polite"></div>
+    <div class="rx" id="ddxList"></div>
+    <p class="why">分數是依典型表現加權的排序，只用來提醒該想到哪些病，不是診斷。不典型、治療 2 週沒好、或兩個答案分數接近時，做 KOH 或轉診切片。</p>
+  </div>
+</section>
+
+<section id="site">
+  <div class="no">STEP 4</div>
+  <h2>從部位反查：點人形圖</h2>
+  <div class="tool">
+    <h3>點一個部位，列出那裡常見的皮膚病</h3>
+    <div class="bodywrap">
+      <div id="siteMap"></div>
+      <div id="siteOut" class="siteout" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section id="pair">
+  <div class="no">STEP 5</div>
+  <h2>最常搞混的八組</h2>
+  <div id="pairBox"></div>
+</section>
+
+<section id="bedside">
+  <div class="no">STEP 6</div>
+  <h2>診間就能做的檢查</h2>
+  <div class="scroll"><table>
+    <tr><th>檢查</th><th>怎麼做</th><th>看什麼</th></tr>
+    <tr><th>KOH 鏡檢</th><td>刀片或玻片邊緣刮<b>病灶活動邊緣</b>的皮屑（水疱取疱頂、指甲取甲下碎屑），滴 10–20% KOH，蓋玻片，微火加熱或放 10 分鐘</td><td>皮癬菌：分節、分枝的長菌絲。汗斑：短菌絲加成串孢子（「義大利麵加肉丸」）。念珠菌：假菌絲加出芽孢子。<b>有脫屑、環狀、單側、類固醇越擦越大，都該刮</b></td></tr>
+    <tr><th>刮疥蟲</th><td>在指縫、手腕的隧道末端滴礦物油，刀片刮幾下放玻片</td><td>蟲體、卵或糞便。陰性不能排除，臨床像就治療</td></tr>
+    <tr><th>伍氏燈</th><td>暗室照 365 nm 紫外光</td><td>紅癬：珊瑚紅。汗斑：淡黃綠。白斑：亮白、邊界銳利。犬小芽孢菌頭癬：黃綠</td></tr>
+    <tr><th>皮膚劃紋</th><td>用壓舌板在背部劃一下，等 5 分鐘</td><td>浮起膨疹：皮膚劃紋症（物理性蕁麻疹）</td></tr>
+    <tr><th>玻片壓診</th><td>玻片壓在紅色病灶上</td><td>會褪色：血管擴張（紅斑）。不褪色：出血（紫斑），要想血管炎、血小板低下</td></tr>
+    <tr><th>Nikolsky 徵象</th><td>在紅斑旁的皮膚輕推</td><td>表皮滑脫為陽性：SJS/TEN、天疱瘡、葡萄球菌燙傷樣皮膚症候群，<b>送急診</b></td></tr>
+    <tr><th>Auspitz 徵象</th><td>刮掉乾癬的鱗屑</td><td>點狀出血。支持乾癬</td></tr>
+    <tr><th>皮膚鏡</th><td>有的話加分</td><td>疥瘡「三角翼」、疣的點狀血管、脂漏性角化的粉刺樣開口、色素網</td></tr>
+  </table></div>
+  <p class="learn">健保有 KOH 鏡檢與黴菌培養的支付項目；口服抗黴菌藥治療灰指甲前，建議先有鏡檢或培養陽性的紀錄。<span class="tag todo">給付條件待核對</span></p>
+</section>
+
+<div class="part"><span>第二部分</span>疾病圖譜卡與治療</div>
+
+<section id="atlas">
+  <div class="no">STEP 7</div>
+  <h2>疾病圖譜卡：26 種門診常見皮膚病</h2>
+  <div class="tool">
+    <div id="atlasChips"></div>
+    <div id="atlasCard" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="rx">
+  <div class="no">STEP 8</div>
+  <h2>處方產生器</h2>
+  <div class="tool">
+    <h3>診斷與病人條件</h3>
+    <div class="fields">
+      <label class="num">診斷<select id="xDx"></select></label>
+      <label class="num">部位<select id="xSite">
+        <option value="trunk" selected>軀幹、四肢</option><option value="face">臉、頸、眼周</option><option value="fold">皺摺處、生殖器</option><option value="palm">手掌、腳掌</option><option value="scalp">頭皮</option></select></label>
+      <label class="num">年齡<select id="xAge">
+        <option value="adult" selected>成人</option><option value="infant">2 歲以下</option><option value="child">2–12 歲</option><option value="old">65 歲以上</option></select></label>
+      <label class="num">嚴重度<select id="xSev">
+        <option value="0">輕：淡紅、少量</option><option value="1" selected>中：明顯紅、癢</option><option value="2">重：增厚、苔癬化、裂</option></select></label>
+      <label class="num">患部幾個手掌大<input type="number" id="xArea" value="4" min="0.5" step="0.5" inputmode="decimal"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="xPreg">懷孕或哺乳</label>
+      <label><input type="checkbox" id="xRenal">eGFR &lt;50</label>
+      <label><input type="checkbox" id="xWet">病灶濕、有滲液</label>
+      <label><input type="checkbox" id="xWide">範圍大或多處（外用藥擦不完）</label>
+    </div>
+    <div class="out" id="rxOut" aria-live="polite"></div>
+    <div class="rx" id="rxList"></div>
+    <div class="why" id="rxWhy"></div>
+  </div>
+  <p class="learn">類固醇的強度由「部位 × 嚴重度」決定，再依年齡下修；品項取自 STEP 9 的台灣常見單方表。院內沒有的品項，換同一級的其他藥即可。</p>
+</section>
+
+<section id="steroid">
+  <div class="no">STEP 9</div>
+  <h2>外用類固醇：強度、部位、劑型、用量</h2>
+  <h3>台灣常見 8 款單方的強度 <span class="tag src">永吉</span></h3>
+  <div class="scroll"><table id="steroidTable">
+    <tr><th>強度</th><th>成分與濃度</th><th>台灣商品</th><th>劑型</th><th>用在哪</th></tr>
+    <tr class="p5"><th>超強效<br><small>Class I</small></th><td>Clobetasol propionate 0.05%</td><td>戴摩膚 Dermovate（GSK）<br>可立舒 Clotasol（杏輝）</td><td>乳膏；可立舒另有軟膏</td><td>手掌腳掌、苔癬化厚斑、頑固乾癬。不用在臉、皺摺、兒童；連續 ≤2 週</td></tr>
+    <tr class="p4"><th>強效<br><small>Class II</small></th><td>Fluocinonide 0.05%</td><td>妥膚淨 Topsym（田邊）</td><td>親水軟膏（cream）</td><td>軀幹四肢較嚴重的濕疹、乾癬</td></tr>
+    <tr class="p4"><th>高效價<br><small>Class II–III</small></th><td>Betamethasone dipropionate 0.64 mg/g<br><small>相當於 betamethasone 0.5 mg/g</small></td><td>貝他每松軟膏（杏輝）</td><td>軟膏</td><td>同上；dipropionate 酯通常比 valerate 酯強</td></tr>
+    <tr class="p3"><th>中效<br><small>Class IV</small></th><td>Mometasone furoate 0.1%</td><td>皚膚美得 Elomet（Organon）<br>安膚樂 Elisone（中生）</td><td>乳膏</td><td>軀幹四肢一般濕疹；一天一次。臉與皺摺只短期用</td></tr>
+    <tr class="p3"><th>中效</th><td>Betamethasone valerate 0.06%</td><td>臨得隆-V Rinderon-V（塩野義）</td><td>乳膏</td><td>軀幹四肢輕中度。台灣是 0.06%，不要直接套國外 0.1% 的分級</td></tr>
+    <tr class="p1"><th>弱效<br><small>Class VII</small></th><td>Hydrocortisone acetate 1%</td><td>吉舒 Gecort（杏輝）</td><td>乳膏</td><td>臉、眼周、皺摺、嬰幼兒</td></tr>
+  </table></div>
+  <p class="learn">八款是：戴摩膚、可立舒、妥膚淨、貝他每松、皚膚美得、安膚樂、臨得隆-V、吉舒。同一強度不代表可以互換，還要看部位、發炎程度和劑型。口內膏（triamcinolone、dexamethasone 口內製劑）是給黏膜用的，不能取代皮膚外用藥。<span class="tag src">永吉</span></p>
+
+  <h3>依部位選強度 <span class="tag src">永吉</span></h3>
+  <div class="scroll"><table>
+    <tr><th>部位</th><th>吸收</th><th>選擇</th></tr>
+    <tr><th>手掌、腳掌</th><td>角質最厚，穿透最低</td><td>確定是厚的發炎病灶，可短期用強效到超強效軟膏。足癬要用抗黴菌藥，不是類固醇</td></tr>
+    <tr><th>軀幹、四肢</th><td>標準</td><td>中效到強效，依嚴重度調整</td></tr>
+    <tr><th>腋下、鼠蹊等皺摺</th><td>皮薄、天然密封，吸收高</td><td>弱效為主、短療程，避免萎縮與萎縮紋</td></tr>
+    <tr><th>臉、眼周</th><td>皮很薄、血流豐富，吸收很高</td><td>弱效為主，不長期用；遠離眼睛（眼壓升高、青光眼、白內障）</td></tr>
+    <tr><th>嬰幼兒</th><td>體表面積比例大、屏障未成熟</td><td>弱效為主；尿布等於密封，劑量與天數要保守</td></tr>
+  </table></div>
+
+  <h3>劑型 <span class="tag src">永吉</span></h3>
+  <ul>
+    <li><b>軟膏</b>：油、密封性強，適合乾、脫屑、增厚、苔癬化的病灶。濕爛處與皺摺避免。</li>
+    <li><b>乳膏</b>：清爽好洗，適合亞急性或一般軀幹四肢的發炎。</li>
+    <li><b>洗劑、溶液</b>：好推開、不油，適合頭皮等有毛處和大面積。</li>
+    <li>軟膏不會自動比乳膏強一級，強度要看該製劑本身。</li>
+  </ul>
+
+  <div class="tool">
+    <h3>用量計算：指尖單位（FTU）</h3>
+    <div class="ftuwrap">
+      <div id="ftuArt"></div>
+      <div>
+        <p style="margin-top:0"><b>1 FTU</b>＝從成人食指指尖擠到第一個指節的長度，約 <b>0.5 g</b>，可以薄擦約<b>兩個手掌大</b>（含手指）的面積。<span class="tag src">永吉</span></p>
+        <div class="fields">
+          <label class="num">患部幾個手掌大<input type="number" id="fArea" data-sync="area" value="4" min="0.5" step="0.5" inputmode="decimal"></label>
+          <label class="num">一天幾次<select id="fFreq"><option value="1">1 次</option><option value="2" selected>2 次</option></select></label>
+          <label class="num">擦幾天<input type="number" id="fDays" value="14" min="1"></label>
+          <label class="num">一條幾克<select id="fTube"><option>5</option><option selected>15</option><option>30</option></select></label>
+        </div>
+      </div>
+    </div>
+    <div class="out" id="ftuOut" aria-live="polite"></div>
+    <details class="learn"><summary>成人各部位擦一次要幾個 FTU</summary><div>
+      <div class="scroll"><table>
+        <tr><th>部位</th><th>FTU</th><th>約幾克</th></tr>
+        <tr><td>臉加脖子</td><td>2.5</td><td>1.25</td></tr>
+        <tr><td>一隻手（手掌加手背）</td><td>1</td><td>0.5</td></tr>
+        <tr><td>一隻手臂</td><td>3</td><td>1.5</td></tr>
+        <tr><td>一隻腳掌</td><td>2</td><td>1</td></tr>
+        <tr><td>一條腿</td><td>6</td><td>3</td></tr>
+        <tr><td>胸腹</td><td>7</td><td>3.5</td></tr>
+        <tr><td>背加臀</td><td>7</td><td>3.5</td></tr>
+      </table></div>
+      <p>數字來自 Long 與 Finlay 的指尖單位研究，是成人的估計值；兒童依年齡約為成人的 1/4 到 2/3。</p>
+    </div></details>
+  </div>
+
+  <h3>怎麼擦、擦多久</h3>
+  <ul>
+    <li>一天 1–2 次就夠，擦更多次不會更有效；厚擦只會增加副作用。<span class="tag src">永吉</span></li>
+    <li>發炎控制後就停，或降一級、改成每週擦 2 天維持（異位性皮膚炎常復發處）。</li>
+    <li>常用的保守上限：超強效連續 ≤2 週；強效 ≤3–4 週；臉與皺摺 ≤1–2 週；到期沒好就複評，不是續擦。</li>
+    <li>保濕劑和類固醇隔 15–30 分鐘，誰先都可以，重點是兩個都要擦到。</li>
+  </ul>
+  <details class="learn"><summary>長期或用錯地方的副作用 <span class="tag src">永吉</span></summary><div>
+    <ul>
+      <li>皮膚變薄、脆弱、容易瘀青；微血管擴張。</li>
+      <li>萎縮紋，尤其在皺摺處。</li>
+      <li>臉部長期使用：類固醇酒糟、口周皮膚炎。</li>
+      <li><b>隱匿性癬（tinea incognito）</b>：癬被類固醇壓住，外觀不典型、越長越大。</li>
+      <li>眼周誤用：眼壓升高、青光眼、白內障。</li>
+      <li>大面積、長期、密封使用強效製劑：HPA 軸抑制（兒童較容易）。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="antifungal">
+  <div class="no">STEP 10</div>
+  <h2>抗黴菌藥與複方藥膏</h2>
+  <h3>台灣常見單方外用抗黴菌藥 <span class="tag src">永吉</span></h3>
+  <div class="scroll"><table>
+    <tr><th>成分</th><th>代表商品</th><th>類別</th><th>皮癬菌<br><small>足癬、股癬、體癬</small></th><th>念珠菌</th><th>汗斑</th></tr>
+    <tr><th>Terbinafine 1%</th><td>療黴舒</td><td>丙烯胺</td><td>✓ 殺菌，療程短</td><td>—</td><td>部分產品才有此適應症</td></tr>
+    <tr><th>Butenafine 1%</th><td>黴可舒</td><td>苯甲胺</td><td>✓</td><td>—</td><td>—</td></tr>
+    <tr><th>Clotrimazole 1%</th><td>卡黴速停</td><td>唑類</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><th>Miconazole 2%</th><td>允消無黴</td><td>唑類</td><td>✓</td><td>未列</td><td>✓</td></tr>
+    <tr><th>Econazole 1%</th><td>欲克黴等</td><td>唑類</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><th>Sulconazole 1%</th><td>優足達</td><td>唑類</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><th>Sertaconazole 2%</th><td>達來</td><td>唑類</td><td>✓</td><td>✓</td><td>✓</td></tr>
+    <tr><th>Ketoconazole 2%</th><td>克多膚</td><td>唑類</td><td>✓</td><td>✓</td><td>✓ 也用於脂漏性皮膚炎</td></tr>
+    <tr><th>Ciclopirox olamine 1%</th><td>膚爽</td><td>羥基吡啶酮</td><td>✓</td><td>未列</td><td>✓</td></tr>
+  </table></div>
+  <ul>
+    <li>擦到病灶外圍 2 公分；看起來好了<b>再擦 1–2 週</b>。</li>
+    <li>常用療程（通則，以仿單為準）：terbinafine 一天 1–2 次，體癬股癬 1–2 週、趾縫型足癬 1–2 週；唑類一天 2 次，體癬股癬 2–4 週、足癬 4 週。</li>
+    <li>Nystatin 只對念珠菌有效，不能治足癬、股癬。<span class="tag src">永吉</span></li>
+  </ul>
+
+  <h3>什麼時候改口服</h3>
+  <div class="scroll"><table>
+    <tr><th>情況</th><th>常用處方（成人）</th><th>注意</th></tr>
+    <tr><th>大範圍體癬、外用失敗、厚皮型足癬</th><td>Terbinafine 250 mg QD，2 週（厚皮型足癬 2–4 週）</td><td>肝病避免；味覺異常、藥物疹</td></tr>
+    <tr><th>灰指甲</th><td>Terbinafine 250 mg QD：手指甲 6 週、腳趾甲 12 週</td><td>先有 KOH 或培養陽性；治療前與 4–6 週驗肝功能 <span class="tag todo">健保條件待核對</span></td></tr>
+    <tr><th>頭癬</th><td>口服才有效：terbinafine 或 griseofulvin 依體重，4–8 週</td><td>兒童為主，建議轉皮膚科</td></tr>
+    <tr><th>大範圍或反覆的汗斑</th><td>Fluconazole 300 mg 每週 1 次，共 2 次；或 itraconazole 200 mg QD 5–7 天</td><td>口服 terbinafine 對汗斑無效</td></tr>
+    <tr><th>皮屑芽孢菌毛囊炎</th><td>Fluconazole 100–200 mg QD 1–3 週；或 itraconazole 200 mg QD 1–2 週</td><td>之後每週外用 ketoconazole 維持</td></tr>
+  </table></div>
+  <p class="learn">Itraconazole、fluconazole 交互作用多（statin、warfarin、部分降血糖藥、QT 延長藥物），開之前查一次；懷孕不用口服抗黴菌藥。</p>
+
+  <h3>含類固醇的複方藥膏：先看成分，不看「幾合一」 <span class="tag src">永吉</span></h3>
+  <div class="scroll"><table>
+    <tr><th>商品</th><th>類固醇</th><th>抗黴菌</th><th>抗菌</th><th>重點</th></tr>
+    <tr><th>貝他健</th><td>Betamethasone valerate 1 mg/g</td><td>無</td><td>Gentamicin 1 mg/g</td><td>類固醇加抗生素；不是香港腳藥</td></tr>
+    <tr><th>臨得隆-VA</th><td>Betamethasone valerate 0.6 mg/g</td><td>無</td><td>Fradiomycin 3.5 mg/g</td><td>類固醇加抗生素；別和單方的臨得隆-V 搞混</td></tr>
+    <tr><th>皮可爽</th><td>Triamcinolone 1 mg/g</td><td>Econazole 10 mg/g</td><td>無</td><td>類固醇加抗黴菌，涵蓋皮癬菌與念珠菌</td></tr>
+    <tr><th>美康</th><td>Triamcinolone 1 mg/g</td><td>Nystatin 10 萬 IU/g</td><td>Neomycin 2.5 mg/g＋gramicidin 0.25 mg/g</td><td>Nystatin 只管念珠菌；neomycin 是常見接觸過敏原</td></tr>
+    <tr><th>四益</th><td>Betamethasone valerate 0.5 mg/g</td><td>Tolnaftate</td><td>Gentamicin 1 mg/g＋iodochlorhydroxyquin 10 mg/g</td><td>Tolnaftate 對皮癬菌；仍含類固醇，不當常規香港腳藥</td></tr>
+  </table></div>
+  <ul>
+    <li>沒診斷的紅疹或水疱不要先擦複方：類固醇會改變外觀、延誤診斷。</li>
+    <li>股癬、足癬用美康或貝他健沒有效（沒有對皮癬菌的成分）。</li>
+    <li>尿布區、臉、鼠蹊長期擦會萎縮、微血管擴張。</li>
+    <li>癢很快止住不代表病因治好了；症狀改善後換成對應診斷的單方。</li>
+  </ul>
+</section>
+
+<section id="other">
+  <div class="no">STEP 11</div>
+  <h2>其他常用藥：抗組織胺、保濕、非類固醇、痤瘡、抗病毒、疥瘡</h2>
+  <details open><summary>口服抗組織胺</summary><div>
+    <ul>
+      <li>蕁麻疹首選<b>第二代</b>：cetirizine 10 mg、levocetirizine 5 mg、fexofenadine 180 mg、loratadine 10 mg、desloratadine 5 mg、bilastine 20 mg，一天一次、規則吃。</li>
+      <li>慢性蕁麻疹 2–4 週控制不好：國際指引建議同一種第二代加到最多 4 倍（仿單外，要說明並記錄）。<span class="tag todo">健保審查待核對</span></li>
+      <li>第一代（chlorpheniramine、hydroxyzine、cyproheptadine）嗜睡、抗膽鹼作用明顯，長者、開車、攝護腺肥大、青光眼避免。</li>
+      <li>濕疹的癢對抗組織胺反應有限，主要是幫助睡眠；重點還是外用藥和保濕。</li>
+    </ul>
+  </div></details>
+  <details><summary>保濕劑</summary><div>
+    <ul>
+      <li>洗澡後 3 分鐘內、皮膚還微濕時擦；一天至少 2 次。</li>
+      <li>異位性皮膚炎成人全身用量約每週 250 g 以上，量不夠是最常見的失敗原因。</li>
+      <li>越乾選越油：乳液 &lt; 乳霜 &lt; 軟膏（凡士林）。無香料。</li>
+      <li>洗澡水不要太燙，10 分鐘內；少用肥皂，改溫和的清潔產品。</li>
+    </ul>
+  </div></details>
+  <details><summary>外用鈣調磷酸酶抑制劑（TCI）</summary><div>
+    <ul>
+      <li>Tacrolimus 0.03%（2 歲以上）、0.1%（成人）；pimecrolimus 1%。</li>
+      <li>用在臉、眼皮、皺摺等不適合長期擦類固醇的地方；不會萎縮。</li>
+      <li>剛擦前幾天會灼熱刺痛，先講；有感染的皮膚不擦。</li>
+      <li><span class="tag todo">健保給付條件待核對</span>（一般限異位性皮膚炎第二線、有面積與用量規定）。</li>
+    </ul>
+  </div></details>
+  <details><summary>痤瘡階梯</summary><div>
+    <div class="scroll"><table>
+      <tr><th>嚴重度</th><th>處方</th></tr>
+      <tr><th>粉刺為主</th><td>外用 A 酸（adapalene 0.1% 睡前）± benzoyl peroxide（BPO）2.5–5%</td></tr>
+      <tr><th>輕度發炎</th><td>Adapalene＋BPO；或加外用 clindamycin（要和 BPO 併用，避免抗藥性）</td></tr>
+      <tr><th>中度</th><td>上面再加口服 doxycycline 100 mg QD–BID，最多 3–4 個月，改善後停口服、留外用維持</td></tr>
+      <tr><th>重度結節囊腫、留疤</th><td>轉皮膚科評估口服 isotretinoin</td></tr>
+    </table></div>
+    <ul>
+      <li>外用 A 酸前幾週會乾、脫皮、刺：先隔天擦、豆粒大擦全臉、加保濕。至少擦 8–12 週再評估。</li>
+      <li>懷孕：不用口服與外用 A 酸、tetracycline 類；可用 azelaic acid、BPO、外用 erythromycin 或 clindamycin。</li>
+      <li>Doxycycline：光敏感、食道炎（配大量水、不要馬上躺下）。</li>
+    </ul>
+  </div></details>
+  <details><summary>帶狀疱疹與單純疱疹的抗病毒藥</summary><div>
+    <div class="scroll"><table>
+      <tr><th>藥</th><th>帶狀疱疹</th><th>單純疱疹</th></tr>
+      <tr><th>Acyclovir</th><td>800 mg 一天 5 次，7 天</td><td>初發 400 mg TID 7–10 天；復發 400 mg TID 5 天</td></tr>
+      <tr><th>Valacyclovir</th><td>1 g TID，7 天</td><td>唇疱疹 2 g BID 1 天；生殖器復發 500 mg BID 3 天</td></tr>
+      <tr><th>Famciclovir</th><td>250–500 mg TID，7 天</td><td>依仿單</td></tr>
+    </table></div>
+    <ul>
+      <li>發疹 <b>72 小時內</b>開始最有效；超過 72 小時但還在長新水疱、侵犯眼睛、免疫不全者仍然給。</li>
+      <li>健保：107 年起口服 acyclovir 用於帶狀疱疹與單純疱疹，不限年齡、部位、族群，療程以 7 日為限（衛福部新聞稿）。Valacyclovir、famciclovir 仍需符合特殊條件（如侵犯三叉神經第一分枝、薦椎皮節、免疫不全等）。<span class="tag todo">條文全文待核對</span></li>
+      <li>三種藥都要依腎功能調整；長者要補水，注意神經毒性（意識改變）。</li>
+      <li>疼痛：acetaminophen 或 NSAID；神經痛加 gabapentin 或 pregabalin（依腎功能，從低劑量開始）。</li>
+      <li>帶狀疱疹疫苗：急性期不打，痊癒後再安排；非活性疫苗（Shingrix）兩劑，間隔 2–6 個月。</li>
+    </ul>
+  </div></details>
+  <details><summary>疥瘡用藥</summary><div>
+    <ul>
+      <li><b>Permethrin 5% 乳膏</b>：洗澡擦乾後從脖子擦到腳底（指縫、指甲下、肚臍、生殖器、臀溝都要），8–14 小時後洗掉；7 天後視需要再一次。嬰幼兒與長者加擦頭皮和臉，避開眼口。</li>
+      <li>健保對 permethrin 的支數有限制（醫院公告：60 g 每位病人限 1 支，半年內第 2 支須皮膚科醫師確診）。<span class="tag todo">待核對</span></li>
+      <li>替代：crotamiton 10%（悠力素，較溫和、效果較弱，連續擦數天）、benzyl benzoate 洗劑（刺激性較高）。</li>
+      <li>口服 ivermectin 200 µg/kg，1–2 週後再一次：機構群聚、結痂型、擦藥有困難時；孕婦、哺乳、體重 &lt;15 kg 不用。院內取得方式各家不同。</li>
+      <li><b>同住者與密切接觸者同一天一起治療</b>，不管有沒有症狀。</li>
+      <li>治療前 3 天穿過的衣物、床單：熱水洗並烘乾，或裝袋密封 7 天。</li>
+      <li>治療成功後還會癢 2–4 週（對蟲體的過敏反應），用外用類固醇和抗組織胺，不要一直重複擦殺疥藥。</li>
+    </ul>
+  </div></details>
+</section>
+
+<div class="part"><span>第三部分</span>追蹤與轉診</div>
+
+<section id="follow">
+  <div class="no">STEP 12</div>
+  <h2>回診：沒好的時候怎麼想</h2>
+  <ul class="sched">
+    <li><b>感染類</b><span>膿痂疹、毛囊炎 3–5 天；蜂窩性組織炎 48–72 小時看紅腫範圍；帶狀疱疹 1 週看疼痛與眼睛。</span></li>
+    <li><b>濕疹、癬</b><span>2 週。好了就降階或停藥，並交代復發時的做法。</span></li>
+    <li><b>痤瘡</b><span>8–12 週才看得出外用 A 酸的效果。</span></li>
+    <li><b>慢性蕁麻疹</b><span>2–4 週調整抗組織胺劑量。</span></li>
+  </ul>
+  <h3>2 週沒好，依序檢查</h3>
+  <ol>
+    <li><b>診斷對嗎</b>：「濕疹」擦類固醇越擦越大圈，是癬（刮 KOH）；全家都癢是疥瘡；單側、固定一塊、慢慢變大的「濕疹」要想 Bowen 氏病或乳房外 Paget 氏病（切片）。</li>
+    <li><b>有沒有擦、擦夠不夠</b>：請病人帶藥膏回來看剩多少。15 g 的藥膏擦兩個手掌大、一天兩次，應該兩週左右用完。</li>
+    <li><b>誘因還在嗎</b>：接觸物（染髮劑、鎳、橡膠手套、藥布、精油）、清潔劑、新的藥。</li>
+    <li><b>有沒有續發感染</b>：滲液、蜜色結痂、變痛（金黃色葡萄球菌）；成群的凹陷小糜爛（疱疹性濕疹，當天轉診）。</li>
+    <li><b>是不是藥造成的</b>：類固醇酒糟、萎縮、對藥膏成分過敏（neomycin、防腐劑，甚至類固醇本身）。</li>
+    <li>以上都排除才升級治療；超強效類固醇、口服類固醇之前，建議先讓皮膚科看過。</li>
+  </ol>
+  <p class="learn"><b>不建議用口服或注射類固醇治乾癬與慢性濕疹</b>：停藥後常反彈，乾癬可能轉成膿疱型或紅皮症。</p>
+</section>
+
+<section id="refer">
+  <div class="no">STEP 13</div>
+  <h2>轉診</h2>
+  <div class="scroll"><table>
+    <tr><th>去哪</th><th>情況</th></tr>
+    <tr class="flag"><th>急診</th><td>STEP 1 的警訊：黏膜糜爛加皮膚痛或表皮剝落、與外觀不成比例的劇痛、發燒加紫斑、全身 &gt;90% 發紅、蕁麻疹合併喘或喉頭緊</td></tr>
+    <tr><th>當天眼科</th><td>帶狀疱疹長在額頭、眼皮、鼻尖或鼻側（Hutchinson 徵象）</td></tr>
+    <tr><th>皮膚科（1–2 週內）</th><td>懷疑皮膚癌的色素或潰瘍病灶；診斷不明且 2–4 週治療無效（切片）；乾癬 &gt;10% 體表面積或有關節痛、指甲病變；中重度異位性皮膚炎需要全身性治療；重度痤瘡要 isotretinoin；慢性蕁麻疹用到 4 倍抗組織胺仍控制不佳；疑似接觸過敏要貼膚試驗；結痂型疥瘡；兒童頭癬；水疱病</td></tr>
+    <tr><th>其他科</th><td>鬱滯性皮膚炎加潰瘍：心臟血管外科或整形外科；反覆念珠菌或癤：驗血糖；玫瑰糠疹樣皮疹長到手掌腳掌或有風險行為：驗梅毒</td></tr>
+  </table></div>
+</section>
+
+<footer class="learn">
+  <p><b>資料來源</b></p>
+  <ul>
+    <li>和美永吉外科診所：<a href="https://www.usual-good.com/taichung-changhua-topical-steroid-potency-guide/" target="_blank" rel="noopener">單方類固醇藥膏怎麼分強弱？台灣常見 8 款藥膏強度與成分比較</a>、<a href="https://www.usual-good.com/taichung-changhua-topical-antifungal-ointment-guide/" target="_blank" rel="noopener">抗黴菌藥膏怎麼選</a>、<a href="https://www.usual-good.com/taichung-changhua-combination-topical-ointments/" target="_blank" rel="noopener">含類固醇複方藥膏怎麼看</a>。</li>
+    <li>衛生福利部：<a href="https://www.mohw.gov.tw/fp-3802-45249-1.html" target="_blank" rel="noopener">疱疹用藥放寬給付範圍</a>。</li>
+    <li>高雄市立凱旋醫院藥劑公告（permethrin 健保規範）、成大醫院皮膚部疥瘡衛教。</li>
+    <li>指尖單位：Long CC, Finlay AY. Clin Exp Dermatol 1991。</li>
+    <li>鑑別要點與口服藥劑量為教科書與指引通則，尚未逐項標註出處。</li>
+  </ul>
+  <p>實際照片連結會開啟 DermNet 的圖片搜尋結果。</p>
+</footer>
+</main>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function out(id,cls,html){const o=$(id);o.className='out'+(cls?' '+cls:'');o.innerHTML=html;}
+
+/* ---------- mode ---------- */
+function setMode(c){document.body.classList.toggle('clinic',c);$('mClinic').setAttribute('aria-pressed',c);$('mLearn').setAttribute('aria-pressed',!c);
+  try{history.replaceState(null,'',c?'#clinic':location.pathname+location.search);}catch(e){}}
+$('mClinic').onclick=()=>setMode(true);$('mLearn').onclick=()=>setMode(false);
+if(location.hash==='#clinic')setMode(true);
+
+/* =========================================================
+   Drawings. All schematic: skin tone, lesion colours and shapes only.
+   ========================================================= */
+const SK='#f3d9c6',EP='#e6b596',DE='#f8e4d6',RD='#d2553f',PK='#ee9f8f';
+function rng(seed){let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280;};}
+const svg=(w,h,inner,label)=>'<svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="'+esc(label||'示意圖')+'">'+inner+'</svg>';
+
+/* cross-sections: surface at y=30, epidermis 8 thick, dermis below */
+function xs(type){
+  const base=(top)=>'<rect x="0" y="30" width="120" height="40" fill="'+DE+'"/>'+(top||'<rect x="0" y="30" width="120" height="8" fill="'+EP+'"/>');
+  const hair=(x)=>'<path d="M'+x+' 62V16" stroke="#5a4636" stroke-width="1.6" fill="none"/><path d="M'+(x-3)+' 38v20a3 3 0 0 0 6 0V38" fill="none" stroke="#b98a6b" stroke-width="1"/>';
+  const T={
+    macule:base('<rect x="0" y="30" width="120" height="8" fill="'+EP+'"/><rect x="42" y="30" width="36" height="8" fill="'+RD+'"/>'),
+    papule:base('<rect x="0" y="30" width="120" height="8" fill="'+EP+'"/><path d="M48 31q12 -22 24 0z" fill="'+RD+'"/>'),
+    plaque:base('<rect x="0" y="30" width="120" height="8" fill="'+EP+'"/><path d="M22 31q2 -9 10 -9h56q8 0 10 9z" fill="'+RD+'"/>'),
+    nodule:base()+'<circle cx="60" cy="42" r="15" fill="'+PK+'" stroke="'+RD+'" stroke-width="1.5"/><path d="M40 31q20 -16 40 0" fill="'+EP+'"/>',
+    vesicle:base()+'<path d="M49 31q11 -22 22 0z" fill="#d6ecf7" stroke="#7fb0c9" stroke-width="1.2"/>',
+    bulla:base()+'<path d="M28 31q32 -34 64 0z" fill="#d6ecf7" stroke="#7fb0c9" stroke-width="1.2"/>',
+    pustule:base()+'<path d="M49 31q11 -22 22 0z" fill="#f2df86" stroke="#c9a53a" stroke-width="1.2"/><ellipse cx="60" cy="33" rx="16" ry="3" fill="'+RD+'" opacity=".5"/>',
+    wheal:base('<path d="M0 30h20q40 -16 80 0h20v8H0z" fill="#f6c9bd"/>')+'<ellipse cx="60" cy="44" rx="34" ry="9" fill="#dcebf5" opacity=".9"/>',
+    scale:base('<rect x="0" y="30" width="120" height="8" fill="'+EP+'"/><rect x="30" y="30" width="60" height="8" fill="'+PK+'"/>')+'<g fill="#fff" stroke="#b9b2a6" stroke-width=".8"><path d="M32 29l14 -5 1 3 -14 4z"/><path d="M52 28l15 -3v3l-14 2z"/><path d="M73 29l13 -6 1 3 -12 5z"/></g>',
+    crust:base('<rect x="0" y="30" width="120" height="8" fill="'+EP+'"/><rect x="38" y="33" width="44" height="5" fill="'+PK+'"/>')+'<path d="M36 33q4 -10 12 -7 6 -6 14 -1 8 -5 12 1 8 0 10 7z" fill="#c9962f" stroke="#8f6a1f" stroke-width="1"/>',
+    erosion:base('<path d="M0 30h42q18 9 36 0h42v8H0z" fill="'+EP+'"/>')+'<path d="M42 30q18 9 36 0" fill="none" stroke="'+RD+'" stroke-width="2"/>',
+    ulcer:base('<path d="M0 30h40l6 8H0zM120 30H80l-6 8h46z" fill="'+EP+'"/>')+'<path d="M40 30l8 16h24l8 -16" fill="#e98d7c" stroke="'+RD+'" stroke-width="1.5"/>',
+    lichen:base('<path d="M0 30h18l6 -8 6 6 6 -7 6 7 6 -8 6 8 6 -7 6 7 6 -8 6 8 6 -6 6 8h18v14H0z" fill="#d9a07f"/>'),
+    excor:base('<rect x="0" y="30" width="120" height="8" fill="'+EP+'"/>')+'<g fill="#8a3b2c"><path d="M30 30h14l-2 4h-10z"/><path d="M55 30h14l-2 4h-10z"/><path d="M80 30h14l-2 4h-10z"/></g>',
+    fissure:base('<path d="M0 30h56l4 8H0zM120 30H64l-4 8h60z" fill="#d9a07f"/>')+'<path d="M56 30l4 22 4 -22" fill="#b3261e"/>',
+    fol:base()+hair(60)+'<path d="M50 31q10 -18 20 0z" fill="#f2df86" stroke="'+RD+'" stroke-width="1.5"/><path d="M60 30V16" stroke="#5a4636" stroke-width="1.6"/>',
+    nonfol:base()+hair(30)+hair(90)+'<path d="M50 31q10 -16 20 0z" fill="'+RD+'"/>'
+  };
+  return svg(120,70,T[type],type);
+}
+const XS1=[['macule','斑（macule）／斑片（patch）','平的，只有顏色改變。&lt;1 cm 叫斑，≥1 cm 叫斑片'],['papule','丘疹（papule）','摸得到的隆起，&lt;1 cm'],['plaque','斑塊（plaque）','平頂的隆起，≥1 cm，寬大於高'],['nodule','結節（nodule）','深到真皮或皮下，摸起來比看起來大'],['vesicle','水疱（vesicle）','清澈液體，&lt;1 cm'],['bulla','大疱（bulla）','清澈液體，≥1 cm'],['pustule','膿疱（pustule）','內容是膿，黃白色'],['wheal','膨疹（wheal）','真皮水腫，淡紅浮起，24 小時內消退']];
+const XS2=[['scale','鱗屑（scale）','角質堆積脫落：乾癬、癬、濕疹'],['crust','痂（crust）','乾掉的滲液或血；蜜色痂是膿痂疹'],['erosion','糜爛（erosion）','只掉表皮，癒合不留疤'],['ulcer','潰瘍（ulcer）','深到真皮，癒合留疤'],['lichen','苔癬化（lichenification）','長期搔抓，皮膚增厚、紋路加深'],['excor','抓痕（excoriation）','線狀或點狀的表皮缺損'],['fissure','裂（fissure）','沿皮紋裂開，會痛']];
+const XS3=[['fol','毛囊性','丘疹或膿疱中央有毛或毛孔，顆顆分開'],['nonfol','非毛囊性','病灶在毛孔之間，和毛的位置無關']];
+const tiles=(list)=>list.map(t=>'<figure class="tile">'+xs(t[0])+'<figcaption><b>'+t[1]+'</b>'+t[2]+'</figcaption></figure>').join('');
+$('xsPrimary').innerHTML=tiles(XS1);$('xsSecondary').innerHTML=tiles(XS2);$('xsFoll').innerHTML=tiles(XS3);
+
+/* surface view of each disease */
+function look(type){
+  const r=rng(type.length*97+type.charCodeAt(0)*13+type.charCodeAt(type.length-1));
+  const bg='<rect width="160" height="110" rx="6" fill="'+SK+'"/>';
+  const dots=(n,x0,y0,w,h,f)=>{let s='';for(let i=0;i<n;i++)s+=f(x0+r()*w,y0+r()*h,i);return s;};
+  const blur='<defs><filter id="bl'+type+'" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter></defs>';
+  const soft=(cx,cy,rx,ry,c,o)=>'<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+c+'" opacity="'+(o||.75)+'" filter="url(#bl'+type+')"/>';
+  const hairdot=(x,y,c,rr)=>'<circle cx="'+x+'" cy="'+y+'" r="'+(rr||3.4)+'" fill="'+c+'"/><path d="M'+x+' '+y+'l2.5 -7" stroke="#4a382b" stroke-width=".9"/>';
+  const ves=(x,y,rr)=>'<circle cx="'+x+'" cy="'+y+'" r="'+rr+'" fill="#e3f1f8" stroke="#7fb0c9" stroke-width=".8"/>';
+  const T={
+    eczema:()=>blur+soft(80,55,52,34,RD,.55)+dots(45,35,28,90,54,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="1.6" fill="'+RD+'"/>')+'<g stroke="#8a3b2c" stroke-width="1.2"><path d="M50 40l22 8M84 62l24 7M60 70l18 5"/></g>',
+    lichen:()=>'<ellipse cx="80" cy="55" rx="50" ry="32" fill="#b9725c"/><g stroke="#8a4a38" stroke-width="1" fill="none">'+dots(1,0,0,0,0,()=>{let s='';for(let i=-4;i<=4;i++)s+='<path d="M'+(40+i*2)+' '+(55+i*7)+'h'+(80-Math.abs(i)*6)+'"/><path d="M'+(80+i*11)+' 26v58"/>';return s;})+'</g>',
+    silver:()=>'<ellipse cx="58" cy="50" rx="36" ry="26" fill="#c9412f"/><ellipse cx="118" cy="72" rx="24" ry="17" fill="#c9412f"/>'+dots(26,30,30,56,40,(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="6" ry="2.6" fill="#fbfaf6" stroke="#cfc8ba" stroke-width=".5" transform="rotate('+(r()*60-30)+' '+x+' '+y+')"/>')+dots(12,102,62,32,20,(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="5" ry="2.2" fill="#fbfaf6" stroke="#cfc8ba" stroke-width=".5"/>'),
+    greasy:()=>blur+soft(80,55,54,30,'#e58a6e',.6)+dots(22,36,34,88,42,(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="5" ry="2.4" fill="#f1dc8c" stroke="#cdb45c" stroke-width=".5" transform="rotate('+(r()*80-40)+' '+x+' '+y+')"/>'),
+    coin:()=>[[52,48,24],[112,66,20]].map(c=>'<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'" fill="#cf6a55"/>'+dots(22,c[0]-c[2]*.7,c[1]-c[2]*.7,c[2]*1.4,c[2]*1.4,(x,y,i)=>'<circle cx="'+x+'" cy="'+y+'" r="1.8" fill="'+(i%3?'#8a3b2c':'#d9a441')+'"/>')).join(''),
+    ring:()=>'<circle cx="80" cy="55" r="36" fill="#f0c5b3"/><circle cx="80" cy="55" r="36" fill="none" stroke="'+RD+'" stroke-width="7"/><circle cx="80" cy="55" r="24" fill="'+SK+'" opacity=".8"/>'+dots(1,0,0,0,0,()=>{let s='';for(let i=0;i<22;i++){const a=i/22*6.283;s+='<ellipse cx="'+(80+Math.cos(a)*36)+'" cy="'+(55+Math.sin(a)*36)+'" rx="3.6" ry="1.5" fill="#fff" stroke="#cfc8ba" stroke-width=".4" transform="rotate('+(a*57.3+90)+' '+(80+Math.cos(a)*36)+' '+(55+Math.sin(a)*36)+')"/>';}return s;}),
+    wheal:()=>blur+soft(55,45,36,24,'#ef9d8c',.5)+soft(112,70,34,22,'#ef9d8c',.5)+'<path d="M30 46q4 -20 26 -17 22 -2 22 17 -2 16 -24 16 -22 0 -24 -16z" fill="#f9e6dc" stroke="#e79a88" stroke-width="2"/><path d="M92 70q6 -16 24 -13 18 2 16 15 -4 12 -22 11 -17 -1 -18 -13z" fill="#f9e6dc" stroke="#e79a88" stroke-width="2"/>',
+    deepves:()=>'<path d="M20 110V50q0 -14 14 -14h6V20q0 -8 8 -8t8 8v10h4V14q0 -8 8 -8t8 8v16h4V18q0 -8 8 -8t8 8v16h4V26q0 -7 7 -7t7 7v84z" fill="#f0cdb8" stroke="#d9a98f" stroke-width="1"/>'+dots(30,34,22,78,34,(x,y)=>ves(x,y,2)),
+    band:()=>'<path d="M0 30q80 16 160 40v26q-80 -24 -160 -40z" fill="#e58a79" opacity=".75"/>'+[[26,46],[62,56],[100,68],[136,80]].map(c=>dots(7,c[0]-9,c[1]-7,18,14,(x,y)=>ves(x,y,3.2))).join(''),
+    group:()=>blur+soft(80,55,30,22,RD,.6)+dots(11,62,42,36,26,(x,y)=>ves(x,y,4)),
+    follic:()=>dots(16,22,18,116,74,(x,y,i)=>'<circle cx="'+x+'" cy="'+y+'" r="5.5" fill="#e88e7b" opacity=".7"/>'+hairdot(x,y,i%2?'#f2df86':RD)),
+    mono:()=>{let s='';for(let i=0;i<5;i++)for(let j=0;j<4;j++){const x=28+i*26+(j%2)*8,y=22+j*22;s+=hairdot(x,y,'#d9705c',3);}return s;},
+    acne:()=>dots(9,24,20,112,70,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="2" fill="#2f2a26"/>')+dots(7,24,20,112,70,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="2.4" fill="#fbf7ec" stroke="#cfc8ba" stroke-width=".6"/>')+dots(6,24,20,112,70,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="5" fill="'+RD+'"/>')+dots(4,24,20,112,70,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="5.5" fill="'+RD+'"/><circle cx="'+x+'" cy="'+y+'" r="2.6" fill="#f2df86"/>'),
+    flush:()=>blur+soft(80,58,60,34,'#e2705f',.6)+'<g stroke="#b3261e" stroke-width=".9" fill="none"><path d="M40 50q8 -6 16 2t14 -2M90 44q8 6 16 -2t12 4M56 76q10 -6 18 2M100 74q8 -6 18 2"/></g>'+dots(8,40,36,84,44,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="3" fill="'+RD+'"/>'),
+    honey:()=>blur+soft(80,55,48,30,RD,.45)+[[58,46,20,13],[102,62,24,15],[70,74,14,9]].map(c=>'<ellipse cx="'+c[0]+'" cy="'+c[1]+'" rx="'+c[2]+'" ry="'+c[3]+'" fill="#d9a12f" stroke="#a87718" stroke-width="1.2"/><ellipse cx="'+(c[0]-4)+'" cy="'+(c[1]-3)+'" rx="'+c[2]*.45+'" ry="'+c[3]*.4+'" fill="#edc35a"/>').join(''),
+    cellul:()=>blur+soft(84,58,66,40,'#d94a3a',.75)+'<path d="M26 34q54 -22 112 6" stroke="#22261f" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/><ellipse cx="70" cy="48" rx="18" ry="7" fill="#fff" opacity=".25"/>',
+    burrow:()=>dots(12,22,18,116,74,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="2.6" fill="'+RD+'"/>')+'<g stroke="#6b5a4c" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M40 40q5 -6 10 0t10 0"/><path d="M96 62q5 -6 10 0t10 0"/><path d="M60 82q5 -6 10 0t8 0"/></g><circle cx="60" cy="40" r="1.6" fill="#22261f"/><circle cx="116" cy="62" r="1.6" fill="#22261f"/>',
+    herald:()=>'<g transform="rotate(-18 80 55)"><ellipse cx="46" cy="40" rx="24" ry="13" fill="#eaa392"/><ellipse cx="46" cy="40" rx="17" ry="8" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="3 3"/>'+[[100,30],[112,56],[84,70],[122,82],[60,84]].map(c=>'<ellipse cx="'+c[0]+'" cy="'+c[1]+'" rx="11" ry="5.5" fill="#eaa392"/><ellipse cx="'+c[0]+'" cy="'+c[1]+'" rx="7" ry="3" fill="none" stroke="#fff" stroke-width="1.2" stroke-dasharray="2 2"/>').join('')+'</g>',
+    morbi:()=>dots(90,10,8,140,94,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="'+(2+r()*2.5)+'" fill="'+RD+'" opacity=".8"/>'),
+    versi:()=>dots(26,16,12,128,86,(x,y,i)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="'+(6+r()*7)+'" ry="'+(4+r()*5)+'" fill="'+(i%2?'#fbeee4':'#c99a7c')+'" opacity=".9"/>'),
+    satel:()=>'<path d="M30 20q50 -12 100 0 -6 50 -50 74 -44 -24 -50 -74z" fill="#cf3f33"/><path d="M80 24v62" stroke="#f6d6cc" stroke-width="3"/>'+[[24,62],[36,82],[124,84],[138,60],[60,100],[104,100]].map(c=>'<circle cx="'+c[0]+'" cy="'+c[1]+'" r="3.4" fill="#cf3f33"/><circle cx="'+c[0]+'" cy="'+c[1]+'" r="1.4" fill="#f2df86"/>').join(''),
+    wart:()=>[[58,52,22],[112,66,14]].map(c=>'<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'" fill="#d8c3a8" stroke="#a48f74" stroke-width="1.5"/>'+dots(9,c[0]-c[2]*.6,c[1]-c[2]*.6,c[2]*1.2,c[2]*1.2,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="1.3" fill="#2f2a26"/>')).join(''),
+    bite:()=>[[40,34],[76,52],[112,70]].map(c=>'<circle cx="'+c[0]+'" cy="'+c[1]+'" r="13" fill="#f2b3a4"/><circle cx="'+c[0]+'" cy="'+c[1]+'" r="7" fill="'+RD+'"/><circle cx="'+c[0]+'" cy="'+c[1]+'" r="1.6" fill="#5a1c14"/>').join(''),
+    stasis:()=>blur+soft(80,60,58,36,'#a8623f',.7)+dots(60,30,30,100,60,(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="1.4" fill="#6e3b22"/>')+'<path d="M20 20q20 20 10 50M130 16q-14 30 6 60" stroke="#6a78b8" stroke-width="3" fill="none" opacity=".6"/>',
+    web:()=>'<path d="M10 110V40q0 -18 18 -18t18 18v40h8V30q0 -18 18 -18t18 18v50h8V40q0 -18 18 -18t18 18v70z" fill="#f0cdb8" stroke="#d9a98f"/><path d="M46 66h8v30h-8zM90 70h8v30h-8z" fill="#fff" stroke="#cfc8ba"/><path d="M50 72v20M94 76v18" stroke="#b3261e" stroke-width="1.4"/>'+dots(10,40,84,60,18,(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="4" ry="1.6" fill="#fff" stroke="#cfc8ba" stroke-width=".4"/>'),
+    dry:()=>'<g stroke="#c98f76" stroke-width="1.3" fill="none"><path d="M20 30l24 10 20 -8 26 12 24 -8 26 10M14 56l28 8 22 -10 24 12 26 -8 30 8M22 84l22 -8 26 10 22 -10 24 8 24 -6M44 40l-2 24M90 44l-2 22M64 32l0 22M114 36l2 24M64 54l6 32M112 60l-2 26"/></g>'+blur+soft(80,56,50,30,'#e79a88',.35)
+  };
+  return svg(160,110,bg+(T[type]||T.eczema)(),'表面示意圖');
+}
+
+/* body map: front and back */
+const REG={scalp:'頭皮',face:'臉',neck:'頸',chest:'胸',abdomen:'腹',back:'背',axilla:'腋下',antecubital:'肘窩',elbow:'手肘伸側',forearm:'前臂、手腕',hand:'手',groin:'鼠蹊、生殖器',buttock:'臀',thigh:'大腿',knee:'膝蓋伸側',popliteal:'膕窩',shin:'小腿',foot:'腳'};
+function body(hi,interactive,sel){
+  const on=k=>hi&&hi.indexOf(k)>=0;
+  const sh=(k,d)=>{const cls='reg'+(on(k)?' on':'')+(sel===k?' sel':''),tag=d.match(/^<(\w+)/)[1];
+    return d.replace('/>',' class="'+cls+'" data-r="'+k+'"'+(interactive?' tabindex="0" role="button" aria-label="'+REG[k]+'"':'')+'><title>'+REG[k]+'</title></'+tag+'>');};
+  const plain=d=>d.replace('/>',' class="reg plain"/>');
+  function fig(cx,backSide){
+    const L=[];
+    L.push(sh(backSide?'scalp':'face','<circle cx="'+cx+'" cy="24" r="13"/>'));
+    if(!backSide)L.push(sh('scalp','<path d="M'+(cx-13)+' 22a13 13 0 0 1 26 0q-13 -8 -26 0z"/>'));
+    L.push(sh('neck','<rect x="'+(cx-5)+'" y="36" width="10" height="8"/>'));
+    L.push(sh(backSide?'back':'chest','<rect x="'+(cx-20)+'" y="44" width="40" height="32" rx="6"/>'));
+    L.push(sh(backSide?'back':'abdomen','<rect x="'+(cx-18)+'" y="77" width="36" height="28" rx="3"/>'));
+    L.push(sh(backSide?'buttock':'groin','<rect x="'+(cx-18)+'" y="106" width="36" height="13" rx="4"/>'));
+    [-1,1].forEach(s=>{
+      const ax=cx+s*27;
+      if(!backSide)L.push(sh('axilla','<circle cx="'+(cx+s*20)+'" cy="52" r="4.5"/>'));
+      L.push(plain('<rect x="'+(ax-5)+'" y="46" width="10" height="30" rx="5"/>'));
+      L.push(sh(backSide?'elbow':'antecubital','<circle cx="'+ax+'" cy="82" r="6.5"/>'));
+      L.push(sh('forearm','<rect x="'+(ax-5)+'" y="89" width="10" height="28" rx="5"/>'));
+      L.push(sh('hand','<circle cx="'+ax+'" cy="125" r="7"/>'));
+      const lx=cx+s*9.5;
+      L.push(sh('thigh','<rect x="'+(lx-7.5)+'" y="120" width="15" height="36" rx="5"/>'));
+      L.push(sh(backSide?'popliteal':'knee','<circle cx="'+lx+'" cy="163" r="7.5"/>'));
+      L.push(sh('shin','<rect x="'+(lx-6.5)+'" y="171" width="13" height="34" rx="5"/>'));
+      L.push(sh('foot','<ellipse cx="'+(lx+s*1.5)+'" cy="212" rx="9" ry="5.5"/>'));
+    });
+    return L.join('')+'<text x="'+cx+'" y="232" text-anchor="middle" class="bl">'+(backSide?'背面':'正面')+'</text>';
+  }
+  return '<svg class="body" viewBox="0 0 200 238" role="img" aria-label="人形圖：'+(hi&&hi.length?hi.map(k=>REG[k]).join('、'):'點選部位')+'">'+fig(52,false)+fig(148,true)+'</svg>';
+}
+
+/* =========================================================
+   Diseases
+   m: primary lesion weights; s: sites; fol: follicular; itch [min,max]; pain 0/1/2(always)
+   t: a acute, c chronic or recurrent; f: feature weights
+   ========================================================= */
+const MORPH=[['patch','紅斑、斑片（平）'],['plaque','脫屑斑塊'],['papule','丘疹'],['vesicle','水疱'],['pustule','膿疱'],['wheal','膨疹'],['nodule','結節、腫塊'],['erosion','糜爛、結痂'],['pigment','顏色變深或變淺']];
+const SITES=[['scalp','頭皮'],['face','臉'],['trunk','軀幹'],['fold','皺摺：腋下、鼠蹊、乳下'],['flex','屈側：肘窩、膕窩、頸'],['ext','伸側：手肘、膝蓋'],['hand','手'],['foot','腳'],['leg','小腿'],['any','全身、多處']];
+const FEATS=[['scale','有脫屑'],['ring','環狀：邊緣隆起脫屑、中央變淡'],['sharp','邊界清楚'],['illdef','邊界模糊'],['sym','兩側對稱'],['derm','單側、沿皮節成一條帶'],['group','水疱成群長在紅斑上'],['crust','蜜色結痂'],['transient','每一塊 24 小時內消退、位置會換'],['comedo','有粉刺'],['family','同住的人也癢'],['night','夜裡更癢'],['drug','2 週內開始吃新的藥'],['warm','局部熱、腫、壓了痛，或發燒'],['contact','形狀像接觸物，或呈線狀'],['satellite','周圍有衛星丘疹或膿疱'],['lichen','皮膚增厚、紋路加深'],['dry','皮膚乾、冬天惡化'],['atopy','有氣喘、過敏性鼻炎或家族史'],['silver','厚的銀白色鱗屑'],['greasy','油膩的黃色屑'],['herald','先長一塊較大的，之後才散開'],['flush','容易潮紅、看得到微血管'],['nail','指甲有凹點或增厚'],['wet','濕、有滲液'],['sweat','流汗、悶熱後惡化'],['punctum','中央有叮咬點'],['edema','下肢水腫或靜脈曲張']];
+const FL=Object.fromEntries(FEATS),ML=Object.fromEntries(MORPH),SL=Object.fromEntries(SITES);
+const G=['濕疹與皮膚炎','丘疹鱗屑性與蕁麻疹','黴菌','毛囊與皮脂腺','細菌','病毒','寄生蟲與蟲咬','藥物'];
+const D=[
+{id:'ad',g:0,zh:'異位性皮膚炎',en:'atopic dermatitis',look:'eczema',dist:['face','neck','antecubital','popliteal','forearm','hand'],
+ m:{patch:3,plaque:2,papule:2,erosion:1},s:['flex','face','hand','any'],fol:0,itch:[1,2],pain:0,t:'c',f:{atopy:4,sym:2,illdef:2,lichen:3,dry:3,night:1,wet:1,scale:1},
+ key:['癢先於疹，「越抓越癢」；慢性反覆','嬰兒：臉頰、伸側，尿布區通常沒事；兒童與成人：肘窩、膕窩、頸、眼皮、手','邊界模糊的紅斑、丘疹，慢性期苔癬化；全身皮膚乾','個人或家族過敏史'],
+ ddx:'疥瘡（家人也癢、指縫）、接觸性皮膚炎（邊界清楚、和接觸物吻合）、脂漏性皮膚炎（嬰兒：尿布區也有、不太癢）、乾癬（伸側、厚屑）',
+ test:'臨床診斷。突然惡化加滲液結痂：金黃色葡萄球菌；成群凹陷糜爛加發燒：疱疹性濕疹，當天轉診',
+ tx:['大量保濕是基礎','外用類固醇依部位與嚴重度，控制後降階或每週 2 天維持','臉、皺摺可改 TCI','中重度、反覆：轉皮膚科（照光、生物製劑、JAK 抑制劑）']},
+{id:'contact',g:0,zh:'接觸性皮膚炎',en:'contact dermatitis',look:'eczema',dist:['hand','face','neck','forearm','foot'],
+ m:{patch:3,vesicle:2,plaque:2,papule:1,erosion:1},s:['hand','face','foot','flex','trunk','leg','any'],fol:0,itch:[1,2],pain:1,t:'ac',f:{contact:5,sharp:3,wet:2,scale:1,lichen:1},
+ key:['形狀與位置和接觸物吻合：錶帶、耳環、皮帶扣（鎳）、染髮（髮際、耳後）、藥布（方形）、植物（線狀）','刺激性：洗碗精、溶劑、頻繁洗手，偏痛與裂；過敏性：接觸後 1–3 天才發，很癢、可有水疱','邊界清楚，可單側'],
+ ddx:'異位性皮膚炎、汗皰疹（手）、足癬（單腳、KOH）、帶狀疱疹（單側、痛）',
+ test:'問職業、嗜好、新用的產品。反覆找不到原因：轉皮膚科做貼膚試驗',
+ tx:['找到並避開接觸物是唯一的根治','外用類固醇依部位選強度 1–2 週','濕、滲液：先生理食鹽水濕敷','範圍 >20% 體表面積或臉部嚴重腫：口服 prednisolone 0.5–1 mg/kg，2–3 週漸減（太短會反彈）','手：棉手套加外層防水手套、頻繁護手霜']},
+{id:'seb',g:0,zh:'脂漏性皮膚炎',en:'seborrheic dermatitis',look:'greasy',dist:['scalp','face','chest','axilla','back'],
+ m:{patch:3,plaque:2},s:['scalp','face','trunk','fold'],fol:0,itch:[0,1],pain:0,t:'c',f:{greasy:5,scale:2,sym:2,illdef:1},
+ key:['頭皮屑、髮際、眉毛、眉間、鼻翼兩側、耳後、胸口中央','淡紅斑上有油膩的黃屑，癢不明顯','壓力、熬夜、冬天惡化；反覆發作','突然很嚴重或很廣：考慮 HIV、巴金森氏症'],
+ ddx:'乾癬（屑厚而乾、銀白、邊界清楚、超出髮際）、酒糟（潮紅、丘疹膿疱、無屑）、異位性皮膚炎、接觸性皮膚炎、紅斑性狼瘡（蝴蝶斑不侵犯鼻唇溝）',
+ test:'臨床診斷',
+ tx:['Ketoconazole 2% 乳膏一天 2 次 2–4 週；頭皮用 ketoconazole 洗髮精每週 2 次，停留 5 分鐘再沖','發炎明顯：臉加弱效類固醇 1 週內','容易復發：洗髮精每週 1 次維持']},
+{id:'num',g:0,zh:'缺脂性濕疹、錢幣狀濕疹',en:'asteatotic eczema / nummular eczema',look:'coin',dist:['shin','forearm','back','thigh'],
+ m:{plaque:3,patch:2,erosion:1},s:['leg','trunk','any','ext'],fol:0,itch:[1,2],pain:0,t:'c',f:{dry:5,scale:2,sharp:1,wet:1,lichen:1},
+ key:['缺脂性：長者、冬天、小腿前側，乾裂像「龜裂的河床」','錢幣狀：硬幣大小的圓形斑塊，表面小水疱、滲液、結痂，很癢','常和洗太熱、洗太勤、用肥皂有關'],
+ ddx:'體癬（環狀、中央變淡、KOH 陽性；錢幣狀濕疹整塊都紅、中央不消退）、乾癬、Bowen 氏病（單一塊、慢慢長大、擦藥不好）',
+ test:'圓形又脫屑就刮 KOH',
+ tx:['保濕、改洗澡習慣','中效到強效類固醇軟膏 2–4 週','有結痂滲液：考慮同時治療細菌感染']},
+{id:'pom',g:0,zh:'汗皰疹',en:'dyshidrotic eczema (pompholyx)',look:'deepves',dist:['hand','foot'],
+ m:{vesicle:4,plaque:1,erosion:1},s:['hand','foot'],fol:0,itch:[1,2],pain:1,t:'c',f:{sym:2,sweat:2,scale:1,atopy:1},
+ key:['手指側面、手掌、腳掌的深層小水疱，像西米露，很癢','之後乾掉脫皮、裂','對稱；換季、流汗、壓力、接觸鎳時發作'],
+ ddx:'足癬與手癬（單側、「兩腳一手」、KOH）、接觸性皮膚炎、掌蹠膿疱症（膿疱）、疥瘡（指縫、家人也癢）、手足口病（兒童、口腔潰瘍）',
+ test:'單側或腳上有脫屑：KOH',
+ tx:['強效類固醇軟膏一天 2 次 2 週（手掌腳掌皮厚）','護手霜、避免刺激物','反覆嚴重：轉皮膚科']},
+{id:'lsc',g:0,zh:'慢性單純苔癬',en:'lichen simplex chronicus',look:'lichen',dist:['neck','shin','forearm','groin'],
+ m:{plaque:4},s:['flex','leg','fold','scalp','hand'],fol:0,itch:[2,2],pain:0,t:'c',f:{lichen:5,sharp:2,night:1,scale:1},
+ key:['一兩塊邊界清楚、皮膚增厚、紋路加深的斑塊','後頸、小腿外側、腳踝、前臂、陰囊或外陰','「癢—抓—更厚—更癢」的循環，壓力大或睡前抓得更兇'],
+ ddx:'乾癬、體癬（KOH）、肥厚性扁平苔癬',
+ test:'臨床診斷；單一塊久治不好要切片',
+ tx:['強效類固醇軟膏，可加封閉（保鮮膜或藥布）2–3 週','打斷搔抓：剪指甲、睡前抗組織胺、覆蓋','生殖器處降一級並縮短天數']},
+{id:'stasis',g:0,zh:'鬱滯性皮膚炎',en:'stasis dermatitis',look:'stasis',dist:['shin'],
+ m:{patch:3,plaque:2,pigment:2,erosion:1},s:['leg'],fol:0,itch:[1,2],pain:0,t:'c',f:{edema:5,sym:2,scale:1,illdef:1,wet:1},
+ key:['小腿下三分之一與內踝，<b>通常兩側</b>','紅褐色色素沉著、脫屑、癢，合併水腫與靜脈曲張','久了皮膚變硬（脂性硬皮症）、內踝潰瘍'],
+ ddx:'蜂窩性組織炎（<b>單側</b>、急性、熱痛、發燒）；兩側「蜂窩性組織炎」幾乎都是鬱滯性皮膚炎。另：接觸性皮膚炎（對藥膏過敏）、缺脂性濕疹',
+ test:'摸足背動脈；壓力治療前有疑慮先做 ABI',
+ tx:['抬腿、彈性襪（ABI 正常）','保濕加中效類固醇 1–2 週','有潰瘍轉外科；少用含 neomycin 的藥膏（容易接觸過敏）']},
+{id:'pso',g:1,zh:'乾癬',en:'psoriasis',look:'silver',dist:['scalp','elbow','knee','back','buttock'],
+ m:{plaque:4,patch:1},s:['ext','scalp','trunk','any','hand','foot'],fol:0,itch:[0,1],pain:0,t:'c',f:{silver:5,sharp:3,sym:2,nail:4,scale:2},
+ key:['邊界清楚的紅色斑塊，上面有厚的銀白色鱗屑','手肘、膝蓋、頭皮（超出髮際）、下背、臀溝、肚臍','指甲凹點、油滴斑、甲床分離；問有沒有關節痛、晨僵','受傷處會長（Koebner 現象）；鏈球菌感染後的點滴型'],
+ ddx:'脂漏性皮膚炎（屑薄而油）、錢幣狀濕疹（很癢、滲液）、體癬（環狀、KOH）、慢性單純苔癬、玫瑰糠疹',
+ test:'刮屑見點狀出血（Auspitz）。皺摺處的反轉型沒有屑，容易當成念珠菌',
+ tx:['軀幹四肢：強效類固醇，可併用維生素 D 類似物（calcipotriol）','頭皮：類固醇溶液；臉與皺摺：弱效類固醇或 TCI','>10% 體表面積、關節痛、影響生活：轉皮膚科','不要用口服或注射類固醇']},
+{id:'urt',g:1,zh:'蕁麻疹',en:'urticaria',look:'wheal',dist:['chest','abdomen','back','thigh','forearm'],
+ m:{wheal:5,patch:1},s:['any','trunk','leg','face'],fol:0,itch:[1,2],pain:0,t:'ac',f:{transient:6,drug:1},
+ key:['淡紅色浮起的膨疹，形狀大小不一，<b>每一塊 24 小時內消退、不留痕跡</b>，位置一直換','很癢；可合併嘴唇、眼皮腫（血管性水腫）','急性 <6 週：感染、食物、藥物（NSAID、抗生素）；慢性 ≥6 週：多數找不到原因'],
+ ddx:'蕁麻疹性血管炎（單一病灶 >24 小時、痛多於癢、消退後留瘀色，要切片）、蟲咬、藥物疹、多形性紅斑（靶狀、固定不動）、接觸性皮膚炎',
+ test:'急性不用抽血。慢性：CBC、CRP 或 ESR，依病史加甲狀腺',
+ tx:['第二代抗組織胺每天規則吃','控制不好：加到 2–4 倍（仿單外）','嚴重急性：短期 prednisolone 3–5 天','喘、喉頭緊、低血壓：腎上腺素、送急診','外用類固醇沒有幫助']},
+{id:'pr',g:1,zh:'玫瑰糠疹',en:'pityriasis rosea',look:'herald',dist:['chest','abdomen','back','thigh'],
+ m:{patch:3,plaque:3},s:['trunk','any'],fol:0,itch:[0,1],pain:0,t:'a',f:{herald:6,scale:2,sym:2},
+ key:['先有一塊 2–5 cm 的母斑，1–2 週後軀幹冒出許多小的橢圓形斑','長軸沿皮紋，在背部排成「聖誕樹」；邊緣一圈往內翻的細屑','年輕人；6–8 週自己好'],
+ ddx:'二期梅毒（手掌腳掌也有、有風險行為：驗 RPR）、體癬（母斑期，KOH）、點滴型乾癬、藥物疹、汗斑',
+ test:'不典型、侵犯手掌腳掌或臉：驗梅毒',
+ tx:['解釋病程，會自己好','癢：保濕、中效類固醇、抗組織胺','懷孕早期發病要告知產科']},
+{id:'tinea',g:2,zh:'體癬、股癬',en:'tinea corporis / tinea cruris',look:'ring',dist:['groin','buttock','thigh','abdomen','chest','face'],
+ m:{plaque:4,patch:2,pustule:1},s:['fold','trunk','face','leg','any','flex','ext'],fol:0,itch:[1,2],pain:0,t:'ac',f:{ring:6,scale:3,sharp:2,sweat:2},
+ key:['環狀：邊緣隆起、紅、有屑，中央變淡，慢慢往外擴','不對稱；股癬在大腿內側與鼠蹊，<b>陰囊通常沒事</b>','擦類固醇會先好再變大、變不典型（隱匿性癬）','看腳：常同時有足癬'],
+ ddx:'錢幣狀濕疹（整塊紅、中央不消退）、乾癬、玫瑰糠疹母斑、念珠菌性間擦疹（鮮紅、濕、衛星病灶、陰囊也有）、紅癬（伍氏燈珊瑚紅）',
+ test:'刮邊緣的屑做 KOH',
+ tx:['外用 terbinafine 1–2 週，或唑類 2–4 週；擦到外圍 2 cm，好了再擦 1–2 週','範圍大、多處、外用失敗：口服 terbinafine 250 mg QD 2 週','不要用含類固醇的複方','一起治療足癬，內褲先穿襪子再穿']},
+{id:'tp',g:2,zh:'足癬、灰指甲',en:'tinea pedis / onychomycosis',look:'web',dist:['foot'],
+ m:{plaque:3,vesicle:2,erosion:2,patch:1},s:['foot','hand'],fol:0,itch:[0,2],pain:1,t:'c',f:{scale:3,sweat:2,wet:1,nail:2},
+ key:['趾縫型：第四、五趾縫發白、脫皮、裂','厚皮型：整個腳掌乾、細屑，像穿了拖鞋的範圍，不太癢','水疱型：足弓的小水疱，很癢','常<b>單側或不對稱</b>；「兩腳一手」','灰指甲：甲變黃、增厚、甲下碎屑'],
+ ddx:'汗皰疹（對稱、深層水疱、KOH 陰性）、接觸性皮膚炎（腳背、和鞋子材質吻合）、掌蹠膿疱症、乾癬；趾縫濕爛發臭要想細菌感染',
+ test:'KOH。指甲變形有一半不是黴菌（乾癬、外傷），口服藥前要有陽性證據',
+ tx:['趾縫型：外用 terbinafine 1–2 週或唑類 4 週','厚皮型：外用常不夠，口服 terbinafine 2–4 週，可加尿素軟膏','灰指甲：口服 terbinafine，手 6 週、腳 12 週','保持乾：擦乾趾縫、輪流穿鞋、治好後鞋子要處理','糖尿病人的足癬要治，是蜂窩性組織炎的入口']},
+{id:'pv',g:2,zh:'汗斑',en:'pityriasis versicolor',look:'versi',dist:['chest','back','neck','axilla'],
+ m:{pigment:5,patch:3},s:['trunk','flex','fold','any'],fol:0,itch:[0,1],pain:0,t:'c',f:{scale:2,sweat:4,sharp:1},
+ key:['胸、背、頸、上臂的小圓斑，融合成片；顏色比周圍淺、深或淡紅','用指甲輕刮才出現細屑','夏天、流汗多的年輕人；曬黑後更明顯'],
+ ddx:'白斑（純白、完全無屑、伍氏燈亮白）、白色糠疹（兒童臉部）、發炎後色素變化、脂漏性皮膚炎、玫瑰糠疹',
+ test:'KOH：短菌絲加孢子；伍氏燈淡黃綠',
+ tx:['Ketoconazole 2% 洗髮精當沐浴乳，停 5–10 分鐘再沖，連續 1–2 週；或外用唑類乳膏','範圍大或反覆：口服 fluconazole 300 mg 每週 1 次共 2 次','先講：菌死了顏色還要幾個月才回來，不是沒治好','容易復發：夏天每月預防性洗 1 次']},
+{id:'cand',g:2,zh:'念珠菌性間擦疹',en:'candidal intertrigo',look:'satel',dist:['groin','axilla','chest','abdomen'],
+ m:{patch:4,pustule:2,erosion:2},s:['fold'],fol:0,itch:[1,2],pain:1,t:'ac',f:{satellite:6,wet:3,sweat:2,sharp:1},
+ key:['皺摺處鮮紅、濕、發亮，皺摺底部裂','<b>周圍有衛星丘疹與膿疱</b>','乳下、腹部皺摺、鼠蹊（陰囊也會有）、尿布區','肥胖、糖尿病、用抗生素或類固醇後'],
+ ddx:'股癬（邊緣隆起、陰囊沒事、無衛星病灶）、反轉型乾癬（邊界清楚、無衛星、別處有乾癬）、紅癬、單純間擦疹、脂漏性皮膚炎',
+ test:'KOH：假菌絲加出芽孢子。反覆發作驗血糖',
+ tx:['外用唑類或 nystatin 一天 2 次 2–4 週','保持乾燥：擦乾、吹乾、隔一層棉布','很紅很癢：短期併用弱效類固醇 3–5 天']},
+{id:'acne',g:3,zh:'痤瘡',en:'acne vulgaris',look:'acne',dist:['face','chest','back'],
+ m:{papule:3,pustule:3,nodule:2},s:['face','trunk'],fol:1,itch:[0,0],pain:1,t:'c',f:{comedo:6},
+ key:['<b>有粉刺</b>（黑頭、白頭）才是痤瘡','粉刺、丘疹、膿疱、結節大小不一，混在一起','臉、胸、上背','成年女性下巴與下顎線的反覆發作：問月經、多毛（PCOS）'],
+ ddx:'酒糟（無粉刺、潮紅）、皮屑芽孢菌毛囊炎（大小一致、會癢、無粉刺）、細菌性毛囊炎、類固醇痤瘡（突然、單一型態）、口周皮膚炎',
+ test:'臨床診斷',
+ tx:['粉刺：外用 A 酸 ± BPO','發炎：A 酸＋BPO，可加外用 clindamycin','中度：加口服 doxycycline，最多 3–4 個月','重度結節、留疤：轉皮膚科（isotretinoin）','至少治療 8–12 週再評估']},
+{id:'ros',g:3,zh:'酒糟',en:'rosacea',look:'flush',dist:['face'],
+ m:{patch:3,papule:3,pustule:2},s:['face'],fol:0,itch:[0,1],pain:1,t:'c',f:{flush:6,sym:2},
+ key:['臉中央（兩頰、鼻、額、下巴）持續發紅、微血管擴張','丘疹與膿疱，但<b>沒有粉刺</b>','熱、日曬、酒、辣、情緒會潮紅、灼熱刺痛','30–50 歲；眼睛乾澀、異物感（眼酒糟）'],
+ ddx:'痤瘡（有粉刺）、脂漏性皮膚炎（鼻唇溝、有屑）、類固醇酒糟（問臉上擦過什麼）、紅斑性狼瘡（不侵犯鼻唇溝、無膿疱）、接觸性皮膚炎',
+ test:'臨床診斷',
+ tx:['避開誘因、防曬、溫和清潔與保濕','丘疹膿疱：外用 metronidazole、azelaic acid 或 ivermectin（依院內品項）；口服 doxycycline 6–12 週','<b>不要擦類固醇</b>；已經在擦的要慢慢停，會先反彈','持續潮紅、鼻瘤：轉皮膚科']},
+{id:'fol',g:3,zh:'細菌性毛囊炎、癤',en:'folliculitis / furuncle',look:'follic',dist:['thigh','buttock','axilla','scalp','chest','face'],
+ m:{pustule:4,papule:3,nodule:2},s:['leg','trunk','scalp','face','fold','any'],fol:1,itch:[0,1],pain:1,t:'a',f:{warm:2},
+ key:['毛孔上的紅丘疹或膿疱，中央一根毛','鬍子、頭皮、大腿、臀部、腋下；刮毛、摩擦、悶熱後','癤：深的、痛的紅色結節，之後中央化膿','泡湯或泳池後 1–2 天軀幹發作：綠膿桿菌'],
+ ddx:'痤瘡（粉刺）、皮屑芽孢菌毛囊炎（癢、大小一致、抗生素無效）、假性毛囊炎（鬍鬚內生）、疥瘡、化膿性汗腺炎（腋下鼠蹊反覆結節、瘻管）',
+ test:'反覆或治療無效：膿液培養（MRSA）；反覆長癤驗血糖',
+ tx:['少數淺層：BPO 清洗、外用 fusidic acid 或 mupirocin 5–7 天','癤：熱敷；有波動感就切開引流','多發、周圍蜂窩性組織炎、發燒：口服 cephalexin 500 mg QID 5–7 天','停止刮毛、寬鬆衣物']},
+{id:'mf',g:3,zh:'皮屑芽孢菌毛囊炎',en:'Malassezia folliculitis',look:'mono',dist:['chest','back','neck','face'],
+ m:{papule:4,pustule:3},s:['trunk','face','flex'],fol:1,itch:[1,2],pain:0,t:'c',f:{sweat:5},
+ key:['<b>大小一致</b>的 2–3 mm 毛囊性丘疹與小膿疱，<b>會癢</b>','上背、胸、肩、髮際、額頭','沒有粉刺；流汗、悶熱、用抗生素或類固醇後變多','當痤瘡治、吃抗生素反而更糟'],
+ ddx:'痤瘡（不癢、有粉刺、大小不一）、細菌性毛囊炎、類固醇痤瘡',
+ test:'膿疱內容物 KOH：成團的圓形孢子',
+ tx:['外用 ketoconazole 乳膏，洗髮精當沐浴乳','範圍大：口服 fluconazole 100–200 mg QD 1–3 週','之後每週外用 1–2 次維持；停掉不必要的抗生素']},
+{id:'imp',g:4,zh:'膿痂疹',en:'impetigo',look:'honey',dist:['face','hand','forearm'],
+ m:{erosion:4,vesicle:2,pustule:2},s:['face','hand','leg','any'],fol:0,itch:[0,1],pain:1,t:'a',f:{crust:6,wet:2,family:1},
+ key:['<b>蜜色結痂</b>蓋在淺糜爛上','兒童的口鼻周圍、四肢；會自體接種到別處','大疱型：鬆的大疱破掉留一圈領口狀脫屑','常繼發於濕疹、蟲咬、疥瘡的抓傷'],
+ ddx:'單純疱疹（群聚水疱、痛、反覆同一處）、接觸性皮膚炎、濕疹續發感染、水痘',
+ test:'臨床診斷；治療無效或群聚：培養',
+ tx:['少數病灶：外用 mupirocin 或 fusidic acid 一天 3 次 5 天','多發、大疱型：口服 cephalexin 7 天','溫水軟化後去掉痂再擦藥','開始治療 24 小時後可回學校；毛巾分開']},
+{id:'cell',g:4,zh:'蜂窩性組織炎、丹毒',en:'cellulitis / erysipelas',look:'cellul',dist:['shin','foot'],
+ m:{patch:4,plaque:2},s:['leg','foot','face','hand'],fol:0,itch:[0,0],pain:2,t:'a',f:{warm:6,illdef:2,edema:1},
+ key:['<b>單側</b>的紅、腫、熱、痛，幾天內擴大','蜂窩性組織炎邊界模糊；丹毒邊界清楚、隆起、鮮紅','可發燒、淋巴結腫','找入口：足癬的趾縫裂、傷口、蟲咬'],
+ ddx:'鬱滯性皮膚炎（兩側、慢性、不燒）、深部靜脈栓塞、痛風、接觸性皮膚炎（癢）、帶狀疱疹前期、<b>壞死性筋膜炎</b>（痛得不成比例、發紫、水疱、捻髮音：急診）',
+ test:'臨床診斷。筆畫出邊界。全身症狀重：CBC、CRP、血糖',
+ tx:['口服 cephalexin 500 mg QID 5–7 天（或 cefadroxil、dicloxacillin）','抬高患肢','48–72 小時回診看邊界','發燒寒顫、擴散快、免疫不全、臉或手、口服失敗：住院','治療足癬與下肢水腫，預防復發']},
+{id:'hz',g:5,zh:'帶狀疱疹',en:'herpes zoster',look:'band',dist:['chest','back','face'],
+ m:{vesicle:5,erosion:2,patch:1},s:['trunk','face','leg','any','flex'],fol:0,itch:[0,1],pain:2,t:'a',f:{derm:7,group:4},
+ key:['<b>單側、不過中線、沿皮節</b>的紅斑上成群水疱','疹子前 2–3 天先痛、灼熱或刺麻（可能被當成心絞痛、膽囊炎、椎間盤突出）','胸段最多，其次三叉神經第一分枝','額頭、眼皮、<b>鼻尖鼻側</b>有疹（Hutchinson 徵象）：眼睛受侵犯機會高','耳道水疱加顏面神經麻痺：Ramsay Hunt'],
+ ddx:'單純疱疹（反覆同一處、範圍小；薦椎處兩者難分）、接觸性皮膚炎（癢、線狀）、膿痂疹、蟲咬（隱翅蟲：線狀、灼痛）',
+ test:'臨床診斷。年輕人或反覆、多皮節：查免疫狀態',
+ tx:['72 小時內開始抗病毒藥 7 天','止痛要給夠；神經痛加 gabapentin 或 pregabalin','眼部：當天眼科','水疱結痂前蓋起來，避開沒得過水痘的人、孕婦、新生兒','痊癒後建議疫苗']},
+{id:'hsv',g:5,zh:'單純疱疹',en:'herpes simplex',look:'group',dist:['face','groin','buttock','hand'],
+ m:{vesicle:5,erosion:3},s:['face','fold','hand','trunk'],fol:0,itch:[0,1],pain:2,t:'ac',f:{group:6},
+ key:['紅斑上<b>一小群</b>水疱，幾天內破掉結痂','<b>每次都在同一個地方</b>：唇緣、鼻、生殖器、臀部','發作前幾小時到一天有刺麻灼熱感','誘因：發燒、日曬、壓力、月經'],
+ ddx:'帶狀疱疹（範圍大、沿皮節、通常只一次）、膿痂疹（蜜色痂）、口角炎、固定型藥物疹（同一處反覆、圓形暗紅斑、和吃藥有關）、口瘡（口內、非角化黏膜）',
+ test:'臨床診斷；生殖器初發建議 PCR 並做性病篩檢',
+ tx:['有前兆就開始吃效果最好','復發：acyclovir 400 mg TID 5 天','一年 ≥6 次：討論每日抑制療法','外用 acyclovir 效果有限','濕疹病人身上擴散（疱疹性濕疹）：當天轉診']},
+{id:'wart',g:5,zh:'疣',en:'viral wart',look:'wart',dist:['hand','foot','knee'],
+ m:{papule:4,nodule:2,plaque:1},s:['hand','foot','face','ext'],fol:0,itch:[0,0],pain:1,t:'c',f:{sharp:1},
+ key:['表面粗糙的角化丘疹，<b>皮紋到這裡中斷</b>','削薄後看到黑點（栓塞的微血管）','腳底疣：擠壓比直壓痛','扁平疣：臉、手背的膚色扁平小丘疹，沿抓痕排成線'],
+ ddx:'雞眼（皮紋連續、中央透明硬芯、直壓痛）、胼胝、傳染性軟疣（光滑、中央凹陷）、脂漏性角化、鱗狀細胞癌（長者、日曬處、潰瘍）',
+ test:'削薄看黑點',
+ tx:['液態氮冷凍，每 2–3 週一次','水楊酸製劑每天擦，泡軟後磨掉角質，持續 12 週','兩年內多數會自己消，兒童可觀察','不要摳、不共用指甲剪']},
+{id:'scab',g:6,zh:'疥瘡',en:'scabies',look:'burrow',dist:['hand','forearm','axilla','abdomen','groin','buttock'],
+ m:{papule:4,nodule:2,vesicle:1,erosion:1},s:['hand','fold','trunk','any','flex'],fol:0,itch:[2,2],pain:0,t:'ac',f:{family:7,night:4,lichen:1},
+ key:['<b>晚上癢到睡不著</b>；<b>同住的人也癢</b>','指縫、手腕屈側、腋下、肚臍周圍、腰、臀、乳暈、陰莖與陰囊（結節）','隧道：幾毫米長的灰白色細線','成人的臉和頭皮通常沒事；嬰兒與長者例外','長照機構、住院後、臥床者。結痂型（挪威疥）：厚痂、不太癢、傳染力極強'],
+ ddx:'異位性皮膚炎、蟲咬、接觸性皮膚炎、毛囊炎；長者全身癢要想藥物、腎臟病、類天疱瘡',
+ test:'刮隧道找蟲體、卵。陰性不能排除',
+ tx:['Permethrin 5% 脖子以下全身，8–14 小時洗掉，7 天後可再一次','同住者與密切接觸者同一天一起治療','衣物床單熱水洗烘或密封 7 天','治好後還會癢 2–4 週','機構內個案要通報感管']},
+{id:'bite',g:6,zh:'蟲咬、丘疹性蕁麻疹',en:'insect bite reaction / papular urticaria',look:'bite',dist:['shin','forearm','foot','neck'],
+ m:{papule:4,wheal:3,vesicle:1},s:['leg','hand','any','flex','foot','face'],fol:0,itch:[1,2],pain:1,t:'a',f:{punctum:6,contact:1,group:1},
+ key:['露出部位的紅色丘疹或膨疹，<b>中央一個叮咬點</b>','三五成群或排成一線（跳蚤、床蝨）','每一顆會持續好幾天（和蕁麻疹不同）','小黑蚊：小腿，奇癢，可起水疱。隱翅蟲：線狀紅斑上有膿疱，灼痛'],
+ ddx:'蕁麻疹（24 小時內消退）、疥瘡（指縫、家人也癢）、毛囊炎、水痘、帶狀疱疹',
+ test:'問戶外活動、寵物、旅遊、床鋪',
+ tx:['中效類固醇一天 2 次 5–7 天','口服抗組織胺','抓破續發感染再加抗生素藥膏','防蚊、處理寵物跳蚤與環境']},
+{id:'drug',g:7,zh:'藥物疹',en:'morbilliform drug eruption',look:'morbi',dist:['chest','abdomen','back','thigh','forearm'],
+ m:{patch:3,papule:3,wheal:1},s:['any','trunk'],fol:0,itch:[1,2],pain:0,t:'a',f:{drug:7,sym:3},
+ key:['開始新藥後 <b>4–14 天</b>出現（以前用過的藥可 1–3 天）','對稱的紅色斑丘疹，從軀幹開始往四肢擴散，會融合','常見的藥：抗生素（penicillin、磺胺）、抗癲癇藥、allopurinol、NSAID','固定型藥物疹：每次吃同一種藥，同一處出現圓形暗紅到紫色的斑，留色素'],
+ ddx:'病毒疹（兒童為主、有上呼吸道症狀）、蕁麻疹、玫瑰糠疹、急性移植物抗宿主病。<b>警訊：</b>黏膜糜爛、皮膚痛、水疱、表皮滑脫（SJS/TEN）；發燒、臉腫、淋巴結腫、肝指數或嗜酸性球高，用藥 2–8 週後（DRESS）',
+ test:'列出 8 週內所有的藥、中藥、保健食品。有全身症狀：CBC/DC、肝腎功能',
+ tx:['停掉可疑的藥','抗組織胺加中效類固醇，1–2 週消退，會脫屑','有任何警訊：急診','病歷與健保卡註記藥物過敏；嚴重者協助申請藥害救濟','開 carbamazepine 前驗 HLA-B*1502、allopurinol 前驗 HLA-B*5801']}
+];
+const DX=Object.fromEntries(D.map(d=>[d.id,d]));
+const photo=d=>'https://www.google.com/search?tbm=isch&q='+encodeURIComponent('site:dermnetnz.org '+d.en.split(' / ')[0].replace(/\s*\(.*\)/,''));
+
+/* ---------- STEP 1 flags ---------- */
+const FLAGS=[
+ ['黏膜（口、眼、生殖器）糜爛，加上皮膚痛或水疱、表皮一推就脫','crit','SJS/TEN：停掉所有可疑藥物，急診'],
+ ['痛得和外觀不成比例，皮膚發紫、出現水疱或捻髮音','crit','壞死性筋膜炎：急診，外科會診'],
+ ['發燒加上不會褪色的紫斑','crit','腦膜炎雙球菌血症、敗血症、血管炎：急診'],
+ ['蕁麻疹或臉腫，合併喘、喉頭緊、聲音沙啞、頭暈','crit','過敏性休克：肌肉注射腎上腺素，急診'],
+ ['全身 >90% 皮膚發紅脫屑','crit','紅皮症：體溫與體液流失，住院'],
+ ['用藥 2–8 週後發燒、臉腫、淋巴結腫、全身紅疹','crit','DRESS：抽 CBC/DC、肝腎功能，急診或住院'],
+ ['濕疹病人身上出現成群的凹陷小糜爛，伴發燒','crit','疱疹性濕疹：當天轉診，全身性抗病毒藥'],
+ ['帶狀疱疹長在額頭、眼皮、鼻尖或鼻側','warn','眼部帶狀疱疹：今天開抗病毒藥並當天轉眼科'],
+ ['單側紅腫熱痛快速擴大，合併發燒寒顫','warn','蜂窩性組織炎合併全身症狀：評估住院打抗生素'],
+ ['色素病灶不對稱、顏色不均、最近變大或流血；腳底或指甲下新的黑斑','warn','懷疑黑色素瘤：1–2 週內轉皮膚科，不要先冷凍或電燒'],
+ ['不會好的潰瘍或角化結節，超過 4 週','warn','排除皮膚癌：轉皮膚科切片'],
+ ['大疱（>1 cm 的水疱）長在長者身上，很癢','warn','類天疱瘡等水疱病：轉皮膚科切片與免疫螢光']
+];
+$('flagChecks').innerHTML=FLAGS.map((f,i)=>'<label><input type="checkbox" data-flag="'+i+'">'+f[0]+'</label>').join('');
+function flags(){
+  const on=[...document.querySelectorAll('[data-flag]')].filter(c=>c.checked).map(c=>FLAGS[+c.dataset.flag]);
+  if(!on.length)return out('flagOut','ok','<b class="big">沒有警訊</b>往下做一般鑑別。看診中出現上面任何一項，隨時回來這一步。');
+  const crit=on.some(f=>f[1]==='crit');
+  out('flagOut',crit?'crit':'warn','<b class="big">'+(crit?'今天就要處理':'安排轉診')+'</b><ul>'+on.map(f=>'<li>'+f[2]+'</li>').join('')+'</ul>');
+}
+
+/* ---------- STEP 3 differential ---------- */
+const sel={morph:'',site:'',fol:'',itch:'',pain:'',time:''};
+function chips(id,key,list){
+  const box=$(id);box.innerHTML=list.map(o=>'<button type="button" class="chip" data-v="'+o[0]+'" aria-pressed="false">'+o[1]+'</button>').join('');
+  box.addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;sel[key]=sel[key]===b.dataset.v?'':b.dataset.v;
+    box.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.v===sel[key])));ddx();});
+}
+chips('cMorph','morph',MORPH);chips('cSite','site',SITES);
+chips('cFol','fol',[['y','對準毛囊（中央有毛或毛孔）'],['n','不是毛囊性']]);
+chips('cItch','itch',[['0','不癢'],['1','會癢'],['2','很癢，影響睡眠']]);
+chips('cPain','pain',[['0','不痛'],['1','痛、灼熱或刺痛']]);
+chips('cTime','time',[['a','急性：2 週內'],['c','慢性或反覆發作']]);
+$('featChecks').innerHTML=FEATS.map(f=>'<label><input type="checkbox" data-feat="'+f[0]+'">'+f[1]+'</label>').join('');
+function score(d,feats){
+  let s=0;const yes=[],no=[];
+  if(sel.morph){const w=d.m[sel.morph]||0;if(w){s+=w*2;yes.push(ML[sel.morph]);}else{s-=3;no.push('原發疹通常不是'+ML[sel.morph]);}}
+  if(sel.site){if(d.s.indexOf(sel.site)>=0){s+=d.s.indexOf(sel.site)===0?3:2;yes.push('常長在'+SL[sel.site].split('：')[0]);}else if(d.s.indexOf('any')>=0)s+=.5;else{s-=2;no.push('少見於'+SL[sel.site].split('：')[0]);}}
+  if(sel.fol==='y'){if(d.fol){s+=5;yes.push('毛囊性');}else{s-=3;no.push('不是毛囊性疾病');}}
+  if(sel.fol==='n'&&d.fol){s-=4;no.push('應該對準毛囊');}
+  if(sel.itch!==''){const i=+sel.itch;if(i>=d.itch[0]&&i<=d.itch[1]){s+=i===2&&d.itch[0]===2?3:1.5;yes.push(i?(i===2?'很癢':'會癢'):'不癢');}else{s-=1.5;no.push(i?'通常不'+(d.itch[1]===0?'癢':'這麼癢'):'通常會癢');}}
+  if(sel.pain!==''){const p=+sel.pain;if(p&&d.pain){s+=d.pain===2?3:1.5;yes.push('會痛');}else if(p&&!d.pain){s-=1.5;no.push('通常不痛');}else if(!p&&d.pain===2){s-=2.5;no.push('通常會痛');}}
+  if(sel.time){if(d.t.indexOf(sel.time)>=0)s+=1;else{s-=1.5;no.push(sel.time==='a'?'通常是慢性':'通常是急性');}}
+  feats.forEach(f=>{const w=d.f[f];if(w){s+=w;yes.push(FL[f].split('：')[0]);}else s-=.4;});
+  return {d,s,yes,no};
+}
+function ddx(){
+  const feats=[...document.querySelectorAll('[data-feat]')].filter(c=>c.checked).map(c=>c.dataset.feat);
+  const n=Object.values(sel).filter(v=>v!=='').length+feats.length;
+  if(!n){out('ddxOut','','先選原發疹和位置，再加其他線索。選得越多，排序越準。');$('ddxList').innerHTML='';return;}
+  const res=D.map(d=>score(d,feats)).filter(r=>r.s>0).sort((a,b)=>b.s-a.s).slice(0,6);
+  if(!res.length){out('ddxOut','warn','<b class="big">沒有符合的常見病</b>這個組合不像本頁收錄的 26 種病。重新描述一次，或考慮切片、轉診。');$('ddxList').innerHTML='';return;}
+  const top=res[0].s,close=res[1]&&res[1].s>=top*.8;
+  out('ddxOut',close?'warn':'ok','<b class="big">最像：'+res[0].d.zh+(close?'，但和「'+res[1].d.zh+'」很接近':'')+'</b>'+(close?'往下比對兩張卡的鑑別要點，或做 KOH。':'點名稱看圖譜卡確認，再帶入處方。'));
+  $('ddxList').innerHTML=res.map(r=>'<div class="item ddxi"><div class="thumb">'+look(r.d.look)+'</div><div><b><a href="#atlas" data-card="'+r.d.id+'">'+r.d.zh+'</a></b> <span class="en">'+r.d.en+'</span>'+
+    '<div class="bar2"><i style="width:'+Math.round(r.s/top*100)+'%"></i></div>'+
+    (r.yes.length?'<div><span class="pill g">符合</span> '+r.yes.join('、')+'</div>':'')+(r.no.length?'<div><span class="pill c">不符</span> '+r.no.join('、')+'</div>':'')+
+    '<div>確認：'+r.d.test+'</div><div><a href="#atlas" data-card="'+r.d.id+'">圖譜卡</a>　<a href="#rx" data-rx="'+r.d.id+'">帶入處方</a></div></div></div>').join('');
+}
+$('ddxReset').onclick=()=>{Object.keys(sel).forEach(k=>sel[k]='');document.querySelectorAll('#ddx .chip').forEach(c=>c.setAttribute('aria-pressed','false'));document.querySelectorAll('[data-feat]').forEach(c=>c.checked=false);ddx();};
+
+/* ---------- STEP 4 by site ---------- */
+const BYSITE={
+ scalp:[['seb','油膩黃屑、癢不明顯，髮際內'],['pso','厚的銀白屑、邊界清楚、超出髮際'],['fol','毛囊性膿疱，會痛'],['lsc','後頸髮際一塊增厚的斑'],[null,'頭癬','兒童；斷髮、脫屑禿塊，要口服藥'],[null,'圓禿','圓形禿塊，皮膚光滑無屑'],['contact','染髮後髮際、耳後、額頭紅癢']],
+ face:[['seb','眉間、鼻翼旁、耳後的紅斑黃屑'],['acne','有粉刺'],['ros','臉中央潮紅、微血管、無粉刺'],['ad','眼皮、嘴周；嬰兒在臉頰'],['contact','保養品、藥膏、口罩'],['imp','口鼻周圍蜜色痂'],['hsv','唇緣同一處反覆的水疱'],['hz','單側額頭、眼皮；看鼻尖'],['tinea','臉上的環狀斑，常被類固醇擦到不典型'],['cell','丹毒：邊界清楚的鮮紅腫痛']],
+ neck:[['ad','頸側、後頸，色素沉著'],['lsc','後頸一塊增厚'],['contact','項鍊、香水、染髮'],['pv','淺色或深色小斑'],[null,'軟垂疣','膚色帶蒂小丘疹'],['mf','髮際、頸後的癢丘疹']],
+ chest:[['pv','淺色或褐色小圓斑，夏天'],['mf','大小一致、會癢的毛囊丘疹'],['acne','有粉刺'],['seb','胸口中央的紅斑黃屑'],['pr','橢圓斑沿皮紋'],['hz','單側帶狀、痛'],['drug','對稱、融合的斑丘疹'],['urt','會跑的膨疹'],['cand','乳下：濕紅加衛星病灶']],
+ abdomen:[['scab','肚臍周圍、腰帶處的癢丘疹'],['contact','皮帶扣、褲頭鈕扣（鎳）'],['urt','會跑的膨疹'],['drug','對稱斑丘疹'],['pr','橢圓斑'],['tinea','環狀'],['cand','腹部皺摺下']],
+ back:[['pv','上背小圓斑'],['mf','上背癢丘疹'],['acne','上背，有粉刺'],['pso','下背、臀溝的厚屑斑塊'],['hz','單側帶狀'],['num','長者：乾、癢'],[null,'脂漏性角化','長者：褐色、像黏上去的疣狀斑塊']],
+ axilla:[['cand','濕紅、衛星膿疱'],['contact','止汗劑、除毛'],['fol','刮毛後的毛囊膿疱'],['scab','腋前皺摺的癢丘疹'],[null,'紅癬','紅褐色、細屑、伍氏燈珊瑚紅'],[null,'反轉型乾癬','邊界清楚的亮紅斑，無屑'],[null,'化膿性汗腺炎','反覆的痛結節、瘻管']],
+ antecubital:[['ad','對稱、邊界模糊、苔癬化'],['scab','癢丘疹，看指縫'],['contact','']],
+ elbow:[['pso','厚的銀白屑、邊界清楚'],['num','圓形、滲液、很癢'],['scab','長者與結痂型'],[null,'毛孔角化症','上臂外側粗糙的毛囊小丘疹，不癢']],
+ forearm:[['scab','手腕屈側：隧道'],['contact','錶帶、手套邊緣；植物：線狀'],['bite','露出處的丘疹，中央叮咬點'],['ad',''],['lsc','前臂伸側一塊增厚'],[null,'扁平苔癬','手腕屈側：紫色、多角形、扁平、很癢的丘疹']],
+ hand:[['contact','手背、指縫：清潔劑、手套；最常見'],['pom','手指側面的深層小水疱'],['scab','指縫隧道、夜癢'],['ad','慢性手部濕疹'],['tp','手癬：單手手掌乾、紋路發白，看腳'],['pso','手掌厚屑、裂；看指甲'],['wart','粗糙丘疹、黑點'],['hsv','手指：疱疹性指頭炎'],[null,'手足口病','兒童：手掌腳掌的橢圓小水疱加口腔潰瘍']],
+ groin:[['tinea','股癬：環狀、邊緣隆起，陰囊沒事'],['cand','鮮紅濕、衛星膿疱，陰囊也有'],[null,'紅癬','紅褐、細屑、不癢、伍氏燈珊瑚紅'],[null,'反轉型乾癬','邊界清楚的亮紅，無屑'],['lsc','陰囊或外陰增厚'],['scab','陰莖、陰囊的癢結節'],['hsv','成群水疱、痛、反覆'],['contact','']],
+ buttock:[['fol','毛囊膿疱'],['tinea','環狀，從鼠蹊延伸'],['scab','癢丘疹'],['pso','臀溝'],['hsv','薦椎處反覆的成群水疱']],
+ thigh:[['tinea','大腿內側環狀斑'],['fol','毛囊膿疱'],['urt',''],['num','']],
+ knee:[['pso','厚屑斑塊'],['wart','兒童'],['num','']],
+ popliteal:[['ad','對稱、苔癬化'],['contact','']],
+ shin:[['num','長者冬天：乾裂；圓形斑塊'],['stasis','兩側、下三分之一、褐色、水腫'],['cell','單側紅腫熱痛'],['bite','小黑蚊、跳蚤'],['lsc','外側一塊增厚'],[null,'結節性紅斑','脛前的痛性紅色結節：鏈球菌、藥物、結核、發炎性腸病']],
+ foot:[['tp','趾縫脫皮、腳掌細屑、足弓水疱；單側'],['pom','對稱的深層水疱'],['contact','腳背：鞋材、襪子'],['wart','腳底：皮紋中斷、黑點、擠壓痛'],['cell','找趾縫的入口'],['scab','嬰兒的腳掌'],[null,'雞眼','受壓處，皮紋連續，中央硬芯'],[null,'肢端黑色素瘤','腳底或甲下的不規則黑斑：轉診']]
+};
+let siteSel='';
+function siteDraw(){
+  $('siteMap').innerHTML=body([],true,siteSel);
+  if(!siteSel){$('siteOut').innerHTML='<p style="color:var(--mute)">點左邊的部位。</p>';return;}
+  $('siteOut').innerHTML='<h4>'+REG[siteSel]+'</h4><ul>'+BYSITE[siteSel].map(r=>r[0]?'<li><a href="#atlas" data-card="'+r[0]+'">'+DX[r[0]].zh+'</a>'+(r[1]?'：'+r[1]:'')+'</li>':'<li><b>'+r[1]+'</b>：'+r[2]+'</li>').join('')+'</ul>';
+}
+$('siteMap').addEventListener('click',e=>{const r=e.target.closest('[data-r]');if(!r||!BYSITE[r.dataset.r])return;siteSel=r.dataset.r;siteDraw();});
+$('siteMap').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const r=e.target.closest('[data-r]');if(!r||!BYSITE[r.dataset.r])return;e.preventDefault();siteSel=r.dataset.r;siteDraw();const n=$('siteMap').querySelector('[data-r="'+siteSel+'"]');if(n)n.focus();});
+
+/* ---------- STEP 5 pairs ---------- */
+const PAIRS=[
+ ['濕疹 vs 體癬',['','濕疹','體癬'],[['形狀','不規則，整塊都紅','環狀，邊緣最紅最多屑，中央變淡'],['對稱','常對稱','不對稱'],['邊界','模糊','清楚、隆起'],['擦類固醇','變好','先好再變大'],['檢查','KOH 陰性','KOH 見菌絲']],['tinea','num']],
+ ['股癬 vs 念珠菌 vs 反轉型乾癬 vs 紅癬',['','股癬','念珠菌','反轉型乾癬','紅癬'],[['顏色','紅褐，邊緣隆起','鮮紅、濕','亮紅、光滑','紅褐、乾'],['陰囊','不侵犯','會侵犯','可','少'],['衛星病灶','無','有','無','無'],['癢','癢','癢、灼熱','輕','不癢'],['檢查','KOH 菌絲','KOH 假菌絲','別處有乾癬、指甲','伍氏燈珊瑚紅']],['tinea','cand']],
+ ['痤瘡 vs 細菌性毛囊炎 vs 皮屑芽孢菌毛囊炎 vs 酒糟',['','痤瘡','細菌性毛囊炎','皮屑芽孢菌毛囊炎','酒糟'],[['粉刺','有','無','無','無'],['大小','不一','相近','一致，2–3 mm','不一'],['癢','不癢','輕或痛','癢','灼熱'],['位置','臉、胸、背','鬍子、大腿、臀','上背、胸、髮際','臉中央'],['抗生素','有效','有效','無效或更糟','有效（抗發炎）']],['acne','fol','mf','ros']],
+ ['蕁麻疹 vs 蕁麻疹性血管炎 vs 蟲咬',['','蕁麻疹','蕁麻疹性血管炎','蟲咬'],[['單一病灶','<24 小時','>24–48 小時','數天'],['感覺','癢','痛、灼熱多於癢','癢'],['消退後','不留痕','瘀色、色素沉著','可留色素'],['其他','位置一直換','可有關節痛、發燒；切片','中央叮咬點、露出處']],['urt','bite']],
+ ['帶狀疱疹 vs 單純疱疹 vs 接觸性皮膚炎',['','帶狀疱疹','單純疱疹','接觸性皮膚炎'],[['分布','單側、沿皮節','一小群','和接觸物吻合'],['感覺','痛先於疹','刺麻、痛','癢'],['復發','通常一次','同一處反覆','再接觸才發'],['過中線','不過','—','可以']],['hz','hsv','contact']],
+ ['乾癬 vs 脂漏性皮膚炎 vs 錢幣狀濕疹',['','乾癬','脂漏性皮膚炎','錢幣狀濕疹'],[['鱗屑','厚、乾、銀白','薄、油、黃','痂與滲液'],['邊界','很清楚','模糊','清楚的圓'],['位置','手肘、膝、頭皮超出髮際、下背','頭皮、眉、鼻翼、胸口','小腿、前臂、軀幹'],['癢','輕到中','輕','很癢'],['指甲','凹點、甲床分離','正常','正常']],['pso','seb','num']],
+ ['蜂窩性組織炎 vs 鬱滯性皮膚炎',['','蜂窩性組織炎','鬱滯性皮膚炎'],[['側別','單側','通常兩側'],['時間','幾天內','幾週到幾年'],['感覺','痛、熱','癢'],['全身','可發燒','不燒'],['皮膚','紅、腫、亮','褐色、脫屑、靜脈曲張']],['cell','stasis']],
+ ['汗皰疹 vs 足癬（水疱型）vs 疥瘡',['','汗皰疹','足癬','疥瘡'],[['對稱','對稱','單側或不對稱','對稱'],['位置','手指側面、掌、蹠','足弓、趾縫','指縫、手腕、腋下、生殖器'],['家人','沒事','可有足癬','也癢'],['檢查','KOH 陰性','KOH 菌絲','刮到蟲體或卵']],['pom','tp','scab']]
+];
+$('pairBox').innerHTML=PAIRS.map((p,i)=>'<details'+(i===0?' open':'')+'><summary>'+p[0]+'</summary><div><div class="scroll"><table><tr>'+p[1].map(h=>'<th>'+h+'</th>').join('')+'</tr>'+p[2].map(r=>'<tr>'+r.map((c,j)=>j?'<td>'+c.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</td>':'<th>'+c+'</th>').join('')+'</tr>').join('')+'</table></div><p>圖譜卡：'+p[3].map(id=>'<a href="#atlas" data-card="'+id+'">'+DX[id].zh+'</a>').join('、')+'</p></div></details>').join('');
+
+/* ---------- STEP 7 atlas ---------- */
+let cardSel='tinea';
+$('atlasChips').innerHTML=G.map((g,gi)=>'<div class="grp"><span>'+g+'</span><div class="chips">'+D.filter(d=>d.g===gi).map(d=>'<button type="button" class="chip" data-card="'+d.id+'" aria-pressed="false">'+d.zh+'</button>').join('')+'</div></div>').join('');
+function card(){
+  const d=DX[cardSel];
+  document.querySelectorAll('#atlasChips .chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.card===cardSel)));
+  $('atlasCard').innerHTML='<div class="acard"><h3>'+d.zh+' <span class="en">'+d.en+'</span></h3>'+
+   '<div class="afig"><figure>'+look(d.look)+'<figcaption>表面示意圖</figcaption></figure><figure>'+body(d.dist,false)+'<figcaption>好發部位：'+d.dist.map(k=>REG[k]).join('、')+'</figcaption></figure></div>'+
+   '<p class="tagrow"><span class="pill n">原發疹：'+Object.keys(d.m).sort((a,b)=>d.m[b]-d.m[a]).slice(0,3).map(k=>ML[k]).join('、')+'</span><span class="pill '+(d.fol?'u':'n')+'">'+(d.fol?'毛囊性':'非毛囊性')+'</span><span class="pill '+(d.itch[1]===2?'c':'n')+'">'+(d.itch[1]===0?'不癢':d.itch[0]===2?'很癢':d.itch[0]===0?'不癢到'+(d.itch[1]===2?'很癢':'輕癢'):'癢')+'</span><span class="pill '+(d.pain===2?'c':'n')+'">'+(d.pain===2?'痛':d.pain?'可痛':'不痛')+'</span></p>'+
+   '<h4>怎麼認</h4><ul>'+d.key.map(k=>'<li>'+k+'</li>').join('')+'</ul>'+
+   '<h4>要和誰區分</h4><p>'+d.ddx+'</p><h4>確認</h4><p>'+d.test+'</p>'+
+   '<h4>治療</h4><ul>'+d.tx.map(k=>'<li>'+k+'</li>').join('')+'</ul>'+
+   '<p class="alinks"><a class="btn" href="#rx" data-rx="'+d.id+'">帶入處方產生器</a><a href="'+photo(d)+'" target="_blank" rel="noopener">看實際照片（DermNet）</a></p></div>';
+}
+/* links that pick a card or a diagnosis; the kit opens the target step on anchor clicks */
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-card]');if(a){cardSel=a.dataset.card;card();}
+  const b=e.target.closest('[data-rx]');if(b){$('xDx').value=b.dataset.rx;rx();}
+});
+
+/* ---------- STEP 8 prescription ---------- */
+$('xDx').innerHTML=G.map((g,gi)=>'<optgroup label="'+g+'">'+D.filter(d=>d.g===gi).map(d=>'<option value="'+d.id+'">'+d.zh+'</option>').join('')+'</optgroup>').join('');
+$('xDx').value='tinea';
+const LAD=[
+ {n:'Hydrocortisone acetate 1% 乳膏（吉舒）',c:'弱效',f:'一天 2 次',fq:2},
+ {n:'Betamethasone valerate 0.06% 乳膏（臨得隆-V）',c:'中效',f:'一天 2 次',fq:2},
+ {n:'Mometasone furoate 0.1% 乳膏（皚膚美得／安膚樂）',c:'中效',f:'一天 1 次',fq:1},
+ {n:'Fluocinonide 0.05% 親水軟膏（妥膚淨）',c:'強效',f:'一天 2 次',fq:2},
+ {n:'Clobetasol propionate 0.05%（戴摩膚／可立舒）',c:'超強效',f:'一天 2 次',fq:2}];
+const BASE={face:[0,0,2],fold:[0,0,1],trunk:[1,2,3],palm:[3,3,4],scalp:[1,2,4]};
+const STEROID_DX={ad:0,contact:0,num:0,pom:1,lsc:1,stasis:-1,pso:1,pr:-1,bite:0,drug:0};
+const g1=x=>Math.round(x*10)/10;
+function amount(area,fq,days){const ftu=area/2,per=ftu*.5;return {ftu,per,total:per*fq*days};}
+function steroid(dx,site,age,sev,area,wet){
+  let i=BASE[site][sev]+(STEROID_DX[dx]||0);const why=[];
+  const cap=site==='face'?2:site==='fold'?1:4;i=Math.max(0,Math.min(i,cap));
+  if(age==='infant'){const c=(site==='face'||site==='fold')?0:1;if(i>c){i=c;why.push('2 歲以下：最高用到'+LAD[c].c);}}
+  if(age==='child'){const c=site==='palm'?3:(site==='face'||site==='fold')?0:2;if(i>c){i=c;why.push('兒童：最高用到'+LAD[c].c);}}
+  if(age==='old'&&i>=3&&site!=='palm'){i--;why.push('長者皮膚薄：降一級');}
+  const L=LAD[i];
+  let days=i===4?14:i===3?14:(site==='face'||site==='fold')?7:14;
+  if(site==='face'&&i===2){days=5;why.push('臉用到中效只短期 5–7 天，之後降回弱效或改 TCI');}
+  if(site==='fold'&&i===1){days=5;}
+  let veh=site==='scalp'?'頭皮選溶液或洗劑劑型（院內同級品項）':wet||site==='fold'?'選乳膏（濕、皺摺處不用軟膏）':sev===2?'厚、乾、裂的病灶選軟膏劑型更好':'乳膏即可';
+  const a=amount(area,L.fq,days);
+  return {i,L,days,veh,a,why};
+}
+function rx(){
+  const dx=$('xDx').value,d=DX[dx],site=$('xSite').value,age=$('xAge').value,sev=+$('xSev').value,area=Math.max(.5,parseFloat($('xArea').value)||1);
+  const preg=$('xPreg').checked,renal=$('xRenal').checked,wet=$('xWet').checked,wide=$('xWide').checked,kid=age==='infant'||age==='child';
+  const items=[],warn=[],why=[];
+  const add=(name,how,note,tag)=>items.push({name,how,note:note||'',tag:tag||''});
+  const st=()=>{const s=steroid(dx,site,age,sev,area,wet);
+    add(s.L.n,s.L.f+'，薄擦患部，最多 '+s.days+' 天',s.L.c+'。'+s.veh+'。每次約 '+g1(s.a.ftu)+' 個指尖單位（'+g1(s.a.per)+' g），'+s.days+' 天共約 '+Math.ceil(s.a.total)+' g。','類固醇');
+    s.why.forEach(w=>why.push(w));
+    if(s.i===4)warn.push('超強效：連續不超過 2 週、每週不超過 50 g，不擦臉與皺摺。');
+    return s;};
+  const moist=()=>add('保濕劑（無香料乳霜或凡士林）','一天至少 2 次，洗澡後 3 分鐘內','','保濕');
+  const ah=(n)=>add(kid?'Cetirizine 口服液（依體重）':'Levocetirizine 5 mg（或 cetirizine 10 mg、fexofenadine 180 mg）',n||'每天 1 次，睡前','第二代抗組織胺','口服');
+  const tci=()=>{if(site==='face'||site==='fold')add(age==='infant'?'（2 歲以下 TCI 為仿單外，先用弱效類固醇）':'Tacrolimus '+(age==='child'?'0.03%':'0.1%')+' 軟膏','一天 2 次，類固醇停藥後接著擦或作為維持','不會萎縮；前幾天會灼熱。健保條件待核對','非類固醇');};
+  const fungal=(wk)=>add('Terbinafine 1% 乳膏（療黴舒）','一天 1–2 次，擦到外圍 2 公分，共 '+wk+' 週','看起來好了再擦 1–2 週。替代：唑類乳膏（卡黴速停、克多膚等）一天 2 次 2–4 週','抗黴菌');
+  const oralTerb=(dur)=>{if(preg){warn.push('懷孕哺乳：不用口服抗黴菌藥，先外用，產後再處理。');return;}if(kid){warn.push('兒童口服 terbinafine 依體重，建議轉皮膚科。');return;}add('Terbinafine 250 mg','每天 1 次，'+dur,'肝病避免；治療超過 4 週先驗肝功能','口服');};
+  const s2=site==='face'||site==='fold';
+  switch(dx){
+   case 'ad':st();moist();tci();if(sev>=1)ah('睡前，幫助入睡');why.push('控制後改成每週 2 天擦在常復發處維持，保濕不能停。');if(wet)warn.push('滲液、蜜色結痂：合併細菌感染，加口服 cephalexin 5–7 天。');break;
+   case 'contact':st();moist();if(wet)add('生理食鹽水濕敷','一天 2–3 次，每次 10–15 分鐘','滲液期先濕敷再擦藥','照護');if(wide||sev===2&&site==='face'){if(kid)warn.push('兒童大範圍：口服類固醇依體重，建議轉診。');else add('Prednisolone 0.5–1 mg/kg','每天早上 1 次，2–3 週漸減','少於 2 週容易反彈；糖尿病、消化性潰瘍要留意','口服');}why.push('沒有避開接觸物，再強的藥也會復發。');break;
+   case 'seb':add('Ketoconazole 2% 乳膏（克多膚）','一天 2 次，2–4 週','','抗黴菌');add('Ketoconazole 2% 洗髮精','每週 2 次，起泡後停留 5 分鐘再沖；改善後每週 1 次維持','頭皮與髮際；也可用來洗臉上的患部','抗黴菌');if(sev>=1)add(site==='scalp'?'Betamethasone valerate 頭皮用溶液（院內同級品項）':LAD[0].n,'一天 1–2 次，最多 7 天','只在發炎明顯時短期加上','類固醇');break;
+   case 'num':st();moist();why.push('溫水短時間洗澡、不用肥皂搓小腿。');if(wet)warn.push('滲液結痂明顯：加外用 fusidic acid 或口服 cephalexin。');break;
+   case 'pom':st();add('護手霜、棉手套加防水手套','每次洗手後','','照護');why.push('手掌腳掌角質厚，起始就用強效。單側或腳上有屑先做 KOH。');break;
+   case 'lsc':st();ah('睡前');why.push('可在藥膏上加封閉（保鮮膜或藥布）以增加效果並擋住搔抓。');break;
+   case 'stasis':st();moist();add('彈性襪、抬腿','白天穿，睡前脫；每天抬腿數次','先確認足背動脈或 ABI 正常','照護');break;
+   case 'pso':st();if(!s2&&!kid)add('Calcipotriol 軟膏（或 calcipotriol＋betamethasone 複方）','一天 1 次','和類固醇併用可減少類固醇用量；每週 ≤100 g。依院內品項與健保規定','非類固醇');if(s2)tci();if(wide)warn.push('>10% 體表面積或有關節痛、指甲病變：轉皮膚科評估照光或全身性治療。');warn.push('不用口服或注射類固醇。');break;
+   case 'urt':ah('每天 1 次，規則吃 2–4 週再評估');why.push('外用類固醇無效。控制不好可把同一種第二代加到 2–4 倍（仿單外）。');if(sev===2&&!kid)add('Prednisolone 20–30 mg','每天早上 1 次，3–5 天','只用於嚴重急性發作','口服');warn.push('喘、喉頭緊、頭暈：打腎上腺素並送急診。');if(preg)why.push('懷孕：loratadine、cetirizine 使用經驗較多。');break;
+   case 'pr':add('衛教：6–8 週會自己消','','','照護');if(sev>=1){st();ah();}moist();break;
+   case 'tinea':fungal('2');if(wide)oralTerb('2 週');if(site==='scalp')warn.push('頭癬外用無效，要口服藥，建議轉皮膚科。');warn.push('不用含類固醇的複方藥膏。');why.push('同時看腳，有足癬一起治。');break;
+   case 'tp':fungal('2–4');if(sev===2||wide)oralTerb('2–4 週（厚皮型足癬）；灰指甲：手 6 週、腳 12 週');if(sev===2)add('Urea 10–20% 軟膏','一天 1–2 次','軟化厚角質，幫助抗黴菌藥穿透','照護');why.push('口服藥治灰指甲前要有 KOH 或培養陽性。');break;
+   case 'pv':add('Ketoconazole 2% 洗髮精','當沐浴乳，塗在患部停 5–10 分鐘再沖，每天 1 次，1–2 週','','抗黴菌');if(wide&&!preg&&!kid)add('Fluconazole 300 mg','每週 1 次，共 2 次','查交互作用','口服');if(wide&&preg)warn.push('懷孕：不用口服 fluconazole。');why.push('顏色要幾個月才恢復，不代表沒治好。');break;
+   case 'cand':add('Clotrimazole 1% 乳膏（卡黴速停）','一天 2 次，2–4 週','替代：nystatin、其他唑類','抗黴菌');if(sev>=1)add(LAD[0].n,'一天 2 次，3–5 天','很紅很癢時短期併用','類固醇');add('保持乾燥','洗後擦乾、吹乾，皺摺間隔一層棉布','','照護');why.push('反覆發作驗血糖。');break;
+   case 'acne':
+    if(preg){add('Azelaic acid 外用','一天 2 次','懷孕可用','外用');add('Benzoyl peroxide 2.5–5%','一天 1 次','','外用');if(sev>=1)add('Clindamycin 外用','一天 2 次，和 BPO 併用','','外用');warn.push('懷孕：不用外用與口服 A 酸、tetracycline 類。');}
+    else{add('Adapalene 0.1% 凝膠','睡前 1 次，豆粒大擦全臉；前 2 週隔天擦','會乾、脫皮、刺，加保濕','外用');add('Benzoyl peroxide 2.5–5%','早上 1 次','會漂白衣物、枕套','外用');
+     if(sev>=1){if(kid)warn.push('12 歲以下不用 doxycycline。');else add('Doxycycline 100 mg','每天 1–2 次，飯後配大量水，最多 3–4 個月','光敏感、食道炎','口服');}
+     if(sev===2)warn.push('結節囊腫或已留疤：轉皮膚科評估 isotretinoin。');}
+    why.push('至少 8–12 週才評估效果；改善後留外用 A 酸維持。');break;
+   case 'ros':add('Metronidazole 0.75% 凝膠（或 azelaic acid、ivermectin 1% 乳膏，依院內品項）','一天 1–2 次，8–12 週','','外用');if(sev>=1&&!preg&&!kid)add('Doxycycline 100 mg','每天 1 次，6–12 週','','口服');add('防曬、溫和清潔、保濕','每天','避開熱、酒、辣','照護');warn.push('不擦類固醇；正在擦的要慢慢停。');break;
+   case 'fol':if(sev===0)add('Benzoyl peroxide 清洗或 chlorhexidine','洗澡時用','','外用');add('Fusidic acid 2% 或 mupirocin 2% 軟膏','一天 2–3 次，5–7 天','','外用');if(sev===2||wide)add(kid?'Cephalexin 25–50 mg/kg/day 分 4 次':'Cephalexin 500 mg','每天 4 次，5–7 天','penicillin 過敏：clindamycin。懷疑 MRSA：依培養','口服');if(sev===2)why.push('癤有波動感要切開引流，抗生素只是輔助。');break;
+   case 'mf':add('Ketoconazole 2% 乳膏或洗髮精','一天 1–2 次；洗髮精停 5–10 分鐘再沖，2–4 週','之後每週 1–2 次維持','抗黴菌');if((sev>=1||wide)&&!preg&&!kid)add('Fluconazole 100–200 mg','每天 1 次，1–3 週','查交互作用','口服');why.push('停掉不必要的口服抗生素與類固醇。');break;
+   case 'imp':add('Mupirocin 2% 或 fusidic acid 2% 軟膏','一天 3 次，5 天，先軟化去痂','','外用');if(sev===2||wide)add(kid?'Cephalexin 25–50 mg/kg/day 分 4 次':'Cephalexin 500 mg','每天 4 次，7 天','','口服');why.push('治療 24 小時後可回學校。');break;
+   case 'cell':add(kid?'Cephalexin 25–50 mg/kg/day 分 4 次':'Cephalexin 500 mg','每天 4 次，5–7 天','替代：cefadroxil、dicloxacillin；penicillin 過敏：clindamycin','口服');add('抬高患肢、筆畫邊界','','48–72 小時回診','照護');warn.push('發燒寒顫、擴散快、免疫不全、臉部、口服 48 小時無效：住院。');warn.push('痛得不成比例、發紫、水疱：壞死性筋膜炎，急診。');break;
+   case 'hz':add('Acyclovir 800 mg','一天 5 次（醒著時每 4 小時），7 天','發疹 72 小時內開始。健保：口服 acyclovir 不限部位年齡，療程 7 日為限','口服');add('Acetaminophen 500 mg','需要時每 6 小時 1–2 顆','不夠再加 NSAID 或弱鴉片類','口服');if(sev>=1&&!kid)add('Gabapentin 100–300 mg','睡前開始，依反應慢慢加','神經痛；嗜睡、頭暈，長者從 100 mg','口服');
+    if(renal)warn.push('eGFR <50：acyclovir 要減量（eGFR 10–25 每 8 小時、<10 每 12 小時），gabapentin 也要減量。');
+    if(site==='face')warn.push('額頭、眼皮、鼻尖有疹：當天轉眼科。');if(preg)why.push('懷孕：acyclovir 使用經驗最多。');why.push('水疱結痂前蓋住；痊癒後安排疫苗。');break;
+   case 'hsv':add('Acyclovir 400 mg','每天 3 次，復發 5 天、初發 7–10 天','有前兆就開始吃。健保：口服 acyclovir 療程 7 日為限','口服');if(renal)warn.push('eGFR <50：acyclovir 依腎功能減量。');why.push('一年 ≥6 次可討論每日抑制療法。');break;
+   case 'wart':add('液態氮冷凍治療','每 2–3 週一次','先削薄角質','處置');add('水楊酸製劑','每天睡前，泡軟、磨掉角質後擦，最多 12 週','糖尿病足、周邊血管疾病不用','外用');break;
+   case 'scab':add('Permethrin 5% 乳膏','脖子以下全身擦一次，8–14 小時後洗掉；7 天後視需要再一次','成人一次約 30 g。健保支數限制待核對','外用');if(age==='infant')why.push('嬰兒：頭皮與臉也要擦，避開眼口。');st();ah('睡前');why.push('同住者同一天一起治療；衣物床單熱水洗烘或密封 7 天；治好後還會癢 2–4 週。');if(preg)why.push('懷孕：用 permethrin，不用 ivermectin、lindane。');break;
+   case 'bite':st();ah();break;
+   case 'drug':add('停用可疑藥物','','記錄藥名與日期，註記過敏','處置');st();ah();warn.push('黏膜糜爛、皮膚痛、水疱、發燒、臉腫：急診。');why.push('有全身症狀抽 CBC/DC、肝腎功能。');break;
+  }
+  if(preg&&STEROID_DX[dx]!==undefined)why.push('懷孕：弱到中效外用類固醇可用；強效、大面積、長時間要避免。');
+  window.CK_RX={dx,dxName:d.zh,site,area,items:items.map(i=>({name:i.name,dose:i.how})),warn};
+  out('rxOut',warn.length?'warn':'ok','<b class="big">'+d.zh+'：'+items.length+' 項處方</b>'+(warn.length?'<ul>'+warn.map(w=>'<li>'+w+'</li>').join('')+'</ul>':'照下面的順序開。')+'<small>確認診斷：'+d.test+'</small>');
+  $('rxList').innerHTML=items.map(i=>'<div class="item"><b>'+i.name+'</b>'+(i.tag?'<span class="pill '+({類固醇:'u',抗黴菌:'g',口服:'c'}[i.tag]||'n')+'">'+i.tag+'</span>':'')+(i.how?'<div>'+i.how+'</div>':'')+(i.note?'<div>'+i.note+'</div>':'')+'</div>').join('');
+  $('rxWhy').innerHTML=(why.length?why.join(' ')+' ':'')+'回診：'+({cell:'48–72 小時',imp:'3–5 天',fol:'3–5 天',hz:'1 週',acne:'8–12 週',ros:'8–12 週',urt:'2–4 週'}[dx]||'2 週')+'。詳見 <a href="#steroid">STEP 9</a>、<a href="#antifungal">STEP 10</a>、<a href="#other">STEP 11</a>。';
+}
+
+/* ---------- FTU calculator ---------- */
+$('ftuArt').innerHTML=svg(150,110,'<rect width="150" height="110" rx="6" fill="#eef1f8"/><path d="M12 78q0 -12 12 -12h70q16 0 16 12t-16 12H24q-12 0 -12 -12z" fill="#f0cdb8" stroke="#d9a98f" stroke-width="1.5"/><path d="M70 66v24M40 66v24" stroke="#d9a98f" stroke-width="1.2"/><path d="M96 70q8 0 8 8t-8 8" fill="#fbe9df" stroke="#d9a98f" stroke-width="1"/><path d="M72 72h30" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M72 72h30" stroke="#3f4f8f" stroke-width="1" stroke-dasharray="2 2"/><path d="M72 56v-6h30v6" fill="none" stroke="#22261f" stroke-width="1.2"/><text x="87" y="44" text-anchor="middle" font-size="11" fill="#22261f" font-weight="700">1 FTU ≈ 0.5 g</text><g transform="translate(112 18) rotate(35)"><rect x="0" y="0" width="16" height="40" rx="4" fill="#fff" stroke="#3f4f8f" stroke-width="1.5"/><rect x="4" y="40" width="8" height="6" fill="#3f4f8f"/></g>','指尖單位：從食指指尖擠到第一指節');
+function ftu(){
+  const area=Math.max(.5,parseFloat($('fArea').value)||1),fq=+$('fFreq').value,days=Math.max(1,parseFloat($('fDays').value)||1),tube=+$('fTube').value;
+  const a=amount(area,fq,days),tubes=Math.ceil(a.total/tube);
+  out('ftuOut','','<b class="big">每次 '+g1(a.ftu)+' 個指尖單位，約 '+g1(a.per)+' g</b>一天 '+fq+' 次、擦 '+days+' 天，共約 <b>'+g1(a.total)+' g</b>，要開 <b>'+tubes+' 條</b> '+tube+' g 的藥膏。'+
+    '<small>一條 '+tube+' g 以這個面積可以擦 '+Math.max(1,Math.floor(tube/(a.per*fq)))+' 天。回診時藥膏還剩很多，代表擦得不夠。</small>');
+}
+
+/* ---------- wiring ---------- */
+function syncFrom(el){const k=el.dataset.sync;document.querySelectorAll('[data-sync="'+k+'"]').forEach(o=>{if(o!==el)o.value=el.value;});}
+$('xArea').dataset.sync='area';
+document.querySelectorAll('input,select').forEach(el=>{
+  const h=()=>{if(el.dataset.sync)syncFrom(el);if(el.dataset.flag!==undefined)flags();else if(el.dataset.feat!==undefined)ddx();else{rx();ftu();}};
+  el.addEventListener('input',h);el.addEventListener('change',h);
+});
+flags();ddx();siteDraw();card();rx();ftu();
+})();
+</script>
+<!-- ck-config start -->
+<script>
+/* 常見皮膚疾病衛教單張設定。讀 STEP 8 處方產生器的 window.CK_RX（dx、items、area）。沒有餐盤與運動區塊。 */
+(function(){
+const STEROID=/hydrocortisone|betamethasone|mometasone|fluocinonide|clobetasol/i;
+const rxDx=()=>(window.CK_RX&&window.CK_RX.dx)||"";
+const inDx=(...ids)=>ids.indexOf(rxDx())>=0;
+const FTU_ART='<svg viewBox="0 0 300 110" role="img" aria-label="一個指尖單位的藥膏可以擦兩個手掌大" style="display:block;width:100%;max-width:340px;height:auto;margin:2px 0 6px"><path d="M8 70q0 -13 13 -13h78q17 0 17 13t-17 13H21q-13 0 -13 -13z" fill="#f6d3bd" stroke="#c99a7e" stroke-width="2"/><path d="M74 57v26M42 57v26" stroke="#c99a7e" stroke-width="1.5"/><path d="M76 66h30" stroke="#fff" stroke-width="9" stroke-linecap="round"/><path d="M76 48v-7h30v7" fill="none" stroke="#2a2622" stroke-width="1.5"/><text x="91" y="34" text-anchor="middle" font-size="13" font-weight="700" fill="#2a2622">1 個單位</text><text x="150" y="76" text-anchor="middle" font-size="26" font-weight="700" fill="#3f4f8f">=</text>'+[190,246].map(x=>'<g transform="translate('+x+' 18)"><path d="M6 86V44q0 -6 6 -6t6 6V14q0 -6 6 -6t6 6v-6q0 -6 6 -6t6 6v8q0 -6 6 -6t6 6v44l6 -12q4 -6 9 -3t2 9l-12 26q-6 12 -20 12H24Q6 96 6 86z" transform="scale(.62)" fill="#f6d3bd" stroke="#c99a7e" stroke-width="3"/></g>').join("")+'<text x="232" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#2a2622">兩個手掌大</text></svg>';
+const BATH_ART='<svg viewBox="0 0 300 70" role="img" aria-label="洗澡後三分鐘內擦保濕" style="display:block;width:100%;max-width:340px;height:auto;margin:2px 0 6px"><g fill="none" stroke="#3f4f8f" stroke-width="2.5" stroke-linecap="round"><path d="M14 36h64v8a16 16 0 0 1 -16 16H30a16 16 0 0 1 -16 -16z" fill="#e6e9f5"/><path d="M24 36V29a6 6 0 0 1 12 0"/></g><text x="46" y="14" text-anchor="middle" font-size="11" fill="#2a2622">溫水 10 分鐘</text><path d="M92 44h26m-8 -7l8 7 -8 7" fill="none" stroke="#2a2622" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="152" cy="42" r="20" fill="#fff" stroke="#3f4f8f" stroke-width="2.5"/><path d="M152 42V28M152 42l9 6" stroke="#3f4f8f" stroke-width="2.5" stroke-linecap="round"/><text x="152" y="14" text-anchor="middle" font-size="11" fill="#2a2622">3 分鐘內</text><path d="M186 44h26m-8 -7l8 7 -8 7" fill="none" stroke="#2a2622" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="232" y="26" width="34" height="36" rx="6" fill="#fbe9df" stroke="#c99a7e" stroke-width="2.5"/><rect x="240" y="16" width="18" height="10" rx="2" fill="#c99a7e"/><text x="249" y="49" text-anchor="middle" font-size="11" font-weight="700" fill="#2a2622">保濕</text><text x="249" y="10" text-anchor="middle" font-size="11" fill="#2a2622">擦多一點</text></svg>';
+window.CK_CONFIG={
+  key:"skin", sheetTitle:"皮膚照護單", mascot:"leaf", days:14, move:false,
+  siteUrl:"https://ycjaca.github.io/medisland/clinic/skin.html",
+  inputs:[{k:"area",label:"患部幾個手掌大",src:"xArea",step:.5}],
+  numbers(v){
+    if(!v.area||inDx("urt","cell","hz","hsv","wart"))return [];
+    const ftu=Math.round(v.area/2*10)/10;
+    return [{label:(window.CK_RX&&window.CK_RX.dxName?window.CK_RX.dxName+"：":"")+"每次要擠的藥膏量",value:ftu,unit:"個指尖單位",
+      text:"患部大約 <b>"+v.area+" 個手掌</b>大。從食指指尖擠到第一個指節是 1 個單位，剛好擦兩個手掌大。擦薄薄一層、看不到白色就夠了。"}];
+  },
+  meds(){
+    const r=window.CK_RX;if(!r||!r.items)return {lines:[]};
+    const it=r.items.filter(i=>i.dose&&!/衛教|停用|抬高|液態氮|^（/.test(i.name));
+    if(!it.length)return {lines:[],note:"這次不用特別的藥，照下面的方式照顧皮膚。"};
+    return {lines:it.map(i=>i.name.replace(/（或[^）]*）/g,"").replace(/ 口服液（依體重）/,"口服液").trim()+"｜"+
+      i.dose.replace(/一天 2 次/,"早晚各 1 次").replace(/一天 1 次/,"每天 1 次").replace(/一天 1–2 次/,"每天 1 到 2 次").replace(/，薄擦患部/,"，薄薄擦在患部"))};
+  },
+  medInfo:[
+    [STEROID,"消炎、止癢的類固醇藥膏","只擦紅、癢的地方；好了就停。不要擦到眼睛裡。"],
+    [/tacrolimus|pimecrolimus/i,"不含類固醇的消炎藥膏","前幾天擦了會熱熱刺刺的，通常一週內就習慣。"],
+    [/洗髮精/,"抗黴菌的洗劑","搓出泡泡後停幾分鐘再沖掉。"],
+    [/terbinafine 1%|clotrimazole|ketoconazole|nystatin/i,"殺黴菌的藥膏","擦到紅疹外圍兩公分；看起來好了還要再擦 1 到 2 週。"],
+    [/terbinafine 250|fluconazole|itraconazole/i,"口服抗黴菌藥","照天數吃完。很累、沒胃口、尿變茶色要回診。"],
+    [/cetirizine|levocetirizine|fexofenadine|loratadine/i,"止癢的抗過敏藥","可能會想睡，開車、操作機器要小心。"],
+    [/保濕|護手霜|urea/i,"修護皮膚","量要多、次數要夠，洗澡後馬上擦。"],
+    [/acyclovir/i,"抗病毒藥","要吃滿天數，多喝水。"],
+    [/gabapentin|pregabalin/i,"神經痛的藥","會想睡、頭暈，起身慢一點。"],
+    [/acetaminophen/i,"止痛藥","一天不超過醫師說的顆數。"],
+    [/cephalexin|dicloxacillin|cefadroxil/i,"抗生素","整個療程吃完，不要好了就停。"],
+    [/doxycycline/i,"消炎的抗生素","配一大杯水，吃完不要馬上躺下；出門要防曬。"],
+    [/adapalene/i,"治粉刺的 A 酸","睡前擦薄薄一層。前幾週會乾、脫皮，要保濕和防曬。"],
+    [/benzoyl/i,"殺痘痘菌","會讓衣服、枕頭套褪色。"],
+    [/azelaic|metronidazole|ivermectin/i,"消炎的外用藥","每天規則擦，幾週後才看得出效果。"],
+    [/permethrin/i,"殺疥蟲的藥膏","脖子以下全身都要擦到，8 到 14 小時後洗掉。"],
+    [/prednisolone/i,"口服類固醇","早上飯後吃；照醫師給的天數慢慢減，不要自己停。"],
+    [/mupirocin|fusidic/i,"抗生素藥膏","先用溫水把痂泡軟擦掉，再擦藥。"],
+    [/calcipotriol/i,"乾癬用的維生素 D 藥膏","不要擦臉；擦完洗手。"],
+    [/水楊酸/,"軟化角質","只擦在疣上，周圍皮膚先塗凡士林保護。"],
+    [/彈性襪/,"幫助腿部血液回流","早上起床就穿，睡前脫掉。"],
+    [/濕敷/,"收乾滲液",""]
+  ],
+  panels(v,meds){
+    const st=STEROID.test(meds||"");
+    return [
+    {id:"ftu",label:"藥膏擠多少",icon:"pills",title:"藥膏擠多少：指尖單位",on:!inDx("urt","cell","hz","hsv"),html:FTU_ART,
+     items:["一個單位擦兩個手掌大；擦太厚不會比較快好","一天擦醫師說的次數就好，多擦沒有用","擦藥前後都要洗手"]},
+    {id:"steroid",label:"類固醇藥膏安心用",icon:"check",title:"類固醇藥膏這樣用最安全",on:st,
+     items:["照醫師說的天數擦，紅和癢退了就可以停","臉、腋下、鼠蹊的皮膚薄，不要拿身體的藥膏去擦","不要拿給家人擦，也不要自己到藥局買來續擦","擦了反而變大圈、或 2 週沒有好，回來讓醫師看"]},
+    {id:"moist",label:"洗澡與保濕",icon:"leaf",title:"洗澡與保濕",on:inDx("ad","num","stasis","contact","pom","lsc","pso","pr"),html:BATH_ART,
+     items:["洗澡用溫水、10 分鐘內，不用肥皂用力搓","洗完擦乾，<b>3 分鐘內</b>擦保濕，一天至少 2 次","保濕和藥膏隔 15 到 30 分鐘","衣服選棉質、寬鬆"]},
+    {id:"itch",label:"癢的時候",icon:"moon",title:"癢的時候這樣做",on:inDx("ad","num","lsc","pom","contact","urt","scab","bite","stasis","drug"),
+     items:["用拍的、冰敷的，不要抓；抓破會更癢、更厚","指甲剪短","睡前擦藥和保濕；房間不要太熱","把保濕劑放冰箱，癢的時候擦"]},
+    {id:"fungus",label:"黴菌感染照顧",icon:"foot",title:"黴菌怕乾：這樣不容易復發",on:inDx("tinea","tp","pv","cand","mf"),
+     items:["洗澡後把趾縫、皺摺擦乾或吹乾","藥要擦到看起來好了<b>之後再 1 到 2 週</b>","襪子每天換；鞋子輪流穿、曬乾","先穿襪子再穿內褲，才不會把腳的黴菌帶到鼠蹊","毛巾、拖鞋不要和家人共用","不要自己買含類固醇的「幾合一」藥膏擦"]},
+    {id:"scab",label:"疥瘡：全家一起治療",icon:"warn",title:"疥瘡：全家同一天一起治療",on:inDx("scab"),
+     items:["同住的人不管癢不癢，<b>同一天一起擦藥</b>","從脖子擦到腳底：指縫、指甲下、肚臍、生殖器、屁股溝都要","擦藥期間洗了手要補擦","這 3 天穿過的衣服、床單、毛巾：用熱水洗再烘乾，或裝進塑膠袋封 7 天","治好之後還會癢 2 到 4 週，這是正常的，不要一直重複擦殺蟲藥"]},
+    {id:"zoster",label:"帶狀疱疹照顧",icon:"thermo",title:"帶狀疱疹（皮蛇）照顧",on:inDx("hz"),
+     items:["抗病毒藥越早吃越好，要吃滿 7 天","痛就吃止痛藥，不用忍","水疱不要弄破，用紗布蓋著，結痂前不要泡澡","結痂前避免接觸沒得過水痘的人、孕婦、新生兒","好了以後可以和醫師討論打疫苗"]},
+    {id:"urt",label:"蕁麻疹照顧",icon:"check",title:"蕁麻疹照顧",on:inDx("urt"),
+     items:["抗過敏藥要<b>每天規則吃</b>，不是癢了才吃","記下發作前吃的東西、藥、做的事","避免：太熱的水、緊身衣、喝酒、自己買的止痛藥","大多數幾天到幾週會好；超過 6 週要回診調藥"]},
+    {id:"acne",label:"痘痘與臉部照顧",icon:"sun",title:"臉部照顧",on:inDx("acne","ros"),
+     items:["洗臉一天 2 次，用溫和的洗面乳，不要用力搓","不要擠","每天防曬、擦清爽的保濕","藥要擦 8 到 12 週才看得出效果，不要太早放棄"]},
+    {id:"infect",label:"傷口與感染照顧",icon:"thermo",title:"感染的照顧",on:inDx("imp","cell","fol"),
+     items:["抗生素整個療程吃完","碰過患部要洗手；毛巾、刮鬍刀自己用","腿上的感染：坐著躺著都把腳抬高","用筆把紅的邊界畫起來，每天看有沒有超出去"]}
+    ];
+  },
+  warn:["紅腫的範圍很快變大、變得很痛，或發燒","嘴巴、眼睛、生殖器破皮，或皮膚起水疱、脫皮","擦藥後反而更紅、更癢，或越長越大圈","嘴唇、眼皮腫起來，喘或喉嚨緊：馬上掛急診"],
+  bring:["正在擦的所有藥膏（包含藥局買的）","最近吃的藥和保健食品","發作時拍的照片"],
+  nextNote(){
+    const m={cell:"2 到 3 天內回診看紅腫有沒有退。",imp:"3 到 5 天回診。",fol:"3 到 5 天回診。",hz:"1 週回診看疼痛與傷口。",acne:"8 到 12 週回診看效果。",ros:"8 到 12 週回診看效果。",urt:"2 到 4 週回診調整藥量。",scab:"1 到 2 週回診，確認要不要再擦第二次。"};
+    return m[rxDx()]||"約 2 週回診。沒有好轉也要回來，可能需要刮皮屑檢查或調整診斷。";
+  }
+};
+})();
+</script>
+<!-- ck-config end -->
+<!-- clinic-kit v1 start | shared by every 門診實務 page. Edit clinic/_kit/kit.html, then run: python3 scripts/add_kit.py clinic/*.html -->
+<style id="ck-style">
+/* ---- collapsible parts and steps ---- */
+.ck-tools{display:flex;gap:4px;flex:none}
+.ck-tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13px var(--body);padding:5px 9px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.ck-tools button:hover{border-color:var(--ink)}
+.ck-tog{all:unset;box-sizing:border-box;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;width:100%;cursor:pointer}
+.ck-tog:focus-visible,.ck-part:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.ck-chev{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;margin-top:3px;transition:transform .2s}
+.ck-chev::before{content:"";width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+[aria-expanded="true"]>.ck-chev{transform:rotate(180deg)}
+section.ck-step>.no{cursor:pointer}
+section.ck-closed>.ck-body{display:none}
+section.ck-closed{padding-bottom:12px}
+section.ck-closed h2{margin-bottom:0}
+.ck-part{cursor:pointer;display:flex!important;justify-content:space-between;align-items:center;gap:10px;user-select:none}
+.ck-part .ck-chev{border-color:rgba(255,255,255,.45);background:transparent;margin:0}
+.ck-part .ck-chev::before{border-color:currentColor}
+.ck-group.ck-closed{display:none}
+@media (prefers-reduced-motion:reduce){.ck-chev{transition:none}}
+
+/* ---- handout form ---- */
+.ck-lead{color:var(--mute);font-size:15px}
+.ck-form{display:flex;flex-direction:column;gap:12px}
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ck-form label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mute)}
+.ck-form input,.ck-form textarea{font:15px var(--body);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:6px 8px;width:100%}
+.ck-form textarea{resize:vertical;line-height:1.6}
+.ck-form fieldset{border:1px solid var(--line);border-radius:6px;padding:8px 12px 10px;margin:0}
+.ck-form legend{font-size:13px;color:var(--mute);padding:0 4px}
+.ck-checks{display:flex;flex-wrap:wrap;gap:6px 16px}
+.ck-checks label{flex-direction:row;align-items:center;gap:6px;color:var(--ink);font-size:14px;cursor:pointer}
+.ck-checks input{width:auto}
+.ck-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ck-btn{border:1px solid var(--ink);background:var(--card);color:var(--ink);font:500 14px var(--body);padding:7px 14px;border-radius:6px;cursor:pointer}
+.ck-btn.ck-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.ck-btn:hover{filter:brightness(.95)}
+#ckPrintNote{font-size:13px;color:var(--mute)}
+#ckPrintNote a{color:var(--accent)}
+.ck-sheetwrap{margin:18px 0 10px;padding:14px;background:#e9e7df;border-radius:8px;overflow:hidden}
+
+/* ---- the handout sheet ---- */
+.ck-sheet{--a:var(--accent);--a2:var(--accent-soft,#f5ece6);max-width:760px;margin:0 auto;background:#fffdf8;color:#2a2622;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.12);
+  padding:22px 24px 18px;font:15.5px/1.7 var(--body);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ck-sheet *{box-sizing:border-box}
+.ck-sh{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:var(--a);color:#fff}
+.ck-sh svg{width:62px;height:62px;flex:none}
+.ck-sh h3{margin:0;font:700 26px/1.25 var(--display);color:#fff}
+.ck-sh p{margin:2px 0 0;font-size:13.5px;opacity:.92}
+.ck-sec{margin-top:16px;break-inside:avoid}
+.ck-sec>h4{display:flex;align-items:center;gap:8px;margin:0 0 8px;font:700 19px/1.3 var(--display);color:#2a2622}
+.ck-sec>h4 svg{width:30px;height:30px;flex:none}
+.ck-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.ck-num{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 12px 8px}
+.ck-nl{font-size:13px;color:#6b645a}
+.ck-nv{font:700 28px/1.2 var(--display);color:var(--a)}
+.ck-nv small{font:13px var(--body);color:#6b645a;margin-left:4px}
+.ck-num>svg{display:block;width:100%;max-width:420px;height:auto;margin:4px 0 2px}
+.ck-num p{margin:2px 0 0;font-size:13.5px;line-height:1.6;color:#4a443c}
+.ck-meds{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ck-med{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start;background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:9px 12px}
+.ck-med svg.ck-pillsvg{width:44px;height:44px}
+.ck-med b{font-size:17px;color:#2a2622}
+.ck-what{display:inline-block;margin-left:8px;font-size:13px;color:#fff;background:var(--a);border-radius:20px;padding:0 9px;vertical-align:2px}
+.ck-times{display:flex;flex-wrap:wrap;gap:5px;margin:3px 0 0}
+.ck-time{display:inline-flex;align-items:center;gap:3px;font-size:13px;background:#f4efe4;border-radius:20px;padding:1px 9px 1px 4px}
+.ck-time svg{width:20px;height:20px}
+.ck-how{margin:2px 0 0;font-size:14.5px}
+.ck-tip{margin:3px 0 0;font-size:13.5px;color:#6a4a12;background:#fff4d9;border-radius:6px;padding:2px 8px}
+.ck-note{background:#fff;border:1.5px dashed #d8cfbd;border-radius:12px;padding:10px 14px;margin:0}
+.ck-two{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:start}
+.ck-plate>svg{display:block;width:100%;height:auto}
+.ck-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0;font-size:13.5px}
+.ck-legend span{display:inline-flex;align-items:center;gap:5px}
+.ck-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.ck-sheet ul{margin:0;padding-left:1.2em}
+.ck-sheet li{margin:2px 0}
+.ck-move>svg{display:block;width:100%;max-width:260px;height:auto;margin:0 auto 4px}
+.ck-pans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.ck-pan{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-pan h5{display:flex;align-items:center;gap:8px;margin:0 0 6px;font:700 17px var(--display)}
+.ck-pan h5 svg{width:34px;height:34px;flex:none}
+.ck-pan .ck-art{display:block;width:100%;max-width:300px;height:auto;margin:2px auto 6px}
+.ck-warn{border:2.5px solid #c8352b;background:#fff3f1;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-warn h5{display:flex;align-items:center;gap:8px;margin:0 0 4px;font:700 18px var(--display);color:#b3261e}
+.ck-warn h5 svg{width:30px;height:30px}
+.ck-next{display:flex;gap:14px;align-items:center;background:var(--a2);border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-next svg{width:74px;height:74px;flex:none}
+.ck-next b{font-size:17px}
+.ck-foot{margin-top:12px;padding-top:8px;border-top:1px dashed #d8cfbd;font-size:12px;color:#7a7266;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media (max-width:620px){.ck-sheet{padding:14px 12px;font-size:15px}.ck-two{grid-template-columns:1fr}.ck-sh h3{font-size:22px}.ck-sheetwrap{padding:6px}}
+
+/* ---- print: only the sheet ---- */
+#ckPrintHost{display:none}
+@media print{
+  @page{size:A4;margin:10mm}
+  body.ck-printing>*:not(#ckPrintHost){display:none!important}
+  body.ck-printing{background:#fff!important}
+  body.ck-printing #ckPrintHost{display:block}
+  #ckPrintHost .ck-sheet{box-shadow:none;max-width:none;padding:0;font-size:11pt;border-radius:0}
+  #ckPrintHost .ck-two{grid-template-columns:1.25fr 1fr}
+  #ckPrintHost .ck-sh h3{font-size:20pt}
+  body:not(.ck-printing) .ck-group.ck-closed,body:not(.ck-printing) section.ck-closed>.ck-body{display:block!important}
+}
+</style>
+<script id="ck-script">
+(function(){
+"use strict";
+const C=window.CK_CONFIG||null;
+const main=document.querySelector("main");if(!main)return;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chev='<i class="ck-chev" aria-hidden="true"></i>';
+let gid=0;
+
+/* =========================================================
+   1. Handout section (built first so it gets grouped too)
+   ========================================================= */
+if(C){
+  const part=document.createElement("div");part.className="part";part.innerHTML="<span>最後</span>衛教單張";
+  const sec=document.createElement("section");sec.id="handout";
+  const ins=(C.inputs||[]).map(f=>'<label>'+esc(f.label)+'<input type="number" id="ck_'+f.k+'"'+(f.step?' step="'+f.step+'"':"")+'></label>').join("");
+  sec.innerHTML='<div class="no">給病人</div><h2>衛教單張產生器</h2>'+
+   '<p class="ck-lead">數值和處方會從上面的工具帶進來，也可以直接改。勾選要放的內容，可以把這張單張直接給病人看，或列印、存成 PDF 帶回家。</p>'+
+   '<div class="tool ck-form">'+
+    '<div class="ck-grid"><label>稱呼<input id="ckName" placeholder="例：陳先生"></label><label>日期<input type="date" id="ckDate"></label>'+
+    '<label>下次回診<input type="date" id="ckNext"></label><label>院所／醫師<input id="ckDoc" placeholder="可留空"></label>'+ins+'</div>'+
+    '<label>我的藥（一行一種，「｜」後面寫怎麼吃；可以直接改）<textarea id="ckMeds" rows="4" placeholder="例：Amlodipine 5 mg｜每天 1 次，早上"></textarea></label>'+
+    '<fieldset><legend>要放進單張的內容</legend><div class="ck-checks" id="ckPanels"></div></fieldset>'+
+    '<div class="ck-actions"><button type="button" class="ck-btn" id="ckPull">重新帶入上面的資料</button><button type="button" class="ck-btn ck-primary" id="ckPrint">列印／存成 PDF</button><span id="ckPrintNote"></span></div>'+
+   '</div><div class="ck-sheetwrap"><article class="ck-sheet" id="ckSheet" aria-label="衛教單張預覽"></article></div>';
+  main.append(part,sec);
+  const jump=document.querySelector(".bar .jump");
+  if(jump&&!jump.querySelector('a[href="#handout"]')){const a=document.createElement("a");a.href="#handout";a.textContent="衛教單";jump.appendChild(a);}
+}
+
+/* =========================================================
+   2. Collapsible parts and steps
+   ========================================================= */
+function setStep(sec,open){sec.classList.toggle("ck-closed",!open);const b=sec.querySelector(":scope>h2>.ck-tog");if(b)b.setAttribute("aria-expanded",String(open));if(open&&sec.id==="handout")onHandoutOpen();}
+function setPart(p,open){const g=$(p.getAttribute("aria-controls"));if(!g)return;g.classList.toggle("ck-closed",!open);p.setAttribute("aria-expanded",String(open));}
+[...main.children].reduce((group,el)=>{
+  if(el.classList.contains("part")){
+    const g=document.createElement("div");g.className="ck-group";g.id="ck-g"+(++gid);el.after(g);
+    el.classList.add("ck-part");el.innerHTML='<span class="ck-ptxt">'+el.innerHTML+"</span>"+chev;
+    el.setAttribute("role","button");el.tabIndex=0;el.setAttribute("aria-controls",g.id);
+    const t=()=>setPart(el,g.classList.contains("ck-closed"));
+    el.addEventListener("click",t);el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t();}});
+    setPart(el,true);return g;
+  }
+  if(!group)return null;
+  if(el.tagName==="SECTION"&&!el.querySelector(":scope>.no"))return null; // closing sections (帶走…) stay outside
+  group.appendChild(el);return group;
+},null);
+const steps=[...main.querySelectorAll("section")].filter(s=>s.querySelector(":scope>.no")&&s.querySelector(":scope>h2"));
+steps.forEach(sec=>{
+  const no=sec.querySelector(":scope>.no"),h2=sec.querySelector(":scope>h2");
+  sec.classList.add("ck-step");
+  const body=document.createElement("div");body.className="ck-body";body.id="ck-b"+(++gid);
+  [...sec.children].forEach(c=>{if(c!==no&&c!==h2)body.appendChild(c);});
+  sec.appendChild(body);
+  const b=document.createElement("button");b.type="button";b.className="ck-tog";b.setAttribute("aria-controls",body.id);
+  b.innerHTML="<span>"+h2.innerHTML+"</span>"+chev;h2.innerHTML="";h2.appendChild(b);
+  const t=()=>setStep(sec,sec.classList.contains("ck-closed"));
+  b.addEventListener("click",t);no.addEventListener("click",t);
+  setStep(sec,false);
+});
+const parts=[...main.querySelectorAll(".ck-part")];
+function all(open){parts.forEach(p=>setPart(p,open||true));steps.forEach(s=>setStep(s,open));}
+const barWrap=document.querySelector(".bar .wrap");
+if(barWrap){const t=document.createElement("div");t.className="ck-tools";t.innerHTML='<button type="button" id="ckOpenAll">全部展開</button><button type="button" id="ckCloseAll">全部收合</button>';barWrap.appendChild(t);
+  $("ckOpenAll").onclick=()=>all(true);$("ckCloseAll").onclick=()=>all(false);}
+function reveal(el){
+  if(!el)return;
+  const g=el.closest(".ck-group");if(g&&g.classList.contains("ck-closed")){const p=document.querySelector('[aria-controls="'+g.id+'"]');if(p)setPart(p,true);}
+  const s=el.closest("section.ck-step");if(s&&s.classList.contains("ck-closed"))setStep(s,true);
+}
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;const id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id||id==="clinic")return;reveal($(id));},true);
+function fromHash(){const id=decodeURIComponent(location.hash.slice(1));if(!id||id==="clinic")return;const t=$(id);if(t){reveal(t);requestAnimationFrame(()=>t.scrollIntoView());}}
+addEventListener("hashchange",fromHash);
+addEventListener("beforeprint",()=>{if(!document.body.classList.contains("ck-printing"))all(true);});
+
+if(!C)return;
+
+/* =========================================================
+   3. Drawings (all inline SVG, no image files)
+   ========================================================= */
+const SK="#f6d2b4",INK="#3b332b";
+const face=(x,y,s)=>'<circle cx="'+(x-9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/><circle cx="'+(x+9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/>'+
+  '<path d="M'+(x-7*s)+' '+(y+9*s)+' Q'+x+' '+(y+16*s)+' '+(x+7*s)+' '+(y+9*s)+'" fill="none" stroke="'+INK+'" stroke-width="'+2.6*s+'" stroke-linecap="round"/>'+
+  '<circle cx="'+(x-16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/><circle cx="'+(x+16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/>';
+const MASCOT={
+  heart:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 90C20 68 5 52 5 33 5 18 16 8 30 8c10 0 16 6 20 13 4-7 10-13 20-13 14 0 25 10 25 25 0 19-15 35-45 57z" fill="#ff6b6b" stroke="#fff" stroke-width="4"/>'+face(50,42,1)+'</svg>',
+  drop:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 5C50 5 17 45 17 64c0 19 15 31 33 31s33-12 33-31C83 45 50 5 50 5z" fill="#ffb347" stroke="#fff" stroke-width="4"/>'+face(50,64,1)+'</svg>',
+  kidney:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M60 8c22-1 35 18 33 42-2 27-20 44-43 42-21-2-23-21-12-31 7-6 7-15-2-21C20 31 32 9 60 8z" fill="#c96b8c" stroke="#fff" stroke-width="4"/>'+face(62,46,0.9)+'</svg>',
+  leaf:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M15 85C15 40 45 12 90 10c-2 45-30 75-75 75z" fill="#6cbf55" stroke="#fff" stroke-width="4"/>'+face(52,48,1)+'</svg>'
+};
+const ICON={
+  sun:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="8" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.5 3.5M28.5 28.5 32 32M8 32l3.5-3.5M28.5 11.5 32 8"/></g></svg>',
+  noon:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="#ffa53d"/><circle cx="20" cy="20" r="6" fill="#ffd36b"/></svg>',
+  moon:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M26 6a14 14 0 1 0 8 25A12 12 0 0 1 26 6z" fill="#7c86d8"/><circle cx="30" cy="10" r="1.6" fill="#ffd36b"/></svg>',
+  bed:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M24 6a12 12 0 1 0 8 21A10 10 0 0 1 24 6z" fill="#5b63b8"/><text x="27" y="15" font-size="10" font-weight="700" fill="#5b63b8">z</text></svg>',
+  cuff:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="6" y="10" width="30" height="40" rx="6" fill="#e8f1f6" stroke="#4b7f99" stroke-width="2.5"/><rect x="11" y="16" width="20" height="12" rx="2" fill="#bfe3c7"/><text x="21" y="26" font-size="8" text-anchor="middle" font-weight="700" fill="#2c5a3a">120</text><circle cx="21" cy="38" r="4" fill="#4b7f99"/><path d="M36 30c10 0 12 8 18 8" fill="none" stroke="#4b7f99" stroke-width="2.5"/><rect x="44" y="34" width="12" height="18" rx="3" fill="#7fb3cf"/></svg>',
+  meter:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="26" height="44" rx="7" fill="#eef1fb" stroke="#5864a8" stroke-width="2.5"/><rect x="14" y="12" width="18" height="12" rx="2" fill="#cfe9d5"/><text x="23" y="21.5" font-size="7.5" text-anchor="middle" font-weight="700" fill="#2c5a3a">110</text><circle cx="23" cy="36" r="4" fill="#5864a8"/><path d="M48 22c0 0-7 9-7 14a7 7 0 0 0 14 0c0-5-7-14-7-14z" fill="#e2493b"/></svg>',
+  walk:'<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="32" cy="10" r="6" fill="'+SK+'"/><g stroke="#2f8f6b" stroke-width="5" stroke-linecap="round" fill="none"><path d="M31 18l-3 16M30 22l-9 8M30 22l9 6"/></g><g stroke="#3b5d8a" stroke-width="5" stroke-linecap="round"><path d="M28 34l-8 14M28 34l9 13"/></g></svg>',
+  leaf:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M8 52C8 26 26 9 54 8c-1 27-19 44-46 44z" fill="#6cbf55"/><path d="M12 48C26 34 36 24 48 14" stroke="#3f8a3a" stroke-width="2.5" fill="none"/></svg>',
+  warn:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 38 36H2z" fill="#e2493b"/><rect x="18" y="14" width="4" height="12" rx="2" fill="#fff"/><circle cx="20" cy="31" r="2.4" fill="#fff"/></svg>',
+  candy:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M6 22l10 8-10 8zM54 22l-10 8 10 8z" fill="#ff9fb6"/><ellipse cx="30" cy="30" rx="15" ry="11" fill="#ff6b8a"/><path d="M20 24c4 6 16 6 20 12" stroke="#fff" stroke-width="3" fill="none" opacity=".8"/></svg>',
+  thermo:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="24" y="6" width="12" height="34" rx="6" fill="#fff" stroke="#c8352b" stroke-width="2.5"/><rect x="28" y="18" width="4" height="22" fill="#e2493b"/><circle cx="30" cy="46" r="9" fill="#e2493b"/></svg>',
+  foot:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M22 54c-9 0-11-10-9-20 2-9 4-16 13-16s11 9 9 18c-2 8-3 18-13 18z" fill="'+SK+'" stroke="#c48a63" stroke-width="2"/><g fill="'+SK+'" stroke="#c48a63" stroke-width="1.6"><circle cx="38" cy="14" r="5"/><circle cx="30" cy="9" r="4"/><circle cx="22" cy="9" r="3.4"/><circle cx="16" cy="12" r="3"/><circle cx="12" cy="17" r="2.6"/></g></svg>',
+  eye:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M4 30C14 14 46 14 56 30 46 46 14 46 4 30z" fill="#fff" stroke="#4b7f99" stroke-width="2.5"/><circle cx="30" cy="30" r="9" fill="#4b7f99"/><circle cx="30" cy="30" r="4" fill="#173a4c"/><circle cx="33" cy="27" r="2" fill="#fff"/></svg>',
+  kidney:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M36 6c13-1 20 11 19 25-1 16-12 25-25 24-12-1-13-12-7-18 4-4 4-9-1-12C12 18 19 6 36 6z" fill="#c96b8c"/></svg>',
+  pills:'<svg viewBox="0 0 60 60" aria-hidden="true"><g transform="rotate(-35 30 30)"><rect x="10" y="22" width="40" height="16" rx="8" fill="#fff" stroke="#8a7f70" stroke-width="2"/><path d="M30 22h12a8 8 0 0 1 0 16H30z" fill="#e2493b"/></g><circle cx="46" cy="46" r="7" fill="#ffd36b" stroke="#8a7f70" stroke-width="2"/></svg>',
+  check:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="40" height="50" rx="5" fill="#fff" stroke="#6b645a" stroke-width="2.5"/><rect x="22" y="2" width="16" height="9" rx="3" fill="#6b645a"/><g stroke="#2f8f6b" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M17 22l4 4 7-8M17 36l4 4 7-8"/></g><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M33 23h10M33 37h10"/></g></svg>',
+  salt:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M20 22h20l3 30H17z" fill="#f2f2f2" stroke="#8a8a8a" stroke-width="2"/><path d="M21 12h18l2 10H19z" fill="#bdbdbd"/><g fill="#6b6b6b"><circle cx="26" cy="16" r="1.4"/><circle cx="30" cy="16" r="1.4"/><circle cx="34" cy="16" r="1.4"/></g><circle cx="30" cy="34" r="22" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M14 18 46 50" stroke="#e2493b" stroke-width="4"/></svg>'
+};
+function pill(color){return '<svg class="ck-pillsvg" viewBox="0 0 44 44" aria-hidden="true"><g transform="rotate(-35 22 22)"><rect x="5" y="15" width="34" height="14" rx="7" fill="#fff" stroke="#8a7f70" stroke-width="1.8"/><path d="M22 15h10a7 7 0 0 1 0 14H22z" fill="'+color+'"/><rect x="9" y="18" width="9" height="3" rx="1.5" fill="#fff" opacity=".8"/></g></svg>';}
+const PILLC=["#e2493b","#3c8dbc","#f0a020","#5aa469","#8e6bbf","#d96a9a","#3aa6a0"];
+function meter(m){
+  const W=300,x0=10,x1=290,lo=m.min,hi=m.max,f=v=>{if(m.log){v=Math.log10(Math.max(v,1e-3));return x0+(Math.min(Math.max(v,Math.log10(lo)),Math.log10(hi))-Math.log10(lo))/(Math.log10(hi)-Math.log10(lo))*(x1-x0);}return x0+(Math.min(Math.max(v,lo),hi)-lo)/(hi-lo)*(x1-x0);};
+  let s='<svg viewBox="0 0 '+W+' 62" aria-hidden="true">';
+  s+='<defs><clipPath id="ckc'+(++gid)+'"><rect x="'+x0+'" y="20" width="'+(x1-x0)+'" height="14" rx="7"/></clipPath></defs><g clip-path="url(#ckc'+gid+')">';
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);s+='<rect x="'+a+'" y="20" width="'+Math.max(0,b-a)+'" height="14" fill="'+z[2]+'"/>';});
+  s+="</g>";
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);if(b-a>24)s+='<text x="'+(a+b)/2+'" y="46" font-size="9" text-anchor="middle" fill="#6b645a">'+esc(z[3])+"</text>";});
+  if(m.target!=null){const t=f(m.target);s+='<line x1="'+t+'" x2="'+t+'" y1="16" y2="38" stroke="#2a2622" stroke-width="2" stroke-dasharray="3 2"/><text x="'+t+'" y="59" font-size="9" text-anchor="middle" font-weight="700" fill="#2a2622">'+esc(m.targetLabel||"目標")+"</text>";}
+  if(m.v!=null&&!isNaN(m.v)){const x=f(m.v);s+='<path d="M'+(x-7)+' 4h14l-7 11z" fill="#2a2622"/><circle cx="'+x+'" cy="27" r="5.5" fill="#fff" stroke="#2a2622" stroke-width="2.5"/>';}
+  return s+"</svg>";
+}
+/* the plate: fr = [vegetables, protein, grains]; side = extra items beside it */
+function plate(p){
+  const cx=128,cy=122,R=88;let s='<svg viewBox="0 0 360 250" aria-hidden="true">';
+  s+='<ellipse cx="'+cx+'" cy="'+(cy+6)+'" rx="104" ry="100" fill="#000" opacity=".06"/><circle cx="'+cx+'" cy="'+cy+'" r="102" fill="#fff" stroke="#ddd5c4" stroke-width="3"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(R+3)+'" fill="#fbf8f1" stroke="#ece5d6" stroke-width="2"/>';
+  const secs=[{k:"veg",f:p.fr[0],c:"#e2f2d6",l:"蔬菜"},{k:"pro",f:p.fr[1],c:"#fbe1d6",l:p.proLabel||"豆魚蛋肉"},{k:"grain",f:p.fr[2],c:"#f6e9cc",l:"全穀雜糧"}];
+  let a=-Math.PI/2;const P=(r,t)=>[cx+r*Math.cos(t),cy+r*Math.sin(t)];
+  const items=[];
+  secs.forEach(sc=>{const b=a+sc.f*Math.PI*2,[x0,y0]=P(R,a),[x1,y1]=P(R,b);
+    s+='<path d="M'+cx+" "+cy+"L"+x0.toFixed(1)+" "+y0.toFixed(1)+"A"+R+" "+R+" 0 "+(sc.f>.5?1:0)+" 1 "+x1.toFixed(1)+" "+y1.toFixed(1)+'Z" fill="'+sc.c+'" stroke="#fff" stroke-width="4"/>';
+    items.push({k:sc.k,a0:a,a1:b,l:sc.l,f:sc.f});a=b;});
+  const draw={
+    broc:(x,y)=>'<rect x="'+(x-3)+'" y="'+(y)+'" width="6" height="12" rx="2" fill="#8bbf5a"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+(x+6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+x+'" cy="'+(y-8)+'" r="8" fill="#4ea845"/>',
+    leaf:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="12" ry="6" fill="#74c25b" transform="rotate(-30 '+x+" "+y+')"/><path d="M'+(x-9)+" "+(y+5)+"L"+(x+9)+" "+(y-5)+'" stroke="#3f8a3a" stroke-width="1.4"/>',
+    carrot:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7" fill="#f08a24"/><circle cx="'+x+'" cy="'+y+'" r="3" fill="#f7b267"/>',
+    tomato:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7.5" fill="#e8463b"/><path d="M'+(x-3)+" "+(y-7)+"l3 2 3-2"+'" stroke="#3f8a3a" stroke-width="2" fill="none"/>',
+    fish:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="20" ry="10" fill="#f4a582"/><path d="M'+(x+17)+" "+y+"l12-9v18z"+'" fill="#f08a6a"/><circle cx="'+(x-11)+'" cy="'+(y-2)+'" r="2" fill="'+INK+'"/><path d="M'+(x-3)+" "+(y-6)+"q4 6 0 12"+'" stroke="#e57b5c" stroke-width="1.6" fill="none"/>',
+    egg:(x,y)=>'<path d="M'+(x-13)+" "+y+"c0-9 7-12 13-11s14 3 13 11-6 10-13 10-13-2-13-10z"+'" fill="#fff" stroke="#eadfcf"/><circle cx="'+(x+1)+'" cy="'+(y+1)+'" r="5.5" fill="#f7c548"/>',
+    tofu:(x,y)=>'<rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="18" rx="3" fill="#f3e3b5" stroke="#e2cf98"/><rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="5" rx="2" fill="#faf0d0"/>',
+    rice:(x,y,big)=>{const r=big?27:20;let t='<ellipse cx="'+x+'" cy="'+y+'" rx="'+r+'" ry="'+r*.72+'" fill="#fffaf0" stroke="#e8dcc0" stroke-width="1.5"/>';for(let i=0;i<14;i++){const u=(i*137.5)%360*Math.PI/180,d=(i%5+1)/6*r*.75;t+='<ellipse cx="'+(x+Math.cos(u)*d).toFixed(1)+'" cy="'+(y+Math.sin(u)*d*.7).toFixed(1)+'" rx="2.6" ry="1.3" fill="#c79a5e" transform="rotate('+(i*40)+" "+(x+Math.cos(u)*d).toFixed(1)+" "+(y+Math.sin(u)*d*.7).toFixed(1)+')"/>';}return t;},
+    potato:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="13" ry="8" fill="#b5524a" transform="rotate(20 '+x+" "+y+')"/><ellipse cx="'+x+'" cy="'+y+'" rx="9" ry="5" fill="#f2b75a" transform="rotate(20 '+x+" "+y+')"/>'
+  };
+  const at=(it,r,frac)=>{const t=it.a0+(it.a1-it.a0)*frac;return P(r,t).map(v=>+v.toFixed(1));};
+  items.forEach(it=>{
+    if(it.k==="veg"){const n=Math.max(4,Math.round(it.f*14)),kinds=["broc","leaf","carrot","broc","tomato","leaf","carrot"];
+      for(let i=0;i<n;i++){const [x,y]=at(it,i%2?62:36,(i+.5)/n);s+=draw[kinds[i%kinds.length]](x,y);}}
+    if(it.k==="pro"){const [x,y]=at(it,52,.5);s+=draw.fish(x,y);if(it.f>.2){const [a,b]=at(it,70,.2);s+=draw.egg(a,b);const [c,d]=at(it,30,.8);s+=draw.tofu(c,d);}else{const [c,d]=at(it,74,.75);s+=draw.tofu(c,d);}}
+    if(it.k==="grain"){const [x,y]=at(it,48,.5);s+=draw.rice(x,y,it.f>.28);if(it.f>.2){const [a,b]=at(it,74,.25);s+=draw.potato(a,b);}}
+    const [lx,ly]=at(it,R*.55,.5);
+    s+='<text x="'+lx+'" y="'+(ly+(it.k==="veg"?32:30))+'" font-size="13" font-weight="700" text-anchor="middle" fill="#2a2622" stroke="#fffdf8" stroke-width="4" paint-order="stroke">'+esc(it.l)+"</text>";
+  });
+  // beside the plate
+  const SIDE={
+    fruit:(x,y)=>'<circle cx="'+x+'" cy="'+(y+4)+'" r="18" fill="#e2493b"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="5" fill="#fff" opacity=".35"/><path d="M'+x+" "+(y-14)+"q2-8 6-10"+'" stroke="#6b4a2b" stroke-width="3" fill="none"/><ellipse cx="'+(x+9)+'" cy="'+(y-20)+'" rx="8" ry="4" fill="#5cae4a" transform="rotate(-25 '+(x+9)+" "+(y-20)+')"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#4a443c">水果 1 拳頭</text>',
+    milk:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#9aa8b5" stroke-width="2"/><path d="M'+(x-13)+" "+(y-12)+"h26l-2.3 29h-21.4z"+'" fill="#f1f4f8"/><text x="'+x+'" y="'+(y+5)+'" font-size="11" text-anchor="middle" font-weight="700" fill="#6c7d8c">奶</text><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">低脂奶 1 杯</text>',
+    water:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#7fb3cf" stroke-width="2"/><path d="M'+(x-12.6)+" "+(y-8)+"h25.2l-2 25.6h-21.2z"+'" fill="#bfe3f3"/><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">白開水</text>',
+    salt:(x,y)=>'<g transform="translate('+(x-24)+" "+(y-30)+') scale(.8)">'+ICON.salt.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">少鹽</text>',
+    boba:(x,y)=>'<path d="M'+(x-14)+" "+(y-20)+"h28l-4 40h-20z"+'" fill="#e9d2b0" stroke="#a5835a" stroke-width="2"/><rect x="'+(x-15)+'" y="'+(y-24)+'" width="30" height="5" rx="2" fill="#a5835a"/><path d="M'+(x+3)+" "+(y-24)+"l5-14"+'" stroke="#e2493b" stroke-width="3"/><g fill="#4a3426"><circle cx="'+(x-6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+x+'" cy="'+(y+15)+'" r="3"/><circle cx="'+(x+6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+(x-2)+'" cy="'+(y+9)+'" r="3"/></g><circle cx="'+x+'" cy="'+y+'" r="25" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-18)+"L"+(x+17)+" "+(y+18)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不喝含糖飲料</text>',
+    star:(x,y)=>{let pts="";for(let i=0;i<10;i++){const r=i%2?8:19,t=-Math.PI/2+i*Math.PI/5;pts+=(x+r*Math.cos(t)).toFixed(1)+","+(y+r*Math.sin(t)).toFixed(1)+" ";}
+      return '<polygon points="'+pts+'" fill="#f5d33c" stroke="#d9a90d" stroke-width="2"/><circle cx="'+x+'" cy="'+y+'" r="24" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-17)+"L"+(x+17)+" "+(y+17)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不吃楊桃</text>';}
+  };
+  (p.side||[]).slice(0,3).forEach((k,i)=>{if(SIDE[k])s+=SIDE[k](300,40+i*84);});
+  return s+"</svg>";
+}
+function walker(){
+  return '<svg viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="96" width="260" height="24" rx="12" fill="#e2f2d6"/><path d="M10 104h240" stroke="#c6dfb3" stroke-width="3" stroke-dasharray="10 8"/>'+
+   '<circle cx="222" cy="26" r="14" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M222 4v5M222 43v5M200 26h5M239 26h5"/></g>'+
+   '<g transform="translate(70 6)"><circle cx="30" cy="16" r="11" fill="'+SK+'"/><path d="M19 13c2-9 20-10 23 0-6-3-15-3-23 0z" fill="#3b332b"/>'+
+   '<g stroke-linecap="round" fill="none"><path d="M29 28 25 60" stroke="#2f8f6b" stroke-width="10"/><path d="M28 34 14 48M28 34l15 10" stroke="#2f8f6b" stroke-width="6"/><path d="M25 60 12 86M25 60l16 24" stroke="#3b5d8a" stroke-width="8"/></g>'+
+   '<ellipse cx="9" cy="89" rx="8" ry="4" fill="#e2493b"/><ellipse cx="45" cy="87" rx="8" ry="4" fill="#e2493b"/><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M-16 34h-14M-12 48h-20M-16 62h-12"/></g></g>'+
+   '<g transform="translate(150 50)"><circle cx="20" cy="20" r="18" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M20 8v12l8 5" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="46" y="18" font-size="14" font-weight="700" fill="#2a2622">30 分</text><text x="46" y="35" font-size="12" fill="#6b645a">× 每週 5 天</text></g></svg>';
+}
+function calendar(dateStr){
+  const d=dateStr?new Date(dateStr+"T00:00:00"):null;
+  const m=d?(d.getMonth()+1)+" 月":"",day=d?d.getDate():"?",wd=d?"週"+"日一二三四五六"[d.getDay()]:"";
+  return '<svg viewBox="0 0 74 74" aria-hidden="true"><rect x="4" y="10" width="66" height="60" rx="9" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M4 19a9 9 0 0 1 9-9h48a9 9 0 0 1 9 9v9H4z" fill="var(--a,#bb3f26)"/>'+
+   '<rect x="18" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><rect x="51" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><text x="37" y="25" font-size="11" text-anchor="middle" fill="#fff" font-weight="700">'+m+'</text>'+
+   '<text x="37" y="54" font-size="24" text-anchor="middle" font-weight="700" fill="#2a2622">'+day+'</text><text x="37" y="66" font-size="9.5" text-anchor="middle" fill="#6b645a">'+wd+"</text></svg>";
+}
+/* small illustrated strips used by panels */
+const ART={
+  r722:()=>{let s='<svg class="ck-art" viewBox="0 0 300 70" aria-hidden="true">';for(let i=0;i<7;i++){const x=8+i*41;s+='<rect x="'+x+'" y="6" width="36" height="58" rx="6" fill="#fff" stroke="#d8cfbd" stroke-width="1.5"/><text x="'+(x+18)+'" y="19" font-size="10" text-anchor="middle" fill="#6b645a">第'+(i+1)+'天</text>'+
+     '<g transform="translate('+(x+3)+' 23) scale(.4)">'+ICON.sun.replace(/<\/?svg[^>]*>/g,"")+'</g><g transform="translate('+(x+17)+' 23) scale(.4)">'+ICON.moon.replace(/<\/?svg[^>]*>/g,"")+'</g>'+
+     '<text x="'+(x+18)+'" y="56" font-size="9" text-anchor="middle" fill="#2f8f6b" font-weight="700">×2 遍</text>';}return s+"</svg>";},
+  r1515:()=>'<svg class="ck-art" viewBox="0 0 300 74" aria-hidden="true"><g transform="translate(4 10) scale(.85)">'+ICON.candy.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="30" y="70" font-size="11" text-anchor="middle" fill="#4a443c">吃 15 克糖</text>'+
+     '<path d="M64 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><defs><marker id="ckar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b9b1a4"/></marker></defs>'+
+     '<circle cx="128" cy="32" r="22" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M128 18v14l9 6" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="128" y="70" font-size="11" text-anchor="middle" fill="#4a443c">等 15 分鐘</text>'+
+     '<path d="M158 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><g transform="translate(196 4) scale(.95)">'+ICON.meter.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="226" y="70" font-size="11" text-anchor="middle" fill="#4a443c">再量一次</text>'+
+     '<text x="286" y="40" font-size="22" text-anchor="middle" fill="#e2493b" font-weight="700">↺</text></svg>',
+  plate5:()=>'',
+};
+
+/* =========================================================
+   4. Form state, pulling from the page, rendering
+   ========================================================= */
+const today=()=>{const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const addDays=(iso,n)=>{const t=new Date(iso+"T00:00:00");t.setDate(t.getDate()+n);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const pageVal=id=>{const e=$(id);if(!e)return "";return e.type==="checkbox"?e.checked:e.value;};
+let medsDirty=false,panelOn={};
+function readForm(){const v={name:$("ckName").value.trim(),date:$("ckDate").value,next:$("ckNext").value,doc:$("ckDoc").value.trim()};
+  (C.inputs||[]).forEach(f=>{const x=parseFloat($("ck_"+f.k).value);v[f.k]=isNaN(x)?null:x;});return v;}
+function freqOf(s){
+  let how=[];const t=[];
+  if(/\bTID\b|三餐/i.test(s)){how.push("每天 3 次");t.push("早","中","晚");}
+  else if(/\bBID\b|早晚/i.test(s)){how.push("每天 2 次");t.push("早","晚");}
+  else if(/\bHS\b|睡前/i.test(s)){how.push("睡前");t.push("睡前");}
+  else if(/\bQD\b|每天 ?1 ?次|每日一次/i.test(s)){how.push("每天 1 次");t.push(/早餐|早上/.test(s)?"早":"早");}
+  else if(/每週/.test(s)){how.push("每週 1 次，固定同一天");}
+  if(/早餐前/.test(s))how.push("早餐前");else if(/隨餐|飯後|餐後/.test(s))how.push("吃飯時或飯後");
+  return {how:how.join("，"),times:t};
+}
+function cleanName(s){
+  return s.replace(/<[^>]+>/g,"").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/（[^）]*）|\([^)]*\)/g," ")
+    .replace(/^(改|再加|可同時加|加)\s*/,"").split(/[；。]/)[0]
+    .replace(/\b(QD|BID|TID|HS|qd|bid|tid|hs)\b/g,"").replace(/\s{2,}/g," ").trim();
+}
+function pull(){
+  const v0={};(C.inputs||[]).forEach(f=>{const x=pageVal(f.src);v0[f.k]=x;if(x!==""&&x!=null)$("ck_"+f.k).value=x;});
+  const m=C.meds?C.meds():{lines:[]};
+  const lines=(m.lines||[]).map(raw=>{if(raw.includes("｜"))return raw;const f=freqOf(raw),n=cleanName(raw);return n+(f.how?"｜"+f.how:"");}).filter(Boolean);
+  $("ckMeds").value=lines.join("\n");$("ckMeds").dataset.note=m.note||"";medsDirty=false;
+  const pans=allPanels(readForm(),lines.join("\n"));pans.forEach(p=>{panelOn[p.id]=typeof p.on==="function"?!!p.on(readForm(),lines.join("\n")):p.on!==false;});
+  drawChecks();render();
+}
+function allPanels(v,medTxt){
+  const list=[{id:"nums",label:"我的數字"},{id:"meds",label:"我的藥"}];
+  if(C.plate)list.push({id:"plate",label:"飲食餐盤"});
+  if(C.move!==false)list.push({id:"move",label:"運動"}); // a topic with no diet or exercise advice (skin) sets plate undefined and move:false
+  (C.panels?C.panels(v,medTxt):[]).forEach(p=>list.push(p));
+  list.push({id:"warn",label:"何時要馬上就醫"},{id:"next",label:"下次回診"});
+  return list;
+}
+function drawChecks(){const v=readForm();$("ckPanels").innerHTML=allPanels(v,$("ckMeds").value).map(p=>'<label><input type="checkbox" data-p="'+p.id+'"'+(panelOn[p.id]!==false?" checked":"")+">"+esc(p.label)+"</label>").join("");}
+function medList(){
+  const txt=$("ckMeds").value.trim();if(!txt)return [];
+  return txt.split(/\n+/).map(l=>l.trim()).filter(Boolean).map((l,i)=>{
+    const [n,h]=l.split(/[｜|]/);const name=n.trim(),how=(h||"").trim()||freqOf(name).how;
+    const info=(C.medInfo||[]).find(r=>r[0].test(name))||[null,"",""];
+    let times=freqOf(how).times;if(!times.length)times=freqOf(name).times;
+    return {name,how,what:info[1],tip:info[2],times,color:PILLC[i%PILLC.length]};});
+}
+const TIMEICON={早:["sun","早上"],中:["noon","中午"],晚:["moon","晚上"],睡前:["bed","睡前"]};
+function render(){
+  const v=readForm(),meds=medList(),on=id=>panelOn[id]!==false,sheet=$("ckSheet");
+  const who=v.name?esc(v.name)+"的":"我的";
+  let h='<header class="ck-sh">'+(MASCOT[C.mascot]||MASCOT.leaf)()+'<div><h3>'+who+esc(C.sheetTitle)+'</h3><p>'+esc(v.date||today())+(v.doc?"　"+esc(v.doc):"")+"</p></div></header>";
+  if(on("nums")){const ns=C.numbers?C.numbers(v):[];if(ns.length)h+='<div class="ck-sec"><h4>'+ICON.check+'我的數字</h4><div class="ck-nums">'+ns.map(n=>'<div class="ck-num"><div class="ck-nl">'+esc(n.label)+'</div><div class="ck-nv">'+esc(n.value)+(n.unit?"<small>"+esc(n.unit)+"</small>":"")+"</div>"+(n.meter?meter(n.meter):"")+(n.text?"<p>"+n.text+"</p>":"")+"</div>").join("")+"</div></div>";}
+  if(on("meds")){const note=$("ckMeds").dataset.note;
+    h+='<div class="ck-sec"><h4>'+ICON.pills+'我的藥</h4>';
+    if(meds.length)h+='<ul class="ck-meds">'+meds.map(m=>'<li class="ck-med">'+pill(m.color)+'<div><b>'+esc(m.name)+"</b>"+(m.what?'<span class="ck-what">'+esc(m.what)+"</span>":"")+
+      (m.times.length?'<div class="ck-times">'+m.times.map(t=>'<span class="ck-time">'+ICON[TIMEICON[t][0]]+TIMEICON[t][1]+"</span>").join("")+"</div>":"")+
+      (m.how?'<p class="ck-how">'+esc(m.how)+"</p>":"")+(m.tip?'<p class="ck-tip">小提醒：'+esc(m.tip)+"</p>":"")+"</div></li>").join("")+"</ul>";
+    else h+='<p class="ck-note">'+esc(note||"目前沒有新的藥，照醫師說的生活習慣開始。")+"</p>";
+    if(meds.length)h+='<p style="font-size:13.5px;margin:6px 0 0;color:#6b645a">藥不要自己停或加量；有不舒服先打電話問或提早回診。</p>';
+    h+="</div>";}
+  const pl=C.plate?C.plate(v,$("ckMeds").value):null;
+  const showPlate=on("plate")&&pl,showMove=on("move")&&C.move!==false;
+  if(showPlate||showMove){h+='<div class="ck-two">';
+    if(showPlate)h+='<div class="ck-sec ck-plate"><h4>'+ICON.leaf+esc(pl.title||"每餐這樣吃")+'</h4>'+plate(pl)+'<div class="ck-legend"><span><i style="background:#9bd27e"></i>蔬菜 '+esc(pl.frLabel[0])+'</span><span><i style="background:#f4b49a"></i>'+esc(pl.proLabel||"豆魚蛋肉")+" "+esc(pl.frLabel[1])+'</span><span><i style="background:#e9cf8f"></i>全穀雜糧 '+esc(pl.frLabel[2])+"</span></div><ul>"+pl.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    if(showMove)h+='<div class="ck-sec ck-move"><h4>'+ICON.walk+'動一動</h4>'+walker()+"<ul>"+(C.move||[]).map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    h+="</div>";}
+  const pans=(C.panels?C.panels(v,$("ckMeds").value):[]).filter(p=>on(p.id));
+  if(pans.length)h+='<div class="ck-sec ck-pans">'+pans.map(p=>'<div class="ck-pan"><h5>'+(ICON[p.icon]||"")+esc(p.title||p.label)+"</h5>"+(p.art&&ART[p.art]?ART[p.art]():"")+(p.html||"")+(p.items?"<ul>"+p.items.map(t=>"<li>"+t+"</li>").join("")+"</ul>":"")+"</div>").join("")+"</div>";
+  if(on("warn")&&C.warn)h+='<div class="ck-sec ck-warn"><h5>'+ICON.warn+'這些情況，馬上就醫</h5><ul>'+C.warn.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+  if(on("next")){const nn=C.nextNote?C.nextNote(v,$("ckMeds").value):"";
+    h+='<div class="ck-sec ck-next">'+calendar(v.next)+'<div><b>下次回診：'+(v.next?esc(v.next.replace(/-/g,"/")):"請跟櫃台約時間")+"</b>"+(nn?'<p style="margin:2px 0">'+nn+"</p>":"")+(C.bring?'<p style="margin:2px 0;font-size:14px">記得帶：'+C.bring.map(esc).join("、")+"</p>":"")+"</div></div>";}
+  h+='<div class="ck-foot"><span>這張單張依醫師今天的評估產生；藥名與劑量以處方箋、藥袋為準。</span><span>ycjacademy 門診實務</span></div>';
+  sheet.innerHTML=h;
+}
+let tm=0;const later=()=>{clearTimeout(tm);tm=setTimeout(render,120);};
+const form=document.querySelector(".ck-form");
+form.addEventListener("input",e=>{if(e.target.id==="ckMeds"){medsDirty=true;$("ckMeds").dataset.note="";}if(e.target.dataset.p){panelOn[e.target.dataset.p]=e.target.checked;}later();});
+form.addEventListener("change",e=>{if(e.target.dataset.p)panelOn[e.target.dataset.p]=e.target.checked;later();});
+$("ckPull").onclick=pull;
+$("ckDate").value=today();$("ckNext").value=addDays(today(),C.days||28);
+function onHandoutOpen(){if(!medsDirty)pull();}
+// printing: only the sheet; window.print is blocked inside the claude.ai preview
+const canPrint=/(^|\.)github\.io$|^localhost$|^127\.|^$/.test(location.hostname)||location.protocol==="file:";
+if(!canPrint&&C.siteUrl){$("ckPrint").textContent="到網站版列印";$("ckPrintNote").innerHTML='預覽畫面不能列印，請開 <a href="'+esc(C.siteUrl)+'#handout" target="_blank" rel="noopener">網站版</a>。';}
+$("ckPrint").onclick=()=>{
+  if(!canPrint&&C.siteUrl){window.open(C.siteUrl+"#handout","_blank","noopener");return;}
+  render();let host=$("ckPrintHost");if(!host){host=document.createElement("div");host.id="ckPrintHost";document.body.appendChild(host);}
+  host.innerHTML="";host.appendChild($("ckSheet").cloneNode(true));document.body.classList.add("ck-printing");
+  try{window.print();}catch(e){}
+  setTimeout(()=>document.body.classList.remove("ck-printing"),400);
+};
+addEventListener("afterprint",()=>document.body.classList.remove("ck-printing"));
+pull();
+fromHash();
+window.CK={pull,render,reveal,setAll:all};
+})();
+</script>
+<!-- clinic-kit v1 end -->
+</body>
+</html>
