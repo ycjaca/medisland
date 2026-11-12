@@ -8,7 +8,7 @@ facilitate med learning...
 
 | 路徑 | 內容 |
 |---|---|
-| `index.html` | ycjacademy 花園：圓形 3D 花園，捲動頁面沿著小徑散步，點兩旁的區域進入 |
+| `index.html` | ycjacademy 方塊花園：Minecraft 風的 3D 世界。電腦用 WASD＋滑鼠，手機用搖桿；準星對著區域按 E 進入。左上角選單有導覽模式、區域列表、地圖與設定 |
 | `islands/` | 展覽會場第一檔：家醫群島（台灣家庭醫學醫學會 115 年度秋季學術研討會） |
 
 ### islands/（家醫群島）
@@ -27,4 +27,4 @@ facilitate med learning...
 
 網址 hash 對應：`islands/#metabolic` 等島名開啟大綱頁的島嶼，`islands/#obesity` 開啟深入頁，`islands/#obesity--c9` 跳到該頁章節。
 
-純靜態 HTML，由 GitHub Pages 從 `main` 分支根目錄發布。花園的 3D 畫面使用 cdnjs 上的 three.js r128。
+純靜態 HTML，由 GitHub Pages 從 `main` 分支根目錄發布。花園的 3D 畫面使用 cdnjs 上的 three.js r128；方塊材質全部由程式產生，沒有圖片檔。
