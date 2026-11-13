@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>戒菸門診實務</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Same clinic-handbook layout as the other 門診實務 pages; fresh-air green accent for smoking cessation. */
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef; --card:#ffffff; --ink:#22261f; --mute:#5d6258; --line:#dad8cd;
+  --accent:#3d7a5a; --accent-soft:#e0efe6;
+  --ok:#2f7d55; --ok-soft:#e1f1e8; --warn:#8f6400; --warn-soft:#fbf0d9; --crit:#b3261e; --crit-soft:#fbe3e0;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:#f3f1e8;padding:22px 0 18px}
+header.top .crumb{font:13px var(--mono);color:#c2bfa9}
+header.top .crumb a{color:inherit}
+header.top h1{font:700 32px/1.3 var(--display);margin:4px 0 6px;text-wrap:balance}
+header.top p{margin:0;color:#dcd9cb;font-size:15px}
+.bar{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:8px;padding-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);font:500 14px var(--body);padding:6px 13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.jump{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0}
+.jump a{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap;padding:4px 7px;border-radius:4px}
+.jump a:hover{background:var(--bg);color:var(--ink)}
+.draft{background:var(--warn-soft);border-left:4px solid var(--warn);padding:10px 14px;margin:18px 0;font-size:14.5px}
+section{padding:26px 0 8px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.no{font:13px var(--mono);color:var(--accent)}
+h2{font:700 25px/1.35 var(--display);margin:2px 0 10px;text-wrap:balance}
+h3{font:700 17px/1.5 var(--body);margin:18px 0 6px}
+p{margin:8px 0;max-width:65ch}
+ul,ol{margin:8px 0;padding-left:1.3em}
+li{margin:3px 0}
+a{color:var(--accent)}
+.tag{display:inline-block;font:500 11.5px/1.5 var(--mono);padding:0 6px;border-radius:3px;background:#ebe9e0;color:var(--mute);vertical-align:1px;white-space:nowrap}
+.tag.tw{background:#dcecf0;color:#1c5a68}.tag.us{background:#e7e4f3;color:#4a3f85}.tag.me{background:#eee7dc;color:#6a5533}.tag.todo{background:var(--warn-soft);color:var(--warn)}.tag.pay{background:#f3e1ec;color:#7c2d5c}
+.case{background:var(--accent-soft);border-radius:8px;padding:12px 16px;margin:12px 0;font-size:15.5px}
+.case b{color:var(--accent)}
+.tool{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:16px 0}
+.tool>h3{margin:0 0 10px;font-size:16px}
+.fields{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+label.num{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input[type=number],input[type=date]{width:96px;font:500 19px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:#fff}
+input[type=date]{width:auto;font-size:16px}
+input[type=search]{font:16px var(--body);padding:8px 10px;border:1px solid var(--line);border-radius:5px;width:100%}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px 14px;margin:6px 0}
+.checks label{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:15px;cursor:pointer;line-height:1.5}
+input[type=checkbox]{margin-top:4px;width:17px;height:17px;accent-color:var(--accent);flex:none}
+.grp{font:500 13px var(--mono);color:var(--mute);margin:12px 0 0;border-top:1px dashed var(--line);padding-top:8px}
+.auto{font-size:12px;color:var(--accent);margin-left:4px}
+button.act{font:500 14px var(--body);background:var(--card);border:1px solid var(--ink);border-radius:5px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.out{margin-top:12px;padding:10px 14px;border-radius:5px;background:var(--bg);border-left:4px solid var(--mute)}
+.out.ok{background:var(--ok-soft);border-color:var(--ok)}.out.warn{background:var(--warn-soft);border-color:var(--warn)}.out.crit{background:var(--crit-soft);border-color:var(--crit)}
+.out b.big{font:700 19px var(--display);display:block}
+.out small{color:var(--mute);font-size:13px;display:block;margin-top:4px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--bg)}
+td.n{font:14px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.flag td,tr.flag th{background:var(--crit-soft)}
+tr.hl td,tr.hl th{background:var(--accent-soft)}
+details{margin:12px 0;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-weight:500;font-size:15px}
+details>div{padding:0 12px 10px}
+.part{margin:34px 0 0;padding:10px 14px;background:var(--ink);color:#f3f1e8;font:700 19px var(--display);border-radius:5px}
+.part span{font:12px var(--mono);color:#c2bfa9;display:block}
+select{font:15px var(--body);padding:8px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);max-width:100%}
+.rx{display:grid;gap:8px;margin-top:8px}
+.rx .item{background:#fff;border:1px solid var(--line);border-radius:5px;padding:8px 11px}
+.rx .item b{font:700 17px var(--body)}
+.rx .item div{font-size:14px;color:var(--mute);line-height:1.6}
+.pill{display:inline-block;font-size:12.5px;padding:0 8px;border-radius:4px;margin-left:4px;vertical-align:2px}
+.pill.g{background:var(--ok-soft);color:var(--ok)}.pill.u{background:#f3e1ec;color:#7c2d5c}.pill.c{background:var(--warn-soft);color:var(--warn)}.pill.t2{background:var(--crit-soft);color:var(--crit)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.cols>div{border:1px solid var(--line);border-radius:5px;padding:9px 11px;background:#fff;font-size:14.5px;line-height:1.6}
+.cols h4{margin:0 0 4px;font:500 13px var(--mono);color:var(--mute)}
+.why{font-size:13.5px;color:var(--mute);margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+.sched{list-style:none;padding:0;margin:8px 0 0}
+.sched li{display:grid;grid-template-columns:7.5em 1fr;gap:8px;border-top:1px solid var(--line);padding:6px 0;font-size:14.5px}
+.sched li b{font:500 13.5px var(--mono);color:var(--accent)}
+.next{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.next a{display:block;border:1px dashed var(--line);border-radius:6px;padding:10px 12px;font-size:14.5px;color:var(--mute);text-decoration:none}
+.next a b{display:block;color:var(--ink)}
+.ladder{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:10px 0}
+.ladder div{border-radius:5px;padding:6px 4px;text-align:center;font-size:12.5px;line-height:1.35;background:#efeee8;color:var(--mute)}
+.ladder div b{display:block;font:700 18px var(--mono);color:var(--ink)}
+.ladder div.on{background:var(--accent);color:#fff}.ladder div.on b{color:#fff}
+.meter{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,#7cc47f 0%,#f2d257 45%,#f5a24b 70%,#e0605a 100%);margin:22px 0 6px}
+.meter i{position:absolute;top:-6px;width:3px;height:26px;background:var(--ink);border-radius:2px}
+.meter i.t{background:var(--accent)}
+.meter span{position:absolute;top:-22px;transform:translateX(-50%);font:12px var(--mono);white-space:nowrap}
+.flow{display:grid;gap:6px;margin:10px 0}
+.flow div{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:5px;padding:7px 11px;font-size:14.5px}
+.flow div b{color:var(--accent)}
+footer{padding:22px 0 44px;font-size:13.5px;color:var(--mute)}
+footer a{color:inherit}
+footer ul{padding-left:1.2em}
+#doseTable{min-width:820px}
+#doseTable th:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+#doseTable tr.flag th:first-child{background:var(--crit-soft)}
+#itemTable{min-width:560px}
+body.clinic .learn{display:none}
+body.clinic section{padding-top:12px;border-bottom:0}
+body.clinic h2{font-size:18px}
+body.clinic .tool{margin:8px 0}
+@media (max-width:560px){.cols{grid-template-columns:1fr}header.top h1{font-size:27px}.sched li{grid-template-columns:6em 1fr}.ladder{grid-template-columns:repeat(3,1fr)}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media print{.bar{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../">ycjacademy</a>／門診實務／戒菸</div>
+  <h1>戒菸門診實務</h1>
+  <p>國健署戒菸服務：收案、成癮度、選藥（varenicline、尼古丁替代、bupropion）、合併用藥規定、療程排程與追蹤。</p>
+</div></header>
+
+<nav class="bar" aria-label="頁面工具"><div class="wrap">
+  <div class="seg" role="group" aria-label="閱讀模式">
+    <button id="mLearn" type="button" aria-pressed="true">學習</button>
+    <button id="mClinic" type="button" aria-pressed="false">門診</button>
+  </div>
+  <div class="jump">
+    <a href="#elig">收案</a><a href="#ftnd">成癮度</a><a href="#motive">動機</a><a href="#screen">安全</a><a href="#drugs">藥物</a><a href="#rx">處方</a><a href="#dose">品項</a><a href="#ae">副作用</a><a href="#ddi">交互作用</a><a href="#plan">排程</a><a href="#withdraw">戒斷</a><a href="#rules">規定</a><a href="#special">特殊族群</a>
+  </div>
+</div></nav>
+
+<main class="wrap">
+<div class="draft learn"><b>v0.1 草稿，最後核對 2026-11-13。</b>補助規定依國健署〈戒菸服務補助計畫作業須知〉（112/1/1 生效、113/9/1 修訂）、〈戒菸服務用藥原則〉（111/6 版全文；113/8 修正版只讀到片段，標 <span class="tag todo">待核對</span>）與國健署戒菸服務公告（至 115/3/1 新增口含錠）。劑量依台灣仿單與國際指引整理，個別病人請依臨床判斷。</div>
+
+<div class="learn">
+<div class="case"><b>陳先生，52 歲，高血壓、糖尿病，抽菸 30 年（虛構）。</b>每天一包，起床 10 分鐘內就要抽第一支。上次自己戒了 3 天就破功。他問：「戒菸藥會不會讓人憂鬱？健保有給付嗎？」</div>
+<h3>這次門診要做的五件事</h3>
+<ol>
+  <li>確認能不能收國健署戒菸服務：年齡、成癮度或支數、意願、今年用了幾個療程。</li>
+  <li>算尼古丁成癮度與包年；順便看 LDCT 與口腔癌篩檢資格。</li>
+  <li>篩檢用藥安全：懷孕、精神病史、癲癇、近期心血管事件、腎功能、會受戒菸影響的藥。</li>
+  <li>選藥並排好戒菸日：varenicline 開藥後第 8 天停菸；尼古丁貼片戒菸日當天開始貼。</li>
+  <li>初診只開 1–2 週，約好回診與衛教；8 週內完成療程。</li>
+</ol>
+<p>糖尿病、高血壓、血脂異常的病人，戒菸是降低心血管風險最划算的一步：相關評估見 <a href="hypertension.html">高血壓</a>、<a href="diabetes.html">糖尿病</a>、<a href="dyslipidemia.html">血脂異常</a>專區。</p>
+</div>
+
+<!-- ================= PART 1 ================= -->
+<div class="part"><span>第一部分</span>初診：收案、成癮度、動機、安全篩檢</div>
+
+<section id="elig">
+  <div class="no">STEP 1</div>
+  <h2>國健署戒菸服務收案判斷</h2>
+  <p class="learn">戒菸服務分兩種：<b>戒菸治療</b>（醫師看診＋藥物）與<b>戒菸衛教暨個案管理</b>（衛教師一對一）。兩者每年各 2 個療程，每療程 8 次治療、8 週藥、8 次衛教、3 次追蹤，限同一機構 90 天內完成。藥品部分負擔自 111/5/15 起全免，病人只付掛號費。</p>
+  <div class="tool">
+    <h3>收案條件</h3>
+    <div class="fields">
+      <label class="num">年齡<input type="number" id="eAge" data-sync="age" value="52"></label>
+      <label class="num">每天幾支<input type="number" id="eCpd" data-sync="cpd" value="20"></label>
+      <label class="num">FTND 分數<input type="number" id="eFtnd" data-sync="ftnd" value="6" min="0" max="10"></label>
+      <label class="num">今年已用療程<select id="eUsed"><option value="0">0 個</option><option value="1">1 個</option><option value="2">2 個</option></select></label>
+      <label class="num">使用的菸品<select id="eType"><option value="cig">紙菸</option><option value="mix">紙菸＋加熱菸／電子煙</option><option value="htp">只用加熱菸</option><option value="ecig">只用電子煙</option></select></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="eWill" checked>有明確戒菸意願</label>
+      <label><input type="checkbox" id="eCont">這是延續療程（上一療程接著用）</label>
+      <label><input type="checkbox" id="eOther">今年另一家機構的療程還沒用完</label>
+    </div>
+    <div class="out" id="eOut" aria-live="polite"></div>
+  </div>
+  <details class="learn"><summary>作業須知原文重點</summary><div>
+    <ul>
+      <li><b>戒菸治療對象</b>：18 歲以上健保保險對象，尼古丁成癮度（Fagerström）≥4 分，或平均每天 ≥10 支紙菸，且有明確戒菸意願。延續療程不受此限，但仍要評估並記錄吸菸量與成癮度。</li>
+      <li><b>戒菸衛教對象</b>：不限年齡，有戒菸意願；限一對一面對面，不能團體衛教。</li>
+      <li><b>第三療程</b>：須有理由並記錄；理由不被認可時不補助。</li>
+      <li><b>換機構</b>：療程限同一機構 90 天內完成。在甲機構療程中跑到乙機構，視同放棄甲的療程、進入第二療程。跨年度則重新起算。</li>
+      <li>成癮度量表：作業須知寫 1991 年版 Fagerström，部分縣市衛生局頁面寫 2019 年版 <span class="tag todo">待核對</span>；兩版題目與計分相同，本頁採標準 FTND。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="ftnd">
+  <div class="no">STEP 2</div>
+  <h2>尼古丁成癮度、包年與篩檢資格</h2>
+  <p class="learn">FTND 第 1 題（起床後多久抽第一支）和第 4 題（每天幾支）合起來就是 HSI（Heaviness of Smoking Index），門診沒時間時只問這兩題也可以。起床 30 分鐘內就抽的人，咀嚼錠與口含錠要用 4 mg。</p>
+  <div class="tool">
+    <h3>FTND</h3>
+    <div class="fields">
+      <label class="num">1. 起床後多久抽第一支<select id="q1"><option value="3">5 分鐘內</option><option value="2" selected>6–30 分鐘</option><option value="1">31–60 分鐘</option><option value="0">60 分鐘以後</option></select></label>
+      <label class="num">4. 每天幾支<input type="number" id="fCpd" data-sync="cpd" value="20"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" class="fq" id="q2" checked>2. 在禁菸場所（電影院、圖書館）很難忍住不抽</label>
+      <label><input type="checkbox" class="fq" id="q3" checked>3. 最不願放棄的是早上第一支</label>
+      <label><input type="checkbox" class="fq" id="q5">5. 起床後幾小時內抽得比其他時間多</label>
+      <label><input type="checkbox" class="fq" id="q6">6. 生病臥床時還是會抽</label>
+    </div>
+    <div class="out" id="fOut" aria-live="polite"></div>
+  </div>
+  <div class="tool">
+    <h3>包年與預防保健</h3>
+    <div class="fields">
+      <label class="num">年齡<input type="number" id="pAge" data-sync="age" value="52"></label>
+      <label class="num">抽了幾年<input type="number" id="pYrs" value="30"></label>
+      <label class="num">每天幾支<input type="number" id="pCpd" data-sync="cpd" value="20"></label>
+      <label class="num">性別<select id="pSex"><option value="m">男</option><option value="f">女</option></select></label>
+      <label class="num">吐氣 CO（ppm）<input type="number" id="pCo" placeholder="選填"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="pQuit">已戒菸（填戒了幾年）</label>
+      <label class="num" style="flex-direction:row;align-items:center;gap:6px">戒菸 <input type="number" id="pQuitY" value="0" style="width:70px"> 年</label>
+      <label><input type="checkbox" id="pFh">一等親有肺癌</label>
+      <label><input type="checkbox" id="pCt">過去 12 個月做過胸部 CT</label>
+      <label><input type="checkbox" id="pBetel">嚼檳榔（含已戒）</label>
+    </div>
+    <div class="out" id="pOut" aria-live="polite"></div>
+  </div>
+  <details class="learn"><summary>FTND 計分與篩檢條件</summary><div>
+    <ul>
+      <li>FTND 0–10 分：0–3 低、4–6 中、7–10 高。第 1 題 3/2/1/0 分；第 4 題 ≤10 支 0、11–20 支 1、21–30 支 2、≥31 支 3；其他各 1 分。</li>
+      <li><b>LDCT 肺癌篩檢</b>（國健署，114 年起放寬）：重度吸菸者 50–74 歲、≥20 包年、仍在抽（願意戒菸）或戒菸未滿 15 年；肺癌家族史者男 45–74、女 40–74 歲。每 2 年 1 次，過去 12 個月內做過胸部 CT 者不收。</li>
+      <li><b>口腔黏膜檢查</b>：30 歲以上吸菸或嚼檳榔（含已戒）者，每 2 年 1 次。</li>
+      <li><b>吐氣 CO</b>：一般以 ≤6 ppm 為不吸菸範圍，7–10 ppm 為輕度暴露、&gt;10 ppm 多為吸菸者；各機器切點略有不同。回診時量 CO 可以客觀確認戒菸，也是很好的正向回饋。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="motive">
+  <div class="no">STEP 3</div>
+  <h2>動機：5A、5R 與 30 秒勸戒</h2>
+  <p class="learn">每次門診都問、都勸，就算病人今天不想戒。醫師簡短勸戒（brief advice）就能提高戒菸率；有意願的人轉入戒菸服務（藥物＋衛教）效果最好。</p>
+  <div class="tool">
+    <h3>病人準備到哪裡了</h3>
+    <div class="fields">
+      <label class="num">準備度<select id="mStage" style="min-width:260px">
+        <option value="ready" selected>準備好了：30 天內想戒</option>
+        <option value="think">考慮中：6 個月內想戒，但還沒決定</option>
+        <option value="no">還不想戒</option>
+        <option value="reduce">想先減量，再慢慢戒</option>
+        <option value="quit">最近剛戒（30 天內），怕復抽</option>
+      </select></label>
+      <label class="num">一包菸多少錢<input type="number" id="mPrice" value="125"></label>
+      <label class="num">每天幾支<input type="number" id="mCpd" data-sync="cpd" value="20"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="mKid">家裡有小孩或孕婦</label>
+      <label><input type="checkbox" id="mCv">有高血壓、糖尿病或心血管疾病</label>
+      <label><input type="checkbox" id="mLung">有咳嗽、喘或 COPD</label>
+    </div>
+    <div class="out" id="mOut" aria-live="polite"></div>
+  </div>
+  <div class="flow learn">
+    <div><b>Ask</b>　每次看診都問、記錄吸菸狀態（含加熱菸、電子煙）。</div>
+    <div><b>Advise</b>　清楚、強烈、個人化地建議戒菸：「以你的血壓和血糖，戒菸是現在最有用的一件事。」</div>
+    <div><b>Assess</b>　評估意願：30 天內想戒嗎？</div>
+    <div><b>Assist</b>　有意願：訂戒菸日、開藥、轉衛教；還沒意願：做 5R 動機晤談。</div>
+    <div><b>Arrange</b>　1–2 週內回診，戒菸日後第一週最容易破功。</div>
+  </div>
+  <details class="learn"><summary>5R：還不想戒的人</summary><div>
+    <ul>
+      <li><b>Relevance</b> 相關：連到他的病（血壓、血糖、咳嗽）、家人、工作。</li>
+      <li><b>Risks</b> 風險：短期（喘、性功能、傷口癒合）、長期（心梗、中風、癌症）、對家人（二手菸、三手菸）。</li>
+      <li><b>Rewards</b> 好處：省錢、味覺嗅覺、體力、當孩子的榜樣。</li>
+      <li><b>Roadblocks</b> 障礙：怕胖、怕戒斷、壓力、朋友都抽——逐一給解法。</li>
+      <li><b>Repetition</b> 重複：每次門診再談一次；多數人要試幾次才成功。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="screen">
+  <div class="no">STEP 4</div>
+  <h2>用藥安全篩檢</h2>
+  <p class="learn">勾選後會帶進 STEP 6 處方產生器。大型試驗 EAGLES（Lancet 2016）在有、無精神疾病的吸菸者中，varenicline 與 bupropion 的嚴重神經精神不良事件都沒有比尼古丁貼片或安慰劑多；美國 FDA 2016 年已移除黑框警語，但仍要問病史並請家人留意情緒變化。</p>
+  <div class="tool">
+    <div class="fields">
+      <label class="num">eGFR<input type="number" id="sEgfr" data-sync="egfr" value="80"></label>
+      <label class="num">透析<select id="sHd"><option value="0">否</option><option value="1">血液透析</option></select></label>
+    </div>
+    <p class="grp">懷孕與年齡</p>
+    <div class="checks">
+      <label><input type="checkbox" id="sPreg">懷孕</label>
+      <label><input type="checkbox" id="sBf">哺乳中</label>
+    </div>
+    <p class="grp">神經精神</p>
+    <div class="checks">
+      <label><input type="checkbox" id="sDep">憂鬱、焦慮（穩定治療中）</label>
+      <label><input type="checkbox" id="sSmi">思覺失調、雙極性疾患，或近期不穩定、有自殺意念</label>
+      <label><input type="checkbox" id="sSeiz">癲癇或曾經抽搐、頭部外傷、腦瘤</label>
+      <label><input type="checkbox" id="sEat">暴食症、厭食症（現在或過去）</label>
+      <label><input type="checkbox" id="sWd">正在突然停酒、停 benzodiazepine 或巴比妥</label>
+      <label><input type="checkbox" id="sMaoi">14 天內用過 MAOI（含 linezolid）</label>
+      <label><input type="checkbox" id="sAlc">大量飲酒</label>
+    </div>
+    <p class="grp">心血管與其他</p>
+    <div class="checks">
+      <label><input type="checkbox" id="sAcs">2 週內急性冠心症、嚴重心律不整或不穩定心絞痛</label>
+      <label><input type="checkbox" id="sCad">穩定冠心病、中風或周邊動脈病史</label>
+      <label><input type="checkbox" id="sSkin">大範圍濕疹、乾癬（貼片不好貼）</label>
+      <label><input type="checkbox" id="sTmj">假牙、顳顎關節問題（不適合咀嚼錠）</label>
+      <label><input type="checkbox" id="sDrive">職業駕駛、高處或操作重機械</label>
+      <label><input type="checkbox" id="sTam">正在吃 tamoxifen</label>
+    </div>
+    <div class="out" id="sOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= PART 2 ================= -->
+<div class="part"><span>第二部分</span>選藥：藥物比較、處方產生器、品項與副作用</div>
+
+<section id="drugs">
+  <div class="no">STEP 5</div>
+  <h2>戒菸藥物比較</h2>
+  <p class="learn">藥物＋行為支持一起用，成功率最高。效果大致是 <b>varenicline ≈ 合併尼古丁替代（貼片＋短效）＞ 單一尼古丁替代 ≈ bupropion</b>（Cochrane 網絡統合分析）。美國胸腔學會 2020 指引建議 varenicline 優先於貼片與 bupropion，並可延長到 12 週以上。</p>
+  <div class="scroll"><table style="min-width:720px">
+    <tr><th>藥物</th><th>怎麼用</th><th>主要副作用</th><th>不適合或小心</th><th>國健署補助</th></tr>
+    <tr class="hl"><th>Varenicline<br><small>戒必適 Champix、戒衛清 Varenate</small></th><td>開藥後第 8 天停菸（可在第 8–35 天之間選）。第 1–3 天 0.5 mg QD，第 4–7 天 0.5 mg BID，之後 1 mg BID，飯後配一杯水。</td><td>噁心（約 3 成，多數會適應）、失眠、怪夢、頭痛、便祕</td><td>eGFR &lt;30 減量；透析 0.5 mg QD。&lt;18 歲、懷孕不建議。職業駕駛先觀察有無嗜睡。</td><td>處方藥，醫師開立。<b>不能和其他戒菸藥合併申報</b>。</td></tr>
+    <tr><th>尼古丁貼片</th><td>戒菸日早上開始貼，每天換位置。&gt;10 支／天 21 mg／24 h，≤10 支 14 mg；漸減 21 → 14 → 7。</td><td>貼處癢紅、失眠、怪夢（睡前撕下即可）</td><td>大範圍皮膚病。2 週內 ACS、嚴重心律不整先和心臟科討論。</td><td>指示藥，醫師可直接交付，藥局也能給</td></tr>
+    <tr><th>短效尼古丁<br><small>咀嚼錠、口含錠、吸入劑、口腔噴霧</small></th><td>想抽時用；起床 30 分鐘內就抽者用 4 mg，否則 2 mg。單用每 1–2 小時 1 顆。</td><td>口腔、喉嚨刺激、打嗝、胃不適</td><td>咀嚼錠不適合假牙、顳顎關節問題。用前 15 分鐘不喝咖啡、果汁、可樂。</td><td>指示藥。可和貼片合併（需符合合併條件）。</td></tr>
+    <tr><th>Bupropion SR 150</th><td>戒菸日前 1–2 週開始。第 1–3 天 150 mg QD，之後 150 mg BID（兩顆間隔 ≥8 小時）。</td><td>失眠、口乾、頭痛；癲癇（約 1/1000）</td><td>癲癇、暴食或厭食症、突然停酒或 benzo、MAOI 禁用；tamoxifen、CYP2D6 受質要注意。</td><td>處方藥。可和任一種尼古丁藥合併。</td></tr>
+  </table></div>
+  <details class="learn"><summary>為什麼 varenicline 有效</summary><div>
+    <p>Varenicline 是 α4β2 尼古丁受體的部分致效劑：一邊少量刺激受體、釋放一點多巴胺，減輕戒斷與渴望；一邊佔住受體，抽菸時尼古丁接不上去，抽起來「沒感覺」。所以病人可以在開藥後第 1 週照常抽，到第 8 天再停。</p>
+    <p>原廠戒必適 2021 年起因亞硝胺不純物（N-nitroso-varenicline）在多國回收，國健署 113/10/1 起暫停補助；114/9/24 重新納入，學名藥戒衛清自 114/12/1 起納入。院內實際有哪一個品項，請先和藥局確認。</p>
+  </div></details>
+</section>
+
+<section id="rx">
+  <div class="no">STEP 6</div>
+  <h2>處方產生器</h2>
+  <p class="learn">依國健署用藥原則：補助以<b>單一用藥</b>為原則；合併用藥須符合四項條件之一並寫進病歷。初診第一療程只能開 1–2 週，之後最多 4 週。STEP 1、2、4 的資料會自動帶入。</p>
+  <div class="tool">
+    <div class="fields">
+      <label class="num">年齡<input type="number" id="rAge" data-sync="age" value="52"></label>
+      <label class="num">每天幾支<input type="number" id="rCpd" data-sync="cpd" value="20"></label>
+      <label class="num">FTND<input type="number" id="rFtnd" data-sync="ftnd" value="6"></label>
+      <label class="num">eGFR<input type="number" id="rEgfr" data-sync="egfr" value="80"></label>
+    </div>
+    <div class="fields" style="margin-top:10px">
+      <label class="num">這次是<select id="rStage" style="min-width:250px">
+        <option value="0">初診：第一次用戒菸藥</option>
+        <option value="1">回診：單一藥 ≥2 週，戒斷或渴望仍明顯</option>
+        <option value="2">再來戒：上次療程失敗（又抽回來）</option>
+        <option value="3">已戒菸滿 8 週：接第二療程鞏固</option>
+      </select></label>
+      <label class="num">上次／目前用藥<select id="rLast">
+        <option value="none">沒用過</option>
+        <option value="var">varenicline</option>
+        <option value="patch">尼古丁貼片</option>
+        <option value="short">短效尼古丁（咀嚼錠、口含錠）</option>
+        <option value="combo">貼片＋短效</option>
+        <option value="bup">bupropion</option>
+      </select></label>
+      <label class="num">病人偏好<select id="rPref">
+        <option value="auto">依建議</option>
+        <option value="var">想吃 varenicline</option>
+        <option value="nrt">想用尼古丁替代</option>
+        <option value="bup">想吃 bupropion</option>
+        <option value="none">不想用藥</option>
+      </select></label>
+      <label class="num">varenicline 品項<select id="rBrand"><option value="戒衛清">戒衛清 Varenate</option><option value="戒必適">戒必適 Champix</option></select></label>
+      <label class="num">短效劑型<select id="rShort"><option value="lz">口含錠</option><option value="gum">咀嚼錠</option><option value="spray">口腔噴霧</option></select></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="rEarly" checked>起床 30 分鐘內抽第一支<span class="auto" id="rEarlyAuto"></span></label>
+      <label><input type="checkbox" id="rReduce">先減量再停（不設固定戒菸日）</label>
+    </div>
+    <div class="out" id="rOut" aria-live="polite"></div>
+  </div>
+  <details class="learn"><summary>處方產生器的規則</summary><div>
+    <ul>
+      <li>預設單一用藥：varenicline 優先；懷孕、&lt;18 歲改走衛教，必要時短效尼古丁。</li>
+      <li>合併條件（任一，寫進病歷）：①曾單一藥失敗 ②本療程單一藥 ≥2 週戒斷仍明顯 ③每天 ≥31 支 ④醫師評估有生理、心理或社會需求並詳述理由。</li>
+      <li>可補助的合併：貼片＋另一種短效尼古丁；bupropion＋任一種尼古丁。<b>Varenicline 合併其他藥不補助</b>；同時用 3 種以上尼古丁製劑不補助（113/8 版）。</li>
+      <li>「回診仍戒斷明顯」：貼片加短效、短效加貼片、bupropion 加尼古丁；varenicline 先確認已到 1 mg BID、有按時吃，再談自費加短效尼古丁或換 bupropion＋尼古丁。</li>
+      <li>「上次失敗」：換另一類（用過 varenicline → 合併尼古丁；用過尼古丁或 bupropion → varenicline）；上次 varenicline 沒吃足量或太早停，也可以再試。</li>
+      <li>「鞏固」：varenicline 再 12 週可減少復抽（Tonstad, JAMA 2006）；尼古丁照 21 → 14 → 7 收尾。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="dose">
+  <div class="no">STEP 7</div>
+  <h2>劑量與國健署補助品項</h2>
+  <p class="learn">補助額度以國健署〈戒菸輔助用藥品項與補助基準〉為準（113/4/1、113/10/1 版，加上 114/9/24、114/12/1、115/3/1 的增修公告）。標 <span class="tag todo">待核對</span> 的數字來自較舊版本。院內實際品項請問藥局。</p>
+  <input type="search" id="iQ" placeholder="搜尋品名或成分，例如：貼片、4 mg、bupropion" aria-label="搜尋品項">
+  <div class="scroll" style="margin-top:8px"><table id="itemTable">
+    <thead><tr><th>品名</th><th>規格</th><th>用法</th><th>補助額度（元）</th></tr></thead>
+    <tbody id="iBody"></tbody>
+  </table></div>
+  <details><summary>尼古丁貼片怎麼換算</summary><div>
+    <ul>
+      <li>克菸貼片 TTS 30、20、10 的「30／20／10」是貼片面積（cm²），釋放量約 21、14、7 mg／24 小時。</li>
+      <li>淨菸經皮戒菸貼片 15、10、5 號是 16 小時貼片，大約 15、10、5 mg／16 小時，早上貼、睡前撕。</li>
+      <li>每天抽一包（20 支）約吸收 20 mg 尼古丁，所以 &gt;10 支／天從 21 mg 開始；&gt;40 支可考慮 21 mg＋14 mg 或加短效（合併條件③）。</li>
+    </ul>
+  </div></details>
+</section>
+
+<section id="ae">
+  <div class="no">STEP 8</div>
+  <h2>副作用與用法問題</h2>
+  <div class="scroll"><table>
+    <tr><th>問題</th><th>處理</th></tr>
+    <tr><td>Varenicline 噁心</td><td>飯後吃、配一整杯水；多數 1–2 週內會減輕。仍受不了可降到 0.5 mg BID（效果稍差但仍有效）。</td></tr>
+    <tr><td>Varenicline 失眠、怪夢</td><td>晚上那顆提早到晚餐後吃；不要睡前吃。</td></tr>
+    <tr><td>情緒低落、易怒、焦慮</td><td>先分清楚是戒斷症狀（戒菸後 1–2 週最明顯）還是藥物；出現自殺念頭、攻擊行為或明顯行為改變，<b>立刻停藥並回診</b>。</td></tr>
+    <tr><td>貼片處紅癢</td><td>每天換位置，同一處一週內不重複；可擦類固醇乳膏。起大範圍疹子就停用。</td></tr>
+    <tr><td>貼片引起失眠、怪夢</td><td>睡前撕下（改成 16 小時）；早上起床後再貼新的。</td></tr>
+    <tr><td>咀嚼錠打嗝、胃痛、喉嚨刺</td><td>嚼太快了。改「嚼—停—嚼」：嚼到有辣味就停，夾在臉頰和牙齦之間，味道淡了再嚼，約 30 分鐘一顆。</td></tr>
+    <tr><td>短效尼古丁沒效</td><td>多半是用太少或太晚。前幾週要「定時」用（每 1–2 小時），不是忍不住才用；用前 15 分鐘不喝酸性飲料。</td></tr>
+    <tr><td>尼古丁過量</td><td>噁心、頭暈、心悸、冒冷汗：減量或撕掉貼片。多半是戒菸期間又照常抽菸。</td></tr>
+    <tr><td>Bupropion 失眠、口乾</td><td>第二顆在下午 3–5 點吃（和第一顆間隔 ≥8 小時），不要接近睡前；可減為 150 mg QD。</td></tr>
+    <tr><td>Bupropion 血壓上升</td><td>合併尼古丁貼片時較常見，回診量血壓。</td></tr>
+  </table></div>
+</section>
+
+<section id="ddi">
+  <div class="no">STEP 9</div>
+  <h2>戒菸後要調整的藥</h2>
+  <p class="learn">菸裡的多環芳香烴（不是尼古丁）會誘導 CYP1A2。戒菸後約 1 週酵素活性開始下降，這些藥的血中濃度會上升；所以用尼古丁替代療法照樣會發生。反過來，住院期間禁菸、出院又抽回來，濃度會下降。</p>
+  <div class="tool">
+    <h3>病人正在吃的藥</h3>
+    <div class="checks" id="dList"></div>
+    <div class="out" id="dOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= PART 3 ================= -->
+<div class="part"><span>第三部分</span>追蹤：療程排程、戒斷與復抽、規定</div>
+
+<section id="plan">
+  <div class="no">STEP 10</div>
+  <h2>療程排程器</h2>
+  <p class="learn">依作業須知排出 8 週療程：同一療程兩次服務間隔 ≥4 天；衛教第 2–5 次在初次衛教起 30 天內、第 6–8 次在第 31–90 天；初診起 80–100 天、170–190 天各追蹤一次，另有 1 年追蹤。藥物種類會從 STEP 6 帶入，決定戒菸日。</p>
+  <div class="tool">
+    <div class="fields">
+      <label class="num">初診日<input type="date" id="tDate"></label>
+      <label class="num">每次開藥<select id="tWk"><option value="2">2 週</option><option value="1">1 週</option><option value="4">4 週（複診起）</option></select></label>
+    </div>
+    <div class="out" id="tOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="withdraw">
+  <div class="no">STEP 11</div>
+  <h2>戒斷症狀、體重與復抽</h2>
+  <div class="cols">
+    <div><h4>戒斷症狀時間軸</h4>
+      <ul style="margin:0">
+        <li><b>數小時內</b>開始想抽、煩躁</li>
+        <li><b>第 1–3 天</b>最強：易怒、焦慮、坐不住、注意力差、失眠、食慾增加</li>
+        <li><b>2–4 週</b>多數症狀消退</li>
+        <li><b>渴望</b>可持續數月，但次數越來越少、一次只撐 3–5 分鐘</li>
+        <li>咳嗽可能暫時變多：纖毛恢復在排痰</li>
+      </ul></div>
+    <div><h4>戒菸的好處</h4>
+      <ul style="margin:0">
+        <li><b>20 分鐘</b>心跳、血壓下降</li>
+        <li><b>12 小時</b>血中一氧化碳回到正常</li>
+        <li><b>2–12 週</b>循環與肺功能改善</li>
+        <li><b>1 年</b>冠心病風險約減半</li>
+        <li><b>5–15 年</b>中風風險接近不吸菸者</li>
+        <li><b>10 年</b>肺癌死亡風險約減半</li>
+      </ul></div>
+  </div>
+  <h3>體重</h3>
+  <p>戒菸一年平均增加約 4–5 公斤，差異很大。增加的體重不會抵消戒菸對心血管的好處。Varenicline、bupropion、短效尼古丁（4 mg）能延緩體重上升。不建議為了怕胖而同時嚴格節食；先戒菸，再處理體重。</p>
+  <h3>破功了怎麼辦</h3>
+  <ul>
+    <li><b>Lapse（偷抽一兩支）≠ relapse（回到原本抽菸）</b>。抽了不要放棄，也不要停藥：繼續吃，找出觸發情境。</li>
+    <li>回到原本的量：這個療程結束前重新訂戒菸日，或下個療程換藥、改合併（符合合併條件①）。</li>
+    <li>常見觸發：喝酒、喝咖啡、飯後、壓力、身邊有人抽。戒菸前幾週少去這些場合。</li>
+    <li>轉介戒菸專線 <b>0800-636363</b>（LINE：@tsh0800636363），可做電話追蹤。</li>
+  </ul>
+</section>
+
+<section id="rules">
+  <div class="no">STEP 12</div>
+  <h2>國健署規定與申報重點</h2>
+  <ul>
+    <li><b>療程</b>：每年戒菸治療、戒菸衛教各 2 療程；每療程 8 次治療費、8 週藥、8 次衛教、3 次追蹤（3、6、12 個月），同一機構 90 天內完成。</li>
+    <li><b>開藥週數</b>：以週為單位（7、14、21、28 天）。第一療程初診 1–2 週；初診一年內的後續療程最多 4 週；複診確信能掌握狀況才開 &gt;2 週，最多 4 週。出國、返回離島、遠洋船員、天災疫情可延長到 4 週（病歷寫明並請個案簽名）。</li>
+    <li><b>間隔</b>：同療程兩次服務、兩療程之間都要隔 ≥4 天；連續兩次處方用藥不可重疊 ≥7 天。</li>
+    <li><b>合併用藥</b>：見 STEP 6；病歷要寫符合哪一款。</li>
+    <li><b>尼古丁劑量</b>：吸菸量或症狀改善後要逐步減量；不能減時要在病歷寫原因（起始劑量太低、又抽回來、戒斷加劇）。</li>
+    <li><b>處方藥</b>：varenicline、bupropion 依健保規定；診所沒有藥師時要釋出處方，由契約調劑藥局申報。尼古丁指示藥醫師可直接交付。</li>
+    <li><b>費用</b>（113/9/1 版）：戒菸治療服務費 300 元、衛教 100 元／次、追蹤 50 元／次；調劑費依院所層級與週數（診所醫師調劑 27／34 元起）。部分負擔 0 元。</li>
+    <li><b>簽名</b>：個案接受服務要本人簽名，不能代簽或補簽。</li>
+    <li>未依用藥原則開藥、又沒在病歷寫明特殊情況：不予補助。</li>
+  </ul>
+  <p class="learn" style="font-size:14px;color:var(--mute)">另有地方衛生局的獎勵（例如追蹤登錄禮券），各縣市不同。</p>
+</section>
+
+<section id="special">
+  <div class="no">STEP 13</div>
+  <h2>加熱菸、電子煙與特殊族群</h2>
+  <div class="scroll"><table>
+    <tr><th>族群</th><th>做法</th></tr>
+    <tr><td>加熱菸、電子煙</td><td>台灣 112 年《菸害防制法》修法後全面禁止電子煙；加熱菸須經國健署審查才能上市（114 年 7 月有條件通過 14 品項）。兩者都不是戒菸工具。用藥原則與紙菸相同；varenicline 對戒電子煙有隨機試驗支持（JAMA 2025）。只用加熱菸或電子煙者能否收戒菸治療，作業須知只在紀錄表勾選，未見明文 <span class="tag todo">待核對</span>。</td></tr>
+    <tr><td>&lt;18 歲</td><td>不符合戒菸治療（藥物）補助，可收戒菸衛教。Varenicline、bupropion 未核准用於 &lt;18 歲；以行為治療為主，尼古丁替代由醫師評估後自費使用。</td></tr>
+    <tr><td>懷孕</td><td>先行為治療，越早戒越好。仍無法戒：和孕婦討論後用短效尼古丁、最低有效劑量、間歇使用（尼古丁替代仍比抽菸安全）。Varenicline、bupropion 資料不足，一般不用。</td></tr>
+    <tr><td>精神疾病</td><td>吸菸率高、戒菸後精神症狀通常不會變差。Varenicline 可用（EAGLES），開始後 1–2 週回診看情緒。用 clozapine、olanzapine 者戒菸後要調藥（STEP 9）。</td></tr>
+    <tr><td>心血管疾病</td><td>穩定冠心病三種藥都可用（EAGLES 心血管延伸研究未見增加主要心血管事件）。2 週內 ACS 或不穩定：住院期間就開始戒菸服務（住院、急診都可收），用藥和心臟科討論。</td></tr>
+    <tr><td>COPD</td><td>戒菸是唯一能減緩肺功能下降的介入；合併肺癌篩檢（STEP 2）。</td></tr>
+    <tr><td>住院病人</td><td>住院、急診都能用戒菸服務；住院期間衛教間隔 ≥2 天即可。出院前約好門診，出院後 1 個月內最容易復抽。</td></tr>
+    <tr><td>手術前</td><td>術前 4–8 週戒菸可明顯減少傷口與肺部併發症；就算只剩幾天也值得戒。</td></tr>
+  </table></div>
+</section>
+
+<section class="learn">
+  <h2>帶走十件事</h2>
+  <ol>
+    <li>每次門診都問、都勸；有意願就當天收案，不要約下次。</li>
+    <li>收案：≥18 歲、FTND ≥4 或 ≥10 支／天、有意願；衛教不限年齡。</li>
+    <li>每年 2 療程，每療程 8 週藥、同機構 90 天內完成；藥品部分負擔 0 元。</li>
+    <li>Varenicline 開藥後第 8 天停菸；第一週照常抽沒關係。</li>
+    <li>貼片戒菸日當天開始；&gt;10 支用 21 mg，起床 30 分鐘內抽者短效用 4 mg。</li>
+    <li>單一用藥為原則；合併要符合四款之一並寫病歷；varenicline 合併不補助。</li>
+    <li>初診只開 1–2 週，複診最多 4 週，處方不可重疊 ≥7 天。</li>
+    <li>戒菸後 clozapine、olanzapine、theophylline 濃度會上升，咖啡減半。</li>
+    <li>偷抽一兩支不是失敗，藥繼續吃。</li>
+    <li>≥50 歲、≥20 包年：記得 LDCT；≥30 歲吸菸者：口腔黏膜檢查。</li>
+  </ol>
+  <div class="next">
+    <a href="hypertension.html"><b>高血壓專區</b>戒菸是最便宜的降風險</a>
+    <a href="diabetes.html"><b>糖尿病專區</b>戒菸後血糖與體重</a>
+    <a href="dyslipidemia.html"><b>血脂異常專區</b>戒菸會讓 HDL 上升</a>
+    <a href="ckd.html"><b>慢性腎臟病專區</b>varenicline 的腎劑量</a>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <p>主要來源</p>
+  <ul>
+    <li>衛生福利部國民健康署。「戒菸服務補助計畫」作業須知（112 年 1 月 1 日生效，113 年 9 月 1 日修訂），含附錄五〈戒菸輔助用藥品項與補助基準〉。</li>
+    <li>國民健康署。〈戒菸服務用藥原則〉111 年 6 月修正版；113 年 8 月修正版（115/3/1 公告附件）。</li>
+    <li>國民健康署戒菸服務重要公告：戒必適暫停給付（113/10/1）、重新納入（114/9/24）、戒衛清納入（114/12/1）、尼古清戒菸口含錠納入（115/3/1）；111/5/15 起免藥品部分負擔。</li>
+    <li>國民健康署。2024 臺灣臨床戒菸服務指引、戒菸教戰手冊（台灣家庭醫學醫學會協辦）。</li>
+    <li>國民健康署肺癌早期偵測計畫（114 年起放寬資格）。</li>
+    <li>Leone FT, et al. Initiating Pharmacologic Treatment in Tobacco-Dependent Adults. ATS Guideline. Am J Respir Crit Care Med 2020；USPSTF 2021 Tobacco Cessation in Adults。</li>
+    <li>Anthenelli RM, et al. EAGLES. Lancet 2016；Benowitz NL, et al. EAGLES CV. JAMA Intern Med 2018；Tonstad S, et al. JAMA 2006。</li>
+    <li>戒必適（Champix）台灣仿單；各藥劑量、交互作用另參考美國 FDA 仿單與常見藥物手冊，未逐項對照台灣學名藥仿單。</li>
+  </ul>
+  <p>ycjacademy 門診實務｜不代表任何廠商立場。</p>
+</div></footer>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const num=id=>{const el=$(id);if(!el)return null;const v=parseFloat(el.value);return isNaN(v)?null:v;};
+const ck=id=>{const el=$(id);return !!(el&&el.checked);};
+const out=(id,cls,html)=>{const o=$(id);o.className='out '+(cls||'');o.innerHTML=html;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- mode ---------- */
+function setMode(c){document.body.classList.toggle('clinic',c);$('mClinic').setAttribute('aria-pressed',c);$('mLearn').setAttribute('aria-pressed',!c);
+  try{history.replaceState(null,'',c?'#clinic':location.pathname+location.search);}catch(e){}}
+$('mClinic').onclick=()=>setMode(true);$('mLearn').onclick=()=>setMode(false);
+if(location.hash==='#clinic')setMode(true);
+
+/* ---------- sync ---------- */
+function syncFrom(el){const k=el.dataset.sync;document.querySelectorAll('[data-sync="'+k+'"]').forEach(o=>{if(o!==el)o.value=el.value;});}
+function setSync(k,v){document.querySelectorAll('[data-sync="'+k+'"]').forEach(o=>{if(document.activeElement!==o)o.value=v;});}
+
+/* ---------- STEP 2 FTND (runs first: it feeds the ftnd field) ---------- */
+let ftndAuto=true;
+function cpdPts(c){return c==null?0:c<=10?0:c<=20?1:c<=30?2:3;}
+function ftnd(){
+  const q1=parseInt($('q1').value,10),c=num('fCpd');
+  let s=q1+cpdPts(c);['q2','q3','q5','q6'].forEach(id=>{if(ck(id))s++;});
+  const hsi=q1+cpdPts(c);
+  const lvl=s>=7?['高度成癮','crit']:s>=4?['中度成癮','warn']:['低度成癮','ok'];
+  if(ftndAuto)setSync('ftnd',s);
+  const early=q1>=2;
+  out('fOut',lvl[1],'<b class="big">FTND '+s+' 分：'+lvl[0]+'</b>HSI '+hsi+'／6'+
+    (early?'；起床 30 分鐘內就抽 → 短效尼古丁用 <b>4 mg</b>':'；短效尼古丁用 2 mg')+
+    '<small>'+(s>=4?'符合戒菸治療成癮度條件（≥4 分）。':'成癮度 &lt;4 分；若每天 ≥10 支仍可收案。')+'</small>');
+}
+
+/* ---------- STEP 1 eligibility ---------- */
+function elig(){
+  const age=num('eAge'),cpd=num('eCpd'),f=num('eFtnd'),used=parseInt($('eUsed').value,10),type=$('eType').value;
+  const will=ck('eWill'),cont=ck('eCont'),other=ck('eOther');
+  const L=[];let cls='ok',head;
+  if(age!=null&&age<18){head='不符合戒菸治療（藥物）；可收戒菸衛教';cls='warn';
+    L.push('戒菸衛教不限年齡，一對一進行。藥物方面見 STEP 13。');}
+  else if(!will){head='先做動機晤談，暫不收案';cls='warn';L.push('作業須知要求「明確戒菸意願」。用 STEP 3 的 5R，下次門診再問。');}
+  else{
+    const ok=cont||(f!=null&&f>=4)||(cpd!=null&&cpd>=10);
+    if(!ok){head='未達收案門檻';cls='warn';L.push('FTND &lt;4 且每天 &lt;10 支。仍可收戒菸衛教，並給簡短勸戒；吸菸量增加時再評估。');}
+    else{
+      head=used===0?'可收案：今年第 1 療程':used===1?'可收案：今年第 2 療程':'今年 2 療程已用完';
+      if(used>=2){cls='crit';L.push('第三療程須有理由並記錄於病歷；理由不被認可時不補助。可改自費或轉戒菸專線 0800-636363。');}
+      L.push('依據：'+(cont?'延續療程（不受門檻限制，但仍要記錄吸菸量與成癮度）':[f!=null&&f>=4?'FTND '+f+' 分 ≥4':'',cpd!=null&&cpd>=10?'每天 '+cpd+' 支 ≥10':''].filter(Boolean).join('、'))+'。');
+      L.push('戒菸治療與戒菸衛教可同時收，兩者各自計算療程。');
+    }
+  }
+  if(other){L.push('<b>另一家機構的療程還沒用完</b>：在本院開始，視同放棄該療程、進入下一療程。');if(cls==='ok')cls='warn';}
+  if(type==='htp'||type==='ecig'){L.push((type==='ecig'?'電子煙在台灣全面禁止。':'')+'只用'+(type==='htp'?'加熱菸':'電子煙')+'：支數門檻以紙菸計，建議以 FTND 評估；是否符合補助未見明文 <span class="tag todo">待核對</span>，先問承辦窗口 (02)2351-0120。');if(cls==='ok')cls='warn';}
+  if(type==='mix')L.push('混用加熱菸或電子煙：一起算進戒菸目標，不要「改抽加熱菸」當作戒菸。');
+  out('eOut',cls,'<b class="big">'+head+'</b>'+L.join('<br>'));
+}
+
+/* ---------- STEP 2 pack-years & screening ---------- */
+function pack(){
+  const age=num('pAge'),yrs=num('pYrs'),cpd=num('pCpd'),sex=$('pSex').value,co=num('pCo');
+  const quit=ck('pQuit'),qy=num('pQuitY')||0,fh=ck('pFh'),ct=ck('pCt'),betel=ck('pBetel');
+  const L=[];let cls='';
+  if(yrs!=null&&cpd!=null){const py=Math.round(yrs*cpd/20*10)/10;var big='<b class="big">'+py+' 包年</b>';
+    const heavy=age!=null&&age>=50&&age<=74&&py>=20&&(!quit||qy<15);
+    const fam=fh&&age!=null&&((sex==='m'&&age>=45&&age<=74)||(sex==='f'&&age>=40&&age<=74));
+    if((heavy||fam)&&!ct){cls='ok';L.push('<b>符合 LDCT 肺癌篩檢</b>（'+[heavy?'重度吸菸者':'',fam?'肺癌家族史':''].filter(Boolean).join('、')+'），每 2 年 1 次。'+(heavy&&!quit?'收案時須同意接受戒菸服務。':''));}
+    else if((heavy||fam)&&ct)L.push('符合 LDCT 條件，但 12 個月內做過胸部 CT，滿一年再安排。');
+    else{const why=[];if(age!=null&&(age<50||age>74))why.push('年齡不在 50–74');if(py<20)why.push('&lt;20 包年');if(quit&&qy>=15)why.push('戒菸已滿 15 年');L.push('不符合重度吸菸者 LDCT'+(why.length?'（'+why.join('、')+'）':'')+'。');}
+  }
+  if(age!=null&&age>=30&&(!quit||betel))L.push('符合<b>口腔黏膜檢查</b>（30 歲以上吸菸或嚼檳榔），每 2 年 1 次。');
+  else if(betel&&age!=null&&age>=30)L.push('符合口腔黏膜檢查（嚼檳榔含已戒）。');
+  if(co!=null)L.push('吐氣 CO '+co+' ppm：'+(co<=6?'在不吸菸範圍':co<=10?'輕度暴露或少量吸菸':'吸菸者範圍')+'。');
+  out('pOut',cls,(typeof big!=='undefined'?big:'')+(L.join('<br>')||'輸入年數與支數。'));
+}
+
+/* ---------- STEP 3 motivation ---------- */
+function motive(){
+  const st=$('mStage').value,price=num('mPrice'),cpd=num('mCpd');
+  const kid=ck('mKid'),cv=ck('mCv'),lung=ck('mLung');
+  const why=[];if(cv)why.push('你的血壓、血糖、血管，戒菸是現在效果最大的一件事；一年內心臟病風險就會降一半');if(lung)why.push('咳嗽和喘，戒菸後幾週到幾個月就會改善');if(kid)why.push('家裡的小孩不用再吸二手菸、三手菸');
+  if(!why.length)why.push('不管抽多久，什麼時候戒都有好處');
+  let money='';if(price&&cpd){const m=Math.round(price*cpd/20*30),y=Math.round(price*cpd/20*365);money='一個月省下約 <b>'+m.toLocaleString()+'</b> 元，一年 <b>'+y.toLocaleString()+'</b> 元。';}
+  const S={
+    ready:['ok','準備好了：今天就收案','訂戒菸日（2 週內），STEP 6 開藥，轉衛教，1–2 週回診。'],
+    think:['warn','考慮中：動機晤談','問「戒菸對你最大的好處是什麼？最擔心什麼？」把擔心逐一給解法；可以先收衛教、約 2–4 週再談。'],
+    no:['warn','還不想戒：5R＋簡短勸戒','不爭辯，給一個個人化理由和一份資料；記下來，下次門診再問。'],
+    reduce:['ok','想先減量：「減量到戒」','Varenicline 可以先吃、在第 8–35 天之間選戒菸日（減量期每 4 週減半）；尼古丁替代也可邊減邊用。仍要訂一個停的日子。'],
+    quit:['ok','剛戒：預防復抽','前 30 天最容易破功。可收第二療程鞏固（STEP 6 選「已戒菸滿 8 週」）、轉戒菸專線追蹤。']
+  }[st];
+  out('mOut',S[0],'<b class="big">'+S[1]+'</b>'+S[2]+'<div class="why"><b>這樣跟他說：</b>「'+why.join('；')+'。'+(money?'而且'+money.replace(/<\/?b>/g,''):'')+'我們有不用自付藥費的戒菸門診，要不要今天就開始？」</div>');
+}
+
+/* ---------- STEP 4 safety ---------- */
+function flags(){
+  const eg=num('sEgfr');return {preg:ck('sPreg'),bf:ck('sBf'),dep:ck('sDep'),smi:ck('sSmi'),seiz:ck('sSeiz'),eat:ck('sEat'),wd:ck('sWd'),maoi:ck('sMaoi'),alc:ck('sAlc'),
+    acs:ck('sAcs'),cad:ck('sCad'),skin:ck('sSkin'),tmj:ck('sTmj'),drive:ck('sDrive'),tam:ck('sTam'),egfr:eg,hd:$('sHd').value==='1'};
+}
+function bupNo(f){return f.seiz||f.eat||f.wd||f.maoi||f.tam;}
+function screen(){
+  const f=flags(),L=[];let cls='ok';
+  if(f.preg){L.push('<b>懷孕</b>：行為治療優先；仍無法戒才考慮短效尼古丁。Varenicline、bupropion 不用。');cls='warn';}
+  if(f.bf)L.push('哺乳：尼古丁替代可用（比抽菸好），盡量餵奶後再用短效；varenicline、bupropion 資料有限。');
+  if(bupNo(f)){L.push('<b>Bupropion 不用</b>：'+[f.seiz?'癲癇／抽搐風險':'',f.eat?'飲食疾患':'',f.wd?'正在突然停酒或 benzo':'',f.maoi?'MAOI':'',f.tam?'tamoxifen（CYP2D6 抑制，降低 endoxifen）':''].filter(Boolean).join('、')+'。');cls='warn';}
+  if(f.smi){L.push('<b>精神疾病不穩定</b>：先和精神科醫師討論時機；varenicline 可用但 1 週內回診看情緒。用 clozapine／olanzapine 見 STEP 9。');cls='warn';}
+  else if(f.dep)L.push('憂鬱、焦慮穩定：三種藥都可用（EAGLES），請家人留意情緒變化，1–2 週回診。');
+  if(f.seiz)L.push('Varenicline 仿單亦提醒癲癇病人小心，但仍是較佳選擇。');
+  if(f.acs){L.push('<b>2 週內 ACS／不穩定</b>：和心臟科討論；尼古丁替代仿單列為小心使用，住院中常用短效或貼片監測使用。');cls='warn';}
+  else if(f.cad)L.push('穩定心血管疾病：三種藥都可用。');
+  if(f.egfr!=null&&f.egfr<30||f.hd){L.push('<b>Varenicline 減量</b>：'+(f.hd?'血液透析最多 0.5 mg QD':'eGFR &lt;30：0.5 mg QD 起，最多 0.5 mg BID')+'。Bupropion 宜 150 mg QD。');cls='warn';}
+  if(f.alc)L.push('大量飲酒：喝酒是復抽最常見的觸發；bupropion 降低癲癇閾值，飲酒要節制。');
+  if(f.skin)L.push('皮膚病：避免貼片，改短效尼古丁或口服藥。');
+  if(f.tmj)L.push('假牙或顳顎關節：用口含錠或噴霧，不用咀嚼錠。');
+  if(f.drive)L.push('職業駕駛、高處作業：varenicline 開始時先觀察有無嗜睡或意識改變，再開車或上工。');
+  out('sOut',cls,L.length?L.join('<br>'):'沒有勾選特殊狀況：三種藥都可以用，依 STEP 6 選擇。');
+}
+
+/* ---------- STEP 6 prescription ---------- */
+const SHORT={lz:{n:'尼古丁口含錠',u:'顆',use:'含在口中慢慢溶，不要嚼、不要吞，約 20–30 分鐘'},gum:{n:'尼古丁咀嚼錠',u:'顆',use:'嚼—停—嚼，嚼到辣就夾在臉頰邊，約 30 分鐘'},spray:{n:'尼古清戒菸噴霧（1 mg／噴）',u:'噴',use:'想抽時噴 1–2 下到口腔'}};
+function rx(){
+  const age=num('rAge'),cpd=num('rCpd')||0,ft=num('rFtnd')||0,eg=num('rEgfr');
+  const stage=$('rStage').value,last=$('rLast').value,pref=$('rPref').value,brand=$('rBrand').value,sf=$('rShort').value;
+  const early=ck('rEarly'),reduce=ck('rReduce');
+  const f=flags();if(eg!=null)f.egfr=eg;
+  const items=[],warn=[],notes=[];let drug='none',combo=null,cls='ok',head='';
+  const sMg=(sf==='spray')?'':(early?'4 mg':'2 mg');
+  const renal=f.hd?'hd':(f.egfr!=null&&f.egfr<30)?'low':'';
+  const bupOK=!bupNo(f)&&!f.preg;
+
+  function addVar(titrate){
+    drug='var';
+    if(renal==='hd'){items.push({name:'Varenicline 0.5 mg（'+brand+'）',dose:'每天 1 次 1 顆，飯後（透析最大劑量）'});return;}
+    if(renal==='low'){items.push({name:'Varenicline 0.5 mg（'+brand+'）',dose:'前 3 天每天 1 次 1 顆；之後可增為早晚各 1 顆（eGFR <30 最大劑量），飯後'});return;}
+    if(titrate){items.push({name:'Varenicline 0.5 mg（'+brand+'）',dose:'第 1–3 天每天 1 次 1 顆；第 4–7 天早晚各 1 顆，飯後配一杯水（共 11 顆）'});
+      items.push({name:'Varenicline 1 mg（'+brand+'）',dose:'第 8 天起早晚各 1 顆，飯後配一杯水'});}
+    else items.push({name:'Varenicline 1 mg（'+brand+'）',dose:'早晚各 1 顆，飯後配一杯水'});
+  }
+  function addPatch(stepDown){
+    const mg=cpd>10?21:14,prod=mg===21?'克菸貼片 TTS 30（21 mg／24 h）':'克菸貼片 TTS 20（14 mg／24 h）';
+    items.push({name:'尼古丁貼片 '+prod,dose:'每天早上 1 片，換位置貼；'+(mg===21?'第 1–4 週 21 mg → 第 5–6 週 14 mg → 第 7–8 週 7 mg':'第 1–6 週 14 mg → 第 7–8 週 7 mg')+'。睡不好就睡前撕下'});
+    if(f.acs)warn.push('2 週內心血管事件：貼片需和心臟科討論。');
+    if(f.skin)warn.push('皮膚病：貼片可能不適合，考慮改短效。');
+  }
+  function addShort(asCombo){
+    const s=SHORT[sf==='gum'&&f.tmj?'lz':sf];
+    items.push({name:s.n+(sMg?' '+sMg:''),dose:(asCombo?'想抽菸時用 1 '+s.u+'，一天約 4–8 '+s.u:'前 6 週每 1–2 小時 1 '+s.u+'（一天至少 9 '+s.u+'），之後逐週減少')+'；'+s.use+'。用前 15 分鐘不喝咖啡、果汁、汽水'});
+    if(sf==='gum'&&f.tmj)notes.push('有假牙或顳顎關節問題，已改為口含錠。');
+  }
+  function addBup(){
+    drug=drug==='none'?'bup':drug;
+    const once=f.egfr!=null&&f.egfr<30||f.hd;
+    items.push({name:'Bupropion SR 150 mg',dose:once?'每天早上 1 顆（腎功能差，不加量）':'第 1–3 天早上 1 顆；第 4 天起早上和下午各 1 顆（間隔 8 小時，下午那顆不要太晚）'});
+    notes.push('Bupropion 先吃 1–2 週再停菸（戒菸日訂在第 8–14 天）。');
+  }
+
+  if(age!=null&&age<18){head='未滿 18 歲：不開補助藥物';cls='warn';
+    notes.push('收戒菸衛教（不限年齡）＋行為治療。Varenicline、bupropion 未核准用於 &lt;18 歲；成癮度高者可由醫師評估自費短效尼古丁。');
+  } else if(pref==='none'){head='不用藥：行為治療＋衛教';cls='warn';
+    notes.push('單靠意志力的一年戒菸率約 3–5%；藥物＋衛教可提高 2–3 倍。仍可收戒菸衛教、轉 0800-636363，下次再談用藥。');
+  } else if(f.preg){head='懷孕：先行為治療';cls='warn';drug='nrt';
+    addShort(false);notes.push('先給 1–2 週行為治療；仍在抽菸才和孕婦討論後使用上面的短效尼古丁（最低有效劑量、間歇使用）。');
+  } else {
+    // decide main plan
+    let plan;// var | patch | short | combo | bup | bupnrt
+    const heavy=cpd>=31;
+    if(stage==='0'){
+      plan=pref==='nrt'?(heavy?'combo':'patch'):pref==='bup'?(bupOK?(heavy?'bupnrt':'bup'):'var'):'var';
+      if(pref==='bup'&&!bupOK)notes.push('Bupropion 有禁忌（STEP 4），改 varenicline。');
+      head=plan==='var'?'初診：varenicline 單一用藥':plan==='combo'?'初診：尼古丁合併（每天 ≥31 支，合併條件③）':plan==='patch'?'初診：尼古丁貼片單一用藥':plan==='bupnrt'?'初診：bupropion＋尼古丁（條件③）':'初診：bupropion 單一用藥';
+      if(plan==='patch'&&ft>=7)notes.push('FTND ≥7：可依合併條件④於病歷詳述理由，直接加短效尼古丁；或 2 週後仍戒斷明顯再加（條件②）。');
+      if(plan==='var'&&heavy)notes.push('每天 ≥31 支：varenicline 合併尼古丁不補助。若想直接合併，可改「貼片＋短效」或「bupropion＋尼古丁」。');
+    } else if(stage==='1'){
+      head='單一用藥 ≥2 週戒斷仍明顯（合併條件②）';
+      if(last==='patch'){plan='combo';}
+      else if(last==='short'){plan='combo';}
+      else if(last==='bup'){plan='bupnrt';}
+      else if(last==='combo'){plan='combo';notes.push('已在合併：確認貼片劑量夠（&gt;20 支可 21＋14 mg）、短效有「定時」用；3 種以上尼古丁製劑不補助。');}
+      else {plan='var2';head='Varenicline ≥2 週仍明顯戒斷';cls='warn';
+        notes.push('先確認：已到 1 mg BID？有沒有漏吃？戒菸日有沒有真的停？多數人第 3–4 週才穩。');
+        notes.push('Varenicline 合併尼古丁不補助；實證上加短效尼古丁有幫助，可自費加。或改 bupropion＋尼古丁（補助）。');}
+    } else if(stage==='2'){
+      head='上次療程失敗：換一類或改合併（合併條件①）';
+      if(last==='var'){plan='combo';notes.push('也可以再試 varenicline：上次若沒吃足量、太早停，或副作用可忍受，重試仍有效（Gonzales, JAMA 2014）；可改「減量到戒」。');}
+      else if(last==='none'){plan='var';head='再來戒：varenicline';}
+      else {plan='var';}
+      if(pref==='nrt'&&plan==='var')plan='combo';
+      if(pref==='bup'&&bupOK)plan='bupnrt';
+    } else {
+      head='已戒 8 週：第二療程鞏固';
+      if(last==='var'||last==='none'){plan='varkeep';notes.push('Varenicline 再吃 12 週可減少復抽（本療程補 8 週）。');}
+      else if(last==='bup'){plan='bupkeep';}
+      else {plan='taper';}
+    }
+    // build items
+    if(plan==='var'){addVar(true);}
+    else if(plan==='var2'||plan==='varkeep'){addVar(false);}
+    else if(plan==='patch'){drug='nrt';addPatch();}
+    else if(plan==='combo'){drug='nrt';combo=true;addPatch();addShort(true);}
+    else if(plan==='bup'||plan==='bupkeep'){addBup();}
+    else if(plan==='bupnrt'){if(!bupOK){drug='nrt';combo=true;addPatch();addShort(true);notes.push('Bupropion 有禁忌，改貼片＋短效。');}else{addBup();drug='bup';combo=true;addPatch();}}
+    else if(plan==='taper'){drug='nrt';items.push({name:'尼古丁貼片 克菸貼片 TTS 20（14 mg／24 h）',dose:'每天早上 1 片，2–4 週後改 7 mg 再 2 週停'});items.push({name:'短效尼古丁 2 mg',dose:'想抽時才用，一天逐漸少於 4 顆'});}
+    if(combo)notes.push('合併用藥：病歷寫明符合哪一款（①曾單一藥失敗 ②單一藥 ≥2 週戒斷仍明顯 ③每天 ≥31 支 ④醫師評估需求並詳述理由）。');
+    if(f.alc)warn.push('喝酒是最常見的復抽原因，戒菸前幾週先不喝。');
+    if(f.dep||f.smi)warn.push('有情緒病史：1–2 週回診，請家人留意情緒、睡眠、行為變化。');
+    if(drug==='var'&&f.drive)warn.push('第一週先確認不會嗜睡再開車或上工。');
+  }
+
+  // quit date and weeks
+  let qd='';
+  if(drug==='var'&&stage==='0'&&!(age<18))qd=reduce?'先照常抽、逐週減量，在開藥後第 8–35 天停。':'開始吃藥後第 <b>8</b> 天停菸；第 1 週照常抽沒關係。';
+  else if(drug==='bup'&&(stage==='0'||stage==='2'))qd='開始吃藥後第 8–14 天停菸。';
+  else if(drug==='nrt'&&(stage==='0'||stage==='2'))qd=reduce?'可先用短效取代部分香菸，逐週減量，4–6 週內完全停。':'<b>戒菸日當天早上</b>開始用。';
+  const wk=stage==='0'?'這次開 <b>1–2 週</b>（第一療程初診規定）':'這次最多可開 <b>4 週</b>（複診確信能掌握狀況）';
+
+  const tag=n=>/Varenicline/.test(n)?'<span class="pill g">補助・處方藥</span>':/Bupropion/.test(n)?'<span class="pill g">補助・處方藥</span>':/尼古|短效/.test(n)?'<span class="pill g">補助・指示藥</span>':'';
+  let h='<b class="big">'+head+'</b>';
+  if(items.length)h+='<div class="rx">'+items.map(i=>'<div class="item"><b>'+esc(i.name)+'</b>'+tag(i.name)+'<div>'+esc(i.dose)+'</div></div>').join('')+'</div>';
+  const tail=[];if(qd)tail.push('戒菸日：'+qd);if(items.length)tail.push(wk+'；每週算 1 週藥，兩次處方不可重疊 ≥7 天。');
+  h+='<div class="why">'+tail.concat(notes).concat(warn.map(w=>'⚠ '+w)).join('<br>')+'</div>';
+  out('rOut',cls,h);
+  window.CK_RX={items:items.slice(),warn:warn.slice(),drug:drug,combo:!!combo,stage:stage,patch:items.some(i=>/貼片/.test(i.name)),short:items.some(i=>/口含錠|咀嚼錠|噴霧|短效/.test(i.name))};
+}
+
+/* ---------- STEP 7 items ---------- */
+const ITEMS=[
+  ['戒衛清膜衣錠 0.5 mg（Varenate）','varenicline 0.5 mg','處方；第 1 週調升','28（114/12/1）'],
+  ['戒衛清膜衣錠 1 mg（Varenate）','varenicline 1 mg','處方；1 mg BID','28（114/12/1）'],
+  ['戒必適 0.5 mg（Champix）','varenicline 0.5 mg','處方；第 1 週調升','60 <span class="tag todo">待核對</span>（114/9/24 重新納入）'],
+  ['戒必適 1 mg（Champix）','varenicline 1 mg','處方；1 mg BID','60 <span class="tag todo">待核對</span>'],
+  ['Bupropion SR 150 mg（輔寧、必博寧、倍得舒、布憂平、慮舒妥、復維樂、必替憂等）','bupropion HCl 150 mg','處方；150 mg QD → BID','依健保價（113/4/1 表列 8.6）'],
+  ['克菸貼片 TTS 30（Nicotinell）','nicotine 52.5 mg／片，約 21 mg／24 h','指示藥；每天 1 片','78 <span class="tag todo">待核對</span>'],
+  ['克菸貼片 TTS 20（Nicotinell）','nicotine 35 mg／片，約 14 mg／24 h','指示藥；每天 1 片','78 <span class="tag todo">待核對</span>'],
+  ['克菸貼片 TTS 10（Nicotinell）','nicotine 17.5 mg／片，約 7 mg／24 h','指示藥；每天 1 片','依公告'],
+  ['淨菸經皮戒菸貼片 15／10／5 號（信東）','nicotine 31.2／20.8／10.4 mg，16 小時貼片','指示藥；早貼睡前撕','56／54／53'],
+  ['停菸貼片 10（Smokquit TDDS）','nicotine 17.5 mg','指示藥','54'],
+  ['克菸咀嚼錠 2 mg、4 mg（Nicotinell）','nicotine 2／4 mg','指示藥；8–12 顆／天','6／8'],
+  ['尼古清薄荷咀嚼錠 2 mg、4 mg（Nicorette）','nicotine 2／4 mg','指示藥；8–12 顆／天','6／8'],
+  ['尼古清戒菸口含錠 2 mg、4 mg（Nicorette）','nicotine 2／4 mg','指示藥；9–15 顆／天','6／8（115/3/1 起）'],
+  ['停菸戒菸薄荷片口含錠 2 mg、4 mg（信東）','nicotine 2／4 mg','指示藥；9–15 顆／天','6／8'],
+  ['戒菸樂口含錠 2 mg（黃氏 Nicodin）','nicotine 2 mg','指示藥；9–15 顆／天','6'],
+  ['尼古清口腔吸入劑 10 mg（Nicorette Inhaler）','nicotine 10 mg／藥匣','指示藥；6–12 藥匣／天','15'],
+  ['尼古清戒菸噴霧 13.2 mL（Nicorette QuickMist）','nicotine 150 mg／瓶，1 mg／噴','指示藥；1–2 噴取代 1 支菸，15–30 噴／天','225（110/9/1 公告）<span class="tag todo">待核對</span>']
+];
+function items(){
+  const q=($('iQ').value||'').trim().toLowerCase().replace(/\s+/g,'');
+  const m=s=>s.toLowerCase().replace(/\s+/g,'').replace(/<[^>]+>/g,'');
+  $('iBody').innerHTML=ITEMS.filter(r=>!q||m(r.join('|')).includes(q)||(/貼片/.test(q)&&/貼片/.test(r[0]))).map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="n" style="white-space:normal">'+r[3]+'</td></tr>').join('')||'<tr><td colspan="4">找不到</td></tr>';
+}
+
+/* ---------- STEP 9 interactions ---------- */
+const DDI=[
+  ['clozapine','Clozapine','戒菸後濃度可上升 50% 以上，可能嗜睡、抽搐。戒菸前後測血中濃度，常需減量約 30–40%，逐步調整；和精神科討論。',2],
+  ['olanzapine','Olanzapine','濃度上升，留意嗜睡、低血壓；必要時減量。',1],
+  ['theo','Theophylline／aminophylline','濃度上升可致心律不整、抽搐。1 週內測濃度，常需減量 25–33%。',2],
+  ['warf','Warfarin','INR 可能輕度上升；戒菸後 1–2 週驗 INR。',1],
+  ['caf','咖啡、茶（咖啡因）','咖啡因濃度可升 2 倍以上，心悸、失眠、焦慮會被誤認為戒斷症狀：<b>咖啡減半</b>。',1],
+  ['insulin','胰島素','戒菸後胰島素吸收改善、敏感度變化，加上體重增加；前幾週多量血糖。',1],
+  ['ropin','Ropinirole、tizanidine、duloxetine、mirtazapine、haloperidol、fluvoxamine','CYP1A2 相關，濃度可能上升；觀察副作用。',1],
+  ['ssri','Paroxetine、fluoxetine、TCA、metoprolol、codeine、tramadol','<b>Bupropion</b> 抑制 CYP2D6，這些藥濃度上升（codeine、tramadol 效果下降）；tramadol、抗精神病藥、theophylline、全身性類固醇還會降低癲癇閾值。',3],
+  ['tamox','Tamoxifen','<b>Bupropion</b> 抑制 CYP2D6，減少活性代謝物 endoxifen：不要併用，改 varenicline 或尼古丁。',3],
+  ['maoi','MAOI、linezolid','<b>Bupropion</b> 禁用（14 天內）。',3]
+];
+function ddiInit(){$('dList').innerHTML=DDI.map(d=>'<label><input type="checkbox" data-d="'+d[0]+'">'+d[1]+'</label>').join('');
+  $('dList').querySelectorAll('input').forEach(i=>i.addEventListener('change',renderAll));}
+function ddi(){
+  const sel=[...$('dList').querySelectorAll('input:checked')].map(i=>i.dataset.d);
+  const drug=(window.CK_RX&&window.CK_RX.drug)||'';
+  const bup=window.CK_RX&&window.CK_RX.items&&window.CK_RX.items.some(i=>/Bupropion/.test(i.name));
+  if(!sel.length){out('dOut','','沒有勾選。所有人都要提醒：戒菸後咖啡減半。');return;}
+  let cls='ok';const L=DDI.filter(d=>sel.includes(d[0])).map(d=>{
+    if(d[3]===3&&!bup)return '<b>'+d[1]+'</b>：只和 bupropion 有關；目前處方沒有 bupropion。';
+    if(d[3]>=2)cls='crit';else if(cls==='ok')cls='warn';
+    return '<b>'+d[1]+'</b>：'+d[2];});
+  out('dOut',cls,L.join('<br>'));
+  if(window.CK_RX){const w=DDI.filter(d=>sel.includes(d[0])&&d[3]<3).map(d=>d[1].split('（')[0].split('、')[0]+'：戒菸後濃度會改變，照醫師指示調藥或抽血');
+    window.CK_RX.warn=(window.CK_RX.warn||[]).concat(w);}
+}
+
+/* ---------- STEP 10 schedule ---------- */
+const add=(iso,n)=>{const t=new Date(iso+'T00:00:00');t.setDate(t.getDate()+n);return t;};
+const fmt=d=>(d.getMonth()+1)+'/'+d.getDate()+'（'+'日一二三四五六'[d.getDay()]+'）';
+function sched(){
+  const d0=$('tDate').value;if(!d0){out('tOut','','選初診日。');return;}
+  const wk=parseInt($('tWk').value,10)||2;const drug=(window.CK_RX&&window.CK_RX.drug)||'var';
+  const qd=drug==='var'?7:drug==='bup'?10:0;
+  const rows=[];
+  rows.push([0,'初診：戒菸治療 #1＋衛教 #1；開 '+Math.min(wk,2)+' 週藥'+(drug==='var'?'（第 1 週調升劑量）':'')]);
+  if(qd)rows.push([qd,'<b>戒菸日</b>'+(drug==='var'?'（吃藥第 8 天）':'（吃藥第 8–14 天之間）')]);
+  else rows.push([0,'<b>戒菸日</b>：今天或 2 週內，當天開始用尼古丁']);
+  const g0=Math.min(wk,2);let given=g0,day=g0*7,n=2;
+  rows.push([7,'衛教（戒菸日前後最需要）'+(drug==='var'?'；電話問噁心、睡眠':'')]);
+  while(given<8){const g=Math.min(wk,8-given);rows.push([day,'戒菸治療 #'+n+'＋衛教；開 '+g+' 週藥（累計 '+(given+g)+' 週）；問戒斷、副作用、量 CO']);given+=g;day+=g*7;n++;}
+  [14,21,28].forEach(x=>{if(!rows.some(r=>r[0]===x))rows.push([x,'衛教（第 2–5 次要在 30 天內完成）']);});
+  rows.push([42,'衛教 #6–8：第 31–90 天內（例如第 6、8、10 週）']);
+  rows.push([90,'療程最晚第 90 天完成；未用完的藥週數不能跨到下個療程']);
+  rows.push([80,'3 個月追蹤：第 80–100 天之間（面對面或電話）']);
+  rows.push([170,'6 個月追蹤：第 170–190 天之間']);
+  rows.push([365,'1 年追蹤；可考慮第二療程鞏固或複查 LDCT']);
+  rows.sort((a,b)=>a[0]-b[0]);
+  out('tOut','','<ul class="sched">'+rows.map(r=>'<li><b>'+fmt(add(d0,r[0]))+'<br>第 '+r[0]+' 天</b><span>'+r[1]+'</span></li>').join('')+'</ul><small>所有服務間隔 ≥4 天；每次處方週數不可和上次重疊 ≥7 天。</small>');
+}
+
+/* ---------- wiring ---------- */
+function renderAll(){ftnd();elig();pack();motive();screen();rx();ddi();sched();}
+document.querySelectorAll('[data-sync]').forEach(el=>{
+  const h=()=>{if(el.dataset.sync==='ftnd')ftndAuto=false;syncFrom(el);renderAll();};
+  el.addEventListener('input',h);el.addEventListener('change',h);
+});
+['q1','q2','q3','q5','q6'].forEach(id=>$(id).addEventListener('change',()=>{ftndAuto=true;if(id==='q1'){$('rEarly').checked=parseInt($('q1').value,10)>=2;$('rEarlyAuto').textContent='（STEP 2 第 1 題）';}renderAll();}));
+document.querySelectorAll('main input,main select').forEach(el=>{if(!el.dataset.sync&&!/^q[1-6]$/.test(el.id)&&el.id!=='iQ'){el.addEventListener('input',renderAll);el.addEventListener('change',renderAll);}});
+$('iQ').addEventListener('input',items);
+$('tDate').value=new Date().toISOString().slice(0,10);
+ddiInit();items();renderAll();
+})();
+</script>
+<!-- ck-config start -->
+<script>
+/* 戒菸衛教單張設定。讀 STEP 6 處方產生器的 window.CK_RX（items、drug、patch、short）與輸入欄位。 */
+(function(){
+const rx=()=>window.CK_RX||{};
+const D4_ART='<svg viewBox="0 0 320 92" role="img" aria-label="想抽菸時：等一下、深呼吸、喝水、做別的事" style="display:block;width:100%;max-width:360px;height:auto;margin:2px 0 6px">'+
+ [["等 5 分鐘","#3d7a5a",'<circle cx="40" cy="34" r="20" fill="#fff" stroke="#3d7a5a" stroke-width="3"/><path d="M40 22v12l8 5" stroke="#3d7a5a" stroke-width="3" fill="none" stroke-linecap="round"/>'],
+  ["深呼吸","#4b7f99",'<path d="M22 40q10-22 36 0" stroke="#4b7f99" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M26 28q14-10 28 0" stroke="#9cc4d6" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="40" cy="46" r="5" fill="#4b7f99"/>'],
+  ["喝口水","#3c8dbc",'<path d="M28 16h24l-3 38H31z" fill="#dff0fa" stroke="#3c8dbc" stroke-width="3" stroke-linejoin="round"/><path d="M30 30h20" stroke="#3c8dbc" stroke-width="2"/>'],
+  ["做別的事","#a3520c",'<circle cx="40" cy="18" r="6" fill="#f6d2b4"/><path d="M40 25v16M40 30l-10 6M40 30l10-4M40 41l-8 12M40 41l9 11" stroke="#a3520c" stroke-width="4" stroke-linecap="round" fill="none"/>']
+ ].map((a,i)=>'<g transform="translate('+(i*80)+' 0)"><rect x="4" y="2" width="72" height="88" rx="10" fill="#fff" stroke="#e6e0d4" stroke-width="1.5"/>'+a[2]+'<text x="40" y="78" text-anchor="middle" font-size="12.5" font-weight="700" fill="'+a[1]+'">'+a[0]+'</text></g>').join("")+'</svg>';
+const TIME_ART=(()=>{const pts=[["20 分","心跳","血壓下降"],["12 小時","一氧化碳","回到正常"],["2–12 週","比較","不喘"],["1 年","心臟病","風險減半"],["10 年","肺癌死亡","風險減半"]];
+  let s='<svg viewBox="0 0 320 84" role="img" aria-label="戒菸後身體的變化" style="display:block;width:100%;max-width:360px;height:auto;margin:2px 0 6px"><path d="M16 30H304" stroke="#9fcfb2" stroke-width="6" stroke-linecap="round"/>';
+  pts.forEach((p,i)=>{const x=24+i*68;s+='<circle cx="'+x+'" cy="30" r="9" fill="#3d7a5a" stroke="#fff" stroke-width="3"/><text x="'+x+'" y="14" text-anchor="middle" font-size="11.5" font-weight="700" fill="#2a2622">'+p[0]+'</text><text x="'+x+'" y="56" text-anchor="middle" font-size="10.5" fill="#4a443c">'+p[1]+'</text><text x="'+x+'" y="70" text-anchor="middle" font-size="10.5" fill="#4a443c">'+p[2]+'</text>';});
+  return s+'</svg>';})();
+const PATCH_ART='<svg viewBox="0 0 320 90" role="img" aria-label="貼片貼在上臂、胸前或背部，每天換位置" style="display:block;width:100%;max-width:340px;height:auto;margin:2px 0 6px"><g fill="#f6d2b4" stroke="#c48a63" stroke-width="2"><circle cx="60" cy="16" r="11"/><path d="M36 32q24-8 48 0l6 50H30z"/><path d="M36 34l-14 38M84 34l14 38" stroke-width="10" stroke-linecap="round"/></g>'+
+ '<g fill="#e6f3ec" stroke="#3d7a5a" stroke-width="2"><rect x="44" y="40" width="14" height="12" rx="2"/><rect x="66" y="52" width="14" height="12" rx="2"/><rect x="20" y="48" width="10" height="12" rx="2"/></g>'+
+ '<text x="196" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#2a2622">貼在沒毛、乾淨的皮膚</text><text x="196" y="50" text-anchor="middle" font-size="12" fill="#4a443c">上臂、胸前、背部</text><text x="196" y="70" text-anchor="middle" font-size="12" fill="#4a443c">每天換位置，壓 10 秒</text></svg>';
+const CHEW_ART='<svg viewBox="0 0 320 70" role="img" aria-label="咀嚼錠：嚼到有辣味就停，夾在臉頰邊，味道淡了再嚼" style="display:block;width:100%;max-width:340px;height:auto;margin:2px 0 6px">'+
+ [["慢慢嚼","有辣味"],["停！夾在","臉頰邊"],["淡了","再嚼"]].map((t,i)=>{const x=50+i*110;return '<circle cx="'+x+'" cy="26" r="20" fill="#fff" stroke="#3d7a5a" stroke-width="2.5"/><text x="'+x+'" y="31" text-anchor="middle" font-size="15" font-weight="700" fill="#3d7a5a">'+(i+1)+'</text><text x="'+x+'" y="58" text-anchor="middle" font-size="11.5" fill="#2a2622">'+t[0]+t[1]+'</text>'+(i<2?'<path d="M'+(x+26)+' 26h56" stroke="#b9b1a4" stroke-width="3"/><path d="M'+(x+76)+' 20l8 6-8 6" fill="none" stroke="#b9b1a4" stroke-width="3"/>':'');}).join("")+
+ '<text x="270" y="16" font-size="16" fill="#e2493b" font-weight="700">↺</text></svg>';
+
+window.CK_CONFIG={
+  key:"smoke", sheetTitle:"戒菸計畫單", mascot:"lung", days:14,
+  siteUrl:"https://ycjaca.github.io/medisland/clinic/smoking.html",
+  inputs:[{k:"cpd",label:"每天幾支",src:"rCpd"},{k:"ftnd",label:"尼古丁成癮度",src:"rFtnd"},{k:"price",label:"一包菸多少錢",src:"mPrice"}],
+  numbers(v){
+    const out=[];
+    if(v.ftnd!=null)out.push({label:"尼古丁成癮度",value:v.ftnd,unit:"／10 分",meter:{min:0,max:10,v:v.ftnd,zones:[[0,4,"#7cc47f","低"],[4,7,"#f2d257","中"],[7,10,"#e0605a","高"]]},
+      text:v.ftnd>=7?"身體很依賴尼古丁，<b>一定要用藥</b>，單靠意志力很辛苦。":v.ftnd>=4?"中度依賴：用藥加上衛教，成功的機會多 2–3 倍。":"依賴不高，照計畫戒，很有機會成功。"});
+    if(v.cpd&&v.price){const m=Math.round(v.price*v.cpd/20*30),y=Math.round(v.price*v.cpd/20*365);
+      out.push({label:"戒菸省下的錢",value:m.toLocaleString(),unit:"元／月",text:"一年可以省下 <b>"+y.toLocaleString()+" 元</b>。把錢存進一個罐子，看著它變多。"});}
+    return out;
+  },
+  meds(){
+    const r=rx();if(!r.items||!r.items.length)return {lines:[],note:r.drug==="none"?"這次先不用藥。照下面的方法準備戒菸，下次回診再討論。":""};
+    return {lines:r.items.map(i=>i.name.replace(/（[^）]*）/g,"").replace(/克菸貼片 TTS \d+/,"克菸貼片").trim()+(/Varenicline 0.5/.test(i.name)?"（第 1 週）":/Varenicline 1 mg/.test(i.name)&&r.items.length>1?"（第 2 週起）":"")+"｜"+i.dose)};
+  },
+  medInfo:[
+    [/varenicline/i,"戒菸藥：減少想抽的感覺，抽了也沒味道","飯後配一大杯水。會噁心通常 1–2 週就好；晚上那顆不要太晚吃，比較不會做怪夢。"],
+    [/bupropion/i,"戒菸藥：減少戒斷與想抽","下午那顆不要太晚吃，以免失眠；先吃 1–2 週再停菸。"],
+    [/貼片/,"慢慢補充尼古丁，不會那麼難受","每天早上換新的一片、換位置。睡不好可以睡前撕下。貼著時不要再抽菸。"],
+    [/口含錠/,"想抽時的急救","含著慢慢溶，不要嚼、不要吞。"],
+    [/咀嚼錠/,"想抽時的急救","不是口香糖：嚼到辣就停，夾在臉頰邊。"],
+    [/噴霧/,"想抽時的急救","噴在口腔，不要吸進喉嚨；一次 1–2 下。"],
+    [/短效/,"想抽時的急救","想抽才用，越用越少。"]
+  ],
+  plate(){return {title:"戒菸不怕胖：這樣吃",fr:[.5,.25,.25],frLabel:["半盤","1/4 盤","1/4 盤"],side:["water","fruit","boba"],
+    tips:["嘴饞時吃<b>無糖</b>的東西：小黃瓜、番茄、無糖口香糖、白開水","三餐定時，不要用零食取代香菸","少喝含糖飲料，少吃甜點、餅乾","咖啡、茶先減半：戒菸後咖啡因會變得比較強"]};},
+  move:["想抽的時候起來走 5 分鐘，渴望通常 3–5 分鐘就會過去","每天快走 30 分鐘：減少戒斷的煩躁，也能控制體重","飯後原本抽菸的時間，改成散步或刷牙"],
+  panels(){const r=rx();return [
+    {id:"crave",label:"想抽的時候",icon:"warn",title:"想抽的時候：4 個方法",on:true,html:D4_ART,
+     items:["想抽的感覺一次只會持續 <b>3–5 分鐘</b>，撐過去就好","手上找事做：握壓力球、玩手機、刷牙","避開飯後、喝酒、喝咖啡、壓力大這些「想抽時刻」"]},
+    {id:"prep",label:"戒菸日準備",icon:"check",title:"戒菸日前要做的事",on:true,
+     items:["在月曆上圈出戒菸日，告訴家人和同事","戒菸日前把<b>菸、打火機、菸灰缸</b>全部丟掉","洗衣服、清車子，去掉菸味","想好最難熬的時候要做什麼","戒菸日那天起，<b>一口都不抽</b>"]},
+    {id:"var",label:"戒菸藥（varenicline）",icon:"pills",title:"吃戒菸藥要知道",on:r.drug==="var",
+     items:["第 1 週照常抽菸沒關係，<b>第 8 天</b>停菸","第 1 週劑量慢慢增加，照藥袋吃","飯後吃、配一大杯水，比較不會噁心","心情變得很差、有傷害自己的念頭、行為很不一樣：<b>先停藥、馬上回診</b>"]},
+    {id:"patch",label:"尼古丁貼片",icon:"leaf",title:"貼片怎麼貼",on:!!r.patch,html:PATCH_ART,
+     items:["戒菸日早上開始貼，每天換新的","貼的地方癢紅：換位置，一週內不貼同一處","貼著時不要抽菸，會心悸、頭暈","洗澡、游泳都可以貼著"]},
+    {id:"short",label:"咀嚼錠、口含錠",icon:"pills",title:"咀嚼錠、口含錠怎麼用",on:!!r.short,html:CHEW_ART,
+     items:["前幾週<b>定時用</b>（每 1–2 小時），不是忍不住才用","用前 15 分鐘不要喝咖啡、果汁、汽水","口含錠：含著慢慢溶，不要嚼、不要吞"]},
+    {id:"benefit",label:"戒菸後身體的變化",icon:"leaf",title:"戒菸後身體的變化",on:true,html:TIME_ART,
+     items:["前幾週可能咳嗽變多：是肺在把髒東西排出來","味覺、嗅覺會變好，爬樓梯比較不喘"]},
+    {id:"slip",label:"不小心抽了一支",icon:"check",title:"不小心抽了一支怎麼辦",on:false,
+     items:["抽了一支不等於失敗，<b>藥繼續吃</b>","想想是什麼情況讓你抽，下次避開","今天開始再一次都不抽"]},
+    {id:"family",label:"家人一起來",icon:"check",title:"給家人的話",on:false,
+     items:["多鼓勵，不要嘮叨；他可能比較煩躁，那是戒斷","家裡、車上都不抽菸，也不要在他面前抽","家裡有人也抽：一起來戒菸門診"]},
+    {id:"help",label:"戒菸專線",icon:"check",title:"一個人戒很辛苦，打電話找幫手",on:true,
+     items:["免費戒菸專線 <b>0800-636363</b>（週一到週六 9–21 點）","LINE 搜尋 <b>@tsh0800636363</b>","回診時告訴醫師卡在哪裡，可以調藥"]}
+  ];},
+  warn:["吃戒菸藥後心情很差、有傷害自己的念頭，或行為變得很不一樣：先停藥並回診","胸口悶痛、冒冷汗超過 5 分鐘：打 <b>119</b>","抽搐、意識不清","全身起疹子、嘴唇或眼皮腫"],
+  bring:["所有藥袋、剩下的藥","這幾天抽了幾支的紀錄"],
+  nextNote(){const r=rx();return r.stage==="0"?"約 1–2 週後回診，看戒菸日過得如何、藥有沒有副作用。":"約 2–4 週後回診，量一氧化碳、調整藥量。";}
+};
+})();
+</script>
+<!-- ck-config end -->
+<!-- clinic-kit v1 start | shared by every 門診實務 page. Edit clinic/_kit/kit.html, then run: python3 scripts/add_kit.py clinic/*.html -->
+<style id="ck-style">
+/* ---- collapsible parts and steps ---- */
+.ck-tools{display:flex;gap:4px;flex:none}
+.ck-tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13px var(--body);padding:5px 9px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.ck-tools button:hover{border-color:var(--ink)}
+.ck-tog{all:unset;box-sizing:border-box;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;width:100%;cursor:pointer}
+.ck-tog:focus-visible,.ck-part:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.ck-chev{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;margin-top:3px;transition:transform .2s}
+.ck-chev::before{content:"";width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+[aria-expanded="true"]>.ck-chev{transform:rotate(180deg)}
+section.ck-step>.no{cursor:pointer}
+section.ck-closed>.ck-body{display:none}
+section.ck-closed{padding-bottom:12px}
+section.ck-closed h2{margin-bottom:0}
+.ck-part{cursor:pointer;display:flex!important;justify-content:space-between;align-items:center;gap:10px;user-select:none}
+.ck-part .ck-chev{border-color:rgba(255,255,255,.45);background:transparent;margin:0}
+.ck-part .ck-chev::before{border-color:currentColor}
+.ck-group.ck-closed{display:none}
+@media (prefers-reduced-motion:reduce){.ck-chev{transition:none}}
+
+/* ---- handout form ---- */
+.ck-lead{color:var(--mute);font-size:15px}
+.ck-form{display:flex;flex-direction:column;gap:12px}
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ck-form label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mute)}
+.ck-form input,.ck-form textarea{font:15px var(--body);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:6px 8px;width:100%}
+.ck-form textarea{resize:vertical;line-height:1.6}
+.ck-form fieldset{border:1px solid var(--line);border-radius:6px;padding:8px 12px 10px;margin:0}
+.ck-form legend{font-size:13px;color:var(--mute);padding:0 4px}
+.ck-checks{display:flex;flex-wrap:wrap;gap:6px 16px}
+.ck-checks label{flex-direction:row;align-items:center;gap:6px;color:var(--ink);font-size:14px;cursor:pointer}
+.ck-checks input{width:auto}
+.ck-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ck-btn{border:1px solid var(--ink);background:var(--card);color:var(--ink);font:500 14px var(--body);padding:7px 14px;border-radius:6px;cursor:pointer}
+.ck-btn.ck-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.ck-btn:hover{filter:brightness(.95)}
+#ckPrintNote{font-size:13px;color:var(--mute)}
+#ckPrintNote a{color:var(--accent)}
+.ck-sheetwrap{margin:18px 0 10px;padding:14px;background:#e9e7df;border-radius:8px;overflow:hidden}
+
+/* ---- the handout sheet ---- */
+.ck-sheet{--a:var(--accent);--a2:var(--accent-soft,#f5ece6);max-width:760px;margin:0 auto;background:#fffdf8;color:#2a2622;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.12);
+  padding:22px 24px 18px;font:15.5px/1.7 var(--body);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ck-sheet *{box-sizing:border-box}
+.ck-sh{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:var(--a);color:#fff}
+.ck-sh svg{width:62px;height:62px;flex:none}
+.ck-sh h3{margin:0;font:700 26px/1.25 var(--display);color:#fff}
+.ck-sh p{margin:2px 0 0;font-size:13.5px;opacity:.92}
+.ck-sec{margin-top:16px;break-inside:avoid}
+.ck-sec>h4{display:flex;align-items:center;gap:8px;margin:0 0 8px;font:700 19px/1.3 var(--display);color:#2a2622}
+.ck-sec>h4 svg{width:30px;height:30px;flex:none}
+.ck-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.ck-num{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 12px 8px}
+.ck-nl{font-size:13px;color:#6b645a}
+.ck-nv{font:700 28px/1.2 var(--display);color:var(--a)}
+.ck-nv small{font:13px var(--body);color:#6b645a;margin-left:4px}
+.ck-num>svg{display:block;width:100%;max-width:420px;height:auto;margin:4px 0 2px}
+.ck-num p{margin:2px 0 0;font-size:13.5px;line-height:1.6;color:#4a443c}
+.ck-meds{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ck-med{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start;background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:9px 12px}
+.ck-med svg.ck-pillsvg{width:44px;height:44px}
+.ck-med b{font-size:17px;color:#2a2622}
+.ck-what{display:inline-block;margin-left:8px;font-size:13px;color:#fff;background:var(--a);border-radius:20px;padding:0 9px;vertical-align:2px}
+.ck-times{display:flex;flex-wrap:wrap;gap:5px;margin:3px 0 0}
+.ck-time{display:inline-flex;align-items:center;gap:3px;font-size:13px;background:#f4efe4;border-radius:20px;padding:1px 9px 1px 4px}
+.ck-time svg{width:20px;height:20px}
+.ck-how{margin:2px 0 0;font-size:14.5px}
+.ck-tip{margin:3px 0 0;font-size:13.5px;color:#6a4a12;background:#fff4d9;border-radius:6px;padding:2px 8px}
+.ck-note{background:#fff;border:1.5px dashed #d8cfbd;border-radius:12px;padding:10px 14px;margin:0}
+.ck-two{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:start}
+.ck-plate>svg{display:block;width:100%;height:auto}
+.ck-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0;font-size:13.5px}
+.ck-legend span{display:inline-flex;align-items:center;gap:5px}
+.ck-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.ck-sheet ul{margin:0;padding-left:1.2em}
+.ck-sheet li{margin:2px 0}
+.ck-move>svg{display:block;width:100%;max-width:260px;height:auto;margin:0 auto 4px}
+.ck-pans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.ck-pan{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-pan h5{display:flex;align-items:center;gap:8px;margin:0 0 6px;font:700 17px var(--display)}
+.ck-pan h5 svg{width:34px;height:34px;flex:none}
+.ck-pan .ck-art{display:block;width:100%;max-width:300px;height:auto;margin:2px auto 6px}
+.ck-warn{border:2.5px solid #c8352b;background:#fff3f1;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-warn h5{display:flex;align-items:center;gap:8px;margin:0 0 4px;font:700 18px var(--display);color:#b3261e}
+.ck-warn h5 svg{width:30px;height:30px}
+.ck-next{display:flex;gap:14px;align-items:center;background:var(--a2);border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-next svg{width:74px;height:74px;flex:none}
+.ck-next b{font-size:17px}
+.ck-foot{margin-top:12px;padding-top:8px;border-top:1px dashed #d8cfbd;font-size:12px;color:#7a7266;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media (max-width:620px){.ck-sheet{padding:14px 12px;font-size:15px}.ck-two{grid-template-columns:1fr}.ck-sh h3{font-size:22px}.ck-sheetwrap{padding:6px}}
+
+/* ---- print: only the sheet ---- */
+#ckPrintHost{display:none}
+@media print{
+  @page{size:A4;margin:10mm}
+  body.ck-printing>*:not(#ckPrintHost){display:none!important}
+  body.ck-printing{background:#fff!important}
+  body.ck-printing #ckPrintHost{display:block}
+  #ckPrintHost .ck-sheet{box-shadow:none;max-width:none;padding:0;font-size:11pt;border-radius:0}
+  #ckPrintHost .ck-two{grid-template-columns:1.25fr 1fr}
+  #ckPrintHost .ck-sh h3{font-size:20pt}
+  body:not(.ck-printing) .ck-group.ck-closed,body:not(.ck-printing) section.ck-closed>.ck-body{display:block!important}
+}
+</style>
+<script id="ck-script">
+(function(){
+"use strict";
+const C=window.CK_CONFIG||null;
+const main=document.querySelector("main");if(!main)return;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chev='<i class="ck-chev" aria-hidden="true"></i>';
+let gid=0;
+
+/* =========================================================
+   1. Handout section (built first so it gets grouped too)
+   ========================================================= */
+if(C){
+  const part=document.createElement("div");part.className="part";part.innerHTML="<span>最後</span>衛教單張";
+  const sec=document.createElement("section");sec.id="handout";
+  const ins=(C.inputs||[]).map(f=>'<label>'+esc(f.label)+'<input type="number" id="ck_'+f.k+'"'+(f.step?' step="'+f.step+'"':"")+'></label>').join("");
+  sec.innerHTML='<div class="no">給病人</div><h2>衛教單張產生器</h2>'+
+   '<p class="ck-lead">數值和處方會從上面的工具帶進來，也可以直接改。勾選要放的內容，可以把這張單張直接給病人看，或列印、存成 PDF 帶回家。</p>'+
+   '<div class="tool ck-form">'+
+    '<div class="ck-grid"><label>稱呼<input id="ckName" placeholder="例：陳先生"></label><label>日期<input type="date" id="ckDate"></label>'+
+    '<label>下次回診<input type="date" id="ckNext"></label><label>院所／醫師<input id="ckDoc" placeholder="可留空"></label>'+ins+'</div>'+
+    '<label>我的藥（一行一種，「｜」後面寫怎麼吃；可以直接改）<textarea id="ckMeds" rows="4" placeholder="例：Amlodipine 5 mg｜每天 1 次，早上"></textarea></label>'+
+    '<fieldset><legend>要放進單張的內容</legend><div class="ck-checks" id="ckPanels"></div></fieldset>'+
+    '<div class="ck-actions"><button type="button" class="ck-btn" id="ckPull">重新帶入上面的資料</button><button type="button" class="ck-btn ck-primary" id="ckPrint">列印／存成 PDF</button><span id="ckPrintNote"></span></div>'+
+   '</div><div class="ck-sheetwrap"><article class="ck-sheet" id="ckSheet" aria-label="衛教單張預覽"></article></div>';
+  main.append(part,sec);
+  const jump=document.querySelector(".bar .jump");
+  if(jump&&!jump.querySelector('a[href="#handout"]')){const a=document.createElement("a");a.href="#handout";a.textContent="衛教單";jump.appendChild(a);}
+}
+
+/* =========================================================
+   2. Collapsible parts and steps
+   ========================================================= */
+function setStep(sec,open){sec.classList.toggle("ck-closed",!open);const b=sec.querySelector(":scope>h2>.ck-tog");if(b)b.setAttribute("aria-expanded",String(open));if(open&&sec.id==="handout")onHandoutOpen();}
+function setPart(p,open){const g=$(p.getAttribute("aria-controls"));if(!g)return;g.classList.toggle("ck-closed",!open);p.setAttribute("aria-expanded",String(open));}
+[...main.children].reduce((group,el)=>{
+  if(el.classList.contains("part")){
+    const g=document.createElement("div");g.className="ck-group";g.id="ck-g"+(++gid);el.after(g);
+    el.classList.add("ck-part");el.innerHTML='<span class="ck-ptxt">'+el.innerHTML+"</span>"+chev;
+    el.setAttribute("role","button");el.tabIndex=0;el.setAttribute("aria-controls",g.id);
+    const t=()=>setPart(el,g.classList.contains("ck-closed"));
+    el.addEventListener("click",t);el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t();}});
+    setPart(el,true);return g;
+  }
+  if(!group)return null;
+  if(el.tagName==="SECTION"&&!el.querySelector(":scope>.no"))return null; // closing sections (帶走…) stay outside
+  group.appendChild(el);return group;
+},null);
+const steps=[...main.querySelectorAll("section")].filter(s=>s.querySelector(":scope>.no")&&s.querySelector(":scope>h2"));
+steps.forEach(sec=>{
+  const no=sec.querySelector(":scope>.no"),h2=sec.querySelector(":scope>h2");
+  sec.classList.add("ck-step");
+  const body=document.createElement("div");body.className="ck-body";body.id="ck-b"+(++gid);
+  [...sec.children].forEach(c=>{if(c!==no&&c!==h2)body.appendChild(c);});
+  sec.appendChild(body);
+  const b=document.createElement("button");b.type="button";b.className="ck-tog";b.setAttribute("aria-controls",body.id);
+  b.innerHTML="<span>"+h2.innerHTML+"</span>"+chev;h2.innerHTML="";h2.appendChild(b);
+  const t=()=>setStep(sec,sec.classList.contains("ck-closed"));
+  b.addEventListener("click",t);no.addEventListener("click",t);
+  setStep(sec,false);
+});
+const parts=[...main.querySelectorAll(".ck-part")];
+function all(open){parts.forEach(p=>setPart(p,open||true));steps.forEach(s=>setStep(s,open));}
+const barWrap=document.querySelector(".bar .wrap");
+if(barWrap){const t=document.createElement("div");t.className="ck-tools";t.innerHTML='<button type="button" id="ckOpenAll">全部展開</button><button type="button" id="ckCloseAll">全部收合</button>';barWrap.appendChild(t);
+  $("ckOpenAll").onclick=()=>all(true);$("ckCloseAll").onclick=()=>all(false);}
+function reveal(el){
+  if(!el)return;
+  const g=el.closest(".ck-group");if(g&&g.classList.contains("ck-closed")){const p=document.querySelector('[aria-controls="'+g.id+'"]');if(p)setPart(p,true);}
+  const s=el.closest("section.ck-step");if(s&&s.classList.contains("ck-closed"))setStep(s,true);
+}
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;const id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id||id==="clinic")return;reveal($(id));},true);
+function fromHash(){const id=decodeURIComponent(location.hash.slice(1));if(!id||id==="clinic")return;const t=$(id);if(t){reveal(t);requestAnimationFrame(()=>t.scrollIntoView());}}
+addEventListener("hashchange",fromHash);
+addEventListener("beforeprint",()=>{if(!document.body.classList.contains("ck-printing"))all(true);});
+
+if(!C)return;
+
+/* =========================================================
+   3. Drawings (all inline SVG, no image files)
+   ========================================================= */
+const SK="#f6d2b4",INK="#3b332b";
+const face=(x,y,s)=>'<circle cx="'+(x-9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/><circle cx="'+(x+9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/>'+
+  '<path d="M'+(x-7*s)+' '+(y+9*s)+' Q'+x+' '+(y+16*s)+' '+(x+7*s)+' '+(y+9*s)+'" fill="none" stroke="'+INK+'" stroke-width="'+2.6*s+'" stroke-linecap="round"/>'+
+  '<circle cx="'+(x-16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/><circle cx="'+(x+16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/>';
+const MASCOT={
+  heart:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 90C20 68 5 52 5 33 5 18 16 8 30 8c10 0 16 6 20 13 4-7 10-13 20-13 14 0 25 10 25 25 0 19-15 35-45 57z" fill="#ff6b6b" stroke="#fff" stroke-width="4"/>'+face(50,42,1)+'</svg>',
+  drop:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 5C50 5 17 45 17 64c0 19 15 31 33 31s33-12 33-31C83 45 50 5 50 5z" fill="#ffb347" stroke="#fff" stroke-width="4"/>'+face(50,64,1)+'</svg>',
+  kidney:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M60 8c22-1 35 18 33 42-2 27-20 44-43 42-21-2-23-21-12-31 7-6 7-15-2-21C20 31 32 9 60 8z" fill="#c96b8c" stroke="#fff" stroke-width="4"/>'+face(62,46,0.9)+'</svg>',
+  leaf:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M15 85C15 40 45 12 90 10c-2 45-30 75-75 75z" fill="#6cbf55" stroke="#fff" stroke-width="4"/>'+face(52,48,1)+'</svg>',
+  lung:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="#f49aa9" stroke="#fff" stroke-width="4" stroke-linejoin="round"><path d="M45 30C30 22 8 40 8 68c0 18 12 26 26 22 10-3 13-12 13-24V34z"/><path d="M55 30c15-8 37 10 37 38 0 18-12 26-26 22-10-3-13-12-13-24V34z"/></g><rect x="45" y="6" width="10" height="30" rx="5" fill="#e98395"/><rect x="40" y="46" width="20" height="30" fill="#f49aa9"/>'+face(50,60,1)+'</svg>'
+};
+const ICON={
+  sun:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="8" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.5 3.5M28.5 28.5 32 32M8 32l3.5-3.5M28.5 11.5 32 8"/></g></svg>',
+  noon:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="#ffa53d"/><circle cx="20" cy="20" r="6" fill="#ffd36b"/></svg>',
+  moon:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M26 6a14 14 0 1 0 8 25A12 12 0 0 1 26 6z" fill="#7c86d8"/><circle cx="30" cy="10" r="1.6" fill="#ffd36b"/></svg>',
+  bed:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M24 6a12 12 0 1 0 8 21A10 10 0 0 1 24 6z" fill="#5b63b8"/><text x="27" y="15" font-size="10" font-weight="700" fill="#5b63b8">z</text></svg>',
+  cuff:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="6" y="10" width="30" height="40" rx="6" fill="#e8f1f6" stroke="#4b7f99" stroke-width="2.5"/><rect x="11" y="16" width="20" height="12" rx="2" fill="#bfe3c7"/><text x="21" y="26" font-size="8" text-anchor="middle" font-weight="700" fill="#2c5a3a">120</text><circle cx="21" cy="38" r="4" fill="#4b7f99"/><path d="M36 30c10 0 12 8 18 8" fill="none" stroke="#4b7f99" stroke-width="2.5"/><rect x="44" y="34" width="12" height="18" rx="3" fill="#7fb3cf"/></svg>',
+  meter:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="26" height="44" rx="7" fill="#eef1fb" stroke="#5864a8" stroke-width="2.5"/><rect x="14" y="12" width="18" height="12" rx="2" fill="#cfe9d5"/><text x="23" y="21.5" font-size="7.5" text-anchor="middle" font-weight="700" fill="#2c5a3a">110</text><circle cx="23" cy="36" r="4" fill="#5864a8"/><path d="M48 22c0 0-7 9-7 14a7 7 0 0 0 14 0c0-5-7-14-7-14z" fill="#e2493b"/></svg>',
+  walk:'<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="32" cy="10" r="6" fill="'+SK+'"/><g stroke="#2f8f6b" stroke-width="5" stroke-linecap="round" fill="none"><path d="M31 18l-3 16M30 22l-9 8M30 22l9 6"/></g><g stroke="#3b5d8a" stroke-width="5" stroke-linecap="round"><path d="M28 34l-8 14M28 34l9 13"/></g></svg>',
+  leaf:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M8 52C8 26 26 9 54 8c-1 27-19 44-46 44z" fill="#6cbf55"/><path d="M12 48C26 34 36 24 48 14" stroke="#3f8a3a" stroke-width="2.5" fill="none"/></svg>',
+  warn:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 38 36H2z" fill="#e2493b"/><rect x="18" y="14" width="4" height="12" rx="2" fill="#fff"/><circle cx="20" cy="31" r="2.4" fill="#fff"/></svg>',
+  candy:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M6 22l10 8-10 8zM54 22l-10 8 10 8z" fill="#ff9fb6"/><ellipse cx="30" cy="30" rx="15" ry="11" fill="#ff6b8a"/><path d="M20 24c4 6 16 6 20 12" stroke="#fff" stroke-width="3" fill="none" opacity=".8"/></svg>',
+  thermo:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="24" y="6" width="12" height="34" rx="6" fill="#fff" stroke="#c8352b" stroke-width="2.5"/><rect x="28" y="18" width="4" height="22" fill="#e2493b"/><circle cx="30" cy="46" r="9" fill="#e2493b"/></svg>',
+  foot:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M22 54c-9 0-11-10-9-20 2-9 4-16 13-16s11 9 9 18c-2 8-3 18-13 18z" fill="'+SK+'" stroke="#c48a63" stroke-width="2"/><g fill="'+SK+'" stroke="#c48a63" stroke-width="1.6"><circle cx="38" cy="14" r="5"/><circle cx="30" cy="9" r="4"/><circle cx="22" cy="9" r="3.4"/><circle cx="16" cy="12" r="3"/><circle cx="12" cy="17" r="2.6"/></g></svg>',
+  eye:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M4 30C14 14 46 14 56 30 46 46 14 46 4 30z" fill="#fff" stroke="#4b7f99" stroke-width="2.5"/><circle cx="30" cy="30" r="9" fill="#4b7f99"/><circle cx="30" cy="30" r="4" fill="#173a4c"/><circle cx="33" cy="27" r="2" fill="#fff"/></svg>',
+  kidney:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M36 6c13-1 20 11 19 25-1 16-12 25-25 24-12-1-13-12-7-18 4-4 4-9-1-12C12 18 19 6 36 6z" fill="#c96b8c"/></svg>',
+  pills:'<svg viewBox="0 0 60 60" aria-hidden="true"><g transform="rotate(-35 30 30)"><rect x="10" y="22" width="40" height="16" rx="8" fill="#fff" stroke="#8a7f70" stroke-width="2"/><path d="M30 22h12a8 8 0 0 1 0 16H30z" fill="#e2493b"/></g><circle cx="46" cy="46" r="7" fill="#ffd36b" stroke="#8a7f70" stroke-width="2"/></svg>',
+  check:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="40" height="50" rx="5" fill="#fff" stroke="#6b645a" stroke-width="2.5"/><rect x="22" y="2" width="16" height="9" rx="3" fill="#6b645a"/><g stroke="#2f8f6b" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M17 22l4 4 7-8M17 36l4 4 7-8"/></g><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M33 23h10M33 37h10"/></g></svg>',
+  salt:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M20 22h20l3 30H17z" fill="#f2f2f2" stroke="#8a8a8a" stroke-width="2"/><path d="M21 12h18l2 10H19z" fill="#bdbdbd"/><g fill="#6b6b6b"><circle cx="26" cy="16" r="1.4"/><circle cx="30" cy="16" r="1.4"/><circle cx="34" cy="16" r="1.4"/></g><circle cx="30" cy="34" r="22" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M14 18 46 50" stroke="#e2493b" stroke-width="4"/></svg>'
+};
+function pill(color){return '<svg class="ck-pillsvg" viewBox="0 0 44 44" aria-hidden="true"><g transform="rotate(-35 22 22)"><rect x="5" y="15" width="34" height="14" rx="7" fill="#fff" stroke="#8a7f70" stroke-width="1.8"/><path d="M22 15h10a7 7 0 0 1 0 14H22z" fill="'+color+'"/><rect x="9" y="18" width="9" height="3" rx="1.5" fill="#fff" opacity=".8"/></g></svg>';}
+const PILLC=["#e2493b","#3c8dbc","#f0a020","#5aa469","#8e6bbf","#d96a9a","#3aa6a0"];
+function meter(m){
+  const W=300,x0=10,x1=290,lo=m.min,hi=m.max,f=v=>{if(m.log){v=Math.log10(Math.max(v,1e-3));return x0+(Math.min(Math.max(v,Math.log10(lo)),Math.log10(hi))-Math.log10(lo))/(Math.log10(hi)-Math.log10(lo))*(x1-x0);}return x0+(Math.min(Math.max(v,lo),hi)-lo)/(hi-lo)*(x1-x0);};
+  let s='<svg viewBox="0 0 '+W+' 62" aria-hidden="true">';
+  s+='<defs><clipPath id="ckc'+(++gid)+'"><rect x="'+x0+'" y="20" width="'+(x1-x0)+'" height="14" rx="7"/></clipPath></defs><g clip-path="url(#ckc'+gid+')">';
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);s+='<rect x="'+a+'" y="20" width="'+Math.max(0,b-a)+'" height="14" fill="'+z[2]+'"/>';});
+  s+="</g>";
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);if(b-a>24)s+='<text x="'+(a+b)/2+'" y="46" font-size="9" text-anchor="middle" fill="#6b645a">'+esc(z[3])+"</text>";});
+  if(m.target!=null){const t=f(m.target);s+='<line x1="'+t+'" x2="'+t+'" y1="16" y2="38" stroke="#2a2622" stroke-width="2" stroke-dasharray="3 2"/><text x="'+t+'" y="59" font-size="9" text-anchor="middle" font-weight="700" fill="#2a2622">'+esc(m.targetLabel||"目標")+"</text>";}
+  if(m.v!=null&&!isNaN(m.v)){const x=f(m.v);s+='<path d="M'+(x-7)+' 4h14l-7 11z" fill="#2a2622"/><circle cx="'+x+'" cy="27" r="5.5" fill="#fff" stroke="#2a2622" stroke-width="2.5"/>';}
+  return s+"</svg>";
+}
+/* the plate: fr = [vegetables, protein, grains]; side = extra items beside it */
+function plate(p){
+  const cx=128,cy=122,R=88;let s='<svg viewBox="0 0 360 250" aria-hidden="true">';
+  s+='<ellipse cx="'+cx+'" cy="'+(cy+6)+'" rx="104" ry="100" fill="#000" opacity=".06"/><circle cx="'+cx+'" cy="'+cy+'" r="102" fill="#fff" stroke="#ddd5c4" stroke-width="3"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(R+3)+'" fill="#fbf8f1" stroke="#ece5d6" stroke-width="2"/>';
+  const secs=[{k:"veg",f:p.fr[0],c:"#e2f2d6",l:"蔬菜"},{k:"pro",f:p.fr[1],c:"#fbe1d6",l:p.proLabel||"豆魚蛋肉"},{k:"grain",f:p.fr[2],c:"#f6e9cc",l:"全穀雜糧"}];
+  let a=-Math.PI/2;const P=(r,t)=>[cx+r*Math.cos(t),cy+r*Math.sin(t)];
+  const items=[];
+  secs.forEach(sc=>{const b=a+sc.f*Math.PI*2,[x0,y0]=P(R,a),[x1,y1]=P(R,b);
+    s+='<path d="M'+cx+" "+cy+"L"+x0.toFixed(1)+" "+y0.toFixed(1)+"A"+R+" "+R+" 0 "+(sc.f>.5?1:0)+" 1 "+x1.toFixed(1)+" "+y1.toFixed(1)+'Z" fill="'+sc.c+'" stroke="#fff" stroke-width="4"/>';
+    items.push({k:sc.k,a0:a,a1:b,l:sc.l,f:sc.f});a=b;});
+  const draw={
+    broc:(x,y)=>'<rect x="'+(x-3)+'" y="'+(y)+'" width="6" height="12" rx="2" fill="#8bbf5a"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+(x+6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+x+'" cy="'+(y-8)+'" r="8" fill="#4ea845"/>',
+    leaf:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="12" ry="6" fill="#74c25b" transform="rotate(-30 '+x+" "+y+')"/><path d="M'+(x-9)+" "+(y+5)+"L"+(x+9)+" "+(y-5)+'" stroke="#3f8a3a" stroke-width="1.4"/>',
+    carrot:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7" fill="#f08a24"/><circle cx="'+x+'" cy="'+y+'" r="3" fill="#f7b267"/>',
+    tomato:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7.5" fill="#e8463b"/><path d="M'+(x-3)+" "+(y-7)+"l3 2 3-2"+'" stroke="#3f8a3a" stroke-width="2" fill="none"/>',
+    fish:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="20" ry="10" fill="#f4a582"/><path d="M'+(x+17)+" "+y+"l12-9v18z"+'" fill="#f08a6a"/><circle cx="'+(x-11)+'" cy="'+(y-2)+'" r="2" fill="'+INK+'"/><path d="M'+(x-3)+" "+(y-6)+"q4 6 0 12"+'" stroke="#e57b5c" stroke-width="1.6" fill="none"/>',
+    egg:(x,y)=>'<path d="M'+(x-13)+" "+y+"c0-9 7-12 13-11s14 3 13 11-6 10-13 10-13-2-13-10z"+'" fill="#fff" stroke="#eadfcf"/><circle cx="'+(x+1)+'" cy="'+(y+1)+'" r="5.5" fill="#f7c548"/>',
+    tofu:(x,y)=>'<rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="18" rx="3" fill="#f3e3b5" stroke="#e2cf98"/><rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="5" rx="2" fill="#faf0d0"/>',
+    rice:(x,y,big)=>{const r=big?27:20;let t='<ellipse cx="'+x+'" cy="'+y+'" rx="'+r+'" ry="'+r*.72+'" fill="#fffaf0" stroke="#e8dcc0" stroke-width="1.5"/>';for(let i=0;i<14;i++){const u=(i*137.5)%360*Math.PI/180,d=(i%5+1)/6*r*.75;t+='<ellipse cx="'+(x+Math.cos(u)*d).toFixed(1)+'" cy="'+(y+Math.sin(u)*d*.7).toFixed(1)+'" rx="2.6" ry="1.3" fill="#c79a5e" transform="rotate('+(i*40)+" "+(x+Math.cos(u)*d).toFixed(1)+" "+(y+Math.sin(u)*d*.7).toFixed(1)+')"/>';}return t;},
+    potato:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="13" ry="8" fill="#b5524a" transform="rotate(20 '+x+" "+y+')"/><ellipse cx="'+x+'" cy="'+y+'" rx="9" ry="5" fill="#f2b75a" transform="rotate(20 '+x+" "+y+')"/>'
+  };
+  const at=(it,r,frac)=>{const t=it.a0+(it.a1-it.a0)*frac;return P(r,t).map(v=>+v.toFixed(1));};
+  items.forEach(it=>{
+    if(it.k==="veg"){const n=Math.max(4,Math.round(it.f*14)),kinds=["broc","leaf","carrot","broc","tomato","leaf","carrot"];
+      for(let i=0;i<n;i++){const [x,y]=at(it,i%2?62:36,(i+.5)/n);s+=draw[kinds[i%kinds.length]](x,y);}}
+    if(it.k==="pro"){const [x,y]=at(it,52,.5);s+=draw.fish(x,y);if(it.f>.2){const [a,b]=at(it,70,.2);s+=draw.egg(a,b);const [c,d]=at(it,30,.8);s+=draw.tofu(c,d);}else{const [c,d]=at(it,74,.75);s+=draw.tofu(c,d);}}
+    if(it.k==="grain"){const [x,y]=at(it,48,.5);s+=draw.rice(x,y,it.f>.28);if(it.f>.2){const [a,b]=at(it,74,.25);s+=draw.potato(a,b);}}
+    const [lx,ly]=at(it,R*.55,.5);
+    s+='<text x="'+lx+'" y="'+(ly+(it.k==="veg"?32:30))+'" font-size="13" font-weight="700" text-anchor="middle" fill="#2a2622" stroke="#fffdf8" stroke-width="4" paint-order="stroke">'+esc(it.l)+"</text>";
+  });
+  // beside the plate
+  const SIDE={
+    fruit:(x,y)=>'<circle cx="'+x+'" cy="'+(y+4)+'" r="18" fill="#e2493b"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="5" fill="#fff" opacity=".35"/><path d="M'+x+" "+(y-14)+"q2-8 6-10"+'" stroke="#6b4a2b" stroke-width="3" fill="none"/><ellipse cx="'+(x+9)+'" cy="'+(y-20)+'" rx="8" ry="4" fill="#5cae4a" transform="rotate(-25 '+(x+9)+" "+(y-20)+')"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#4a443c">水果 1 拳頭</text>',
+    milk:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#9aa8b5" stroke-width="2"/><path d="M'+(x-13)+" "+(y-12)+"h26l-2.3 29h-21.4z"+'" fill="#f1f4f8"/><text x="'+x+'" y="'+(y+5)+'" font-size="11" text-anchor="middle" font-weight="700" fill="#6c7d8c">奶</text><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">低脂奶 1 杯</text>',
+    water:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#7fb3cf" stroke-width="2"/><path d="M'+(x-12.6)+" "+(y-8)+"h25.2l-2 25.6h-21.2z"+'" fill="#bfe3f3"/><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">白開水</text>',
+    salt:(x,y)=>'<g transform="translate('+(x-24)+" "+(y-30)+') scale(.8)">'+ICON.salt.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">少鹽</text>',
+    boba:(x,y)=>'<path d="M'+(x-14)+" "+(y-20)+"h28l-4 40h-20z"+'" fill="#e9d2b0" stroke="#a5835a" stroke-width="2"/><rect x="'+(x-15)+'" y="'+(y-24)+'" width="30" height="5" rx="2" fill="#a5835a"/><path d="M'+(x+3)+" "+(y-24)+"l5-14"+'" stroke="#e2493b" stroke-width="3"/><g fill="#4a3426"><circle cx="'+(x-6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+x+'" cy="'+(y+15)+'" r="3"/><circle cx="'+(x+6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+(x-2)+'" cy="'+(y+9)+'" r="3"/></g><circle cx="'+x+'" cy="'+y+'" r="25" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-18)+"L"+(x+17)+" "+(y+18)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不喝含糖飲料</text>',
+    star:(x,y)=>{let pts="";for(let i=0;i<10;i++){const r=i%2?8:19,t=-Math.PI/2+i*Math.PI/5;pts+=(x+r*Math.cos(t)).toFixed(1)+","+(y+r*Math.sin(t)).toFixed(1)+" ";}
+      return '<polygon points="'+pts+'" fill="#f5d33c" stroke="#d9a90d" stroke-width="2"/><circle cx="'+x+'" cy="'+y+'" r="24" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-17)+"L"+(x+17)+" "+(y+17)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不吃楊桃</text>';}
+  };
+  (p.side||[]).slice(0,3).forEach((k,i)=>{if(SIDE[k])s+=SIDE[k](300,40+i*84);});
+  return s+"</svg>";
+}
+function walker(){
+  return '<svg viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="96" width="260" height="24" rx="12" fill="#e2f2d6"/><path d="M10 104h240" stroke="#c6dfb3" stroke-width="3" stroke-dasharray="10 8"/>'+
+   '<circle cx="222" cy="26" r="14" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M222 4v5M222 43v5M200 26h5M239 26h5"/></g>'+
+   '<g transform="translate(70 6)"><circle cx="30" cy="16" r="11" fill="'+SK+'"/><path d="M19 13c2-9 20-10 23 0-6-3-15-3-23 0z" fill="#3b332b"/>'+
+   '<g stroke-linecap="round" fill="none"><path d="M29 28 25 60" stroke="#2f8f6b" stroke-width="10"/><path d="M28 34 14 48M28 34l15 10" stroke="#2f8f6b" stroke-width="6"/><path d="M25 60 12 86M25 60l16 24" stroke="#3b5d8a" stroke-width="8"/></g>'+
+   '<ellipse cx="9" cy="89" rx="8" ry="4" fill="#e2493b"/><ellipse cx="45" cy="87" rx="8" ry="4" fill="#e2493b"/><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M-16 34h-14M-12 48h-20M-16 62h-12"/></g></g>'+
+   '<g transform="translate(150 50)"><circle cx="20" cy="20" r="18" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M20 8v12l8 5" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="46" y="18" font-size="14" font-weight="700" fill="#2a2622">30 分</text><text x="46" y="35" font-size="12" fill="#6b645a">× 每週 5 天</text></g></svg>';
+}
+function calendar(dateStr){
+  const d=dateStr?new Date(dateStr+"T00:00:00"):null;
+  const m=d?(d.getMonth()+1)+" 月":"",day=d?d.getDate():"?",wd=d?"週"+"日一二三四五六"[d.getDay()]:"";
+  return '<svg viewBox="0 0 74 74" aria-hidden="true"><rect x="4" y="10" width="66" height="60" rx="9" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M4 19a9 9 0 0 1 9-9h48a9 9 0 0 1 9 9v9H4z" fill="var(--a,#bb3f26)"/>'+
+   '<rect x="18" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><rect x="51" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><text x="37" y="25" font-size="11" text-anchor="middle" fill="#fff" font-weight="700">'+m+'</text>'+
+   '<text x="37" y="54" font-size="24" text-anchor="middle" font-weight="700" fill="#2a2622">'+day+'</text><text x="37" y="66" font-size="9.5" text-anchor="middle" fill="#6b645a">'+wd+"</text></svg>";
+}
+/* small illustrated strips used by panels */
+const ART={
+  r722:()=>{let s='<svg class="ck-art" viewBox="0 0 300 70" aria-hidden="true">';for(let i=0;i<7;i++){const x=8+i*41;s+='<rect x="'+x+'" y="6" width="36" height="58" rx="6" fill="#fff" stroke="#d8cfbd" stroke-width="1.5"/><text x="'+(x+18)+'" y="19" font-size="10" text-anchor="middle" fill="#6b645a">第'+(i+1)+'天</text>'+
+     '<g transform="translate('+(x+3)+' 23) scale(.4)">'+ICON.sun.replace(/<\/?svg[^>]*>/g,"")+'</g><g transform="translate('+(x+17)+' 23) scale(.4)">'+ICON.moon.replace(/<\/?svg[^>]*>/g,"")+'</g>'+
+     '<text x="'+(x+18)+'" y="56" font-size="9" text-anchor="middle" fill="#2f8f6b" font-weight="700">×2 遍</text>';}return s+"</svg>";},
+  r1515:()=>'<svg class="ck-art" viewBox="0 0 300 74" aria-hidden="true"><g transform="translate(4 10) scale(.85)">'+ICON.candy.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="30" y="70" font-size="11" text-anchor="middle" fill="#4a443c">吃 15 克糖</text>'+
+     '<path d="M64 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><defs><marker id="ckar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b9b1a4"/></marker></defs>'+
+     '<circle cx="128" cy="32" r="22" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M128 18v14l9 6" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="128" y="70" font-size="11" text-anchor="middle" fill="#4a443c">等 15 分鐘</text>'+
+     '<path d="M158 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><g transform="translate(196 4) scale(.95)">'+ICON.meter.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="226" y="70" font-size="11" text-anchor="middle" fill="#4a443c">再量一次</text>'+
+     '<text x="286" y="40" font-size="22" text-anchor="middle" fill="#e2493b" font-weight="700">↺</text></svg>',
+  plate5:()=>'',
+};
+
+/* =========================================================
+   4. Form state, pulling from the page, rendering
+   ========================================================= */
+const today=()=>{const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const addDays=(iso,n)=>{const t=new Date(iso+"T00:00:00");t.setDate(t.getDate()+n);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const pageVal=id=>{const e=$(id);if(!e)return "";return e.type==="checkbox"?e.checked:e.value;};
+let medsDirty=false,panelOn={};
+function readForm(){const v={name:$("ckName").value.trim(),date:$("ckDate").value,next:$("ckNext").value,doc:$("ckDoc").value.trim()};
+  (C.inputs||[]).forEach(f=>{const x=parseFloat($("ck_"+f.k).value);v[f.k]=isNaN(x)?null:x;});return v;}
+function freqOf(s){
+  let how=[];const t=[];
+  if(/\bTID\b|三餐/i.test(s)){how.push("每天 3 次");t.push("早","中","晚");}
+  else if(/\bBID\b|早晚/i.test(s)){how.push("每天 2 次");t.push("早","晚");}
+  else if(/\bHS\b|睡前/i.test(s)){how.push("睡前");t.push("睡前");}
+  else if(/\bQD\b|每天 ?1 ?次|每日一次/i.test(s)){how.push("每天 1 次");t.push(/早餐|早上/.test(s)?"早":"早");}
+  else if(/每週/.test(s)){how.push("每週 1 次，固定同一天");}
+  if(/早餐前/.test(s))how.push("早餐前");else if(/隨餐|飯後|餐後/.test(s))how.push("吃飯時或飯後");
+  return {how:how.join("，"),times:t};
+}
+function cleanName(s){
+  return s.replace(/<[^>]+>/g,"").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/（[^）]*）|\([^)]*\)/g," ")
+    .replace(/^(改|再加|可同時加|加)\s*/,"").split(/[；。]/)[0]
+    .replace(/\b(QD|BID|TID|HS|qd|bid|tid|hs)\b/g,"").replace(/\s{2,}/g," ").trim();
+}
+function pull(){
+  const v0={};(C.inputs||[]).forEach(f=>{const x=pageVal(f.src);v0[f.k]=x;if(x!==""&&x!=null)$("ck_"+f.k).value=x;});
+  const m=C.meds?C.meds():{lines:[]};
+  const lines=(m.lines||[]).map(raw=>{if(raw.includes("｜"))return raw;const f=freqOf(raw),n=cleanName(raw);return n+(f.how?"｜"+f.how:"");}).filter(Boolean);
+  $("ckMeds").value=lines.join("\n");$("ckMeds").dataset.note=m.note||"";medsDirty=false;
+  const pans=allPanels(readForm(),lines.join("\n"));pans.forEach(p=>{panelOn[p.id]=typeof p.on==="function"?!!p.on(readForm(),lines.join("\n")):p.on!==false;});
+  drawChecks();render();
+}
+function allPanels(v,medTxt){
+  const list=[{id:"nums",label:"我的數字"},{id:"meds",label:"我的藥"}];
+  if(C.plate)list.push({id:"plate",label:"飲食餐盤"});
+  if(C.move!==false)list.push({id:"move",label:"運動"}); // a topic with no diet or exercise advice (skin) sets plate undefined and move:false
+  (C.panels?C.panels(v,medTxt):[]).forEach(p=>list.push(p));
+  list.push({id:"warn",label:"何時要馬上就醫"},{id:"next",label:"下次回診"});
+  return list;
+}
+function drawChecks(){const v=readForm();$("ckPanels").innerHTML=allPanels(v,$("ckMeds").value).map(p=>'<label><input type="checkbox" data-p="'+p.id+'"'+(panelOn[p.id]!==false?" checked":"")+">"+esc(p.label)+"</label>").join("");}
+function medList(){
+  const txt=$("ckMeds").value.trim();if(!txt)return [];
+  return txt.split(/\n+/).map(l=>l.trim()).filter(Boolean).map((l,i)=>{
+    const [n,h]=l.split(/[｜|]/);const name=n.trim(),how=(h||"").trim()||freqOf(name).how;
+    const info=(C.medInfo||[]).find(r=>r[0].test(name))||[null,"",""];
+    let times=freqOf(how).times;if(!times.length)times=freqOf(name).times;
+    return {name,how,what:info[1],tip:info[2],times,color:PILLC[i%PILLC.length]};});
+}
+const TIMEICON={早:["sun","早上"],中:["noon","中午"],晚:["moon","晚上"],睡前:["bed","睡前"]};
+function render(){
+  const v=readForm(),meds=medList(),on=id=>panelOn[id]!==false,sheet=$("ckSheet");
+  const who=v.name?esc(v.name)+"的":"我的";
+  let h='<header class="ck-sh">'+(MASCOT[C.mascot]||MASCOT.leaf)()+'<div><h3>'+who+esc(C.sheetTitle)+'</h3><p>'+esc(v.date||today())+(v.doc?"　"+esc(v.doc):"")+"</p></div></header>";
+  if(on("nums")){const ns=C.numbers?C.numbers(v):[];if(ns.length)h+='<div class="ck-sec"><h4>'+ICON.check+'我的數字</h4><div class="ck-nums">'+ns.map(n=>'<div class="ck-num"><div class="ck-nl">'+esc(n.label)+'</div><div class="ck-nv">'+esc(n.value)+(n.unit?"<small>"+esc(n.unit)+"</small>":"")+"</div>"+(n.meter?meter(n.meter):"")+(n.text?"<p>"+n.text+"</p>":"")+"</div>").join("")+"</div></div>";}
+  if(on("meds")){const note=$("ckMeds").dataset.note;
+    h+='<div class="ck-sec"><h4>'+ICON.pills+'我的藥</h4>';
+    if(meds.length)h+='<ul class="ck-meds">'+meds.map(m=>'<li class="ck-med">'+pill(m.color)+'<div><b>'+esc(m.name)+"</b>"+(m.what?'<span class="ck-what">'+esc(m.what)+"</span>":"")+
+      (m.times.length?'<div class="ck-times">'+m.times.map(t=>'<span class="ck-time">'+ICON[TIMEICON[t][0]]+TIMEICON[t][1]+"</span>").join("")+"</div>":"")+
+      (m.how?'<p class="ck-how">'+esc(m.how)+"</p>":"")+(m.tip?'<p class="ck-tip">小提醒：'+esc(m.tip)+"</p>":"")+"</div></li>").join("")+"</ul>";
+    else h+='<p class="ck-note">'+esc(note||"目前沒有新的藥，照醫師說的生活習慣開始。")+"</p>";
+    if(meds.length)h+='<p style="font-size:13.5px;margin:6px 0 0;color:#6b645a">藥不要自己停或加量；有不舒服先打電話問或提早回診。</p>';
+    h+="</div>";}
+  const pl=C.plate?C.plate(v,$("ckMeds").value):null;
+  const showPlate=on("plate")&&pl,showMove=on("move")&&C.move!==false;
+  if(showPlate||showMove){h+='<div class="ck-two">';
+    if(showPlate)h+='<div class="ck-sec ck-plate"><h4>'+ICON.leaf+esc(pl.title||"每餐這樣吃")+'</h4>'+plate(pl)+'<div class="ck-legend"><span><i style="background:#9bd27e"></i>蔬菜 '+esc(pl.frLabel[0])+'</span><span><i style="background:#f4b49a"></i>'+esc(pl.proLabel||"豆魚蛋肉")+" "+esc(pl.frLabel[1])+'</span><span><i style="background:#e9cf8f"></i>全穀雜糧 '+esc(pl.frLabel[2])+"</span></div><ul>"+pl.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    if(showMove)h+='<div class="ck-sec ck-move"><h4>'+ICON.walk+'動一動</h4>'+walker()+"<ul>"+(C.move||[]).map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    h+="</div>";}
+  const pans=(C.panels?C.panels(v,$("ckMeds").value):[]).filter(p=>on(p.id));
+  if(pans.length)h+='<div class="ck-sec ck-pans">'+pans.map(p=>'<div class="ck-pan"><h5>'+(ICON[p.icon]||"")+esc(p.title||p.label)+"</h5>"+(p.art&&ART[p.art]?ART[p.art]():"")+(p.html||"")+(p.items?"<ul>"+p.items.map(t=>"<li>"+t+"</li>").join("")+"</ul>":"")+"</div>").join("")+"</div>";
+  if(on("warn")&&C.warn)h+='<div class="ck-sec ck-warn"><h5>'+ICON.warn+'這些情況，馬上就醫</h5><ul>'+C.warn.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+  if(on("next")){const nn=C.nextNote?C.nextNote(v,$("ckMeds").value):"";
+    h+='<div class="ck-sec ck-next">'+calendar(v.next)+'<div><b>下次回診：'+(v.next?esc(v.next.replace(/-/g,"/")):"請跟櫃台約時間")+"</b>"+(nn?'<p style="margin:2px 0">'+nn+"</p>":"")+(C.bring?'<p style="margin:2px 0;font-size:14px">記得帶：'+C.bring.map(esc).join("、")+"</p>":"")+"</div></div>";}
+  h+='<div class="ck-foot"><span>這張單張依醫師今天的評估產生；藥名與劑量以處方箋、藥袋為準。</span><span>ycjacademy 門診實務</span></div>';
+  sheet.innerHTML=h;
+}
+let tm=0;const later=()=>{clearTimeout(tm);tm=setTimeout(render,120);};
+const form=document.querySelector(".ck-form");
+form.addEventListener("input",e=>{if(e.target.id==="ckMeds"){medsDirty=true;$("ckMeds").dataset.note="";}if(e.target.dataset.p){panelOn[e.target.dataset.p]=e.target.checked;}later();});
+form.addEventListener("change",e=>{if(e.target.dataset.p)panelOn[e.target.dataset.p]=e.target.checked;later();});
+$("ckPull").onclick=pull;
+$("ckDate").value=today();$("ckNext").value=addDays(today(),C.days||28);
+function onHandoutOpen(){if(!medsDirty)pull();}
+// printing: only the sheet; window.print is blocked inside the claude.ai preview
+const canPrint=/(^|\.)github\.io$|^localhost$|^127\.|^$/.test(location.hostname)||location.protocol==="file:";
+if(!canPrint&&C.siteUrl){$("ckPrint").textContent="到網站版列印";$("ckPrintNote").innerHTML='預覽畫面不能列印，請開 <a href="'+esc(C.siteUrl)+'#handout" target="_blank" rel="noopener">網站版</a>。';}
+$("ckPrint").onclick=()=>{
+  if(!canPrint&&C.siteUrl){window.open(C.siteUrl+"#handout","_blank","noopener");return;}
+  render();let host=$("ckPrintHost");if(!host){host=document.createElement("div");host.id="ckPrintHost";document.body.appendChild(host);}
+  host.innerHTML="";host.appendChild($("ckSheet").cloneNode(true));document.body.classList.add("ck-printing");
+  try{window.print();}catch(e){}
+  setTimeout(()=>document.body.classList.remove("ck-printing"),400);
+};
+addEventListener("afterprint",()=>document.body.classList.remove("ck-printing"));
+pull();
+fromHash();
+window.CK={pull,render,reveal,setAll:all};
+})();
+</script>
+<!-- clinic-kit v1 end -->
+</body>
+</html>
