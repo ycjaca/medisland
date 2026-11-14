@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>常見藥物腎劑量</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Toolbox tool: renal dose look-up. Same clinic-handbook look and plum accent as the CKD page. */
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef; --card:#ffffff; --ink:#22261f; --mute:#5d6258; --line:#dad8cd;
+  --accent:#7a2f4f; --accent-soft:#f4e3ea;
+  --ok:#2f7d55; --ok-soft:#e1f1e8; --warn:#8f6400; --warn-soft:#fbf0d9; --crit:#b3261e; --crit-soft:#fbe3e0;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 var(--body)}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:#f3f1e8;padding:22px 0 18px}
+header.top .crumb{font:13px var(--mono);color:#c2bfa9}
+header.top .crumb a{color:inherit}
+header.top h1{font:700 32px/1.3 var(--display);margin:4px 0 6px}
+header.top p{margin:0;color:#dcd9cb;font-size:15px}
+.draft{background:var(--warn-soft);border-left:4px solid var(--warn);padding:10px 14px;margin:18px 0;font-size:14.5px}
+.tool{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:6px;padding:14px 16px;margin:16px 0}
+.tool>h2{margin:0 0 10px;font:700 18px/1.4 var(--display)}
+.fields{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+label.num{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:2px}
+input[type=number]{width:96px;font:500 19px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:5px;color:var(--ink);background:#fff}
+input[type=search]{width:100%;font:16px var(--body);padding:9px 12px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink)}
+select{font:15px var(--body);padding:7px 8px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}
+.res button{text-align:left;border:1px solid var(--line);border-radius:6px;background:#fff;padding:8px 10px;cursor:pointer;color:var(--ink);font:13px var(--body)}
+.res button b{display:block;font:700 22px var(--mono)}
+.res button[aria-pressed="true"]{border:2px solid var(--accent);background:var(--accent-soft)}
+.hint{font-size:13px;color:var(--mute);margin:6px 0 0}
+.sticky{position:sticky;top:0;z-index:4;background:var(--bg);padding:8px 0 6px;border-bottom:1px solid var(--line)}
+.cur{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.cur b{font:700 24px var(--mono);color:var(--accent)}
+.cur span{font-size:13px;color:var(--mute)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.chip{font:14px var(--body);padding:3px 11px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.row2{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.row2 label{font-size:14px;display:flex;gap:6px;align-items:center;cursor:pointer}
+input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55;min-width:640px}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+thead th{background:var(--card);font-weight:700;position:sticky;top:0}
+tbody th{font-weight:700;background:var(--card);position:sticky;left:0;min-width:9em}
+tbody th small{display:block;font-weight:400;color:var(--mute);font-size:12px}
+tr.s td,tr.s th{background:var(--crit-soft)}
+td.v{font-weight:700}
+td.v.ok{color:var(--ok);font-weight:400}td.v.a{color:var(--warn)}td.v.s{color:var(--crit)}
+.pill{display:inline-block;font:500 11px/1.6 var(--mono);padding:0 5px;border-radius:3px;background:#e7e4f3;color:#4a3f85;margin-left:4px;vertical-align:1px}
+tr.cat td{background:var(--bg);font:700 13px var(--mono);color:var(--accent);padding-top:12px}
+.empty{padding:16px;color:var(--mute)}
+h3{font:700 17px/1.5 var(--body);margin:22px 0 6px}
+ul{padding-left:1.3em}
+li{margin:3px 0}
+footer{padding:22px 0 44px;font-size:13.5px;color:var(--mute)}
+footer ul{padding-left:1.2em}
+@media (max-width:560px){header.top h1{font-size:27px}}
+/* phones: no sideways scrolling, each drug becomes a small card */
+@media (max-width:640px){
+  .sticky{position:static}
+  table{min-width:0}thead{display:none}
+  tbody tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}
+  tbody th,tbody td{display:block;border:0;padding:1px 4px;position:static;min-width:0}
+  tbody td::before{content:attr(data-l);display:inline-block;min-width:5.6em;color:var(--mute);font:400 12px var(--body)}
+  tr.cat td::before{content:none}
+  tbody td:empty{display:none}
+}
+@media print{.sticky{position:static}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../../">ycjacademy</a>／<a href="../">門診實務</a>／<a href="./">工具箱</a>／腎劑量</div>
+  <h1>常見藥物腎劑量</h1>
+  <p>家醫門診常用藥，依 CrCl 或 eGFR 看要不要減量、停用。</p>
+</div></header>
+
+<main class="wrap">
+<div class="draft"><b>v0.1 草稿，最後核對 2026-11-14。</b>依美國 FDA 仿單、KDIGO 2024、Beers 2023 與常見藥物手冊整理，未逐項對照台灣仿單與院內處方集；同成分不同劑型（如緩釋劑）規定可能不同。校對前請勿當臨床依據。</div>
+
+<section class="tool" aria-labelledby="calcH">
+  <h2 id="calcH">先算腎功能</h2>
+  <div class="fields">
+    <label class="num">年齡<input type="number" id="age" value="72" inputmode="numeric"></label>
+    <label class="num">性別<select id="sex"><option value="F">女</option><option value="M" selected>男</option></select></label>
+    <label class="num">體重 kg<input type="number" id="wt" value="60" inputmode="decimal"></label>
+    <label class="num">身高 cm<input type="number" id="ht" placeholder="可空白" inputmode="decimal"></label>
+    <label class="num">Cr mg/dL<input type="number" id="cr" step="0.01" value="1.4" inputmode="decimal"></label>
+  </div>
+  <div class="res" id="res" role="group" aria-label="用哪一個數字查表"></div>
+  <p class="hint">點一個數字帶入下面的表。<b>仿單多用 Cockcroft-Gault CrCl</b>（DOAC 一定要用 CrCl）；老人、低體重時 CrCl 常比 eGFR 低很多，邊界值選較保守的那個。</p>
+</section>
+
+<div class="sticky">
+  <div class="cur"><span>查表用腎功能</span><b id="cur">—</b><span id="curSrc"></span></div>
+  <input type="range" id="slider" min="5" max="120" value="45" aria-label="腎功能 mL/min">
+  <input type="search" id="q" placeholder="搜尋藥名、商品名或中文（例：痛風、Lyrica、抗凝）" aria-label="搜尋藥物">
+  <div class="chips" id="cats" role="group" aria-label="藥物類別"></div>
+  <div class="row2"><label><input type="checkbox" id="onlyAdj">只看要調整或避免的</label></div>
+</div>
+
+<div class="scroll"><table>
+  <thead><tr><th>藥物</th><th>一般劑量</th><th id="colV">腎功能 —</th><th>注意</th></tr></thead>
+  <tbody id="tb"></tbody>
+</table></div>
+
+<h3>不論劑量，CKD 病人先想到的</h3>
+<ul>
+  <li><b>NSAID＋ACEi／ARB＋利尿劑</b>同時用最容易急性腎損傷。</li>
+  <li>吐、拉、吃不下時暫停 SADMANS：SU、ACEi、利尿劑、metformin、ARB、NSAID、SGLT2i。</li>
+  <li>來源不明的中草藥、偏方：馬兜鈴酸、重金屬。</li>
+  <li>假性 Cr 上升：trimethoprim、cimetidine 抑制 Cr 分泌，GFR 沒變。</li>
+  <li>CKD 的完整處置見<a href="../ckd.html">慢性腎臟病專區</a>。</li>
+</ul>
+</main>
+
+<footer><div class="wrap">
+  <p>主要來源</p>
+  <ul>
+    <li>各藥美國 FDA 仿單（Renal impairment／Dosage and administration）。</li>
+    <li>KDIGO 2024 CKD 指引；KDIGO 2022 糖尿病合併 CKD。</li>
+    <li>American Geriatrics Society 2023 Beers Criteria：依腎功能應避免或減量的藥物。</li>
+    <li>Cockcroft DW, Gault MH. Nephron 1976；CKD-EPI 2021（不分種族）。</li>
+  </ul>
+  <p>ycjacademy 門診工具箱｜不代表任何廠商立場。</p>
+</div></footer>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const num=id=>{const v=parseFloat($(id).value);return isNaN(v)?null:v;};
+
+/* ---------- kidney function ---------- */
+function ckdEpi(cr,age,f){const k=f?0.7:0.9,a=f?-0.241:-0.302;return 142*Math.pow(Math.min(cr/k,1),a)*Math.pow(Math.max(cr/k,1),-1.2)*Math.pow(0.9938,age)*(f?1.012:1);}
+function cg(age,wt,cr,f){return (140-age)*wt/(72*cr)*(f?0.85:1);}
+let pick='cg',V=45,src='';
+function calc(){
+  const age=num('age'),wt=num('wt'),ht=num('ht'),cr=num('cr'),f=$('sex').value==='F';
+  const R=[];
+  if(age&&cr){
+    if(wt){
+      R.push(['cg','CrCl（實際體重）',cg(age,wt,cr,f)]);
+      if(ht){const m=ht/2.54-60,ibw=(f?45.5:50)+2.3*m;
+        if(ibw>0){R.push(['ibw','CrCl（理想體重 '+Math.round(ibw)+' kg）',cg(age,Math.min(wt,ibw),cr,f)]);
+          if(wt>1.2*ibw)R.push(['adj','CrCl（調整體重）',cg(age,ibw+0.4*(wt-ibw),cr,f)]);}}
+    }
+    R.push(['egfr','eGFR CKD-EPI 2021',ckdEpi(cr,age,f)]);
+  }
+  if(!R.some(r=>r[0]===pick))pick=R.length?R[0][0]:pick;
+  $('res').innerHTML=R.map(r=>'<button type="button" data-k="'+r[0]+'" aria-pressed="'+(r[0]===pick)+'"><b>'+Math.round(r[2])+'</b>'+r[1]+'</button>').join('')||'<p class="hint">輸入年齡與 Cr。</p>';
+  const p=R.find(r=>r[0]===pick);
+  if(p){V=Math.round(p[2]);src=p[1];$('slider').value=Math.max(5,Math.min(120,V));}
+  $('res').querySelectorAll('button').forEach(b=>b.onclick=()=>{pick=b.dataset.k;calc();});
+  render();
+}
+
+/* ---------- data ----------
+   [category, name, search words, usual dose, rule(e) -> [text, flag: ''|'a'|'s'], note, crcl-only]
+   flag '' = no change, 'a' = adjust / caution, 's' = avoid or stop */
+const CATS=[['all','全部'],['dm','降糖'],['cv','心血管'],['ac','抗凝'],['pain','止痛神經'],['gout','痛風'],['abx','抗生素'],['av','抗病毒黴菌'],['psy','精神神經'],['gi','腸胃'],['other','過敏泌尿骨']];
+const ok=t=>['不調整'+(t?'；'+t:''),''];
+const D=[
+ /* diabetes */
+ ['dm','Metformin','glucophage 二甲雙胍','500 mg bid → 1000 mg bid',e=>e>=45?ok():e>=30?['上限 1000 mg/日；不新開','a']:['停用','s'],'顯影劑、脫水時暫停'],
+ ['dm','Empagliflozin／dapagliflozin','jardiance forxiga sglt2','10 mg qd',e=>e>=45?ok():e>=20?['10 mg；降糖弱，護腎心','a']:['不新開；已用可續用到透析','a'],'起始後 eGFR 小降屬預期'],
+ ['dm','Sitagliptin','januvia dpp4','100 mg qd',e=>e>=45?ok():e>=30?['50 mg qd','a']:['25 mg qd','a'],''],
+ ['dm','Linagliptin','trajenta dpp4','5 mg qd',e=>ok('膽道排除'),'腎差首選 DPP-4i'],
+ ['dm','Vildagliptin','galvus dpp4','50 mg bid',e=>e>=50?ok():['50 mg qd','a'],'監測肝功能'],
+ ['dm','Saxagliptin','onglyza dpp4','5 mg qd',e=>e>45?ok():['2.5 mg qd','a'],'心衰竭避免'],
+ ['dm','Alogliptin','nesina dpp4','25 mg qd',e=>e>=60?ok():e>=30?['12.5 mg qd','a']:['6.25 mg qd','a'],'心衰竭小心'],
+ ['dm','Gliclazide MR','diamicron su 磺醯脲','30–120 mg 早餐前',e=>e>=30?['小心低血糖','a']:['避免','s'],''],
+ ['dm','Glimepiride','amaryl su 磺醯脲','1–4 mg 早餐前',e=>e>=60?ok():e>=30?['1 mg 起，慢加','a']:['避免','s'],'長者低血糖'],
+ ['dm','Glibenclamide','glyburide daonil su 磺醯脲','—',e=>e>=60?['長者避免','a']:['避免','s'],'活性代謝物，低血糖延長'],
+ ['dm','Repaglinide','novonorm glinide','0.5–4 mg 餐前',e=>e>=40?ok():['0.5 mg 起，慢加','a'],''],
+ ['dm','Acarbose','glucobay','50–100 mg tid',e=>e>=25?ok():['不建議','s'],'低血糖要用葡萄糖'],
+ ['dm','Pioglitazone','actos tzd','15–45 mg qd',e=>ok('注意水腫'),'心衰竭避免'],
+ ['dm','GLP-1 RA','dulaglutide semaglutide liraglutide trulicity ozempic','每週或每日',e=>e>=15?ok():['經驗少','a'],'嘔吐脫水時暫停'],
+ ['dm','胰島素','insulin','依血糖',e=>e>=50?ok():e>=10?['需求下降約 25%，慢滴定','a']:['需求下降約 50%','a'],'腎差時胰島素清除變慢'],
+ /* cardiovascular */
+ ['cv','Enalapril','acei renitec','5–40 mg/日',e=>e>30?ok():['2.5 mg 起','a'],'2–4 週驗 Cr、K'],
+ ['cv','Lisinopril','acei zestril','10–40 mg qd',e=>e>30?ok():e>=10?['5 mg 起','a']:['2.5 mg 起','a'],'2–4 週驗 Cr、K'],
+ ['cv','Ramipril','acei tritace','2.5–10 mg qd',e=>e>=40?ok():['1.25 mg 起，上限 5 mg','a'],''],
+ ['cv','ARB（losartan、valsartan 等）','arb cozaar diovan','依品項',e=>ok('驗 Cr、K'),'不和 ACEi 併用'],
+ ['cv','Atenolol','tenormin β-blocker','25–100 mg qd',e=>e>35?ok():e>=15?['上限 50 mg/日','a']:['上限 25 mg/日','a'],'',true],
+ ['cv','Bisoprolol','concor β-blocker','2.5–10 mg qd',e=>e>=40?ok():['2.5 mg 起','a'],''],
+ ['cv','Hydrochlorothiazide','hctz thiazide 利尿','12.5–25 mg qd',e=>e>=30?ok():['效果差，改 loop 或 chlorthalidone','a'],'低鈉、高尿酸'],
+ ['cv','Chlorthalidone','thiazide 利尿','12.5–25 mg qd',e=>e>=15?ok('G4 仍有效'):['效果差','a'],'低鉀、低鈉'],
+ ['cv','Spironolactone','aldactone mra','12.5–25 mg qd',e=>e>=45?['K ≤5.0 可用','']:e>=30?['12.5 mg，密切驗 K','a']:['避免','s'],'高血鉀'],
+ ['cv','Finerenone','kerendia ns-mra','10–20 mg qd',e=>e>=60?['20 mg（K ≤4.8）','']:e>=25?['10 mg 起，4 週 K ≤4.8 加到 20','a']:['不新開','s'],'K &gt;5.0 不起始'],
+ ['cv','Digoxin','lanoxin 毛地黃','0.125–0.25 mg qd',e=>e>=50?['依濃度','']:['0.0625–0.125 mg 或隔日；驗濃度','a'],'低鉀增加毒性'],
+ ['cv','Rosuvastatin','crestor statin','5–20 mg qd',e=>e>=30?ok():['5 mg 起，上限 10 mg','a'],''],
+ ['cv','Atorvastatin','lipitor statin','10–80 mg qd',e=>ok(),'CKD 偏好的 statin 之一'],
+ ['cv','Fenofibrate','tricor lipanthyl fibrate','—',e=>e>=60?ok():e>=30?['減量','a']:['避免','s'],'會升 Cr'],
+ /* anticoagulants */
+ ['ac','Apixaban（AF）','eliquis doac 抗凝','5 mg bid',e=>e>=25?['5 mg；年齡 ≥80、體重 ≤60、Cr ≥1.5 三項中兩項時 2.5 mg','']:e>=15?['資料少；依上述條件','a']:['避免或依專科','s'],'',true],
+ ['ac','Rivaroxaban（AF）','xarelto doac 抗凝','20 mg qd 隨餐',e=>e>50?['20 mg','']:e>=15?['15 mg qd','a']:['避免','s'],'',true],
+ ['ac','Dabigatran（AF）','pradaxa doac 抗凝','150 mg bid',e=>e>50?['150 mg（高齡或出血風險 110）','']:e>=30?['110 mg bid','a']:['禁用','s'],'',true],
+ ['ac','Edoxaban（AF）','lixiana savaysa doac 抗凝','60 mg qd',e=>e>50?['60 mg','']:e>=15?['30 mg qd','a']:['避免','s'],'',true],
+ ['ac','Enoxaparin（治療）','clexane lmwh 抗凝','1 mg/kg q12h',e=>e>=30?ok():['1 mg/kg q24h','a'],'',true],
+ ['ac','Warfarin','coumadin 抗凝','依 INR',e=>ok('INR 較不穩'),'出血風險較高'],
+ /* pain and neuro */
+ ['pain','Acetaminophen','paracetamol panadol 普拿疼','500 mg q6h',e=>ok('≤3 g/日'),'CKD 止痛首選'],
+ ['pain','NSAID（含 COX-2）','ibuprofen naproxen diclofenac celecoxib 止痛 消炎','—',e=>e>=60?['短期、最低劑量','a']:e>=30?['避免長期使用','a']:['避免','s'],'外用貼布較安全'],
+ ['pain','Tramadol','ultram 止痛','50 mg q6h（≤400）',e=>e>=30?ok():['q12h，上限 200 mg/日','a'],'癲癇、血清素症候群'],
+ ['pain','Morphine、codeine','嗎啡 可待因 止痛','—',e=>e>=30?['減量','a']:['避免','s'],'代謝物蓄積'],
+ ['pain','Gabapentin','neurontin 神經痛','300 mg tid（≤3600）',e=>e>=60?['900–3600 mg/日','']:e>=30?['400–1400 mg/日','a']:e>=15?['200–700 mg/日','a']:['100–300 mg/日','s'],'嗜睡、跌倒',true],
+ ['pain','Pregabalin','lyrica 神經痛','75 mg bid（≤600）',e=>e>=60?['150–600 mg/日','']:e>=30?['75–300 mg/日','a']:e>=15?['25–150 mg/日','a']:['25–75 mg/日','s'],'',true],
+ ['pain','Duloxetine','cymbalta 神經痛 憂鬱','30–60 mg qd',e=>e>=30?ok():['避免','s'],''],
+ ['pain','Baclofen','lioresal 肌肉鬆弛','5–10 mg tid',e=>e>=60?ok():e>=30?['減量','a']:['避免','s'],'腎差易致腦病變'],
+ /* gout */
+ ['gout','Allopurinol','zyloric 痛風 降尿酸','起始 100 mg',e=>e>=30?['100 mg 起，慢加到尿酸目標','a']:['50 mg 起，慢加','a'],'漢人先驗 HLA-B*5801'],
+ ['gout','Febuxostat','feburic 痛風 降尿酸','40 mg qd',e=>e>=30?ok():['上限 40 mg（資料少）','a'],'心血管疾病者小心'],
+ ['gout','Benzbromarone','narcaricin 痛風 降尿酸','25–100 mg qd',e=>e>=30?['監測肝功能','']:['效果差','a'],'尿酸結石避免，多喝水'],
+ ['gout','Colchicine','秋水仙素 痛風','0.5 mg qd–bid',e=>e>=30?ok('留意交互作用'):['減量（如 0.5 mg 隔日）；急性發作 2 週內不重複療程','a'],'避免併用 clarithromycin',true],
+ /* antibiotics */
+ ['abx','Amoxicillin','抗生素 盤尼西林','500 mg tid／875 mg bid',e=>e>=30?ok():e>=10?['500 mg q12h；不用 875','a']:['500 mg q24h','s'],'',true],
+ ['abx','Amoxicillin/clavulanate','augmentin curam 抗生素','875/125 mg bid',e=>e>=30?ok():e>=10?['500/125 mg q12h','a']:['500/125 mg q24h','s'],'',true],
+ ['abx','Cephalexin','keflex 抗生素 頭孢','500 mg q6–8h',e=>e>=30?ok():e>=15?['250–500 mg q8–12h','a']:['250–500 mg q24h','s'],'',true],
+ ['abx','Cefuroxime（口服）','zinnat 抗生素 頭孢','250–500 mg bid',e=>e>=30?ok():e>=10?['同劑量 q24h','a']:['同劑量 q48h','s'],'',true],
+ ['abx','Levofloxacin','cravit 抗生素 quinolone','500–750 mg qd',e=>e>=50?ok():e>=20?['500 方案：首劑後 250 mg qd；750 方案：q48h','a']:['首劑後 250 mg q48h','s'],'QT、肌腱、老人譫妄',true],
+ ['abx','Ciprofloxacin','ciproxin 抗生素 quinolone','500 mg bid',e=>e>50?ok():e>=30?['250–500 mg q12h','a']:['250–500 mg q18–24h','a'],'',true],
+ ['abx','Clarithromycin','klaricid 抗生素 macrolide','500 mg bid',e=>e>=30?ok():['半量','a'],'交互作用多（statin、colchicine）',true],
+ ['abx','Azithromycin、doxycycline、metronidazole','抗生素','—',e=>ok(),''],
+ ['abx','Nitrofurantoin','macrobid 抗生素 膀胱炎','100 mg bid',e=>e>=30?ok():['避免','s'],'Beers：CrCl &lt;30 避免',true],
+ ['abx','TMP-SMX','baktar bactrim 抗生素','1 DS bid',e=>e>=30?ok():e>=15?['半量','a']:['避免','s'],'升 K、假性升 Cr',true],
+ /* antivirals, antifungals */
+ ['av','Valacyclovir（帶狀疱疹）','valtrex 抗病毒 皰疹','1 g tid',e=>e>=50?ok():e>=30?['1 g q12h','a']:e>=10?['1 g q24h','a']:['500 mg q24h','s'],'過量致神經毒性',true],
+ ['av','Acyclovir（帶狀疱疹）','zovirax 抗病毒 皰疹','800 mg 5 次/日',e=>e>25?ok():e>=10?['800 mg q8h','a']:['800 mg q12h','s'],'',true],
+ ['av','Famciclovir（帶狀疱疹）','famvir 抗病毒 皰疹','500 mg tid',e=>e>=60?ok():e>=40?['500 mg q12h','a']:e>=20?['500 mg q24h','a']:['250 mg q24h','s'],'',true],
+ ['av','Oseltamivir（治療）','tamiflu 克流感 流感','75 mg bid',e=>e>60?ok():e>30?['30 mg bid','a']:e>=10?['30 mg qd','a']:['依透析','s'],'',true],
+ ['av','Fluconazole','diflucan 抗黴菌','依適應症',e=>e>50?ok():['首劑後半量','a'],'QT、交互作用',true],
+ ['av','Terbinafine','lamisil 抗黴菌 灰指甲','250 mg qd',e=>e>=50?ok():['不建議','s'],'',true],
+ /* psych and neuro */
+ ['psy','Levetiracetam','keppra 抗癲癇','500–1500 mg bid',e=>e>80?ok():e>=50?['500–1000 mg bid','a']:e>=30?['250–750 mg bid','a']:['250–500 mg bid','a'],'',true],
+ ['psy','Memantine','ebixa 失智','10 mg bid',e=>e>=30?ok():['上限 5 mg bid','a'],'',true],
+ ['psy','Pramipexole（IR）','mirapex 巴金森 不寧腿','依適應症',e=>e>=60?ok():e>=35?['分 bid','a']:e>=15?['qd','a']:['避免','s'],'',true],
+ ['psy','Paroxetine','seroxat 憂鬱','20–50 mg qd',e=>e>=30?ok():['10 mg 起，上限 40 mg','a'],'',true],
+ ['psy','Escitalopram、sertraline','lexapro zoloft ssri 憂鬱','—',e=>e>=20?ok():['小心使用','a'],''],
+ ['psy','Bupropion','wellbutrin 戒菸 憂鬱','150 mg qd–bid',e=>e>=90?ok():['減量或減少次數','a'],'癲癇閾值'],
+ ['psy','Varenicline','champix 戒菸','1 mg bid',e=>e>=30?ok():['0.5 mg qd 起，上限 0.5 mg bid','a'],'',true],
+ ['psy','Lithium','鋰鹽','依濃度',e=>e>=60?['監測濃度、Cr','a']:['避免，與精神科討論','s'],'慢性間質性腎炎'],
+ /* gi */
+ ['gi','Famotidine','gaster h2 胃藥','20 mg bid',e=>e>=50?ok():['20 mg qd','a'],'老人譫妄',true],
+ ['gi','Metoclopramide','primperan 止吐','5–10 mg tid',e=>e>=60?ok():['半量','a'],'錐體外症狀'],
+ ['gi','PPI','omeprazole esomeprazole 胃藥','—',e=>ok('長期用注意間質性腎炎'),''],
+ ['gi','氧化鎂（MgO）','magnesium oxide 軟便 便秘','250–500 mg tid',e=>e>=30?['監測 Mg','a']:['避免','s'],'台灣常用軟便劑，高鎂血症'],
+ ['gi','磷酸鹽灌腸、磷酸鈉清腸','fleet enema 便秘 大腸鏡','—',e=>e>=60?['小心','a']:['避免','s'],'急性磷酸鹽腎病變'],
+ /* allergy, urology, bone */
+ ['other','Cetirizine','zyrtec 抗組織胺 過敏','10 mg qd',e=>e>=31?ok():e>=11?['5 mg qd','a']:['避免','s'],'',true],
+ ['other','Levocetirizine','xyzal 抗組織胺 過敏','5 mg qd',e=>e>80?ok():e>=50?['2.5 mg qd','a']:e>=30?['2.5 mg 隔日','a']:e>=10?['2.5 mg 每週兩次','a']:['禁用','s'],'',true],
+ ['other','Fexofenadine','allegra 抗組織胺 過敏','60 mg bid／180 mg qd',e=>e>=80?ok():['60 mg qd','a'],'',true],
+ ['other','Solifenacin','vesicare 膀胱過動','5–10 mg qd',e=>e>=30?ok():['上限 5 mg','a'],'',true],
+ ['other','Tolterodine','detrusitol 膀胱過動','2 mg bid',e=>e>=30?ok():['1 mg bid','a'],'',true],
+ ['other','Alendronate','fosamax 骨鬆','70 mg 每週',e=>e>=35?ok():['不建議','s'],'',true],
+ ['other','Zoledronic acid','aclasta 骨鬆','5 mg 每年',e=>e>=35?ok():['禁用','s'],'打前驗 Cr',true],
+ ['other','Denosumab','prolia 骨鬆','60 mg 每半年',e=>e>=30?ok():['不調整；嚴重低血鈣風險','a'],'補鈣與維生素 D'],
+];
+let cat='all';
+$('cats').innerHTML=CATS.map(c=>'<button type="button" class="chip" data-v="'+c[0]+'" aria-pressed="'+(c[0]==='all')+'">'+c[1]+'</button>').join('');
+$('cats').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{cat=b.dataset.v;$('cats').querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b));render();});
+const norm=s=>s.toLowerCase().replace(/[\s\-–／/、,，()（）]/g,'');
+function render(){
+  const e=V;$('cur').textContent=e;$('curSrc').textContent=src?'（'+src+'）':'（手動）';$('colV').textContent='腎功能 '+e;
+  const q=norm($('q').value),only=$('onlyAdj').checked;
+  let h='',last='',n=0;
+  D.forEach(r=>{
+    if(cat!=='all'&&r[0]!==cat)return;
+    if(q&&!norm(r[1]+r[2]+r[5]+(CATS.find(c=>c[0]===r[0])||['',''])[1]).includes(q))return;
+    const [t,f]=r[4](e);if(only&&!f)return;
+    if(cat==='all'&&r[0]!==last){last=r[0];h+='<tr class="cat"><td colspan="4">'+CATS.find(c=>c[0]===r[0])[1]+'</td></tr>';}
+    n++;
+    h+='<tr class="'+(f==='s'?'s':'')+'"><th>'+r[1]+(r[6]?'<span class="pill" title="仿單以 Cockcroft-Gault CrCl 定義">CrCl</span>':'')+'</th><td data-l="一般">'+r[3]+'</td><td data-l="腎功能 '+e+'" class="v '+(f||'ok')+'">'+t+'</td>'+(r[5]?'<td data-l="注意">'+r[5]+'</td>':'<td></td>')+'</tr>';
+  });
+  $('tb').innerHTML=h||'<tr><td colspan="4" class="empty">找不到符合的藥物。</td></tr>';
+}
+['age','sex','wt','ht','cr'].forEach(id=>{$(id).addEventListener('input',calc);$(id).addEventListener('change',calc);});
+$('slider').addEventListener('input',()=>{V=+$('slider').value;src='';$('res').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));render();});
+$('q').addEventListener('input',render);$('onlyAdj').addEventListener('change',render);
+/* #45 in the URL sets the kidney function directly (e.g. linked from a topic page) */
+const hv=parseInt(location.hash.slice(1),10);
+calc();
+if(hv>=5&&hv<=120){V=hv;src='';$('slider').value=hv;$('res').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));render();}
+window.__rd={count:D.length};
+})();
+</script>
+</body>
+</html>

@@ -233,7 +233,8 @@ const ZONES = [
      {k:"第三專區 · 慢性腎臟病", t:"慢性腎臟病門診實務", note:"eGFR 計算與 G/A 熱圖、KFRE、Early CKD／Pre-ESRD 收案判斷；四大支柱處方產生器（含健保 2.16 SGLT2i 條件）、腎劑量表、高血鉀處理、追蹤排程與轉診。另有門診模式速查。", stage:"sprout", url:"clinic/ckd.html", go:"進入專區"},
      {k:"第四專區 · 血脂異常", t:"血脂異常門診實務", note:"報告判讀與 FH 篩檢；健保 115/9/1 表一六級風險分級器、照表一走的處方產生器（statin 強度、ezetimibe 時機、PCSK9 路徑）、表一／表二品項查詢、交互作用速查、追蹤排程。另有門診模式速查。", stage:"sprout", url:"clinic/dyslipidemia.html", go:"進入專區"},
      {k:"第五專區 · 常見皮膚疾病", t:"常見皮膚疾病門診實務", note:"從病灶型態、位置、有沒有對準毛囊、癢或痛來鑑別：鑑別器、人形圖部位反查、易混淆對照、26 種疾病圖譜卡；處方產生器、台灣外用類固醇強度表與指尖單位、抗黴菌與複方藥膏。另有門診模式速查。", stage:"sprout", url:"clinic/skin.html", go:"進入專區"},
-     {k:"第六專區 · 戒菸", t:"戒菸門診實務", note:"國健署戒菸服務收案判斷、FTND 與包年（LDCT 資格）、照戒菸用藥原則的處方產生器：varenicline、尼古丁合併、bupropion 與合併條件；補助品項、戒菸後要調的藥、8 週療程排程與衛教單張。", stage:"sprout", url:"clinic/smoking.html", go:"進入專區"}]},
+     {k:"第六專區 · 戒菸", t:"戒菸門診實務", note:"國健署戒菸服務收案判斷、FTND 與包年（LDCT 資格）、照戒菸用藥原則的處方產生器：varenicline、尼古丁合併、bupropion 與合併條件；補助品項、戒菸後要調的藥、8 週療程排程與衛教單張。", stage:"sprout", url:"clinic/smoking.html", go:"進入專區"},
+     {k:"診間桌上 · 工具箱", t:"門診工具箱", note:"走進門診、看著桌上的紅色工具箱按 E 打開。第一件工具：常見藥物腎劑量（CrCl／eGFR 計算、80 多種常用藥的減量與避免、搜尋與類別篩選）。", stage:"sprout", url:"clinic/toolbox/", go:"打開工具箱"}]},
   {id:"study", name:"書齋涼亭", sub:"USMLE・期刊", color:"#9a8bd0",
    desc:"坐下來讀書的涼亭：考試準備與期刊報告。", items:[
      {t:"ARM 技術與乳癌術後淋巴水腫", stage:"fruit", note:"住院醫師 Journal Club 報告。"},
@@ -247,6 +248,7 @@ const ZONES = [
    desc:"門診與讀書用的小工具。", items:[]},
   {id:"journal", name:"小徑日誌", sub:"更新紀錄", color:"#c77fa0",
    desc:"沿著小徑記下花園的變化。", items:[], log:[
+     ["2026-11-14","門診的桌上放了紅色工具箱：門診工具箱開張，第一件工具是常見藥物腎劑量。"],
      ["2026-11-12","門診實務新增第三專區：慢性腎臟病。"],
      ["2026-11-12","門診實務新增第二專區：糖尿病。"],
      ["2026-11-12","觀星台開放：第一張星圖「家醫星圖」，把秋季會深入頁的概念連成星座。"],
@@ -358,16 +360,16 @@ const camera=new THREE.PerspectiveCamera(70,1,0.05,600); camera.rotation.order="
 let seed=20261112;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
 
 /* ---------- blocks ---------- */
-const B={AIR:0,GRASS:1,DIRT:2,STONE:3,BRICK:4,PATH:5,SAND:6,LOG:7,PLANKS:8,LEAVES:9,BIRCH:10,GLASS:11,WATER:12,QUARTZ:13,TERRA:14,RED:15,WHITE:16,BOOK:17,FARM:18,PUMPKIN:19,BLEAVES:20,HEDGE:21,F_RED:22,F_YEL:23,F_WHT:24,F_PUR:25,TALL:26,LAMP:27,PURPLE:28};
+const B={AIR:0,GRASS:1,DIRT:2,STONE:3,BRICK:4,PATH:5,SAND:6,LOG:7,PLANKS:8,LEAVES:9,BIRCH:10,GLASS:11,WATER:12,QUARTZ:13,TERRA:14,RED:15,WHITE:16,BOOK:17,FARM:18,PUMPKIN:19,BLEAVES:20,HEDGE:21,F_RED:22,F_YEL:23,F_WHT:24,F_PUR:25,TALL:26,LAMP:27,PURPLE:28,TOOLBOX:29};
 // [top, side, bottom] tile index in the atlas
-const TILES={1:[0,1,2],2:[2,2,2],3:[3,3,3],4:[4,4,4],5:[5,5,2],6:[6,6,6],7:[8,7,8],8:[9,9,9],9:[10,10,10],10:[12,11,12],11:[13,13,13],12:[14,14,14],13:[15,15,15],14:[16,16,16],15:[17,17,17],16:[18,18,18],17:[9,19,9],18:[20,2,2],19:[22,21,22],20:[23,23,23],21:[24,24,24],22:[25],23:[26],24:[27],25:[28],26:[29],27:[30,30,30],28:[31,31,31]};
+const TILES={1:[0,1,2],2:[2,2,2],3:[3,3,3],4:[4,4,4],5:[5,5,2],6:[6,6,6],7:[8,7,8],8:[9,9,9],9:[10,10,10],10:[12,11,12],11:[13,13,13],12:[14,14,14],13:[15,15,15],14:[16,16,16],15:[17,17,17],16:[18,18,18],17:[9,19,9],18:[20,2,2],19:[22,21,22],20:[23,23,23],21:[24,24,24],22:[25],23:[26],24:[27],25:[28],26:[29],27:[30,30,30],28:[31,31,31],29:[32,33,33]};
 // kind: 0 opaque, 1 cutout (leaves), 2 translucent (glass, water), 3 cross plant
 const KIND=new Uint8Array(32); KIND[9]=KIND[20]=1; KIND[11]=KIND[12]=2; for(let i=22;i<=26;i++)KIND[i]=3;
 const OPQ=new Uint8Array(32), SOLID=new Uint8Array(32), OCC=new Uint8Array(32);
-for(let i=1;i<=28;i++){OPQ[i]=KIND[i]===0?1:0; SOLID[i]=(i!==B.WATER&&KIND[i]!==3)?1:0; OCC[i]=(KIND[i]===0||KIND[i]===1)?1:0}
+for(let i=1;i<=29;i++){OPQ[i]=KIND[i]===0?1:0; SOLID[i]=(i!==B.WATER&&KIND[i]!==3)?1:0; OCC[i]=(KIND[i]===0||KIND[i]===1)?1:0}
 
 /* ---------- pixel textures, drawn in code ---------- */
-const ROWS=2;
+const ROWS=3;
 function makeAtlas(){
   const c=document.createElement("canvas");c.width=256;c.height=16*ROWS;const x=c.getContext("2d");
   let s=4242;const r=()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296};
@@ -406,6 +408,10 @@ function makeAtlas(){
   noise(30,["#ffe9a8","#ffd874","#fff3c8"]);for(let i=0;i<16;i++){px(30,i,0,"#b98a2e");px(30,i,15,"#b98a2e");px(30,0,i,"#b98a2e");px(30,15,i,"#b98a2e")}
   noise(31,["#7b5a9f","#6f5092","#8766ab"]);
   for(let i=1;i<15;i++){if(r()<.25)continue;const h=4+((r()*9)|0);for(let j=16-h;j<16;j++)px(29,i,j,r()<.5?"#5c9a3e":"#79b955")}
+  // 32-33: the red toolbox on the clinic desk (top with a handle, side with a latch and a white cross)
+  noise(32,["#c23a2e","#b5352a","#cc4436"]);for(let i=3;i<13;i++){px(32,i,7,"#5a5a5a");px(32,i,8,"#8a8a8a")}for(const i of [3,12]){px(32,i,6,"#5a5a5a");px(32,i,9,"#5a5a5a")}
+  noise(33,["#c23a2e","#b5352a","#cc4436"]);for(let i=0;i<16;i++){px(33,i,0,"#7e2219");px(33,i,4,"#7e2219");px(33,i,15,"#7e2219")}for(const [i,j] of [[7,3],[8,3],[7,4],[8,4],[7,5],[8,5]])px(33,i,j,"#c9c9c4");
+  for(let j=7;j<14;j++){px(33,7,j,"#f6f6f2");px(33,8,j,"#f6f6f2")}for(let i=4;i<12;i++){px(33,i,10,"#f6f6f2");px(33,i,9,i>5&&i<10?"#f6f6f2":"#c23a2e")}
   const tex=new THREE.CanvasTexture(c);tex.magFilter=THREE.NearestFilter;tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;tex.encoding=THREE.sRGBEncoding;return tex;
 }
 const atlas=makeAtlas();
@@ -442,7 +448,9 @@ const BUILD={
   herb(put,box){for(const w of [-3,0,3]){box(-3,3,1,1,w,w,B.DIRT);put(-3,1,w,B.LOG);put(3,1,w,B.LOG);for(let u=-2;u<=2;u++)put(u,2,w,(u+w+9)&1?B.F_PUR:B.TALL)}return banner(put,box)},
   clinic(put,box){box(-3,3,0,0,-3,2,B.QUARTZ);box(-3,3,1,4,-3,-3,B.WHITE);box(-3,3,1,4,2,2,B.WHITE);box(-3,-3,1,4,-3,2,B.WHITE);box(3,3,1,4,-3,2,B.WHITE);
     box(0,0,1,2,2,2,0);box(2,2,2,3,2,2,B.GLASS);box(-3,-3,2,3,-1,0,B.GLASS);box(3,3,2,3,-1,0,B.GLASS);
-    box(-2,-2,1,3,2,2,B.RED);put(-1,2,2,B.RED);put(-3,2,2,B.RED);box(-4,4,5,5,-4,3,B.RED);return{y:4,w:2}},
+    box(-2,-2,1,3,2,2,B.RED);put(-1,2,2,B.RED);put(-3,2,2,B.RED);box(-4,4,5,5,-4,3,B.RED);
+    put(-1,1,-2,B.LOG);put(1,1,-2,B.LOG);put(0,1,-2,B.PLANKS);put(0,2,-2,B.TOOLBOX);put(-1,2,-2,B.BOOK);put(0,4,-3,B.LAMP); // the desk, with the toolbox on it
+    return{y:4,w:2,props:[[0,2,-2,"toolbox"]]}},
   study(put,box){box(-4,4,0,0,-4,4,B.PLANKS);for(const [u,w] of [[-3,-3],[3,-3],[-3,3],[3,3]])box(u,u,1,3,w,w,B.LOG);
     box(-4,4,4,4,-4,4,B.PURPLE);box(-3,3,5,5,-3,3,B.PURPLE);box(-2,2,6,6,-2,2,B.PURPLE);box(-1,1,7,7,-1,1,B.PURPLE);put(0,8,0,B.LAMP);
     box(-2,2,1,2,-3,-3,B.BOOK);put(0,1,-1,B.PLANKS);return{y:4,w:4}},
@@ -456,6 +464,9 @@ const BUILD={
   journal(put,box){for(let i=-4;i<=4;i++)put(Math.round(Math.sin(i*0.9)*2),0,i,B.BRICK);
     box(-1,1,1,1,-4,-4,B.PLANKS);put(-2,1,-4,B.LOG);put(2,1,-4,B.LOG);put(3,1,-2,B.BOOK);box(-3,-3,1,2,2,2,B.LOG);put(-3,3,2,B.LAMP);put(3,1,1,B.F_WHT);put(-3,1,-1,B.F_RED);return banner(put,box)}
 };
+// Things you can open from inside a building: look at the block and press E.
+const PROP_DEF={toolbox:{name:"門診工具箱",url:"clinic/toolbox/"}};
+const PROPS=[];
 function buildZones(){
   ZG.forEach((zg,k)=>{
     const bx=Math.floor(zg.cx),bz=Math.floor(zg.cz);
@@ -463,6 +474,7 @@ function buildZones(){
     const put=(u,y,w,b)=>set(bx+u*rx+w*fx,G+y,bz+u*rz+w*fz,b);
     const box=(u0,u1,y0,y1,w0,w1,b)=>{for(let u=u0;u<=u1;u++)for(let y=y0;y<=y1;y++)for(let w=w0;w<=w1;w++)put(u,y,w,b)};
     const S=(BUILD[ZONES[k].id]||banner)(put,box);
+    (S.props||[]).forEach(([u,y,w,id])=>{const p=PROP_DEF[id];PROPS.push(Object.assign({x:bx+u*rx+w*fx,y:G+y,z:bz+u*rz+w*fz,zone:k},p))});
     zg.sign={x:bx+.5+(S.w+.53)*fx,y:G+S.y+.5,z:bz+.5+(S.w+.53)*fz,ry:Math.atan2(fx,fz)};
   });
 }
@@ -717,7 +729,8 @@ document.getElementById("tourBtn").addEventListener("click",()=>{if(tourOn){stop
 
 /* ---------- zones: labels and entering ---------- */
 let nearZone=-1;const promptEl=document.getElementById("prompt");
-function enter(k){if(auto&&!auto.tour)auto=null;try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}for(const c in keys)keys[c]=false;openZone(ZONES[k].id)}
+function enter(k){if(k>=ZN){const p=PROPS[k-ZN];try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}location.href=p.url;return}
+  if(auto&&!auto.tour)auto=null;try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}for(const c in keys)keys[c]=false;openZone(ZONES[k].id)}
 promptEl.addEventListener("click",()=>{if(nearZone>=0)enter(nearZone)});
 const signs=[];
 function makeSigns(){
@@ -794,10 +807,11 @@ function frame(now){
   let best=-1;
   {const cp=Math.cos(P.pitch),dx=-Math.sin(P.yaw)*cp,dy=Math.sin(P.pitch),dz=-Math.cos(P.yaw)*cp,ex=P.x,ey=P.y+eyeH,ez=P.z;
    for(let t=0.3;t<18&&best<0;t+=0.15){const x=ex+dx*t,y=ey+dy*t,z=ez+dz*t,b=get(Math.floor(x),Math.floor(y),Math.floor(z));
+     if(b===B.TOOLBOX&&t<7){const i=PROPS.findIndex(p=>p.x===Math.floor(x)&&p.y===Math.floor(y)&&p.z===Math.floor(z));if(i>=0){best=ZN+i;break}}
      if(b&&b!==B.WATER&&KIND[b]!==3){for(let k=0;k<ZN;k++)if(Math.hypot(x-ZG[k].cx,z-ZG[k].cz)<PLAT+0.4){best=k;break}break}}
    if(best<0)for(let k=0;k<ZN;k++)if(Math.hypot(P.x-ZG[k].cx,P.z-ZG[k].cz)<PLAT-1)best=k}
   document.getElementById("cross").classList.toggle("on",best>=0);
-  if(best!==nearZone){nearZone=best;if(best<0)promptEl.style.display="none";else{promptEl.style.display="block";promptEl.innerHTML=(TOUCH?"":"<kbd>E／點擊</kbd>")+"進入："+esc(ZONES[best].name)}}
+  if(best!==nearZone){nearZone=best;if(best<0)promptEl.style.display="none";else{promptEl.style.display="block";promptEl.innerHTML=(TOUCH?"":"<kbd>E／點擊</kbd>")+(best>=ZN?"打開："+esc(PROPS[best-ZN].name):"進入："+esc(ZONES[best].name))}}
   if(!started||uiOpen()||auto)promptEl.style.display="none";else if(nearZone>=0)promptEl.style.display="block";
   renderer.render(scene,camera);
   requestAnimationFrame(frame);
@@ -811,7 +825,7 @@ setTimeout(()=>{
   {const g=new THREE.BufferGeometry(),p=[];LAMPS.forEach(l=>p.push(l[0],l[1],l[2]));g.setAttribute("position",new THREE.Float32BufferAttribute(p,3));glowPts=new THREE.Points(g,glowMat);glowPts.frustumCulled=false;scene.add(glowPts)}
   updateSky();setInterval(updateSky,60000);applyQ();
   loadingEl.remove();startEl.hidden=false;
-  window.__yc={P,get,G,ZG,LAMPS,start:()=>startEl.click(),autoWalk,startTour,setView,state:()=>({auto:!!auto,tourOn,tourI,Q,view,started})};
+  window.__yc={P,get,G,ZG,LAMPS,PROPS,start:()=>startEl.click(),autoWalk,startTour,setView,state:()=>({auto:!!auto,tourOn,tourI,Q,view,started})};
   requestAnimationFrame(frame);
   const hsh=location.hash.slice(1);if(ZONES.some(z=>z.id===hsh))openZone(hsh,true);
 },30);

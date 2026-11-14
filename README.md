@@ -11,6 +11,7 @@ facilitate med learning...
 | `index.html` | ycjacademy 方塊花園：Minecraft 風的 3D 世界。電腦用 WASD＋滑鼠，手機用搖桿；準星對著區域按 E 進入。左上角選單有導覽模式、區域列表、地圖與設定 |
 | `islands/` | 展覽會場第一檔：家醫群島（台灣家庭醫學醫學會 115 年度秋季學術研討會） |
 | `clinic/` | 門診實務：`index.html` 目錄、`hypertension.html` 高血壓、`diabetes.html` 糖尿病、`ckd.html` 慢性腎臟病、`dyslipidemia.html` 血脂異常、`skin.html` 常見皮膚疾病 |
+| `clinic/toolbox/` | 門診工具箱（花園裡門診建築內、桌上的紅色工具箱，看著它按 E 打開）：`index.html` 目錄、`renal-dose.html` 常見藥物腎劑量 |
 | `clinic/_kit/` | 門診共用套件：`kit.html`（STEP／部分收合、衛教單張產生器、插圖）＋每個主題一個 `<主題>.config.js` |
 | `scripts/add_kit.py` | 把 config＋套件裝進門診頁：`python3 scripts/add_kit.py clinic/<主題>.html`（可重複執行） |
 | `scripts/sync_clinic.py` | 從 claude.ai artifact 複製新版門診頁後，跑這支把站內連結改成相對路徑 |

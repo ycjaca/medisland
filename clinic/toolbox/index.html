@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>門診工具箱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* The toolbox on the clinic desk: small calculators and look-up tables used across topics. Same light handbook look as clinic/index.html. */
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef; --card:#ffffff; --ink:#22261f; --mute:#5d6258; --line:#dad8cd; --red:#bb3f26;
+  --display:"LXGW WenKai TC","Noto Sans TC",serif; --body:"Noto Sans TC","PingFang TC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header{background:var(--ink);color:#f3f1e8;padding:22px 0 20px}
+.crumb{font:13px var(--mono);color:#c2bfa9}
+.crumb a{color:inherit}
+h1{font:700 32px/1.3 var(--display);margin:4px 0 6px}
+header p{margin:0;color:#dcd9cb;font-size:15px}
+main.wrap{padding:22px 16px 50px;display:flex;flex-direction:column;gap:14px}
+a.card{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:start;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:6px;padding:16px 18px}
+a.card:hover{border-color:var(--c)}
+a.card:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.ico{grid-row:span 2;width:40px;height:40px}
+.card h2{margin:0;font:700 22px/1.35 var(--display)}
+.card p{margin:0;color:var(--mute);font-size:14.5px}
+.slot{border:1px dashed var(--line);border-radius:6px;padding:14px 18px;color:var(--mute);font-size:14.5px}
+.note{font-size:13px;color:var(--mute);margin:6px 0 0}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="crumb"><a href="../../">ycjacademy</a>／<a href="../">門診實務</a>／工具箱</div>
+  <h1>門診工具箱</h1>
+  <p>放在診間桌上的工具：跨主題都會用到的計算器與速查表。</p>
+</div></header>
+<main class="wrap">
+  <a class="card" href="renal-dose.html" style="--c:#7a2f4f">
+    <svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><path d="M15 6c-6 0-10 6-10 14s4 14 10 14c4 0 6-3 6-7 0-3-3-4-3-7s3-4 3-7c0-4-2-7-6-7z" fill="#7a2f4f"/><rect x="24" y="12" width="12" height="18" rx="3" fill="#f4e3ea" stroke="#7a2f4f" stroke-width="2"/><path d="M27 18h6M27 23h6" stroke="#7a2f4f" stroke-width="2"/></svg>
+    <h2>常見藥物腎劑量</h2>
+    <p>輸入年齡、體重、Cr 算 CrCl 與 eGFR，一次看 80 多種家醫門診常用藥要不要減量、停用；可搜尋、依類別篩選。</p>
+  </a>
+  <div class="slot">之後放進來的工具會排在這裡。</div>
+  <p class="note">內容仍在製作中，劑量請以最新仿單與院內處方集為準。</p>
+</main>
+</body>
+</html>
