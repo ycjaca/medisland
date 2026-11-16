@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>門診速查｜SOAP 與處方模板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--accent:#0f6f6a;--accent-soft:#e6f2f0;--body:"Noto Sans TC",system-ui,sans-serif;--display:"LXGW WenKai TC","Noto Sans TC",sans-serif;--bg:#f6f5f1;--card:#fff;--ink:#1d2328;--mute:#5d666e;--line:#dcd9d0;--acc:#0f6f6a;--acc2:#e6f2f0;--warn:#a14a12;--warnbg:#fbefe4;--add:#5a3d99;--addbg:#efeafa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans TC",system-ui,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 14px 8px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:18px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+h1 small{font-size:12px;color:var(--mute);font-weight:400}
+#q{width:100%;font:inherit;font-size:17px;padding:11px 14px;border:2px solid var(--acc);border-radius:10px;background:#fff;outline:none}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 11px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.cats .chip{font-size:13px;color:var(--mute)}
+.cats .chip.on{color:#fff}
+main{padding:12px 14px 60px}
+.notice{background:var(--warnbg);border:1px solid #efd3bb;border-radius:10px;padding:8px 12px;font-size:14px;margin-bottom:12px}
+.notice summary{cursor:pointer;color:var(--warn);font-weight:700}
+.notice ol{margin:6px 0 4px;padding-left:20px}
+.count{font-size:13px;color:var(--mute);margin:4px 2px 8px}
+details.card{scroll-margin-top:170px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+details.card>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:10px;align-items:baseline}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::before{content:"▸";color:var(--acc);flex:none;transition:transform .15s}
+details.card[open]>summary::before{transform:rotate(90deg)}
+.ttl{font-weight:700}
+.sub{font-size:13px;color:var(--mute);display:block;font-weight:400}
+.badge{font-size:11px;padding:1px 7px;border-radius:99px;background:var(--addbg);color:var(--add);margin-left:6px;font-weight:500;white-space:nowrap}
+.body{padding:0 14px 14px}
+.codes{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px}
+.code{font:500 13px "IBM Plex Mono",monospace;background:var(--acc2);color:var(--acc);border:1px solid #bfdcd8;border-radius:6px;padding:2px 7px;cursor:pointer}
+.codes .lbl{font-size:12px;color:var(--mute);align-self:center}
+textarea{width:100%;font:13.5px/1.55 "IBM Plex Mono",monospace;border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfbf9;color:var(--ink);resize:vertical;white-space:pre-wrap;word-break:break-word}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+button.b{font:inherit;font-size:14px;border-radius:8px;padding:7px 13px;cursor:pointer;border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.b.o{background:#fff;color:var(--acc)}
+button.b.g{background:#fff;color:var(--mute);border-color:var(--line)}
+ul.notes{margin:10px 0 4px;padding-left:20px;font-size:15px}
+ul.notes li{margin:3px 0}
+ul.notes li.indent{list-style:circle;margin-left:14px}
+.tbl{overflow-x:auto;margin:6px 0}
+table{border-collapse:collapse;font-size:13px;min-width:460px}
+th,td{border:1px solid var(--line);padding:4px 7px;text-align:left}
+th{background:var(--acc2)}
+.src{font-size:12.5px;color:var(--mute);margin-top:6px}
+.see{font-size:14px;margin-top:8px}
+.see a{color:var(--acc);margin-right:10px}
+.empty{color:var(--mute);padding:20px 4px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:99px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#toast.show{opacity:.92}
+
+.tabs{display:flex;gap:6px;margin:0 0 8px}
+.tab{flex:1;font:inherit;font-size:15px;font-weight:700;padding:8px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--mute);cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+body.vgen .tplonly{display:none} body.vtpl .genonly{display:none}
+details.blk{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:0 12px 12px}
+details.blk>summary{cursor:pointer;font-weight:700;padding:11px 0 8px;list-style:none}
+details.blk>summary::-webkit-details-marker{display:none}
+details.blk>summary::before{content:"▸ ";color:var(--acc)}
+details.blk[open]>summary::before{content:"▾ "}
+details.mblk{border-left:5px solid var(--mc)}
+details.mblk>summary{color:var(--mc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+.fld{display:flex;flex-direction:column;font-size:13px;color:var(--mute)}
+.fld input,.fld select{font:inherit;font-size:16px;color:var(--ink);padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:#fbfbf9;margin-top:2px;min-width:0;width:100%}
+.tgs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.tg{display:inline-flex;align-items:center;cursor:pointer;font-size:14px}
+.tg input{position:absolute;opacity:0;pointer-events:none}
+.tg span{border:1px solid var(--line);border-radius:99px;padding:4px 11px;background:#fff}
+.tg input:checked+span{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tg input:focus-visible+span{outline:2px solid var(--acc);outline-offset:2px}
+.mods .tg span{font-size:15px;padding:7px 14px;font-weight:500}
+.mods .tg input:checked+span{background:var(--mc);border-color:var(--mc)}
+.pe{margin-top:8px}.pe1 span{font-size:13px;border-style:dashed}
+.pe1 input:checked+span{border-style:solid}
+.sm{font-size:12.5px;color:var(--mute)}
+ul.wl{background:var(--warnbg);border:1px solid #efd3bb;border-radius:10px;padding:8px 12px 8px 28px;margin:0 0 8px;font-size:14px;color:#6b3410}
+ul.wl li{margin:2px 0}
+#gout{white-space:pre-wrap}
+details.sub2{margin-top:8px}details.sub2>summary{cursor:pointer;color:var(--acc);font-size:14px}
+
+#genHandout{margin-top:6px}
+#genHandout .part{background:var(--ink);color:#fff;border-radius:10px;padding:9px 14px;font-weight:700;margin:4px 0 8px}
+#genHandout .part span span{font-size:12px;opacity:.75;margin-right:8px;font-weight:400}
+#genHandout section{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+#genHandout .no{font:12px "IBM Plex Mono",monospace;color:var(--acc)}
+#genHandout h2{font:700 18px/1.4 var(--display);margin:2px 0 8px}
+#genHandout .tool{margin-top:6px}
+footer{font-size:12.5px;color:var(--mute);border-top:1px solid var(--line);padding-top:10px;margin-top:20px}
+footer a{color:var(--acc)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>門診速查 <small>SOAP＋處方 · v0.3 · 2026-11-16</small></h1>
+  <div class="tabs"><button class="tab" data-tab="gen">慢性病 SOAP 產生器</button><button class="tab" data-tab="tpl">模板＋主訴查詢</button></div>
+  <div class="tplonly">
+  <input id="q" type="search" placeholder="輸入 CKD、chest pain、URI、發燒、痛風…" autocomplete="off">
+  <div class="chips" id="quick"></div>
+  <div class="chips cats" id="cats"></div>
+  </div>
+</div></header>
+<main><div class="wrap">
+  <div class="genonly"><div class="notice" style="margin-bottom:10px">勾選病人狀況與慢性病，SOAP、處方、下次回診抽血會自動產生。規則依門診實務各專區與健保規定，劑量與條件請依院內品項核對；理學檢查只勾實際有做的。最下面可以產生給病人的衛教單張。</div><div id="gen"></div><div id="genHandout"></div></div>
+  <div class="tplonly">
+  <details class="notice"><summary>使用前請讀：病歷要照實際看診修改</summary><ol id="rules"></ol></details>
+  <details class="card" id="skel"><summary><span class="ttl">共用 SOAP 骨架<span class="sub">每次先貼這段，再貼診斷專屬段落</span></span></summary>
+    <div class="body"><textarea id="skelTa" rows="12" spellcheck="false"></textarea>
+    <div class="btns"><button class="b" data-copy="skelTa">複製骨架</button></div></div></details>
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+  </div>
+  <footer>
+    模板來源：Ray 提供的〈台灣家醫科門診快速病歷模板集（2026 年 11 月版）〉第 1–26 則；標「Claude 補寫」的卡片原檔沒有或被截斷。SOAP 產生器的處方規則沿用門診實務高血壓、糖尿病、血脂、CKD、戒菸專區與健保表一（115/9/1），減重針依 TFDA 仿單；都請核對後再用。
+    劑量以一般成人、腎功能正常為預設；健保規定、ICD 版本會更新，使用前以健保署與疾管署最新公告為準。<br>
+    慢性病完整的決策流程與處方產生器：<a href="../">門診實務</a>。本頁不儲存任何資料，請勿輸入病人個資。
+  </footer>
+</div></main>
+<div id="toast"></div>
+<script>
+const D=[{"n": 1, "cat": "A. 呼吸道／耳鼻喉", "title": "急性上呼吸道感染 Acute URI", "codes": "J06.9", "soap": "S: Rhinorrhea, sore throat, cough [ ] days; [with/without] fever. Denied dyspnea, chest pain, otalgia.\nO: Pharynx [mild injected], tonsils [not enlarged, no exudate]. Neck LAP [-]. Lungs: clear, no wheeze/crackles.\nA: Acute upper respiratory infection (J06.9)\nP: Acetaminophen 500 mg 1# QID PRN fever/pain x 3 days\n   Cetirizine 10 mg 1# QD x 3 days (或 chlorpheniramine 4 mg 1# TID)\n   Dextromethorphan 15 mg 1# TID x 3 days (乾咳時)\n   No antibiotics indicated. Return if fever >3 days, dyspnea, otalgia.\n", "notes": ["重點：病毒性為主，不需抗生素；健保抗生素管理會監測上呼吸道感染的抗生素使用率。Red flags：呼吸窘迫、SpO2 < 94%、高燒超過 3 天、頸部僵硬。", "衛教：「這是病毒感冒，抗生素沒有用，多喝水休息，3 到 7 天會慢慢好。」不需常規回診。"], "src": "CDC Adult Outpatient Treatment Recommendations；AAFP。", "alias": "uri 上感 感冒 上呼吸道 common cold j06.9 流鼻水 喉嚨痛 fever 發燒", "id": "t1"}, {"n": 2, "cat": "A. 呼吸道／耳鼻喉", "title": "急性咽炎／扁桃腺炎", "codes": "J02.9；鏈球菌 J02.0；扁桃腺炎 J03.90；鏈球菌扁桃腺炎 J03.00", "soap": "S: Sore throat [ ] days, odynophagia. Fever [ ]. Cough [absent/present].\nO: Tonsils [grade ], exudate [+/-]. Tender anterior cervical LAP [+/-]. Centor/McIsaac score: ___.\n   Uvula midline, no trismus, no muffled voice.\nA: Acute [pharyngitis/tonsillitis] ([J02.9/J03.90]) / Streptococcal (J02.0/J03.00) if RADT(+)\nP: (Strep likely/confirmed) Amoxicillin 500 mg 1# BID x 10 days\n   (PCN allergy, non-anaphylaxis) Cephalexin 500 mg 1# BID x 10 days\n   (Anaphylaxis) Azithromycin 500 mg D1 then 250 mg QD D2-5\n   Ibuprofen 400 mg 1# TID PC PRN x 3 days.\n", "notes": ["重點：IDSA 建議，Centor ≥ 3 時做快篩／培養再給抗生素。Red flags：扁桃腺周圍膿瘍（牙關緊閉、懸雍垂偏移、熱馬鈴薯音）、流口水、呼吸道阻塞，應轉耳鼻喉科或急診。", "陷阱：EBV 單核球症給 amoxicillin 會起疹；年輕人如合併脾大、後頸淋巴結腫大，要先想到 EBV。"], "src": "IDSA GAS pharyngitis guideline 2012。", "alias": "pharyngitis tonsillitis 咽炎 喉嚨痛 扁桃腺 strep centor sore throat", "id": "t2"}, {"n": 3, "cat": "A. 呼吸道／耳鼻喉", "title": "急性支氣管炎", "codes": "J20.9", "soap": "S: Cough [ ] days, [productive/dry], no dyspnea. Fever [none/low-grade].\nO: Lungs: [scattered rhonchi], no crackles. RR ___, SpO2 ___%.\nA: Acute bronchitis (J20.9)\nP: Acetylcysteine 600 mg 1# QD 或 Ambroxol 30 mg 1# TID x 5 days\n   (Wheeze) Salbutamol MDI 100 mcg 2 puffs Q6H PRN\n   CXR if HR>100, RR>24, BT>38, or focal chest signs (r/o pneumonia).\n", "notes": ["咳嗽可持續 2 到 3 週，不需抗生素。若合併氣喘或 COPD，改用對應的急性惡化模板。"], "src": "ACCP cough guideline；CDC。", "alias": "bronchitis 支氣管炎 咳嗽 cough", "id": "t3"}, {"n": 4, "cat": "A. 呼吸道／耳鼻喉", "title": "流行性感冒", "codes": "未分型 J11.1；快篩確認 A/B 型 J10.1；合併肺炎 J10.00／J11.00", "soap": "S: Abrupt fever ___°C, myalgia, headache, cough since [ ] (onset < 48 h: [Y/N]). Contact: [ ].\nO: Lungs [clear]. Flu rapid test: [A+/B+/neg/not done].\nA: Influenza ([J10.1 confirmed / J11.1 clinical])\nP: Oseltamivir 75 mg 1# BID x 5 days (CrCl 30-60: 30 mg BID)\n   公費身分: [<5y/≥65y/孕婦或產後2週內/高風險慢性病/肥胖/擴大用藥族群: ___]\n   Acetaminophen 500 mg PRN. Return if dyspnea, chest pain, altered consciousness.\n", "notes": ["給付：流感抗病毒藥**不在健保給付範圍**，僅符合疾管署公費條件者可公費使用，其餘自費。疾管署會視疫情公告「擴大用藥條件」的期間，例如 2026/8/24–9/30 納入有類流感症狀的醫事防疫人員、長照機構、托育人員、學生等高傳播族群。疾管署 2026/10/20 新聞稿已將這項擴大條件（有類流感症狀且屬流感高傳播族群）的適用期限延長至今年 11 月 15 日止，藥劑配置於全國約 4 千家合約醫療機構（克流感、易剋冒）；11/15 以後的適用條件請查疾管署最新公告。病歷要記載公費身分佐證。", "重點：發病 48 小時內用藥效果最好；高風險或重症病人超過 48 小時仍應給藥。"], "src": "衛福部疾管署「流感抗病毒藥劑」Q&A；衛福部 2026/8 新聞稿。", "alias": "flu influenza 流感 克流感 tamiflu oseltamivir fever 發燒", "id": "t4"}, {"n": 5, "cat": "A. 呼吸道／耳鼻喉", "title": "COVID-19", "codes": "U07.1", "soap": "S: [Fever/sore throat/cough] since [ ]. Home Ag test (+) on [ ]. High-risk: [age≥65/DM/CKD/immunocompromised/ ].\nO: SpO2 ___%. Lungs [ ].\nA: COVID-19 (U07.1)\nP: (High risk, ≤5 days) Nirmatrelvir/ritonavir 300/100 mg BID x 5 days (eGFR 30-60: 150/100 mg BID; <30 不建議)\n   → 先核對 CYP3A4 交互作用 (statin, amiodarone, DOAC, tacrolimus...)\n   或 Molnupiravir 800 mg BID x 5 days (孕婦禁用)\n   Symptomatic: acetaminophen, antitussive.\n", "notes": ["口服抗病毒藥公費條件與領藥機制依疾管署當期公告（需自行查證）。SpO2 < 94% 或呼吸喘，轉急診。"], "src": "", "alias": "covid 新冠 covid-19 paxlovid 武漢 fever", "id": "t5"}, {"n": 6, "cat": "A. 呼吸道／耳鼻喉", "title": "急性鼻竇炎", "codes": "未明示 J01.90；上頜竇 J01.00", "soap": "S: Nasal obstruction, purulent rhinorrhea, facial pain [ ] days. Pattern: [>10 days persistent / \"double sickening\" / severe onset ≥3-4 days fever>39].\nO: Maxillary tenderness [+/-]. Purulent PND [+/-]. No periorbital edema, EOM full.\nA: Acute bacterial rhinosinusitis (J01.90)\nP: Amoxicillin/clavulanate 875/125 mg 1# BID x 5-7 days (PCN allergy: doxycycline 100 mg BID)\n   Saline irrigation BID; intranasal steroid (mometasone 2 sprays/nostril QD).\n", "notes": ["Red flags（立即轉診）：眼眶周圍腫脹、複視、視力下降、劇烈頭痛、意識改變。"], "src": "IDSA ABRS guideline 2012。", "alias": "sinusitis 鼻竇炎 abrs", "id": "t6"}, {"n": 7, "cat": "A. 呼吸道／耳鼻喉", "title": "過敏性鼻炎", "codes": "J30.9；季節性 J30.2；塵蟎等常年性 J30.89", "soap": "S: Sneezing, itchy watery rhinorrhea, nasal congestion, [seasonal/perennial]. Triggers: [dust mite/ ].\nO: Pale boggy turbinates, allergic shiners [+/-].\nA: Allergic rhinitis (J30.9)\nP: Fexofenadine 180 mg 或 Levocetirizine 5 mg 1# QD x [14-28] days\n   Mometasone/fluticasone nasal spray 2 puffs each nostril QD\n   Environmental control education.\n", "notes": ["第一線為鼻用類固醇；只有鼻塞時，口服抗組織胺效果有限。需排除鼻息肉、單側症狀（腫瘤）。"], "src": "ARIA 2019/2020。", "alias": "ar allergic rhinitis 過敏性鼻炎 鼻過敏 打噴嚏", "id": "t7"}, {"n": 8, "cat": "A. 呼吸道／耳鼻喉", "title": "氣喘", "codes": "輕度間歇 J45.20｜輕度持續 J45.30｜中度持續 J45.40｜未明示 J45.909｜急性發作 J45.901", "soap": "S: Wheeze/cough/dyspnea; nocturnal symptoms [ ]/mo; reliever use [ ]/wk; exacerbation hx [ ]. ACT score ___.\nO: Wheeze [+/-], SpO2 ___%, PEF ___ L/min (___% predicted). Inhaler technique checked: [Y].\nA: Asthma, [severity], [controlled/partly/uncontrolled] (J45.__)\nP: GINA Track 1: Budesonide/formoterol 160/4.5 1 inhalation PRN (Step 1-2);\n   Step 3-4: maintenance + reliever (MART) 1-2 inh BID + PRN.\n   Spirometry with BD test [ordered]. F/U 1-3 months.\n", "notes": ["GINA 2024 起不建議 SABA 單用。健保對吸入製劑訂有「呼吸道疾患吸入製劑給付規定」，處方時請核對品項限制（需自行查證）。Red flags：講話無法成句、SpO2 < 92%、PEF < 50%，送急診。"], "src": "GINA 2024/2025。", "alias": "asthma 氣喘 哮喘 wheeze", "id": "t8"}, {"n": 9, "cat": "A. 呼吸道／耳鼻喉", "title": "COPD", "codes": "J44.9；急性惡化 J44.1；合併下呼吸道感染 J44.0", "soap": "S: Chronic dyspnea, mMRC ___, CAT ___. Exacerbations last yr: ___ (hospitalized ___). Smoking ___ PPY.\nO: Prolonged expiration, wheeze [ ]. SpO2 ___%.\n   Spirometry: post-BD FEV1/FVC ___ (<0.7), FEV1 ___% pred (GOLD ___).\nA: COPD, GOLD group [A/B/E] (J44.9)\nP: Group A: bronchodilator (LAMA or LABA). Group B: LAMA+LABA. Group E: LAMA+LABA (± ICS if Eos≥300).\n   Smoking cessation, influenza/pneumococcal/RSV vaccine, pulmonary rehab.\n", "notes": ["須有肺功能證實才能診斷。急性惡化：prednisolone 40 mg QD x 5 days；痰變膿時加抗生素。"], "src": "GOLD 2025 Report。", "alias": "copd 慢性阻塞性肺病 肺阻塞", "id": "t9"}, {"n": 10, "cat": "A. 呼吸道／耳鼻喉", "title": "急性中耳炎", "codes": "右 H66.91｜左 H66.92｜雙側 H66.93", "soap": "S: Otalgia [R/L], fever [ ], hearing decrease. Preceding URI.\nO: TM [bulging/erythematous/opaque], mobility decreased; otorrhea [-].\nA: Acute otitis media, [right/left] (H66.9_)\nP: Adult: Amoxicillin 500 mg TID (或 875 mg BID) x 5-7 days; (failure/recent abx) Amox/clav 875/125 BID.\n   Analgesic: ibuprofen 400 mg TID PRN.\n", "notes": ["成人單側反覆中耳積水要排除鼻咽癌（台灣盛行率較高），應轉耳鼻喉科做鼻咽鏡。"], "src": "", "alias": "aom otitis media 中耳炎 耳朵痛 otalgia", "id": "t10"}, {"n": 11, "cat": "A. 呼吸道／耳鼻喉", "title": "外耳炎", "codes": "右 H60.91｜左 H60.92｜雙側 H60.93", "soap": "S: Otalgia, itching, [swimming/ear picking] hx.\nO: Tragal tenderness [+], EAC edema/debris, TM [intact/not visualized].\nA: Acute otitis externa (H60.9_)\nP: Ofloxacin otic 0.3% 10 gtt BID x 7 days. Keep ear dry. Avoid cotton swab.\n", "notes": ["糖尿病或免疫低下老人有劇痛、肉芽組織時，要排除惡性外耳炎，應轉診。"], "src": "", "alias": "aoe otitis externa 外耳炎 耳朵痛", "id": "t11"}, {"n": 12, "cat": "A. 呼吸道／耳鼻喉", "title": "慢性咳嗽", "codes": "R05.3（2023 年版新碼；急性 R05.1、亞急性 R05.2；舊 R05 已不可申報）", "soap": "S: Cough > 8 weeks. Smoker [ ]. ACEI use [ ]. PND, heartburn, wheeze [ ]. Hemoptysis/wt loss/night sweats denied.\nO: Lungs [ ]. Nasal/pharynx [cobblestoning].\nA: Chronic cough (R05.3), r/o UACS / asthma / GERD / ACEI-induced\nP: CXR PA view. Spirometry ± BD test.\n   Empiric: intranasal steroid + 2nd-gen antihistamine x 2-4 wks; stop ACEI → ARB.\n   (TB suspicion) Sputum AFB x3 + TB PCR.\n", "notes": ["台灣結核病雖逐年下降，依疾管署《台灣結核病防治年報》，2024 年新案仍有 6,141 人、發生率每十萬人口 26.2 人，且 65 歲以上占 64.4%。咳嗽超過 2 週應照 CXR；有痰時驗 AFB，符合者依法通報。"], "src": "ACCP 2018 chronic cough；疾管署結核病診治指引。", "alias": "chronic cough 慢性咳嗽 久咳 cough tb 結核", "id": "t12"}, {"n": 13, "cat": "B. 腸胃", "title": "急性腸胃炎", "codes": "感染性 A09；非感染性 K52.9", "soap": "S: Diarrhea ___ times/day x [ ] days, [watery/bloody], vomiting [ ], abd cramp. Food/travel/contact hx [ ].\nO: BT ___. Abd: soft, [diffuse mild tenderness], no rebound, BS [hyperactive]. Dehydration: [mild/none].\nA: Acute gastroenteritis (A09)\nP: ORS; Domperidone 10 mg 1# TID AC x 3 days (QTc 注意; 或 metoclopramide)\n   Loperamide 2 mg PRN (NOT if bloody stool/high fever)\n   Diosmectite 1 pack TID; probiotics.\n", "notes": ["Red flags：血便合併發燒、嚴重脫水、右下腹壓痛（闌尾炎）、老人腹痛與理學檢查不成比例（腸缺血），應轉診。"], "src": "", "alias": "age gastroenteritis 腸胃炎 腹瀉 拉肚子 diarrhea vomiting 嘔吐", "id": "t13"}, {"n": 14, "cat": "B. 腸胃", "title": "胃食道逆流 GERD", "codes": "無食道炎 K21.9；伴食道炎、無出血 K21.00；伴出血 K21.01（舊 K21.0 已細分）", "soap": "S: Heartburn/acid regurgitation [ ]/wk, postprandial, nocturnal. Alarm: dysphagia/wt loss/GI bleed/anemia/age>60 new onset [none].\nO: Abd soft, epigastric tenderness [+/-].\nA: GERD [without esophagitis / LA grade __ esophagitis] (K21.9 / K21.00)\nP: (No endoscopy) Famotidine 20 mg 1# BID 或 antacid (Alginate/aluminium-magnesium) x 14-28 days\n   (Endoscopy-proven LA A/B, report within 4 months) Esomeprazole 40 mg 1# QD AC x 8 wks\n   Lifestyle: avoid late meals, head elevation, weight loss.\n   Arrange EGD if alarm features or refractory.\n", "notes": ["**健保 PPI 給付（藥品給付規定 7.1）**：LA Grade A/B 的消化性潰瘍或逆流性食道炎，使用期間以 4 個月為限，申報時需附 4 個月內有效的上消化道內視鏡或上消化道 X 光報告。LA C/D 經消化系專科醫師確認後，可長期使用 1 年。內視鏡正常但疑似逆流者，需附 24 小時 pH 監測等其他檢查結果。110/12/1 起有兩項放寬：曾發生重大心血管事件或易出血體質、需使用抗血小板藥或抗凝血劑者，可用每日藥費 6.5 元以下的 PPI；曾經內視鏡證實潰瘍、因他病需用 NSAID 者，不必再經消化系專科醫師確認。制酸劑一般不可與 PPI／H2 blocker 併用申報。"], "src": "健保署藥品給付規定 7.1；台灣 GERD 共識（台灣消化系醫學會）。", "alias": "gerd 胃食道逆流 火燒心 heartburn 逆流 chest pain", "id": "t14"}, {"n": 15, "cat": "B. 腸胃", "title": "消化不良／消化性潰瘍", "codes": "功能性消化不良 K30；胃潰瘍 K25.9；十二指腸潰瘍 K26.9", "soap": "S: Epigastric pain/fullness/early satiety [ ] months. NSAID/aspirin use [ ]. Alarm features [none].\nO: Epigastric tenderness [ ]. Pallor [-].\nA: Dyspepsia (K30) / Peptic ulcer (K25.9/K26.9) [endoscopy date ___]\nP: H. pylori test (UBT/stool Ag/CLO) → if (+): eradication per Taiwan consensus\n   e.g., 14-day high-dose dual (Amoxicillin 750 mg QID + Esomeprazole 40 mg BID) 或 bismuth quadruple x 10-14 days\n   Test of cure ≥4 wks after therapy (PPI stopped ≥2 wks).\n", "notes": ["台灣 H. pylori 共識（Taipei Global Consensus II、台灣共識 2023）以 14 天療程為主，並依地區抗藥性選藥。實際處方請依院內藥品與最新共識調整（需自行查證）。"], "src": "", "alias": "dyspepsia pud peptic ulcer 消化不良 胃潰瘍 胃痛 hp h. pylori 幽門桿菌", "id": "t15"}, {"n": 16, "cat": "B. 腸胃", "title": "便秘", "codes": "K59.00；慢性特發性 K59.04", "soap": "S: BM every [ ] days, hard stool, straining. Alarm: hematochezia/wt loss/anemia/age≥50 new onset/FHx CRC [none].\nO: Abd soft, [no mass]. DRE: [done/not done].\nA: Constipation (K59.00)\nP: Magnesium oxide 250 mg 1-2# TID (eGFR<30 避免) 或 PEG 3350 17 g QD\n   PRN: Sennoside 12.5 mg 2# HS 或 Bisacodyl 10 mg suppository.\n   Fiber 25-30 g/d, fluids.\n", "notes": ["50 到 74 歲提醒國健署的 FIT 篩檢；有警訊症狀者安排大腸鏡。"], "src": "", "alias": "constipation 便秘", "id": "t16"}, {"n": 17, "cat": "B. 腸胃", "title": "腸躁症", "codes": "腹瀉型 K58.0｜便秘型 K58.1｜混合型 K58.2｜未明示 K58.9", "soap": "S: Recurrent abd pain ≥1 day/wk x 3 months, related to defecation/stool frequency/form change (Rome IV). Subtype [ ].\nO: Abd soft, [mild LLQ tenderness]. No alarm signs.\nA: Irritable bowel syndrome, [subtype] (K58._)\nP: Mebeverine 135 mg 1# TID AC 或 Hyoscine butylbromide 10 mg TID PRN\n   IBS-D: loperamide PRN; IBS-C: PEG; consider low-FODMAP; low-dose TCA (amitriptyline 10 mg HS).\n   Labs: CBC, CRP (± celiac/TSH as indicated).\n", "notes": [], "src": "", "alias": "ibs 腸躁症 irritable bowel", "id": "t17"}, {"n": 18, "cat": "B. 腸胃", "title": "痔瘡", "codes": "I 度 K64.0｜II 度 K64.1｜III 度 K64.2｜未明示 K64.9｜血栓性外痔 K64.5", "soap": "S: Painless bright red blood on paper/after BM [ ], prolapse [ ]. Pain [ ].\nO: Inspection: [external tag/thrombosed external hemorrhoid]. DRE/anoscopy: [ ].\nA: Hemorrhoids, grade [ ] (K64._)\nP: Topical hemorrhoid ointment/suppository BID x 7 days; Sitz bath; stool softener (MgO).\n   Refer colonoscopy if age ≥45-50, anemia, change in bowel habit, or FHx CRC.\n", "notes": ["陷阱：「直腸出血」都歸咎於痔瘡，會延誤大腸癌診斷。"], "src": "", "alias": "hemorrhoid 痔瘡 血便", "id": "t18"}, {"n": 19, "cat": "B. 腸胃", "title": "脂肪肝（MASLD）", "codes": "K76.0；NASH／MASH K75.81", "soap": "S: Incidental fatty liver on sono / ALT ___. Alcohol ___ g/day (F<20, M<30). Metabolic RF: [obesity/DM/HTN/HLP].\nO: BMI ___, waist ___ cm.\nA: Metabolic dysfunction-associated steatotic liver disease (K76.0)\nP: Labs: AST/ALT, Plt, HbA1c, lipid, HBsAg, anti-HCV.\n   FIB-4 = ___ (<1.3 low risk; ≥1.3 → transient elastography/refer GI).\n   Weight loss 7-10%; treat metabolic comorbidities. Abd sono q6-12m if advanced fibrosis.\n", "notes": ["2023 年版 ICD 尚無 MASLD 專屬碼，仍用 K76.0。"], "src": "", "alias": "masld nafld fatty liver 脂肪肝 mash nash", "id": "t19"}, {"n": 20, "cat": "B. 腸胃", "title": "慢性 B／C 型肝炎追蹤", "codes": "慢性 B 肝 B18.1｜B 肝帶原 Z22.51｜慢性 C 肝 B18.2", "soap": "S: HBV carrier since [ ]. FHx HCC [ ]. Antiviral [none/ ].\nO: Jaundice [-], stigmata of CLD [-].\nA: Chronic hepatitis B (B18.1) / HBV carrier (Z22.51) / Chronic HCV (B18.2)\nP: HBV: ALT, HBeAg, HBV DNA, AFP + abd sono q6-12m (cirrhosis/high risk q6m).\n   HCV: anti-HCV(+) → HCV RNA → DAA (健保全口服新藥, 依健保規定) → refer if needed.\n", "notes": ["健保 B／C 肝抗病毒藥給付有 ALT、HBV DNA、纖維化等條件（藥品給付規定 10.7.x）。家醫科是否可開立及條件細節需自行查證。"], "src": "", "alias": "hbv hcv hepatitis b肝 c肝 肝炎 帶原", "id": "t20"}, {"n": 21, "cat": "C. 心血管代謝", "title": "高血壓", "codes": "原發性 I10；合併 CKD 1–4 期 I12.9（加 N18.x）；合併心衰竭 I11.0（加 I50.x）", "soap": "S: HBP 722 avg: ___/___ mmHg (7 days x AM/PM x 2). Headache/chest pain/dyspnea [denied]. Meds: [ ]. Adherence [ ].\nO: Office BP ___/___ (R), ___/___ (L), HR ___. Heart: RRR, no murmur. Edema [-].\nA: Essential hypertension (I10), [controlled/uncontrolled]; target HBPM <130/80\nP: Amlodipine 5 mg 1# QD 或 Losartan 50 mg 1# QD (或 single-pill combination)\n   Labs (baseline/annual): Cr/eGFR, K, Na, UA, FPG/HbA1c, lipid, UACR; ECG.\n   S-ABCDE lifestyle. F/U 2-4 wks after titration, then q1-3m (慢性病連續處方箋可開).\n", "notes": ["**2022 台灣高血壓指引**（TSOC/THS）：以居家血壓 722 原則（每次量 2 遍、早晚各 1 次、連續 7 天）作為診斷與治療依據，高血壓定義 ≥ 130/80 mmHg，普遍目標 < 130/80 mmHg。", "陷阱：ACEI 與 ARB 不併用；ACEI/ARB 開始後 1 到 2 週追蹤 K 與 Cr；年輕、低血鉀、難治型高血壓要篩次發性（如原發性高醛固酮症）。", "ICD：高血壓合併 CKD 時，依編碼原則推定有因果關係，碼 I12.9 加 N18.x，不要只碼 I10。"], "src": "", "alias": "htn hypertension 高血壓 血壓 bp", "id": "t21"}, {"n": 22, "cat": "C. 心血管代謝", "title": "第 2 型糖尿病", "codes": "無併發症 E11.9｜高血糖 E11.65｜糖尿病 CKD E11.22（加 N18.x）｜腎病變 E11.21｜多發性神經病變 E11.42｜視網膜病變未伴黃斑水腫 E11.319；長期胰島素 Z79.4、口服藥 Z79.84、非胰島素注射劑 Z79.85（2023 年版新碼）", "soap": "S: DM since [ ]. SMBG fasting ___ mg/dL. Hypoglycemia [ ]. Meds: [ ]. Diet/exercise [ ].\nO: BW ___, BMI ___, BP ___/___. Foot: monofilament [intact], pulses [palpable], ulcer [-].\n   HbA1c ___% ([date]), eGFR ___, UACR ___ mg/g, LDL ___.\nA: Type 2 DM [without complication / with CKD stage _] (E11.__), HbA1c ___%\nP: Metformin 500 mg 1# BID PC → titrate to 1000 mg BID (eGFR 30-45 減量 max 1000 mg/d; <30 停用)\n   + SGLT2i: Empagliflozin 10 mg 或 Dapagliflozin 10 mg 1# QD (給付: metformin 最大耐受劑量仍未控制)\n   (ASCVD/HF/CKD) consider SGLT2i/GLP-1 RA with proven benefit.\n   HbA1c q3m; lipid, Cr/eGFR, UACR yearly; eye fundus yearly; foot exam yearly. 糖尿病共照網/P4P 收案 [Y].\n", "notes": ["**健保給付**：", "　SGLT2i 與 DPP-4i 限用於已用最大耐受劑量 metformin 仍控制不理想者，兩類宜擇一使用。114/6/1 起刪除「口服降血糖藥最多四種」上限。", "　GLP-1 RA（liraglutide、dulaglutide、semaglutide）一般須同時符合：已用最大耐受劑量 metformin 及／或 SU，再併用 SGLT2i、DPP-4i、其複方或 insulin 6 個月以上，HbA1c 仍 > 8.5%。曾有心肌梗塞、血管再通術、動脈硬化性缺血性中風者，metformin 控制不佳即可直接使用。GLP-1 RA 不得與 DPP-4i 或 SGLT2i 併用。", "陷阱：SGLT2i 有正常血糖酮酸中毒風險（術前或禁食前 3 天停藥）與生殖器黴菌感染；metformin 在顯影劑檢查或急性腎損傷時要暫停。"], "src": "中華民國糖尿病學會 2022/2024 臨床照護指引；ADA Standards of Care 2025/2026；健保署藥品給付規定 5.1。", "alias": "dm t2dm diabetes 糖尿病 血糖 hba1c", "id": "t22"}, {"n": 23, "cat": "C. 心血管代謝", "title": "高血脂", "codes": "單純高膽固醇 E78.00（舊 E78.0 已細分）｜家族性 E78.01｜混合型 E78.2｜高三酸甘油脂 E78.1｜未明示 E78.5", "soap": "S: Lipid found at [health check]. ASCVD hx [ ]. DM [ ]. CKD [ ]. FHx premature CHD [ ].\nO: Xanthoma [-]. BP ___. Waist ___.\n   TC ___, TG ___, HDL ___, LDL ___ mg/dL. Risk tier (健保表一): [極高/非常高/高/中/低/0 RF], target LDL < ___.\nA: Hyperlipidemia (E78.__), ASCVD risk [ ]\nP: Atorvastatin 10-20 mg (中強度) / 40-80 mg (高強度) 或 Rosuvastatin 5-10 / 20 mg 1# QD\n   ± Ezetimibe 10 mg QD if not at target.\n   Lipid 6-8 wks after start/change, then q6m (中低風險 q6-12m); ALT baseline; CK if myalgia.\n", "notes": ["**健保降膽固醇藥物給付規定表一（115/9/1 起）**：", "　風險因子：高血壓；男 ≥ 45 歲、女 ≥ 55 歲；早發冠心病家族史；HDL 偏低（男 < 40、女 < 50）；抽菸；代謝症候群。CKD 的定義是 UACR ≥ 30 mg/g 或 eGFR < 60，持續 3 個月。", "　部分舊 statin 品項（附表列名的 simvastatin、部分 atorvastatin 學名藥等）仍適用「表二」舊標準。處方前請在健保署品項清單核對（需自行查證院內品項是否列名）。", "病歷要件：記載風險分級、起始與目標值、生活型態介入期間，以及追蹤血脂的日期。"], "src": "健保署「藥品給付規定修訂對照表 第 2 節（自 115 年 9 月 1 日生效）」；2022 台灣高風險病人血脂治療指引。", "table": ["| ASCVD 風險 | 非藥物治療 | 起始 LDL-C | 目標 LDL-C（non-HDL） |", "|---|---|---|---|", "| 極高風險 | 與藥物並行 | ≥ 55 | < 55（< 85） |", "| 非常高風險 | 與藥物並行 | ≥ 70 | < 70（< 100） |", "| 高風險（DM、CKD、LDL ≥ 190、CAC ≥ 400） | 與藥物並行 | ≥ 100 | < 100（< 130） |", "| 中風險（≥ 2 項 RF） | 先 3–6 個月生活型態 | ≥ 115 | < 115（< 145） |", "| 低風險（1 項 RF） | 先 3–6 個月生活型態 | ≥ 130 | < 130（< 160） |", "| 0 項 RF | 先 3–6 個月生活型態 | ≥ 160 | < 160 |"], "alias": "hld hlp dyslipidemia hyperlipidemia 高血脂 血脂 膽固醇 ldl statin", "id": "t23"}, {"n": 24, "cat": "C. 心血管代謝", "title": "痛風／高尿酸血症", "codes": "痛風未明示 M10.9；右踝足特發性痛風 M10.071（左 M10.072）；慢性痛風 M1A.-（第 7 碼為痛風石）；無症狀高尿酸 E79.0", "soap": "S: Acute [R 1st MTP/ankle/knee] pain, swelling since [ ]; prior attacks ___/yr. Tophi [ ]. Diuretic/alcohol [ ].\nO: [Erythema, warmth, swelling, exquisite tenderness] at [ ]. BT ___.\n   UA ___ mg/dL (急性期可能偏低), Cr/eGFR ___.\nA: Acute gout flare, [site] (M10.0__)\nP: Acute: Colchicine 0.5 mg 2# stat, 1# 1h later, then 0.5 mg QD-BID (eGFR<30 減量; 避免與 clarithromycin/強 CYP3A4/P-gp 抑制劑)\n   或 NSAID (Naproxen 500 mg BID / Etoricoxib 120 mg QD x 5-8 days) 或 Prednisolone 30-35 mg QD x 5 days\n   ULT (≥2 flares/yr, tophi, urate stone, CKD≥3): Allopurinol 50-100 mg QD start, titrate q2-4 wks\n     → HLA-B*5801 screening recommended before allopurinol (Han Chinese); target UA <6 (tophi <5)\n   Flare prophylaxis colchicine 0.5 mg QD x 3-6 months when starting ULT.\n", "notes": ["**健保 febuxostat（藥品給付規定 2.11.1）**：限慢性痛風患者的高尿酸血症，需符合下列之一：曾用 benzbromarone 反應不佳、尿酸仍 > 6.0 mg/dL；CKD（eGFR < 45 或 SCr ≥ 1.5）；尿酸性腎或尿路結石；痛風石；肝硬化。**不建議用於無症狀高尿酸血症**。HLA-B*5801 檢測的健保給付狀況需自行查證。", "陷阱：急性期不要停用原有的 ULT；開始 ULT 時要同時給 flare 預防用藥。"], "src": "中華民國風濕病醫學會 2016 痛風與高尿酸血症診治指引；ACR 2020 gout guideline；衛福部 105/8/1 新聞稿。", "alias": "gout 痛風 尿酸 hyperuricemia", "id": "t24"}, {"n": 25, "cat": "C. 心血管代謝", "title": "肥胖／代謝症候群", "codes": "肥胖 E66.9｜病態肥胖 E66.01（加 Z68.4x BMI）；BMI 成人 Z68.30–Z68.45；代謝症候群 E88.81", "soap": "S: Wt gain [ ] kg/[ ] yr. Diet/exercise/sleep [ ]. Prior wt-loss meds [ ]. OSA symptoms [ ].\nO: BW ___ kg, BH ___ cm, BMI ___, waist ___ cm, BP ___/___.\nA: Obesity (E66.9) + BMI __ (Z68.__); Metabolic syndrome (E88.81) [3/5 criteria]\nP: Labs: FPG/HbA1c, lipid, ALT, TSH (if indicated), UA.\n   Goal 5-10% wt loss in 6 months; nutrition consult; 150-300 min/wk exercise.\n   Pharmacotherapy (自費): see M14.\n", "notes": ["台灣成人肥胖定義為 BMI ≥ 27（國健署），過重為 24–27。代謝症候群：腰圍男 ≥ 90、女 ≥ 80 cm，再加血壓、血糖、TG、HDL，五項中符合三項。", "2023 年版 ICD 尚無 E66.811–E66.813（肥胖分級碼），請勿使用（需自行查證健保代碼檔）。"], "src": "", "alias": "obesity 肥胖 減重 代謝症候群 metabolic syndrome bmi", "id": "t25"}, {"n": 26, "cat": "C. 心血管代謝", "title": "慢性腎臟病 CKD", "codes": "N18.1｜N18.2｜3a 期 N18.31｜3b 期 N18.32｜3 期未明示 N18.30（舊 N18.3 已細分）｜N18.4｜N18.5", "soap": "S: CKD stage [ ] since [ ]. Etiology [DM/HTN/ ]. NSAID/herbal use [ ].\nO: BP ___/___. Edema [ ]. eGFR ___ (x2 ≥3 months apart), UACR ___ mg/g.\nA: CKD stage G_\nA: CKD stage G_A_ (N18.__), etiology [DM (E11.22) / HTN (I12.9) / ]\nP: (UACR ≥30) ACEi 或 ARB titrate to max tolerated, e.g. Losartan 50 → 100 mg QD\n     → Cr/K 2-4 wks after start (Cr 上升 ≤30% 可續用)\n   (eGFR ≥20) Dapagliflozin 10 mg 或 Empagliflozin 10 mg 1# QD (健保: 收案 Early CKD/Pre-ESRD 計畫)\n   Avoid NSAID/herbal; renal dose check all meds. BP target <130/80 (UACR ≥30).\n   Labs: Cr/eGFR, UACR, K, Hb, Ca/P [q3-12m by stage]. Early CKD/Pre-ESRD 收案 [Y].\n   Refer nephrology if eGFR <30, UACR ≥300, rapid decline, hematuria, resistant HTN.\n", "notes": ["【A 與 P 為 Claude 補寫】原檔在此截斷，以下依 KDIGO 2024 與原檔 TL;DR 的健保規定補上，請 Ray 核對後再用。", "健保 SGLT2i：114/3/1 起，加入 Early CKD／Pre-ESRD 計畫的 CKD 病人可給付（原檔 TL;DR）。", "ICD：DM 或 HTN 造成的 CKD，病因碼在前（E11.22 或 I12.9），再加 N18.x。", "完整決策流程（分期、選藥、追蹤）見門診實務 CKD 專區。"], "src": "KDIGO 2024 CKD guideline；健保署藥品給付規定（SGLT2i，114/3/1）", "added": true, "alias": "ckd 慢性腎臟病 腎功能 egfr 腎病 uacr", "id": "t26"}, {"n": 101, "cat": "S. 症狀型（先分流）", "title": "胸痛 Chest pain", "codes": "未明示 R07.9｜其他胸痛 R07.89｜呼吸時胸痛 R07.1｜肋軟骨炎 M94.0", "soap": "S: Chest pain since [ ], [pressure/tightness/sharp/burning], duration [ ] min, [exertional/at rest/positional/pleuritic/reproducible].\n   Radiation [arm/jaw/back/none]. Associated: [dyspnea/diaphoresis/nausea/syncope/palpitation] [denied].\n   RF: [HTN/DM/HLP/smoking/FHx premature CAD/CKD]. Recent [immobilization/surgery/long flight].\nO: BP ___/___ (R), ___/___ (L), HR ___, RR ___, SpO2 ___%, BT ___.\n   Heart [RRR, no murmur/rub]. Lungs [clear, equal BS]. Chest wall tenderness [+/-] reproducing pain [Y/N]. Calf swelling [-].\n   ECG (within 10 min): [NSR, no ST-T change / ].\nA: [Chest pain, unspecified (R07.9) / Costochondritis (M94.0) / GERD (K21.9) / ], r/o ACS\nP: (ACS suspected / ECG change / unstable vitals) → 急診轉送 (EMS)\n     Aspirin 300 mg chewed stat if no allergy/active bleeding.\n   (Chest wall pain, low risk) Acetaminophen 500 mg 1# QID PRN 或 Ibuprofen 400 mg TID PC x 5-7 days.\n   (GERD-like) → 見 GERD 模板. (Stable exertional pattern) arrange cardiology referral/stress test.\n   Return/ER if pain at rest >20 min, dyspnea, syncope, diaphoresis.\n", "notes": ["【整張為 Claude 補寫】原檔沒有胸痛模板；這張以分流為主，請 Ray 核對後再用。", "先排除五個致命原因：ACS、主動脈剝離、肺栓塞、張力性氣胸、心包填塞。", "Red flags：休息時胸痛 >20 分鐘、冒冷汗、昏厥、雙手血壓差 >20 mmHg、SpO2 <94%、ECG 新變化。", "陷阱：女性、DM、長者的 ACS 常不典型（喘、上腹痛、疲倦）；按壓會痛不能完全排除 ACS。單次 ECG 正常不能排除。", "基層沒有 troponin 時，懷疑 ACS 就直接轉急診，不要在診間等抽血。"], "src": "2021 AHA/ACC Chest Pain Guideline；ESC 2023 ACS Guideline", "added": true, "see": [14, 1], "alias": "chest pain cp 胸痛 胸悶 acs", "id": "t101"}, {"n": 102, "cat": "S. 症狀型（先分流）", "title": "發燒 Fever", "codes": "未明示 R50.9｜找到病灶時改碼該診斷", "soap": "S: Fever ___°C x [ ] days, [chills/rigor]. Focal sx: [URI/sore throat/cough/dysuria/diarrhea/skin/abd pain/headache] [none].\n   Travel [ ] / dengue area [ ] / contact [ ] / animal [ ]. Immunocompromised [ ]. Recent abx [ ].\nO: BT ___, HR ___, RR ___, BP ___/___, SpO2 ___%. Consciousness [clear].\n   Pharynx [ ], Lungs [ ], Abd [soft], CVA knock [-], Skin [no rash/petechiae], Neck [supple].\nA: Fever, unspecified (R50.9) / [focus Dx]\nP: Acetaminophen 500 mg 1# Q6H PRN BT>38.5 (max 4 g/day; 肝病、酗酒、體重 <50 kg 減量)\n   (Dengue suspected) NS1 rapid test; avoid NSAID/aspirin; 依法通報.\n   Labs if >3 days / no focus: CBC/DC, CRP, U/A (± LFT, Cr, blood culture).\n   Return if consciousness change, dyspnea, neck stiffness, petechiae, poor intake.\n", "notes": ["【整張為 Claude 補寫】原檔沒有發燒模板；請 Ray 核對後再用。找到病灶後，改用該診斷的模板。", "Red flags（轉急診）：意識改變、低血壓、RR ≥22（qSOFA）、頸部僵硬、紫斑、SpO2 <94%、免疫低下或化療中的發燒、3 個月內嬰兒。", "台灣要想到：登革熱（南部、夏秋、不要給 NSAID）、恙蟲病（野外、焦痂）、流感與 COVID（季節）。", "長者發燒常沒有局部症狀，先驗 U/A、看 CXR。"], "src": "疾管署登革熱防治工作指引；Sepsis-3 qSOFA", "added": true, "see": [1, 2, 4, 5, 13], "alias": "fever 發燒 發熱 febrile", "id": "t102"}, {"n": 103, "cat": "S. 症狀型（先分流）", "title": "頭痛 Headache", "codes": "未明示 R51.9｜緊縮型 G44.209｜偏頭痛 G43.909", "soap": "S: Headache since [ ], [first/recurrent], location [ ], [pressing/throbbing], severity [ ]/10, duration [ ] hrs.\n   Associated: [nausea/photophobia/phonophobia/aura]. Analgesic use [ ] days/month.\n   Red flags denied: thunderclap onset, fever/neck stiffness, focal deficit, new onset >50 y, pregnancy, cancer/immunocompromised, positional, worse with Valsalva.\nO: BP ___/___, BT ___. Neck [supple]. Neuro: [alert, pupils equal, no focal deficit, gait normal]. Fundus [ ].\nA: [Tension-type headache (G44.209) / Migraine without aura (G43.909) / Headache (R51.9)]\nP: (Tension) Acetaminophen 500 mg 1-2# Q6H PRN 或 Ibuprofen 400 mg 1# TID PC PRN x 3-5 days.\n   (Migraine) Naproxen 500 mg 1# stat ± Metoclopramide 10 mg 1#; Sumatriptan 50 mg PRN（無 CAD/中風/未控制 HTN）.\n   Headache diary. Limit analgesics <10 days/month (avoid MOH).\n   (≥4 attacks/month) consider prophylaxis: Propranolol 10-40 mg BID 或 Topiramate 25 mg HS.\n   Return/ER if worst headache, fever, weakness, confusion.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "SNOOP 紅旗：全身症狀（發燒、體重減輕、癌症）、神經學異常、突發（雷擊頭痛）、>50 歲新發、型態改變、姿勢或用力時加重、懷孕。有紅旗 → 影像或急診。", "止痛藥一個月用超過 10–15 天，要想到藥物過度使用頭痛（MOH）。", "Topiramate 懷孕禁用（育齡女性要避孕）；triptan 不用於 CAD、中風、未控制高血壓。"], "src": "IHS ICHD-3；AAFP Headache 2018", "added": true, "alias": "headache ha 頭痛 偏頭痛 migraine", "id": "t103"}, {"n": 104, "cat": "S. 症狀型（先分流）", "title": "頭暈 Dizziness", "codes": "頭暈 R42｜BPPV H81.10（右 H81.11、左 H81.12）", "soap": "S: Dizziness since [ ]: [vertigo (spinning)/presyncope/disequilibrium]. Trigger [head turning/standing up/spontaneous]. Duration [seconds/minutes/hours/days].\n   Associated: [nausea, hearing loss, tinnitus]. Denied: diplopia, dysarthria, dysphagia, limb weakness/numbness, ataxia, new headache, chest pain, palpitation, syncope.\n   Meds: [antihypertensives/sedatives/ ].\nO: BP lying ___/___, standing ___/___ (orthostatic [−]). HR ___.\n   Neuro: [no focal deficit, finger-nose normal, gait steady]. Nystagmus [ ]. Dix-Hallpike [R/L +/−]. HINTS [ ].\nA: [BPPV, right/left (H81.11/H81.12) / Dizziness (R42) / Orthostatic hypotension (I95.1)]\nP: (BPPV) Epley maneuver done [Y]; home Brandt-Daroff.\n   (Vertigo, short course) Meclizine 25 mg 1# TID PRN x 3 days（長者小心跌倒）.\n   (Orthostatic) review antihypertensives, hydration, rise slowly.\n   ECG if presyncope/palpitation. Return/ER if weakness, speech change, double vision, unable to walk.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "先分是哪一種暈：天旋地轉（前庭）、快昏倒（心血管、姿勢性）、走不穩（神經、多重因素）。", "中樞性紅旗（5D：diplopia、dysarthria、dysphagia、dysmetria、dizziness＋ataxia）、新頭痛、急性持續性眩暈不能走 → 想後循環中風，轉急診。", "BPPV：翻身或抬頭誘發、數十秒內緩解；Dix-Hallpike 陽性就做 Epley，不需長期吃藥。", "昏厥合併胸痛、心悸、運動時發生、猝死家族史 → 心因性，ECG 並轉診。"], "src": "AAO-HNS BPPV guideline 2017；AAFP Dizziness 2023", "added": true, "alias": "dizziness vertigo 頭暈 眩暈 bppv", "id": "t104"}, {"n": 105, "cat": "S. 症狀型（先分流）", "title": "腹痛 Abdominal pain", "codes": "未明示 R10.9｜上腹 R10.13｜右上 R10.11｜右下 R10.31｜左下 R10.32", "soap": "S: Abdominal pain since [ ], location [ ], [colicky/constant/burning], severity [ ]/10, radiation [ ].\n   Associated: [N/V, diarrhea, constipation, fever, dysuria, hematochezia/melena]. Relation to meals [ ].\n   (F) LMP [ ], pregnancy [ ]. NSAID/alcohol [ ].\nO: BT ___, BP ___/___, HR ___. Abd: [soft/distended], tenderness [location], rebound [−], guarding [−], Murphy [−], McBurney [−], CVA knock [−], BS [ ].\nA: [Abdominal pain, epigastric (R10.13) / ], r/o [ ]\nP: (Benign, no peritoneal sign) Hyoscine butylbromide 10 mg 1# TID PRN 或 antacid x 3 days.\n   Lab as indicated: CBC/DC, CRP, U/A, (lipase, LFT), urine hCG (育齡女性).\n   (Epigastric, ≥40 y or CV risk) ECG to r/o ACS.\n   Return/ER if fever, worsening pain, vomiting, bloody stool, rigid abdomen.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗（轉急診）：腹膜炎徵象、生命徵象不穩、持續嘔吐、腸阻塞、腸胃道出血、長者腹痛遠大於理學檢查（腸缺血、AAA）。", "育齡女性一律問月經、驗孕（子宮外孕）；上腹痛要想到心肌梗塞與下葉肺炎。", "右下腹痛初期可能在肚臍周圍；止痛不會遮蔽闌尾炎診斷，但要安排回診或複評。", "上腹痛反覆 → 見消化不良／GERD 模板。"], "src": "ACR Appropriateness Criteria；AAFP Acute Abdominal Pain 2023", "added": true, "see": [13, 14, 15], "alias": "abdominal pain abd pain 腹痛 肚子痛 胃痛", "id": "t105"}, {"n": 106, "cat": "S. 症狀型（先分流）", "title": "呼吸喘 Dyspnea", "codes": "未明示 R06.00｜呼吸短促 R06.02", "soap": "S: Dyspnea since [ ], [acute/chronic], [exertional (NYHA ___)/rest], orthopnea [ ], PND [ ].\n   Associated: [cough, sputum, wheeze, chest pain, fever, leg swelling, palpitation, hemoptysis]. Smoking [ ] PPY.\nO: RR ___, SpO2 ___% (RA), HR ___, BP ___/___, BT ___. Speak in full sentences [Y].\n   JVE [−]. Lungs: [clear/wheeze/crackles/decreased BS]. Heart [RRR, no murmur/S3]. Leg edema [−], calf asymmetry [−].\nA: Dyspnea (R06.00), r/o [asthma/COPD/HF/pneumonia/PE/anemia]\nP: CXR, ECG; CBC, Cr, (NT-proBNP if available), (D-dimer if PE low-moderate pretest).\n   (Wheeze) Salbutamol MDI 100 mcg 2-4 puffs q4-6h PRN; see asthma/COPD template.\n   Spirometry when stable.\n   Return/ER if rest dyspnea, chest pain, SpO2 <92%, confusion.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗（轉急診）：講話無法成句、SpO2 <92%、RR >24、意識改變、胸痛、單側腿腫合併喘（肺栓塞）、新發心衰竭。", "慢性喘的常見原因：氣喘、COPD、心衰竭、貧血、肥胖與體能差、焦慮；先 CXR、ECG、CBC、肺功能。", "Wells 分數低且 D-dimer 正常可排除肺栓塞；中高機率直接轉院做 CTPA。"], "src": "AAFP Dyspnea 2020；ESC 2019 PE guideline", "added": true, "see": [8, 9], "alias": "dyspnea sob 喘 呼吸喘 呼吸困難 shortness of breath", "id": "t106"}, {"n": 107, "cat": "S. 症狀型（先分流）", "title": "心悸 Palpitations", "codes": "心悸 R00.2｜AF I48.91", "soap": "S: Palpitations since [ ], [regular/irregular], [sudden onset-offset/gradual], duration [ ], frequency [ ].\n   Trigger [caffeine/alcohol/exercise/stress/meds]. Associated: [syncope, chest pain, dyspnea]. FHx sudden death [−].\nO: HR ___ [regular/irregular], BP ___/___. Thyroid [no goiter]. Heart [RRR, no murmur].\n   ECG: [NSR, normal PR/QRS/QTc, no pre-excitation / ].\nA: Palpitations (R00.2), r/o [arrhythmia/hyperthyroidism/anemia/anxiety]\nP: Lab: CBC, TSH (fT4), electrolytes (K, Mg), (glucose).\n   Holter 24-48 h if frequent; event monitor if infrequent.\n   Reduce caffeine, alcohol, energy drinks; review meds (β-agonist, decongestant, thyroxine).\n   (AF on ECG) see AF management: CHA2DS2-VA, rate control, anticoagulation.\n   Return/ER if syncope, chest pain, sustained rapid HR.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗：心悸合併昏厥或快昏倒、胸痛、運動時發生、結構性心臟病、猝死家族史、ECG 異常（WPW、長 QT、Brugada）→ 轉心臟科。", "規則、突然開始突然結束 → PSVT（可教 Valsalva）；不規則 → AF。", "記得問咖啡因、能量飲料、減肥藥、甲狀腺素、焦慮。"], "src": "ESC 2019 SVT guideline；AAFP Palpitations 2017", "added": true, "alias": "palpitation palpitations 心悸 心跳快", "id": "t107"}, {"n": 108, "cat": "S. 症狀型（先分流）", "title": "解尿疼痛／頻尿 Dysuria", "codes": "解尿疼痛 R30.0｜急性膀胱炎 N30.00（血尿 N30.01）｜頻尿 R35.0", "soap": "S: Dysuria, frequency, urgency x [ ] days. Hematuria [ ]. Fever/chills [−], flank pain [−], vaginal discharge [−].\n   (F) LMP [ ], pregnancy [−]. Recurrent UTI [ ]/yr. (M) LUTS [ ].\nO: BT ___. Suprapubic tenderness [+/−]. CVA knock [−].\n   U/A: WBC ___/HPF, nitrite [ ], LE [ ], RBC ___.\nA: Acute cystitis [without/with] hematuria (N30.00/N30.01)\nP: (Uncomplicated female) Nitrofurantoin 100 mg 1# BID x 5 days（eGFR <30 避免；院內有才用）\n     或 Cephalexin 500 mg 1# BID x 7 days 或 Amoxicillin/clavulanate 500/125 mg 1# TID x 5-7 days.\n   (Male/complicated) 7 days; urine culture before abx.\n   Fluids; void after intercourse.\n   Return if fever, flank pain, vomiting (pyelonephritis).\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "單純性：未懷孕、停經前女性、無泌尿道異常；其餘（男性、懷孕、糖尿病控制差、導尿管、反覆感染）做尿液培養。", "有發燒、腰痛、CVA 叩痛 → 腎盂腎炎：尿液培養，口服 fluoroquinolone 或轉診；病況重轉急診。", "台灣大腸桿菌對 TMP-SMX、fluoroquinolone 抗藥性高，經驗療法依院內抗生素譜調整（需自行查證）。", "無症狀菌尿不治療（懷孕、泌尿手術前例外）。"], "src": "IDSA uncomplicated cystitis guideline 2011；AUA rUTI 2019", "added": true, "alias": "dysuria uti cystitis 解尿疼痛 頻尿 尿道炎 膀胱炎", "id": "t108"}, {"n": 109, "cat": "S. 症狀型（先分流）", "title": "水腫 Edema", "codes": "局部 R60.0｜全身或未明示 R60.9", "soap": "S: Leg swelling since [ ], [unilateral/bilateral], [pitting], worse at evening [ ].\n   Associated: [dyspnea/orthopnea, foamy urine, jaundice, calf pain, skin redness].\n   Meds: [amlodipine/NSAID/pioglitazone/steroid/gabapentin].\nO: BP ___/___, BW ___ (previous ___). JVE [−]. Lungs [clear]. Edema [grade ], [pitting/non-pitting], calf tenderness [−], skin [ ].\nA: Edema (R60.9), r/o [drug-induced/venous insufficiency/HF/CKD/nephrotic/liver/hypothyroid]\nP: Lab: Cr/eGFR, U/A (protein), albumin, LFT, TSH, (NT-proBNP); (unilateral) D-dimer/duplex.\n   Review/stop offending drug (e.g., amlodipine → lower dose or switch).\n   Leg elevation; compression stocking if ABI normal.\n   Diuretic only if HF/CKD volume overload.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "單側腿腫：先排除深部靜脈栓塞（Wells、D-dimer、超音波）與蜂窩性組織炎。", "雙側：最常見是藥物（CCB、NSAID、pioglitazone、gabapentin）與靜脈功能不全；再查心、腎、肝、甲狀腺、低白蛋白。", "泡泡尿＋水腫 → 驗 UPCR，懷疑腎病症候群轉腎臟科。", "不要只開利尿劑消腫而沒找原因。"], "src": "AAFP Edema 2022", "added": true, "alias": "edema 水腫 腳腫 leg swelling", "id": "t109"}, {"n": 110, "cat": "S. 症狀型（先分流）", "title": "疲倦 Fatigue", "codes": "其他疲倦 R53.83", "soap": "S: Fatigue x [ ] weeks/months. Sleep [ ] hrs, snoring [ ]. Mood [low/anhedonia]. Appetite [ ], wt change [ ] kg.\n   Red flags denied: fever, night sweats, wt loss, bleeding, lymph node swelling.\n   Meds [ ]. Menstruation [heavy?]. PHQ-2 ___, STOP-BANG ___.\nO: BW ___, BP ___/___, HR ___. Pallor [−]. Thyroid [ ]. LAP [−]. Lungs/heart [ ]. Abd [no hepatosplenomegaly].\nA: Fatigue (R53.83), r/o [anemia/hypothyroid/DM/depression/OSA/medication]\nP: Lab: CBC, ferritin, TSH, FPG/HbA1c, Cr, ALT, (B12 if metformin/elderly), (Ca, ESR/CRP).\n   Sleep hygiene; screen depression (PHQ-9), OSA (refer PSG if high risk).\n   F/U 2 weeks with results.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "先分急性（<1 個月，多為感染）或慢性；問睡眠、情緒、藥物。", "紅旗：體重減輕、夜間盜汗、發燒、出血、淋巴結腫大 → 想惡性腫瘤或慢性感染（含結核）。", "基本抽血正常、症狀 ≥6 個月且活動後惡化 → 考慮 ME/CFS。"], "src": "AAFP Fatigue 2023；NICE ME/CFS 2021", "added": true, "alias": "fatigue 疲倦 累 倦怠 tired", "id": "t110"}, {"n": 111, "cat": "S. 症狀型（先分流）", "title": "下背痛 Low back pain", "codes": "下背痛 M54.50（舊 M54.5 已細分）｜坐骨神經痛 右 M54.41／左 M54.42", "soap": "S: Low back pain since [ ], [after lifting/insidious], radiation [ ] below knee [Y/N], numbness/weakness [ ].\n   Red flags denied: saddle anesthesia, urinary retention/incontinence, fever, cancer hx, wt loss, trauma, steroid use/osteoporosis, night pain, age >50 new onset.\nO: Spine tenderness [ ], ROM [limited]. SLR [R/L −/+ at __°]. Motor [5/5], sensation [intact], reflex [ ].\nA: Low back pain (M54.50) / [lumbago with sciatica, right/left (M54.41/M54.42)]\nP: Stay active, avoid bed rest; heat pack.\n   Ibuprofen 400 mg 1# TID PC 或 Naproxen 250-500 mg 1# BID PC x 5-7 days（CKD/GI bleed/CV 風險小心）\n   ± Muscle relaxant (e.g., Tolperisone 50 mg TID) x 3-5 days.\n   No imaging <6 wks without red flags. Rehab referral if >4 wks.\n   Return/ER if leg weakness, urinary/bowel symptoms.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "馬尾症候群（鞍狀麻木、尿滯留或失禁、雙側無力）→ 立刻轉急診做 MRI。", "癌症病史、體重減輕、發燒、長期類固醇、骨鬆創傷、夜間痛 → 影像與抽血。", "大多數 4–6 週內改善；acetaminophen 單用效果有限。"], "src": "ACP Low back pain guideline 2017", "added": true, "alias": "lbp low back pain 下背痛 腰痛 背痛 sciatica", "id": "t111"}, {"n": 112, "cat": "S. 症狀型（先分流）", "title": "關節痛 Joint pain", "codes": "關節痛 M25.50｜膝 右 M25.561／左 M25.562", "soap": "S: [ ] joint pain since [ ], [mono/oligo/poly], [acute/chronic]. Swelling [ ], redness [ ], morning stiffness [ ] min.\n   Associated: [fever, rash, uveitis, diarrhea/urethritis, psoriasis]. Gout hx [ ]. Trauma [ ].\nO: BT ___. Joint: [swelling/effusion/warmth/erythema/tenderness] at [ ], ROM [ ]. Pattern [symmetric small joints/large joints].\nA: Joint pain (M25.50), r/o [OA/gout/septic arthritis/RA/reactive]\nP: (OA/mechanical) Diclofenac gel topical QID; Acetaminophen PRN; Ibuprofen 400 mg TID PC x 7 days.\n   (Inflammatory polyarthritis) CBC, ESR/CRP, RF, anti-CCP, UA, (ANA) → refer rheumatology.\n   (Acute hot monoarthritis) arthrocentesis/refer to r/o septic arthritis; see gout template.\n   Exercise, weight loss (knee OA).\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "急性單一熱腫關節 → 先當化膿性關節炎，抽關節液或轉診；不要只當痛風。", "對稱小關節＋晨僵 >30–60 分鐘 → 類風濕性關節炎，盡早轉風濕免疫科。", "膝 OA：運動與減重是第一線；外用 NSAID 優先於口服（長者）。"], "src": "ACR 2019 OA guideline；EULAR early arthritis", "added": true, "see": [24], "alias": "joint pain arthralgia 關節痛 膝痛 knee", "id": "t112"}, {"n": 113, "cat": "S. 症狀型（先分流）", "title": "皮疹 Rash", "codes": "皮疹 R21（找到病因改碼該診斷）", "soap": "S: Rash since [ ], location [ ], [itchy/painful], spreading [ ]. New drugs within 8 wks [ ]. Contacts with similar rash [ ]. Fever [ ].\nO: Primary lesion [macule/papule/plaque/vesicle/pustule/wheal], distribution [ ], follicular [Y/N], mucosa [spared].\nA: [Diagnosis] / Rash (R21)\nP: 依診斷 → 門診實務「常見皮膚疾病」鑑別器與處方產生器.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗（轉急診）：黏膜糜爛、皮膚痛、水疱或表皮剝落（SJS/TEN）；發燒＋臉腫＋淋巴結腫（DRESS）；紫斑合併發燒（腦膜炎球菌）。", "完整鑑別、圖譜與外用類固醇強度表見門診實務皮膚專區。"], "src": "門診實務：常見皮膚疾病專區", "added": true, "alias": "rash 皮疹 紅疹 癢 skin", "id": "t113"}];
+const M={"rules": ["**理學檢查與陰性所見必須依實際看診修改**。模板列出的 PE 項目，沒有做的請刪除，不可保留。病歷記載與實際不符，會有醫療法律責任（病歷不實）與健保核刪／違規風險。", "**劑量須個別化**：依年齡、體重、eGFR（建議用 CKD-EPI）、肝功能、懷孕哺乳、過敏史與交互作用調整。本文劑量以一般成人、腎功能正常為預設。", "**規定會變動**：健保藥品給付規定、支付標準、ICD 版本與公費用藥條件都會更新。使用前請以健保署「藥品給付規定」最新版、疾管署公告為準。本文標「需自行查證」之處，是我未能從一手條文確認的部分。", "**ICD 版本**：門診以「就醫日期」判斷。113/12/31 以前申報 2014 年版，114/1/1 以後申報 2023 年版。", "縮寫：BID 每日兩次、TID 三次、QID 四次、QD 每日一次、HS/QHS 睡前、PRN 需要時、PO 口服、KUB 腹部 X 光、DXA 雙能量 X 光骨密度。"], "skel": "S: CC: [ ] for [ ] days.\n   PI: Onset [sudden/gradual], [ ]. Associated: [ ]. Denied: [fever/chest pain/dyspnea/wt loss/ ].\n   PMH: [HTN/DM/HLP/CKD/none]. Meds: [ ]. Allergy: [NKDA/ ]. Smoking [ ] PPY, alcohol [ ].\n   (F) LMP [ ], pregnancy/breastfeeding [no/ ].\nO: BT ___ °C, HR ___ /min, RR ___ /min, BP ___/___ mmHg, SpO2 ___ % (RA), BW ___ kg, BMI ___.\n   General: [alert, not ill-looking].\n   (只保留實際有做的 PE)\nA: [Dx] ([ICD])\nP: 1. Medication as below x [ ] days.\n   2. Lab/Imaging: [ ].\n   3. Education: [ ]. Return if [red flags].\n   4. F/U OPD in [ ] days/weeks.\n"};
+const QUICK=['CKD','chest pain','URI','fever','HTN','DM','血脂','GERD','痛風','腸胃炎','咽炎','流感'];
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const md=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+const norm=s=>s.toLowerCase().replace(/[\s\-_.／/]+/g,' ').trim();
+let cat='全部';
+const cats=['全部',...new Set(D.map(d=>d.cat))];
+$('#rules').innerHTML=M.rules.map(r=>'<li>'+md(r.replace(/^\d+\.\s*/,''))+'</li>').join('');
+$('#skelTa').value=M.skel;
+$('#quick').innerHTML=QUICK.map(k=>`<button class="chip" data-k="${esc(k)}">${esc(k)}</button>`).join('');
+$('#cats').innerHTML=cats.map(c=>`<button class="chip${c==='全部'?' on':''}" data-c="${esc(c)}">${esc(c.replace(/^[A-Z]\.\s*/,''))}</button>`).join('');
+
+function codesHtml(s){
+  const re=/[A-Z]\d{2}(?:\.[0-9A-Z]{1,4})?/g;
+  const found=[...new Set(s.match(re)||[])];
+  return found.map(c=>`<span class="code" data-code="${c}" title="點一下複製">${c}</span>`).join('');
+}
+function card(d){
+  let notes=d.notes.map((n,i)=>{
+    const li=n.startsWith('　')?`<li class="indent">${md(n.slice(1))}</li>`:`<li>${md(n)}</li>`;
+    if(i===0&&d.table){
+      const rows=d.table.filter(r=>!/^\|[-| ]+\|$/.test(r)).map(r=>r.split('|').slice(1,-1).map(x=>x.trim()));
+      return li+'<div class="tbl"><table>'+rows.map((r,j)=>'<tr>'+r.map(x=>j?`<td>${md(x)}</td>`:`<th>${md(x)}</th>`).join('')+'</tr>').join('')+'</table></div>';
+    }
+    return li;}).join('');
+  const see=d.see?'<div class="see">相關模板：'+d.see.map(n=>{const t=D.find(x=>x.n===n);return `<a href="#${t.id}" data-go="${t.id}">${esc(t.title)}</a>`}).join('')+'</div>':'';
+  const rows=Math.min(22,Math.ceil(d.soap.length/34)+2);
+  return `<details class="card" id="${d.id}"><summary><span class="ttl">${esc(d.title)}${d.added?'<span class="badge">Claude 補寫</span>':''}<span class="sub">${esc(d.codes)}</span></span></summary>
+  <div class="body"><div class="codes"><span class="lbl">ICD（點選複製）</span>${codesHtml(d.codes)}</div>
+  <textarea id="ta-${d.id}" rows="${rows}" spellcheck="false">${esc(d.soap)}</textarea>
+  <div class="btns"><button class="b" data-copy="ta-${d.id}">複製 SOAP</button><button class="b o" data-copyskel="ta-${d.id}">骨架＋SOAP 一起複製</button><button class="b g" data-reset="${d.id}">還原</button></div>
+  ${notes?'<ul class="notes">'+notes+'</ul>':''}${see}${d.src?'<div class="src">來源：'+esc(d.src)+'</div>':''}</div></details>`;
+}
+function score(d,q){
+  if(!q)return 1;
+  const toks=norm(q).split(' ');
+  const hay=norm(d.title+' '+d.codes);
+  const al=' '+norm(d.alias)+' ';
+  let s=0;
+  for(const t of toks){
+    let hit=0;
+    const short=/^[a-z0-9]{1,3}$/.test(t);
+    const has=(h,x)=>short?new RegExp('(^|[^a-z0-9])'+x+'([^a-z0-9]|$)').test(h):h.includes(x);
+    if(has(norm(d.title),t))hit=5;
+    if(al.includes(' '+t+' '))hit=Math.max(hit,d.n>100?6:4);
+    else if(has(al,t))hit=Math.max(hit,2);
+    if(has(hay,t))hit=Math.max(hit,3);
+    if(!hit)return 0;
+    s+=hit;
+  }
+  return s;
+}
+function render(){
+  const q=$('#q').value.trim();
+  let r=D.filter(d=>cat==='全部'||d.cat===cat).map(d=>[score(d,q),d]).filter(x=>x[0]>0);
+  if(q)r.sort((a,b)=>b[0]-a[0]||a[1].n-b[1].n);
+  $('#list').innerHTML=r.length?r.map(x=>card(x[1])).join(''):`<div class="empty">找不到「${esc(q)}」。試試中文、英文或縮寫，例如：上感、cp、ckd。</div>`;
+  $('#count').textContent=q?`「${q}」找到 ${r.length} 個`:`共 ${r.length} 個模板`;
+  if(q&&r.length)document.getElementById(r[0][1].id).open=true;
+  document.querySelectorAll('#quick .chip').forEach(b=>b.classList.toggle('on',b.dataset.k===q));
+}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),1300)}
+async function copy(text,ta){
+  try{await navigator.clipboard.writeText(text);toast('已複製');}
+  catch(e){
+    const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();
+    let ok=false;try{ok=document.execCommand('copy')}catch(_){}
+    t.remove();
+    if(ok)toast('已複製');else{if(ta){ta.focus();ta.select();}toast('請長按選取後手動複製');}
+  }
+}
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.dataset.k!==undefined){$('#q').value=t.dataset.k;render();window.scrollTo(0,0);}
+  else if(t.dataset.c!==undefined){cat=t.dataset.c;document.querySelectorAll('#cats .chip').forEach(b=>b.classList.toggle('on',b===t));render();}
+  else if(t.dataset.copy){const ta=document.getElementById(t.dataset.copy);copy(ta.value,ta);}
+  else if(t.dataset.copyskel){const ta=document.getElementById(t.dataset.copyskel);copy($('#skelTa').value+'\n'+ta.value,ta);}
+  else if(t.dataset.reset){const d=D.find(x=>x.id===t.dataset.reset);document.getElementById('ta-'+d.id).value=d.soap;toast('已還原');}
+  else if(t.dataset.code){copy(t.dataset.code);}
+  else if(t.dataset.go){e.preventDefault();openId(t.dataset.go);}
+});
+function openId(id){
+  let el=document.getElementById(id);
+  if(!el){$('#q').value='';cat='全部';document.querySelectorAll('#cats .chip').forEach((b,i)=>b.classList.toggle('on',i===0));render();el=document.getElementById(id);}
+  if(el){el.open=true;el.scrollIntoView({block:'start',behavior:'smooth'});}
+}
+let tm;$('#q').addEventListener('input',()=>{clearTimeout(tm);tm=setTimeout(render,120)});
+$('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const f=document.querySelector('#list details');if(f){f.open=true;f.scrollIntoView({block:'start'});$('#q').blur();}}});
+render();
+function view(v){document.body.classList.toggle('vgen',v==='gen');document.body.classList.toggle('vtpl',v!=='gen');document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===v));try{localStorage.setItem('cq_view',v)}catch(e){}}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{view(b.dataset.tab);history.replaceState(null,'','#'+b.dataset.tab)}));
+let v0='gen';try{v0=localStorage.getItem('cq_view')||'gen'}catch(e){}
+view(v0);
+function fromHash(){const h=location.hash.slice(1);if(h==='gen'||h==='tpl')view(h);else if(/^t\d+$/.test(h)){view('tpl');openId(h);}}
+window.addEventListener('hashchange',fromHash);fromHash();
+</script>
+<script>
+/* ===== 慢性病 SOAP 產生器 ===== */
+(function(){
+const G=document.getElementById('gen');
+const MODS=[
+ {k:'htn',n:'高血壓',c:'#b5432c'},{k:'dm',n:'糖尿病',c:'#2c6fb5'},{k:'lip',n:'血脂',c:'#1d6b72'},
+ {k:'ckd',n:'CKD',c:'#7a5a2c'},{k:'wt',n:'減重針',c:'#8a3d8f'},{k:'smk',n:'戒菸',c:'#3d7a5a'}];
+const COMORB=[
+ ['cad','冠心病 CAD'],['cadx','極高風險條件*'],['stroke','缺血性中風／TIA'],['pad','周邊動脈疾病'],['plaque','影像 ≥50% 狹窄'],
+ ['hfref','HFrEF'],['af','心房顫動'],['gout','痛風'],['fhx','早發冠心病家族史'],['cac','CAC ≥400'],
+ ['prediab','糖尿病前期'],['osa','睡眠呼吸中止'],['frail','衰弱／長者照護'],['preg','懷孕／備孕'],['ifg','空腹血糖 ≥100']];
+const F={ // module fields
+ htn:[['h_sbp','num','居家 722 收縮壓'],['h_dbp','num','居家 722 舒張壓'],
+  ['h_step','sel','目前治療',['未用藥','單藥（amlodipine 或 ARB 一種）','A5＋O20（或 Sevikar 5/20）','A5＋O40（或 Sevikar 5/40）','A10＋O40','A10＋O40＋HCTZ 12.5（Sevikar HCT 40/10/12.5）','上一步＋spironolactone']],
+  ['h_adh','chk','服藥遵從性差'],['h_edema','chk','CCB 腳踝水腫'],['h_sx','chk','有頭痛、胸痛、喘、視力模糊']],
+ dm:[['d_a1c','num','HbA1c (%)'],['d_fpg','num','空腹血糖'],
+  ['d_lvl','sel','目前治療',['未用藥','Metformin 足量仍未達標','＋第二類，未滿 6 個月','＋第二類 ≥6 個月','三種口服或複方 ≥6 個月','GLP-1 RA','基礎胰島素']],
+  ['d_sym','chk','高血糖症狀（多尿、口渴、變瘦）'],['d_hypo','chk','有低血糖'],['d_gu','chk','反覆泌尿生殖道感染'],['d_mci','chk','Metformin 禁忌或不耐受'],['d_adh','chk','服藥遵從性差']],
+ lip:[['l_ldl','num','LDL-C'],['l_hdl','num','HDL-C'],['l_tg','num','TG'],['l_tc','num','TC'],
+  ['l_lvl','sel','目前治療',['未用藥','生活型態已滿 3–6 個月','Statin 未滿 6–8 週','Statin ≥6–8 週','Statin＋ezetimibe ≥1–3 個月','Statin 不耐受']],
+  ['l_cur','sel','目前 statin',['無','Atorvastatin 10（中）','Atorvastatin 20（中）','Rosuvastatin 10（中）','Atorvastatin 40（高）','Rosuvastatin 20（高）']],
+  ['l_my','chk','肌肉痠痛'],['l_adh','chk','服藥遵從性差']],
+ ckd:[['c_prev','num','一年前 eGFR'],['c_hema','chk','持續性血尿'],['c_htn','chk','頑固型高血壓']],
+ wt:[['w_drug','sel','藥物（自費）',['Mounjaro（tirzepatide）','Wegovy（semaglutide）','Saxenda（liraglutide）']],
+  ['w_dose','sel','目前劑量',['尚未開始']],['w_wk','num','這個劑量已用幾週'],['w_base','num','開始前體重 kg'],
+  ['w_gi','sel','腸胃副作用',['沒有','輕微可忍受','嚴重（吐、吃不下）']],['w_ctx','chk','甲狀腺髓質癌／MEN2 或胰臟炎病史']],
+ smk:[['s_yr','num','菸齡（年）'],
+  ['s_q1','sel','起床後多久抽第一支',['>60 分鐘','31–60 分鐘','6–30 分鐘','≤5 分鐘']],
+  ['s_q2','chk','禁菸場所很難忍'],['s_q3','chk','最難放棄早上第一支'],['s_q5','chk','起床後幾小時內抽得最多'],['s_q6','chk','生病臥床還是會抽'],
+  ['s_stage','sel','這次是',['初診','回診：單一藥 ≥2 週仍有戒斷','上次療程失敗：用過 varenicline','上次療程失敗：用過尼古丁或 bupropion','已戒 8 週，鞏固']],
+  ['s_pref','sel','病人偏好',['Varenicline','尼古丁替代','Bupropion']],
+  ['s_cur','sel','目前藥物（回診用）',['Varenicline','尼古丁貼片','尼古丁短效','Bupropion']],
+  ['s_bc','chk','Bupropion 禁忌（癲癇、飲食疾患、停酒或 benzo、MAOI、tamoxifen）'],['s_dent','chk','假牙或顳顎關節問題']]
+};
+const PE={
+ base:['General: alert, not ill-looking'],
+ htn:['Heart: RRR, no murmur','Lungs: clear','Leg edema: (-)','BP both arms: symmetric'],
+ dm:['Foot: monofilament intact','Foot: dorsalis pedis palpable','Foot: no ulcer or callus','Acanthosis nigricans: (-)'],
+ lip:['Xanthoma: (-)','Corneal arcus: (-)'],
+ ckd:['Pitting edema: (-)','Pallor: (-)'],
+ wt:['Waist measured','Acanthosis nigricans: (-)','Thyroid: no nodule'],
+ smk:['Oral mucosa: no leukoplakia','Lungs: clear','Exhaled CO: ___ ppm']
+};
+const WT={
+ 'Mounjaro（tirzepatide）':{u:'mg SC qw',d:[2.5,5,7.5,10,12.5,15],min:4},
+ 'Wegovy（semaglutide）':{u:'mg SC qw',d:[0.25,0.5,1,1.7,2.4],min:4},
+ 'Saxenda（liraglutide）':{u:'mg SC qd',d:[0.6,1.2,1.8,2.4,3.0],min:1}
+};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function fieldHtml(f){
+ const [id,t,l,o]=f;
+ if(t==='num')return `<label class="fld"><span>${l}</span><input id="${id}" type="number" inputmode="decimal" step="any"></label>`;
+ if(t==='sel')return `<label class="fld"><span>${l}</span><select id="${id}">${o.map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('')}</select></label>`;
+ return `<label class="tg"><input id="${id}" type="checkbox"><span>${l}</span></label>`;
+}
+function peHtml(k){return `<div class="pe"><div class="sm">理學檢查（只勾有做的，才會寫進 O）</div>${PE[k].map((p,i)=>`<label class="tg pe1"><input type="checkbox" data-pe="${k}" value="${esc(p)}"><span>${esc(p)}</span></label>`).join('')}</div>`}
+G.innerHTML=`
+<details class="blk" open><summary>病人</summary><div class="grid">
+ <label class="fld"><span>就診</span><select id="p_visit"><option value="0">回診</option><option value="1">初診</option></select></label>
+ <label class="fld"><span>年齡</span><input id="p_age" type="number" inputmode="numeric"></label>
+ <label class="fld"><span>性別</span><select id="p_sex"><option value="M">男</option><option value="F">女</option></select></label>
+ <label class="fld"><span>身高 cm</span><input id="p_ht" type="number" inputmode="decimal"></label>
+ <label class="fld"><span>體重 kg</span><input id="p_wt" type="number" inputmode="decimal"></label>
+ <label class="fld"><span>腰圍 cm</span><input id="p_waist" type="number" inputmode="decimal"></label>
+ <label class="fld"><span>診間收縮壓</span><input id="p_sbp" type="number" inputmode="numeric"></label>
+ <label class="fld"><span>診間舒張壓</span><input id="p_dbp" type="number" inputmode="numeric"></label>
+ <label class="fld"><span>心跳</span><input id="p_hr" type="number" inputmode="numeric"></label>
+ <label class="fld"><span>eGFR</span><input id="p_egfr" type="number" inputmode="decimal"></label>
+ <label class="fld"><span>UACR mg/g</span><input id="p_uacr" type="number" inputmode="decimal"></label>
+ <label class="fld"><span>K</span><input id="p_k" type="number" inputmode="decimal" step="0.1"></label>
+ <label class="fld"><span>每天抽菸（支）</span><input id="p_cig" type="number" inputmode="numeric"></label>
+</div>
+<div class="sm" style="margin-top:8px">共病與風險因子</div>
+<div class="tgs">${COMORB.map(([k,l])=>`<label class="tg"><input id="x_${k}" type="checkbox"><span>${l}</span></label>`).join('')}</div>
+<div class="sm">*極高風險條件：CAD 合併一年內 MI、≥2 次 MI、多支阻塞、ACS 合併 DM、PAD 或頸動脈狹窄（健保表一）</div>
+</details>
+<div class="sm" style="margin:12px 2px 6px">這次要處理的慢性病（可複選）</div>
+<div class="tgs mods">${MODS.map(m=>`<label class="tg mod" style="--mc:${m.c}"><input type="checkbox" data-mod="${m.k}"><span>${m.n}</span></label>`).join('')}</div>
+${MODS.map(m=>`<details class="blk mblk" id="m_${m.k}" open hidden style="--mc:${m.c}"><summary>${m.n}</summary><div class="grid">${F[m.k].filter(f=>f[1]!=='chk').map(fieldHtml).join('')}</div><div class="tgs">${F[m.k].filter(f=>f[1]==='chk').map(fieldHtml).join('')}</div>${peHtml(m.k)}</details>`).join('')}
+<details class="blk" open id="outblk"><summary>產生的 SOAP</summary>
+ <div id="gwarn"></div>
+ <textarea id="gout" rows="24" spellcheck="false"></textarea>
+ <div class="btns"><button class="b" data-copy="gout">複製 SOAP</button><button class="b o" data-copy="gslip">複製回診單（給病人）</button><button class="b g" id="gregen">重新產生</button><button class="b g" id="gclear">清空</button></div>
+ <div class="sm" id="gedit" hidden>你改過文字框；再改輸入欄會覆蓋。要保留請先複製。</div>
+ <details class="sub2"><summary>回診單預覽</summary><textarea id="gslip" rows="10" spellcheck="false"></textarea></details>
+</details>`;
+// weight dose options
+function fillWt(){const d=WT[$('w_drug').selectedOptions[0].text];const s=$('w_dose'),v=s.value;s.innerHTML='<option value="0">尚未開始</option>'+d.d.map((x,i)=>`<option value="${i+1}">${x} ${d.u}</option>`).join('');s.value=v<=d.d.length?v:0}
+fillWt();
+$('w_drug').addEventListener('change',fillWt);
+
+const n=id=>{const e=$(id);if(!e)return NaN;const v=parseFloat(e.value);return isNaN(v)?NaN:v};
+const sel=id=>+$(id).value;
+const ck=id=>$(id)&&$(id).checked;
+const has=v=>!isNaN(v);
+const B=v=>has(v)?v:'___';
+const on=k=>!!document.querySelector(`[data-mod="${k}"]`).checked;
+
+function pt(){
+ const p={visit:sel('p_visit'),age:n('p_age'),sex:$('p_sex').value,ht:n('p_ht'),wt:n('p_wt'),waist:n('p_waist'),sbp:n('p_sbp'),dbp:n('p_dbp'),hr:n('p_hr'),egfr:n('p_egfr'),uacr:n('p_uacr'),k:n('p_k'),cig:n('p_cig')};
+ COMORB.forEach(([k])=>p[k]=ck('x_'+k));
+ p.bmi=has(p.ht)&&has(p.wt)?Math.round(p.wt/((p.ht/100)**2)*10)/10:NaN;
+ p.old=has(p.age)&&p.age>=75;
+ p.smoker=(has(p.cig)&&p.cig>0)||on('smk');
+ p.ckd=on('ckd')||(has(p.egfr)&&p.egfr<60)||(has(p.uacr)&&p.uacr>=30);
+ p.ascvd=p.cad||p.stroke||p.pad||p.plaque;
+ return p;
+}
+function gstage(e){return e>=90?'G1':e>=60?'G2':e>=45?'G3a':e>=30?'G3b':e>=15?'G4':'G5'}
+function astage(u){return u<30?'A1':u<300?'A2':'A3'}
+const NCODE={G1:'N18.1',G2:'N18.2',G3a:'N18.31',G3b:'N18.32',G4:'N18.4',G5:'N18.5'};
+const ncode=p=>has(p.egfr)?NCODE[gstage(p.egfr)]:'N18.x';
+function R(){return {S:[],O:[],A:[],P:[],labs:[],fu:99,edu:[],warn:[],goals:[],rx:[]}}
+const lab=(r,item,wk)=>r.labs.push([item,wk]);
+
+/* ---------- 高血壓 ---------- */
+function HTN(p){
+ const r=R(),s=n('h_sbp'),d=n('h_dbp');let step=sel('h_step');
+ const tgt=[130,80];
+ r.S.push(`HTN: HBPM 722 avg ${B(s)}/${B(d)} mmHg. Adherence ${ck('h_adh')?'poor':'[good]'}. ${ck('h_sx')?'Complains of [headache/chest pain/dyspnea/blurred vision].':'Denied headache, chest pain, dyspnea.'}${ck('h_edema')?' Ankle edema (+).':''}`);
+ if(ck('h_sx'))r.warn.push('高血壓合併症狀：先排除急性器官傷害（胸痛、神經學症狀、喘、視力），需要時轉急診。');
+ const dx=p.hfref?'Hypertensive heart disease with HF (I11.0) + I50.2_':(p.ckd&&on('ckd')?`Hypertensive CKD (${has(p.egfr)&&p.egfr<15?'I12.0':'I12.9'}) + ${ncode(p)}`:'Essential hypertension (I10)');
+ const known=has(s)&&has(d);
+ const atT=known&&s<tgt[0]&&d<tgt[1];
+ const gs=known?s-tgt[0]:0,gd=known?d-tgt[1]:0;
+ r.A.push(`${dx}, ${known?(atT?'controlled':'uncontrolled'):'[controlled/uncontrolled]'}; target HBPM <130/80${p.frail||p.old?'（衰弱或高齡：個別化，避免姿勢性低血壓）':''}`);
+ r.goals.push('居家血壓 <130/80');
+ const arb20=p.gout?'Losartan 50 mg 1# QD':'Olmesartan 20 mg 1# QD';
+ const arb40=p.gout?'Losartan 100 mg 1# QD':'Olmesartan 40 mg 1# QD';
+ const arbName=p.gout?'losartan':'olmesartan';
+ const preferArb=on('dm')||p.ckd||p.hfref||(has(p.uacr)&&p.uacr>=30);
+ const LAD=[[],
+  [preferArb?(p.frail?(p.gout?'Losartan 25 mg 1# QD':'Olmesartan 10 mg 1# QD'):arb20):(p.frail?'Amlodipine 2.5 mg 1# QD':'Amlodipine 5 mg 1# QD')],
+  ['Amlodipine 5 mg 1# QD',arb20],
+  ['Amlodipine 5 mg 1# QD',arb40],
+  ['Amlodipine 10 mg 1# QD',arb40],
+  p.gout?['Amlodipine 10 mg 1# QD',arb40,'（痛風：不加 thiazide）']:['Sevikar HCT 40/10/12.5 mg 1# QD'],
+  null];
+ let next=step,why='';
+ if(!known){r.P.push('HTN: 請輸入 722 平均才能算處方。');}
+ else if(atT){next=step;why='已達標，維持'}
+ else if(ck('h_adh')&&step>0){next=step;why='遵從性差：先處理服藥（藥盒、簡化、副作用），暫不加藥'}
+ else if(step===0){next=(gs>=40||gd>=25)?4:(gs>=30||gd>=20)?3:(gs>=20||gd>=10)?2:1;why=`高於目標 ${gs}/${gd}，起始 ${next>1?'兩種':'一種'}`}
+ else{next=Math.min(6,step+((gs>=30||gd>=20)?2:1));why=`未達標（高於目標 ${Math.max(gs,0)}/${Math.max(gd,0)}）→ 往上 ${next-step} 階`}
+ if(known){
+  let meds;
+  if(p.preg){meds=['Nifedipine XL 30 mg 1# QD 或 Labetalol 100 mg 1# BID'];r.warn.push('懷孕／備孕：停用 ACEi/ARB、spironolactone；轉產科共照。');}
+  else if(next===6){
+   const base=p.gout?['Amlodipine 10 mg 1# QD',arb40]:['Sevikar HCT 40/10/12.5 mg 1# QD'];
+   if((has(p.k)&&p.k>=5)||(has(p.egfr)&&p.egfr<30)){meds=base;r.warn.push('第四線：K ≥5 或 eGFR <30 不加 spironolactone → 轉心臟或腎臟科評估頑固型高血壓。');}
+   else meds=base.concat(['Spironolactone 25 mg 1# QD（K <5、eGFR ≥30）']);
+   r.warn.push('三種藥仍未達標：先排除假性頑固（量測、遵從、NSAID、鹽、酒、OSA），並篩原發性高醛固酮症。');
+  } else meds=LAD[next]||[];
+  if(next===0)meds=[];
+  if(p.hfref&&!p.preg){meds=meds.concat(['Bisoprolol 1.25 mg 1# QD（HFrEF 慢慢加）']);r.warn.push('HFrEF：依 GDMT（ARNI/ARB、β-blocker、MRA、SGLT2i），轉心臟科。');}
+  else if((p.cad||p.af)&&!p.preg&&!meds.some(m=>/Bisoprolol/.test(m)))meds=meds.concat(['Bisoprolol 2.5 mg 1# QD（CAD／AF）']);
+  if(ck('h_edema')&&meds.some(m=>/Amlodipine 10/.test(m))){r.warn.push('CCB 水腫：amlodipine 改回 5 mg，ARB 加量或加 thiazide 取代。')}
+  if(has(p.k)&&p.k>=5.5)r.warn.push('K ≥5.5：暫停 ARB／spironolactone，複驗 K。');
+  if(p.gout)r.edu.push('痛風：ARB 用 losartan（可降尿酸），避開 thiazide。');
+  const nm=next>=2&&!p.preg&&!p.gout&&next<=4?'（兩藥穩定後可改單一複方 Sevikar，少一顆）':'';
+  r.P.push(`HTN（${why}）：`);meds.forEach(m=>r.P.push('  '+m));if(nm)r.P.push('  '+nm);
+  r.rx=meds;
+  const changed=next!==step;
+  if(changed){r.fu=2;r.P.push('  722 home BP x 7 days before next visit (調藥 2 週複評，4 週未達標再調).');
+   if(meds.some(m=>/sartan|Sevikar|Spironolactone|HCT/.test(m)))lab(r,'Cr/eGFR',2),lab(r,'K',2);
+   if(meds.some(m=>/HCT/.test(m)))lab(r,'Na',2),lab(r,'Uric acid',2);
+  } else {r.fu=atT?12:4;if(atT)r.P.push('  慢性病連續處方箋 x 3 months.');}
+ }
+ ['Cr/eGFR','K','Na','Uric acid','FPG','HbA1c','Lipid profile','UACR','U/A'].forEach(x=>lab(r,x,52));
+ r.P.push('  ECG yearly. S-ABCDE lifestyle（減鈉、減重、運動、限酒、戒菸）.');
+ r.edu.push('每天早晚各量兩次血壓（722），回診帶紀錄。');
+ r.v={hs:s,hd:d};
+ return r;
+}
+/* ---------- 糖尿病 ---------- */
+function DM(p){
+ const r=R(),a=n('d_a1c'),lvl=sel('d_lvl');
+ const tgt=(p.old||p.frail)?8:7;
+ const eg=p.egfr;
+ r.S.push(`DM: SMBG fasting ${B(n('d_fpg'))} mg/dL. Hypoglycemia ${ck('d_hypo')?'(+) [frequency/severity]':'denied'}. ${ck('d_sym')?'Polyuria/polydipsia/wt loss (+). ':''}Adherence ${ck('d_adh')?'poor':'[good]'}.`);
+ const atT=has(a)&&a<tgt;
+ let code=p.ckd&&on('ckd')?`Type 2 DM with diabetic CKD (E11.22) + ${ncode(p)}`:(has(a)&&!atT?'Type 2 DM with hyperglycemia (E11.65)':'Type 2 DM without complication (E11.9)');
+ r.A.push(`${code}, HbA1c ${B(a)}% (target <${tgt}%)`);
+ r.goals.push(`HbA1c <${tgt}%`);
+ const metOK=!ck('d_mci')&&!(has(eg)&&eg<30);
+ const metDose=has(eg)&&eg<45?'Metformin 500 mg 1# BID PC（eGFR 30–45 最多 1000 mg/d）':'Metformin 500 mg 1# BID PC → 2 週後 1000 mg BID';
+ const sglt=!(has(eg)&&eg<20);
+ const wantS=p.ascvd||p.hfref||p.ckd||(has(p.bmi)&&p.bmi>=27);
+ const wantD=p.old||p.frail||(has(p.bmi)&&p.bmi<22)||ck('d_gu');
+ let second;
+ if(!sglt)second='Linagliptin 5 mg 1# QD（Trajenta；eGFR <20 不用 SGLT2i）';
+ else if(wantD&&!wantS)second=has(eg)&&eg<30?'Linagliptin 5 mg 1# QD（Trajenta）':'Linagliptin 5 mg 1# QD（Trajenta）';
+ else second='Empagliflozin 10 mg 1# QD（Jardiance）或 Dapagliflozin 10 mg 1# QD（Forxiga）';
+ const isS=/flozin/.test(second);
+ if(isS&&wantD)r.warn.push('SGLT2i 用在長者／衰弱：衛教脫水、生殖器清潔、手術或禁食前 3 天停藥。');
+ const meds=[];let why='';
+ if(!has(a)){r.P.push('DM: 請輸入 HbA1c 才能算處方。');}
+ else if(atT){why='已達標，維持'}
+ else if(ck('d_adh')&&lvl>0){why='遵從性差：先處理服藥與飲食，暫不加藥'}
+ else if(lvl===0){
+  if(a>=10||ck('d_sym')){const u=has(p.wt)?Math.round(p.wt*(p.old?0.1:0.15)):'___';meds.push(`Insulin glargine ${u} U SC HS（${p.old?'0.1':'0.15'} U/kg）`);if(metOK)meds.push(metDose);why='HbA1c ≥10% 或有症狀 → 基礎胰島素';r.fu=1;r.edu.push('打胰島素要量空腹血糖；每 3 天空腹 >130 加 2 單位（依醫囑）。');}
+  else if(metOK){meds.push(metDose);
+   if(a-tgt>=1.5){if(p.old||p.frail)meds.push(second),why='高於目標 ≥1.5%（長者不加 SU）';else meds.push('Gliclazide MR 30 mg 1# QD AC（Diamicron MR）'),why='高於目標 ≥1.5% → metformin＋SU（健保初始雙藥）';}
+   else why='高於目標 <1.5% → metformin';}
+  else{meds.push(second);why='Metformin 禁忌 → 直接第二類（健保待核對）'}
+ }
+ else if(lvl===1){meds.push(second);why=`metformin 足量未達標 → 加${isS?' SGLT2i':' DPP-4i'}`}
+ else if(lvl===2){why='第二類未滿 6 個月：續用，3 個月後再評估（健保多數加藥需滿 6 個月）'}
+ else if(lvl===3){if(a>7.5)meds.push(p.hfref?'改 Glyxambi 10/5 mg 1# QD（empagliflozin/linagliptin；HF 不用 Qtern）':'改 Glyxambi 10/5 mg 1# QD（empagliflozin/linagliptin）'),why='兩類 ≥6 個月仍 >7.5% → 第三類（複方）';else{meds.push('Gliclazide MR 30 mg 1# QD AC'),why='差距小 → 加 SU（低血糖衛教）'}}
+ else if(lvl===4){if(a>8.5){if(on('wt')&&sel('w_dose')>0){meds.push('（已在用減重針，不重複開 GLP-1 RA；減重針劑量上調後 3 個月再評估，仍 >8.5% 加基礎胰島素）');why='>8.5%，GLP-1 類已由減重針提供'}else if((has(p.bmi)&&p.bmi>=25)||p.ascvd){meds.push('Semaglutide（Ozempic）0.25 mg SC qw x4 → 0.5 mg qw');meds.push('停用 DPP-4i（健保：GLP-1 RA 不可與 DPP-4i、SGLT2i 併用；SGLT2i 續用需確認給付）');why='>8.5% → GLP-1 RA'}else{const u=has(p.wt)?Math.round(p.wt*0.15):'___';meds.push(`Insulin glargine ${u} U SC HS`);why='>8.5% → 基礎胰島素';r.fu=1}}else why='7–8.5%：檢查遵從、飲食，或加 SU'}
+ else if(lvl===5){const u=has(p.wt)?Math.round(p.wt*0.1):'___';meds.push(`Insulin glargine ${u} U SC HS（加上 GLP-1 RA）`);why='GLP-1 RA 未達標 → 加基礎胰島素';r.fu=1}
+ else if(lvl===6){meds.push('Insulin：依空腹血糖每 3 天 +2 U，目標 FPG 80–130');why='胰島素滴定（教學簡化）';if(a>9)r.warn.push('基礎胰島素已高（>0.5 U/kg）仍未達標：考慮加 GLP-1 RA 或餐前胰島素，轉新陳代謝科。')}
+ if(has(a)){r.P.push(`DM（${why}）：`);meds.forEach(m=>r.P.push('  '+m));if(!meds.length&&!atT&&why)r.P.push('  Continue current regimen.');r.rx=meds;}
+ if(metOK&&lvl<=1&&has(eg)&&eg<45&&eg>=30)r.warn.push('eGFR 30–45：metformin 最多 1000 mg/d；<30 停用。');
+ if(!metOK&&has(eg)&&eg<30)r.warn.push('eGFR <30：停 metformin。');
+ if(ck('d_hypo'))r.warn.push('有低血糖：SU 減量或停用，目標放寬。');
+ if(on('wt'))r.warn.push('同時開減重針：與 GLP-1 RA 擇一，不要重複；SU／胰島素要減量防低血糖。');
+ lab(r,'HbA1c',atT?26:12);
+ ['Lipid profile','Cr/eGFR','UACR','ALT'].forEach(x=>lab(r,x,52));
+ if(metOK)lab(r,'Vit B12',52);
+ if(r.fu===99)r.fu=12;
+ r.P.push('  Eye fundus yearly; foot exam yearly. 糖尿病共照網／P4P 收案 [Y].');
+ r.edu.push('飲食：餐盤一半蔬菜、四分之一蛋白質、四分之一全穀；少含糖飲料。');
+ r.v={a1c:a,a1cT:tgt};
+ return r;
+}
+/* ---------- 血脂 ---------- */
+const TIER=[['極高風險',55,55,85],['非常高風險',70,70,100],['高風險',100,100,130],['中風險',115,115,145],['低風險',130,130,160],['0 項風險因子',160,160,null]];
+function riskTier(p){
+ const hdl=n('l_hdl'),tg=n('l_tg'),ldl=n('l_ldl');
+ const lowH=has(hdl)&&hdl<(p.sex==='M'?40:50);
+ if(p.cadx&&(p.cad||p.pad))return[0,['CAD/PAD 合併極高風險條件']];
+ if(p.ascvd)return[1,['確診 ASCVD（ACS、血管再通、缺血性中風、PAD 或影像 ≥50% 狹窄）']];
+ const hi=[];if(on('dm'))hi.push('糖尿病');if(p.ckd)hi.push('CKD（UACR ≥30 或 eGFR <60，持續 3 個月）');if(has(ldl)&&ldl>=190)hi.push('LDL ≥190');if(p.cac)hi.push('CAC ≥400');
+ if(hi.length)return[2,hi];
+ const rf=[];
+ if(on('htn'))rf.push('高血壓');
+ if(has(p.age)&&p.age>=(p.sex==='M'?45:55))rf.push('年齡');
+ if(p.fhx)rf.push('早發冠心病家族史');
+ if(lowH)rf.push('HDL 偏低');
+ if(p.smoker)rf.push('抽菸');
+ let ms=0;if(has(p.waist)&&p.waist>=(p.sex==='M'?90:80))ms++;if(on('htn')||(has(p.sbp)&&(p.sbp>=130||p.dbp>=85)))ms++;if(on('dm')||p.ifg||p.prediab)ms++;if(has(tg)&&tg>=150)ms++;if(lowH)ms++;
+ if(ms>=3)rf.push('代謝症候群');
+ return[rf.length>=2?3:rf.length===1?4:5,rf.length?rf:['無']];
+}
+function LIP(p){
+ const r=R(),ldl=n('l_ldl'),tg=n('l_tg'),hdl=n('l_hdl'),tc=n('l_tc'),lvl=sel('l_lvl'),cur=sel('l_cur');
+ const [ti,why]=riskTier(p);const T=TIER[ti];
+ const nh=has(tc)&&has(hdl)?tc-hdl:NaN;
+ r.S.push(`HLD: ${['drug-naive','lifestyle modification x 3-6 months','on statin <6-8 wks','on statin ≥6-8 wks','on statin + ezetimibe','statin intolerance'][lvl]}. Myalgia ${ck('l_my')?'(+)':'denied'}. Adherence ${ck('l_adh')?'poor':'[good]'}.`);
+ const atT=has(ldl)&&ldl<T[2];
+ const code=has(tg)&&tg>=150&&has(ldl)&&ldl>=T[2]?'Mixed hyperlipidemia (E78.2)':(has(tg)&&tg>=150&&atT?'Hypertriglyceridemia (E78.1)':'Pure hypercholesterolemia (E78.00)');
+ r.A.push(`${code}; 健保表一 ${T[0]}（${why.join('、')}），LDL ${B(ldl)} → target <${T[2]}${T[3]?`（non-HDL <${T[3]}${has(nh)?'，目前 '+nh:''}）`:''}`);
+ r.goals.push(`LDL <${T[2]}`);
+ const hiRisk=ti<=2;
+ const need=has(ldl)?Math.max(0,Math.round((1-(T[2]-1)/ldl)*100)):NaN;
+ const egLow=has(p.egfr)&&p.egfr<30;
+ const meds=[];let wy='';
+ const intens=cur>=4?'high':cur>=1?'mod':'none';
+ if(!has(ldl)){r.P.push('HLD: 請輸入 LDL 才能算處方。')}
+ else if(lvl===5){meds.push('Ezetimibe 10 mg 1# QD（2.6.2 第 1 款：statin 無法耐受）');meds.push('或低劑量再挑戰：Rosuvastatin 5 mg 1# QOD');wy='statin 不耐受'}
+ else if(atT){wy='已達標，維持'}
+ else if(ck('l_adh')&&lvl>=2){wy='遵從性差：先確認有吃藥再調'}
+ else if(lvl===0||lvl===1){
+  if(ldl<T[1])wy=`LDL 未達起始值 ${T[1]}：生活型態`;
+  else if(!hiRisk&&lvl===0){wy=`${T[0]}：先 3–6 個月生活型態（健保規定）`}
+  else if(!hiRisk){meds.push(need<=30?'Atorvastatin 10 mg 1# QD（Lipitor）':'Atorvastatin 20 mg 1# QD（Lipitor）');wy=`生活型態後仍 ≥${T[1]}，需降 ${need}% → 中強度`}
+  else if(need>40){meds.push(egLow?'Atorvastatin 40 mg 1# QD（eGFR <30 不用 rosuvastatin 20）':'Atorvastatin 40 mg 1# QD（Lipitor）');if(ti<=1&&need>60)meds.push('＋Ezetimibe 10 mg 1# QD（表一允許起始合併；與 2.6.2 條文落差待核對）');wy=`需降 ${need}% → 高強度`}
+  else{meds.push('Atorvastatin 20 mg 1# QD（Lipitor）');wy=`需降 ${need}% → 中強度`}
+ }
+ else if(lvl===2){wy='statin 未滿 6–8 週：續用，6–8 週驗血脂'}
+ else if(lvl===3){
+  if(intens!=='high'){
+   if(need<=6){meds.push(cur===1?'Atorvastatin 20 mg 1# QD':cur===2?'Atorvastatin 40 mg 1# QD':egLow?'Atorvastatin 40 mg 1# QD':'Rosuvastatin 20 mg 1# QD（選表一品項）');wy=`還差 ${need}% → statin 加倍`}
+   else if(need<=30){meds.push('原 statin＋Ezetimibe 10 mg 1# QD（或 Atozet 單一複方）');wy=`還差 ${need}% → 加 ezetimibe`}
+   else{meds.push(egLow?'Atorvastatin 40 mg 1# QD':'Atorvastatin 40 mg 1# QD 或 Rosuvastatin 20 mg 1# QD');meds.push('＋Ezetimibe 10 mg 1# QD');wy=`還差 ${need}% → 高強度＋ezetimibe`}
+  } else {meds.push('原 statin＋Ezetimibe 10 mg 1# QD');wy='高強度未達標 → 加 ezetimibe'}
+ }
+ else if(lvl===4){if(ti<=1)meds.push('PCSK9 單株抗體：Evolocumab 140 mg SC q2w（健保條件待核對，否則自費）'),wy='statin＋ezetimibe 未達標，極高／非常高風險';else meds.push('自費選項：inclisiran、bempedoic acid'),wy='statin＋ezetimibe 未達標'}
+ if(has(tg)&&tg>=500){meds.push(egLow?'（TG ≥500：eGFR <30 避免 fenofibrate，轉介）':'Fenofibrate 160 mg 1# QD（TG ≥500，防胰臟炎）')}
+ if(has(ldl)){r.P.push(`HLD（${wy}）：`);meds.forEach(m=>r.P.push('  '+m));r.rx=meds.filter(m=>!/^（/.test(m));}
+ if(ck('l_my'))r.warn.push('肌肉痠痛：驗 CK；CK >10 倍正常上限或症狀嚴重先停 statin，2–4 週後換低劑量或其他 statin。'),lab(r,'CK',0);
+ if(has(ldl)&&ldl>=190)r.warn.push('LDL ≥190：考慮家族性高膽固醇血症篩檢（DLCN），並篩家人。');
+ const changed=meds.length>0&&!/^自費|^PCSK9/.test(meds[0]);
+ if(changed){lab(r,'Lipid profile',8);lab(r,'ALT',8);r.fu=8}
+ else if(lvl===2){lab(r,'Lipid profile',8);r.fu=8}
+ else if(atT){lab(r,'Lipid profile',26);r.fu=26}
+ else{lab(r,'Lipid profile',12);r.fu=12}
+ r.P.push(`  病歷：風險分級 ${T[0]}、起始值 ${T[1]}、目標 <${T[2]}${hiRisk?'':'、生活型態介入期間'}。`);
+ r.edu.push('少吃油炸、肥肉、內臟；多蔬菜、全穀、魚；每週運動 150 分鐘。');
+ r.v={ldl,ldlT:T[2],tier:T[0]};
+ return r;
+}
+/* ---------- CKD ---------- */
+const FREQ={G1:[1,1,3],G2:[1,1,3],G3a:[1,2,3],G3b:[2,3,3],G4:[3,3,4],G5:[4,4,4]};
+function CKD(p,ctx){
+ const r=R(),e=p.egfr,u=p.uacr;
+ r.S.push(`CKD: NSAID/herbal use [denied]. ${ck('c_hema')?'Persistent hematuria (+).':''}`);
+ if(!has(e)){r.A.push('CKD stage G_A_ (N18.__)');r.P.push('CKD: 請輸入 eGFR（與 UACR）才能分期。');lab(r,'Cr/eGFR',12);lab(r,'UACR',12);r.fu=12;return r}
+ const g=gstage(e),a=has(u)?astage(u):'A_';
+ const et=on('dm')?'diabetic (E11.22)':on('htn')?'hypertensive (I12.9)':'[etiology]';
+ r.A.push(`CKD stage ${g}${a} (${NCODE[g]}), ${et}`);
+ const meds=[];
+ const prev=n('c_prev');const drop=has(prev)?prev-e:NaN;
+ if(has(u)&&u>=30&&!p.preg&&has(p.k)&&p.k>=5.5)meds.push('（K ≥5.5：先處理高血鉀，暫不開始 RASi）');
+ else if(has(u)&&u>=30&&!p.preg){
+  if(on('htn')&&ctx.htnArb)meds.push('ARB 已在高血壓處方中 → 調到最大耐受劑量');
+  else meds.push('Losartan 50 mg 1# QD → 2–4 週後 100 mg（UACR ≥30，最大耐受）');
+ }
+ if(e>=20&&!p.preg){if(on('dm')&&ctx.dmSglt)meds.push('SGLT2i 已在糖尿病處方中');else meds.push('Dapagliflozin 10 mg 1# QD（Forxiga；eGFR ≥20；健保：收案 Early CKD／Pre-ESRD）')}
+ if(on('dm')&&has(u)&&u>=30&&e>=25&&(!has(p.k)||p.k<=5))meds.push('可考慮 Finerenone 10 mg 1# QD（Kerendia；已用最大耐受 RASi 仍 UACR ≥30、K 正常時；健保條件待核對）');
+ if(!on('lip'))r.warn.push('CKD 屬健保表一高風險（LDL 目標 <100）：建議一起勾「血脂」。');
+ r.P.push('CKD：');meds.forEach(m=>r.P.push('  '+m));
+ r.P.push('  Avoid NSAID, herbal; renal dose check all meds. BP target <130/80'+(has(u)&&u>=30?'（UACR ≥30）':'')+'.');
+ r.P.push(`  ${e<45||/A2|A3/.test(a)?'Early CKD／Pre-ESRD 計畫收案 [Y].':'Early CKD 計畫：符合條件收案.'}`);
+ r.rx=meds.filter(m=>!/已在/.test(m));
+ const ai=a==='A_'?0:+a[1]-1;const fq=FREQ[g][ai];const wk=fq>=4?12:fq===3?17:fq===2?26:52;
+ lab(r,'Cr/eGFR',wk);lab(r,'UACR',wk);
+ if(r.rx.length){lab(r,'Cr/eGFR',4);lab(r,'K',4);r.P.push('  RASi／SGLT2i 起始後 2–4 週驗 Cr、K（eGFR 下降 ≤30% 可續用）.')}
+ if(/G3|G4|G5/.test(g))lab(r,'CBC (Hb)',wk),lab(r,'K',wk);
+ if(/G3b|G4|G5/.test(g))lab(r,'Ca/P',wk),lab(r,'HCO3',wk);
+ if(/G4|G5/.test(g))lab(r,'iPTH',26);
+ r.fu=Math.min(r.rx.length?4:99,wk);
+ const ref=[];
+ if(e<30)ref.push('eGFR <30');if(has(u)&&u>=300)ref.push('UACR ≥300');if(ck('c_hema'))ref.push('持續性血尿');if(ck('c_htn'))ref.push('頑固型高血壓');if(has(drop)&&(drop>=5||drop/prev>=0.25))ref.push(`eGFR 一年下降 ${drop}`);if(has(p.k)&&p.k>=5.5)ref.push('K ≥5.5');
+ if(ref.length){r.P.push('  Refer nephrology: '+ref.join('、')+'.');r.warn.push('建議轉腎臟科：'+ref.join('、'))}
+ r.goals.push(on('htn')?'避免止痛藥（NSAID）與來路不明的藥':'血壓 <130/80；避免止痛藥（NSAID）與來路不明的藥');
+ r.edu.push('不要自行吃止痛藥、草藥、偏方；看其他科時說自己腎功能不好。');
+ return r;
+}
+/* ---------- 減重針 ---------- */
+function WTM(p){
+ const r=R(),dn=$('w_drug').selectedOptions[0].text,D=WT[dn],di=sel('w_dose'),wk=n('w_wk'),gi=sel('w_gi'),b0=n('w_base');
+ const bmi=p.bmi;const co=[];
+ if(on('htn'))co.push('HTN');if(on('dm'))co.push('T2DM');else if(p.prediab)co.push('prediabetes');if(on('lip'))co.push('dyslipidemia');if(p.osa)co.push('OSA');if(p.ascvd)co.push('CVD');
+ const lossPct=has(b0)&&has(p.wt)?Math.round((b0-p.wt)/b0*1000)/10:NaN;
+ r.S.push(`Weight management: ${di?`on ${dn} ${D.d[di-1]} ${D.u} x ${B(wk)} wks`:'considering anti-obesity medication'}. GI AE: ${['none','mild, tolerable','severe [nausea/vomiting/poor intake]'][gi]}.${has(lossPct)?` Wt ${b0} → ${p.wt} kg (${lossPct>0?'-':'+'}${Math.abs(lossPct)}%).`:''}`);
+ let zc='';if(has(bmi)){if(bmi>=70)zc='Z68.45';else if(bmi>=60)zc='Z68.44';else if(bmi>=50)zc='Z68.43';else if(bmi>=45)zc='Z68.42';else if(bmi>=40)zc='Z68.41';else if(bmi>=25)zc='Z68.'+Math.floor(bmi);}
+ const ob=!has(bmi)?'Obesity (E66.9)':bmi>=40?'Morbid obesity (E66.01)':bmi>=27?'Obesity (E66.9)':bmi>=24?'Overweight (E66.3)':'BMI <24';
+ r.A.push(`${ob}${zc?' + BMI '+bmi+' ('+zc+')':''}${co.length?', with '+co.join('/'):''}`);
+ const elig=has(bmi)&&(bmi>=30||(bmi>=27&&co.length));
+ if(has(bmi)&&!elig)r.warn.push(`BMI ${bmi}${co.length?'':'、沒有共病'}：不符仿單（BMI ≥30，或 ≥27 合併共病）；台灣 2025 指引門檻待核對，屬仿單外使用要說明。`);
+ if(p.preg){r.warn.push('懷孕／備孕：不使用減重針；計畫懷孕前停藥（semaglutide 至少 2 個月）。');}
+ if(ck('w_ctx')){r.warn.push('甲狀腺髓質癌／MEN2 或胰臟炎病史：GLP-1 類藥物禁用或不建議。');}
+ const meds=[];let why='';
+ if(!p.preg&&!ck('w_ctx')){
+  if(di===0){meds.push(`${dn} ${D.d[0]} ${D.u}（起始劑量）`);why='起始'}
+  else if(gi===2){const t=Math.max(1,di-1);meds.push(`${dn} ${D.d[t-1]} ${D.u}（${t<di?'退回上一劑量':'維持'}，症狀緩解再試）`);why='腸胃副作用嚴重'}
+  else if(di<D.d.length&&has(wk)&&wk>=D.min){meds.push(`${dn} ${D.d[di]} ${D.u}（往上一階）`);why=`已用 ${wk} 週可耐受`}
+  else{meds.push(`${dn} ${D.d[di-1]} ${D.u}（維持）`);why=di===D.d.length?'已到最高劑量':`同劑量未滿 ${D.min} 週`}
+  if(di>0&&gi<2&&has(lossPct)&&has(wk)&&di===D.d.length&&wk>=12&&lossPct<5)r.warn.push(`最高劑量 12 週減重 <5%（${lossPct}%）：檢討飲食與遵從，考慮換藥或停藥。`);
+ }
+ if(meds.length){r.P.push(`Weight（${why}；自費、已說明並簽同意書）：`);meds.forEach(m=>r.P.push('  '+m));r.rx=meds}
+ if(dn.startsWith('Saxenda'))r.edu.push('Saxenda 每天打，每週加 0.6 mg 直到 3.0 mg。');
+ r.P.push('  營養：蛋白質 1.2–1.6 g/kg/day、水分 30–35 mL/kg/day；阻力訓練每週 2–3 次（減脂不減肌）.');
+ r.P.push('  GI AE：少量多餐、吃慢、有飽足感就停；便秘加纖維與水分.');
+ if(di===0)['FPG/HbA1c','Lipid profile','ALT','Cr/eGFR'].forEach(x=>lab(r,x,0));
+ r.fu=4;r.goals.push('6 個月體重減少 5–10%');
+ r.edu.push('打針後噁心：少量多餐、不吃油膩；持續腹痛、嘔吐要回診（胰臟炎、膽結石）。');
+ if(on('dm'))r.warn.push('合併 DM：SU、胰島素可能要減量；停用 DPP-4i。');
+ return r;
+}
+/* ---------- 戒菸 ---------- */
+function SMK(p){
+ const r=R(),cig=p.cig,yr=n('s_yr'),st=sel('s_stage'),pref=sel('s_pref'),curd=sel('s_cur');
+ const q4=!has(cig)?0:cig<=10?0:cig<=20?1:cig<=30?2:3;
+ const ft=sel('s_q1')+(ck('s_q2')?1:0)+(ck('s_q3')?1:0)+q4+(ck('s_q5')?1:0)+(ck('s_q6')?1:0);
+ const py=has(cig)&&has(yr)?Math.round(cig/20*yr*10)/10:NaN;
+ r.S.push(`Smoking: ${B(cig)} cig/day x ${B(yr)} yrs (${B(py)} pack-years). FTND ${ft}/10. Quit attempt stage: ${['initial','f/u, withdrawal on monotherapy ≥2 wks','prior failure on varenicline','prior failure on NRT/bupropion','abstinent 8 wks'][st]}.`);
+ r.A.push(`Nicotine dependence, cigarettes (F17.210); tobacco cessation counseling (Z71.6); FTND ${ft}`);
+ const elig=(!has(p.age)||p.age>=18)&&(ft>=4||(has(cig)&&cig>=10));
+ if(!elig)r.warn.push('國健署收案：≥18 歲，且 FTND ≥4 或每天 ≥10 支。不符合者走衛教或自費。');
+ const short=(sel('s_q1')>=2?'4 mg':'2 mg');
+ const shortRx=ck('s_dent')?`尼古丁口含錠 ${short} q1-2h PRN（想抽時）`:`尼古丁口嚼錠 ${short} q1-2h PRN（嚼停嚼，想抽時）`;
+ const patch=has(cig)&&cig<=10?'尼古丁貼片 14 mg/24h QD':'尼古丁貼片 21 mg/24h QD';
+ const vDose=has(p.egfr)&&p.egfr<30?'Varenicline 0.5 mg QD x 3 days → 0.5 mg BID（eGFR <30 最大量）':'Varenicline 0.5 mg QD (D1–3) → 0.5 mg BID (D4–7) → 1 mg BID（第 8 天停菸）';
+ const bupOK=!ck('s_bc');
+ const bup='Bupropion SR 150 mg QD x 3 days → 150 mg BID（停菸日前 1–2 週開始）';
+ const meds=[];let why='';
+ if(has(p.age)&&p.age<18){why='<18 歲不開補助藥：行為治療'}
+ else if(p.preg){meds.push(shortRx+'（必要時）');why='懷孕：行為治療為主'}
+ else if(st===0){
+  if(pref===0){meds.push(vDose);why='初診：varenicline 單一用藥'}
+  else if(pref===1||(!bupOK&&pref===2)){meds.push(patch);if(has(cig)&&cig>=31)meds.push(shortRx),why='≥31 支：貼片＋短效（合併條件③）';else why='初診：尼古丁貼片'}
+  else{meds.push(bup);if(has(cig)&&cig>=31)meds.push(patch),why='≥31 支：bupropion＋貼片';else why='初診：bupropion'}
+ }
+ else if(st===1){
+  if(curd===1)meds.push(patch,shortRx),why='貼片 ≥2 週仍戒斷 → 加短效（條件②）';
+  else if(curd===2)meds.push(shortRx,patch),why='短效 ≥2 週仍戒斷 → 加貼片（條件②）';
+  else if(curd===3)meds.push(bup,patch),why='bupropion ≥2 週仍戒斷 → 加貼片（條件②）';
+  else{meds.push('Varenicline 1 mg BID（確認足量與遵從）');why='varenicline：確認足量與遵從；合併不補助（可自費加短效）'}
+ }
+ else if(st===2){meds.push(patch,shortRx);why='用過 varenicline 失敗 → 貼片＋短效（條件①；也可重試 varenicline）'}
+ else if(st===3){meds.push(vDose);why='用過尼古丁或 bupropion 失敗 → varenicline'}
+ else{meds.push(curd===0?'Varenicline 1 mg BID 續用（鞏固）':'尼古丁貼片 14 → 7 mg 漸減收尾');why='已戒 8 週'}
+ if(pref===2&&!bupOK&&st===0)r.warn.push('Bupropion 禁忌：已改用其他藥。');
+ r.P.push(`Smoking（${why}）：`);meds.forEach(m=>r.P.push('  '+m));r.rx=meds;
+ r.P.push(`  Quit date: [ ]. 國健署戒菸服務：本療程第 [ ] 次（8 週內、間隔 ≥4 天）；初診開 1–2 週，複診最多 4 週.`);
+ r.P.push('  5A counseling; 戒菸專線 0800-636363.');
+ if(has(p.age)&&p.age>=50&&p.age<=74&&has(py)&&py>=20){r.P.push('  LDCT 公費肺癌篩檢：50–74 歲、≥20 包年 → 轉介 [Y].');r.warn.push(`符合公費 LDCT：${p.age} 歲、${py} 包年。`)}
+ if(has(p.age)&&p.age>=30)r.P.push('  口腔黏膜檢查（≥30 歲吸菸者每 2 年）.');
+ r.warn.push('戒菸後 CYP1A2 誘導消失：clozapine、olanzapine、theophylline、warfarin 濃度可能上升。');
+ r.fu=st===0?1:2;r.goals.push('完全不抽（包含加熱菸、電子煙）');
+ r.edu.push('想抽菸時：深呼吸、喝水、離開現場、做別的事，通常 5 分鐘會過去。');
+ r.v={ftnd:ft};
+ return r;
+}
+/* ---------- 合併 ---------- */
+const WKL={0:'今天',1:'1 週',2:'2 週',4:'4 週',8:'6–8 週',12:'3 個月',17:'4 個月',26:'6 個月',52:'1 年'};
+const FAST=/FPG|Lipid/;
+let edited=false;
+function build(){
+ const p=pt();const order=MODS.map(m=>m.k).filter(on);
+ MODS.forEach(m=>{$('m_'+m.k).hidden=!on(m.k)});
+ if(!order.length){$('gout').value='先勾選這次要處理的慢性病。';$('gslip').value='';$('gwarn').innerHTML='';return}
+ const res={};const ctx={};
+ if(on('htn')){res.htn=HTN(p);ctx.htnArb=res.htn.rx.some(m=>/sartan|Sevikar/.test(m))}
+ if(on('dm')){res.dm=DM(p);ctx.dmSglt=res.dm.rx.some(m=>/flozin|Glyxambi/.test(m))}
+ if(on('lip'))res.lip=LIP(p);
+ if(on('ckd'))res.ckd=CKD(p,ctx);
+ if(on('wt'))res.wt=WTM(p);
+ if(on('smk'))res.smk=SMK(p);
+ const names={htn:'HTN',dm:'T2DM',lip:'HLD',ckd:'CKD',wt:'Obesity',smk:'Smoking'};
+ const S=[`S: ${p.visit?'Initial visit':'F/U'} for ${order.map(k=>names[k]).join(', ')}.`];
+ S.push(`   PMH: ${order.map(k=>names[k]).join(', ')}${COMORB.filter(([k])=>p[k]&&['cad','stroke','pad','hfref','af','gout','osa','prediab'].includes(k)).map(([,l])=>', '+l).join('')}. Meds: [ ]. Allergy: [NKDA].`);
+ S.push(`   Smoking: ${p.smoker?B(p.cig)+' cig/day':'[non-smoker]'}. Alcohol: [ ].`);
+ order.forEach(k=>res[k].S.forEach(x=>S.push('   '+x)));
+ const O=[`O: BP ${B(p.sbp)}/${B(p.dbp)} mmHg, HR ${B(p.hr)}/min, BW ${B(p.wt)} kg, BH ${B(p.ht)} cm, BMI ${B(p.bmi)}${has(p.waist)?', waist '+p.waist+' cm':''}.`];
+ const pe=[...document.querySelectorAll('[data-pe]:checked')].filter(x=>x.dataset.pe==='base'||on(x.dataset.pe)).map(x=>x.value);
+ const peU=[...new Set(pe)];
+ if(peU.length)O.push('   PE: '+peU.join('; ')+'.');else O.push('   PE: [只寫實際有做的項目]');
+ const L=[];
+ if(on('dm')&&has(n('d_a1c')))L.push('HbA1c '+n('d_a1c')+'%');
+ if(on('lip')){['l_tc','l_ldl','l_hdl','l_tg'].forEach(i=>{if(has(n(i)))L.push(i.slice(2).toUpperCase().replace('LDL','LDL-C').replace('HDL','HDL-C')+' '+n(i))})}
+ if(has(p.egfr))L.push('eGFR '+p.egfr);if(has(p.uacr))L.push('UACR '+p.uacr+' mg/g');if(has(p.k))L.push('K '+p.k);
+ O.push('   Lab ([date]): '+(L.length?L.join(', '):'[ ]')+'.');
+ const A=['A:'];let i=1;order.forEach(k=>res[k].A.forEach(x=>A.push(`   ${i++}. ${x}`)));
+ const P=['P:'];let j=1;order.forEach(k=>{const r=res[k];r.P.filter(x=>x!=='').forEach((x,ix)=>P.push(ix===0?`   ${j++}. ${x}`:`     ${x.trim()}`))});
+ // labs merge
+ const m={};order.forEach(k=>res[k].labs.forEach(([it,wk])=>{m[it]=it in m?Math.min(m[it],wk):wk}));
+ const fu=Math.min(...order.map(k=>res[k].fu));
+ const grp={};Object.entries(m).forEach(([it,wk])=>{const w=wk===0?0:(wk<=fu?fu:wk);(grp[w]=grp[w]||[]).push(it)});
+ const keys=Object.keys(grp).map(Number).sort((a,b)=>a-b);
+ P.push(`   ${j++}. Lab：`);
+ keys.forEach(w=>{const it=grp[w];P.push(`     ${w===0?'今天抽':w===fu?'下次回診（'+(WKL[fu]||fu+' 週')+'）':(WKL[w]||w+' 週')+'後'}：${it.join(', ')}${it.some(x=>FAST.test(x))?'（空腹 8 小時）':''}`)});
+ const goals=order.flatMap(k=>res[k].goals);
+ P.push(`   ${j++}. Goals: ${goals.join('; ')}.`);
+ P.push(`   ${j++}. Education: ${order.flatMap(k=>res[k].edu).join(' ')}`);
+ P.push(`   ${j++}. F/U OPD in ${WKL[fu]||fu+' 週'}${fu>=12?'（慢箋）':''}. Return earlier if [chest pain/dyspnea/hypoglycemia/edema].`);
+ $('gout').value=[...S,...O,...A,...P].join('\n');edited=false;$('gedit').hidden=true;
+ const warn=order.flatMap(k=>res[k].warn);
+ const newRx=order.flatMap(k=>res[k].rx).filter(x=>/^\S+ \d/.test(x)&&!/續用|維持|可考慮|自費|已在/.test(x));
+ if(newRx.length>=3)warn.unshift(`這次處方共 ${newRx.length} 項：新病人一次加多種藥，考慮分次加（先處理最優先的），方便判斷副作用。`);
+ $('gwarn').innerHTML=warn.length?'<ul class="wl">'+[...new Set(warn)].map(w=>'<li>'+esc(w)+'</li>').join('')+'</ul>':'';
+ // patient slip
+ const d=new Date();d.setDate(d.getDate()+fu*7);
+ const ds=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
+ const meds=order.flatMap(k=>res[k].rx).filter(x=>!/^＋?（|已在|停用|可考慮|自費|^或/.test(x)).map(x=>x.split(' 或 ')[0].replace(/^＋/,''));
+ const slip=['【回診單】',`下次回診：${WKL[fu]||fu+' 週'}後，約 ${ds}`];
+ const nl=grp[fu];if(nl)slip.push(`回診要抽血：${nl.join('、')}${nl.some(x=>FAST.test(x))?'（前一晚 10 點後不吃東西，可喝白開水）':''}`);
+ if(order.includes('htn'))slip.push('請帶 7 天居家血壓紀錄（早晚各量兩次）');
+ slip.push('目標：'+goals.join('；'));
+ if(meds.length){slip.push('目前的藥：');meds.forEach(x=>slip.push('・'+x.replace(/（[^）]*）/g,'')))}
+ slip.push('提醒：'+order.flatMap(k=>res[k].edu).join(''));
+ $('gslip').value=slip.join('\n');
+ handout(order,p,res,fu,grp[fu]||[],goals);
+}
+G.addEventListener('input',e=>{if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
+G.addEventListener('change',e=>{if(e.target.id==='gout'||e.target.id==='gslip')return;build()});
+$('gregen').addEventListener('click',build);
+$('gclear').addEventListener('click',()=>{G.querySelectorAll('input').forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''});G.querySelectorAll('select').forEach(s=>s.selectedIndex=0);fillWt();build()});
+// base PE
+const bp=document.createElement('div');bp.innerHTML=peHtml('base');G.querySelector('details.blk').appendChild(bp.firstChild);
+build();
+/* ---------- 衛教單張（門診實務共用套件 clinic-kit） ---------- */
+const HO={
+ mascot:{htn:'heart',dm:'drop',lip:'heart',ckd:'kidney',wt:'leaf',smk:'lung'},
+ title:{htn:'血壓照護單',dm:'血糖照護單',lip:'血脂照護單',ckd:'護腎照護單',wt:'體重管理單',smk:'戒菸計畫單'},
+ warn:{htn:'血壓超過 180/120，合併頭痛、胸痛、視力模糊或手腳無力',
+  dm:'血糖一直超過 300、很渴尿很多、噁心嘔吐；低血糖吃糖 15 分鐘後沒改善或叫不醒：打 <b>119</b>',
+  lip:'全身肌肉痛、沒力氣、尿變成可樂色',
+  ckd:'尿量變很少、全身水腫、喘到不能躺平',
+  wt:'上腹痛很厲害、痛到背，或一直吐、吃不下（可能是胰臟炎或膽結石）',
+  smk:'用戒菸藥後情緒明顯低落、異常激動：先停藥並馬上聯絡醫師'}
+};
+function handout(order,p,res,fu,next,goals){
+ const V={};order.forEach(k=>Object.assign(V,res[k].v||{}));
+ window.CK_SOAP={mods:order,p,res,fu,next,goals,v:V};
+ const C=window.CK_CONFIG;if(!C)return;
+ C.mascot=HO.mascot[order[0]]||'leaf';
+ C.sheetTitle=order.length===1?HO.title[order[0]]:'慢性病照護單';
+ const rx=order.flatMap(k=>res[k].rx||[]).join(' ');
+ C.warn=['胸痛、喘不過氣、單側手腳無力、講話不清楚：打 <b>119</b>'].concat(order.map(k=>HO.warn[k])).concat(/flozin|Glyxambi/.test(rx)?['吃 -flozin 類的藥：吐、肚子痛、很喘很累，就算血糖不高也要就醫']:[]);
+ C.bring=['所有藥袋'].concat(order.includes('htn')?['7 天血壓紀錄']:[]).concat(order.includes('dm')&&/insulin|glargine|gliclazide/i.test(rx)?['血糖紀錄']:[]).concat(['其他醫院的檢驗報告']);
+ const nx=document.getElementById('ckNext');if(nx){const d=new Date();d.setDate(d.getDate()+fu*7);nx.value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+ if(window.CK&&window.CK.refresh)window.CK.refresh();
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ const host=document.getElementById('genHandout');const part=[...document.querySelectorAll('main .ck-part')].find(x=>/衛教單張/.test(x.textContent));
+ if(host&&part){const g=document.getElementById(part.getAttribute('aria-controls'));host.append(part);if(g)host.append(g);}
+ build();
+});
+window.__gen={build,pt,HTN,DM,LIP,CKD,WTM,SMK};
+})();
+
+</script>
+<!-- ck-config start -->
+<script>
+/* 門診工具箱｜慢性病 SOAP 產生器的衛教單張設定。
+   不讀頁面欄位；讀產生器每次重算後放在 window.CK_SOAP 的結果：
+   {mods, p(病人), res(各模組 rx/goals), fu(週), next(下次要抽的血), goals}
+   mascot、sheetTitle、warn、bring 由產生器依勾選的慢性病即時改寫。 */
+window.CK_CONFIG={
+  key:"soap", sheetTitle:"慢性病照護單", mascot:"leaf", days:28,
+  siteUrl:"https://ycjaca.github.io/medisland/clinic/toolbox/soap.html",
+  inputs:[],
+  numbers(){
+    const S=window.CK_SOAP;if(!S)return [];const p=S.p,m=S.mods,out=[],ok=v=>v!=null&&!isNaN(v);
+    if(m.includes("htn")&&ok(S.v.hs)){out.push({label:"居家血壓（722 平均）",value:S.v.hs+"/"+S.v.hd,unit:"mmHg",
+      meter:{min:100,max:180,v:S.v.hs,target:130,targetLabel:"目標 130",zones:[[100,120,"#7cc47f","理想"],[120,130,"#b9db7a","正常"],[130,140,"#f2d257","偏高"],[140,160,"#f5a24b","高"],[160,180,"#e0605a","很高"]]},
+      text:"目標：居家血壓 <b>&lt;130/80</b>。"});}
+    if(m.includes("dm")&&ok(S.v.a1c)){const t=S.v.a1cT,eag=Math.round(28.7*S.v.a1c-46.7);out.push({label:"糖化血色素 HbA1c",value:S.v.a1c,unit:"%",
+      meter:{min:4.5,max:12,v:S.v.a1c,target:t,targetLabel:"目標 "+t,zones:[[4.5,5.7,"#7cc47f","正常"],[5.7,6.5,"#f2d257","前期"],[6.5,8,"#f5a24b","偏高"],[8,12,"#e0605a","太高"]]},
+      text:"過去 3 個月的平均血糖，約 <b>"+eag+" mg/dL</b>。目標：<b>&lt;"+t+"%</b>。"});}
+    if(m.includes("lip")&&ok(S.v.ldl)){const t=S.v.ldlT;out.push({label:"壞膽固醇 LDL-C",value:S.v.ldl,unit:"mg/dL",
+      meter:{min:30,max:220,v:S.v.ldl,target:t,targetLabel:"目標 "+t,zones:[[30,t,"#7cc47f","達標"],[t,Math.min(t+40,190),"#f2d257","偏高"],[Math.min(t+40,190),220,"#e0605a","太高"]]},
+      text:"你的風險等級是<b>"+S.v.tier+"</b>，LDL 目標 <b>&lt;"+t+"</b>。"});}
+    if(m.includes("ckd")&&ok(p.egfr)){out.push({label:"腎功能 eGFR",value:p.egfr,unit:"mL/min/1.73m²",
+      meter:{min:0,max:120,v:p.egfr,zones:[[0,15,"#e0605a","第5期"],[15,30,"#f08a5a","第4期"],[30,60,"#f5a24b","第3期"],[60,90,"#b9db7a","第2期"],[90,120,"#7cc47f","正常"]]},
+      text:ok(p.uacr)?"尿蛋白 UACR <b>"+p.uacr+" mg/g</b>"+(p.uacr>=30?"（偏高，藥物可以保護腎臟）":"（正常）")+"。":"每次回診追蹤，數字穩定就是好消息。"});}
+    if((m.includes("wt")||m.includes("dm"))&&ok(p.bmi)){out.push({label:"身體質量指數 BMI",value:p.bmi,
+      meter:{min:15,max:40,v:p.bmi,target:24,targetLabel:"24",zones:[[15,18.5,"#9fc9e8","過輕"],[18.5,24,"#7cc47f","正常"],[24,27,"#f2d257","過重"],[27,40,"#f5a24b","肥胖"]]},
+      text:p.bmi>=24&&ok(p.wt)?"先減 5–10%（約 <b>"+Math.round(p.wt*0.05)+"–"+Math.round(p.wt*0.1)+" 公斤</b>），血壓、血糖、血脂都會改善。":"維持現在的體重。"});}
+    if(m.includes("smk")&&ok(S.v.ftnd)){out.push({label:"尼古丁成癮度（FTND）",value:S.v.ftnd,unit:"/ 10",
+      meter:{min:0,max:10,v:S.v.ftnd,zones:[[0,4,"#7cc47f","低"],[4,7,"#f5a24b","中"],[7,10,"#e0605a","高"]]},
+      text:ok(p.cig)&&p.cig>0?"每天 "+p.cig+" 支，戒掉一個月可以省下約 <b>"+(Math.round(p.cig/20*30*130/100)*100).toLocaleString()+" 元</b>（以一包 130 元計）。":""});}
+    return out;
+  },
+  meds(){
+    const S=window.CK_SOAP;if(!S)return {lines:[]};
+    const raw=S.mods.flatMap(k=>(S.res[k]&&S.res[k].rx)||[]);
+    const lines=[];
+    raw.forEach(r=>{
+      if(/^（|^或|^停用|^可考慮|^自費|已在/.test(r))return;
+      let s=r.replace(/（[^）]*）/g," ").split(/\s或\s/)[0].replace(/^＋/,"").replace(/^原 statin＋/,"").replace(/^改\s*/,"");
+      let later="";const ar=s.indexOf("→");if(ar>0){later="之後依醫師指示調整";s=s.slice(0,ar).trim();}
+      s=s.replace(/（[^）]*）/g,"").trim();
+      const how=[];
+      if(/\bTID\b/i.test(s))how.push("每天 3 次");else if(/\bBID\b/i.test(s))how.push("每天 2 次，早晚");
+      else if(/\bqw\b/i.test(s))how.push("每週 1 次，固定同一天");else if(/\bHS\b/i.test(s))how.push("睡前");
+      else if(/\bQD\b|\bqd\b/.test(s))how.push("每天 1 次");else if(/PRN/.test(s))how.push("需要時");
+      if(/\bAC\b/.test(s))how.push("飯前");else if(/\bPC\b/.test(s))how.push("飯後");
+      if(/\bSC\b/.test(s))how.push("皮下注射");
+      if(later)how.push(later);
+      const name=s.replace(/\d#/g,"").replace(/\b(QD|qd|BID|TID|HS|qw|PC|AC|SC|PRN|q1-2h)\b/g,"").replace(/\(D[^)]*\)/g,"").replace(/\s{2,}/g," ").trim();
+      lines.push(name+"｜"+how.join("，"));
+    });
+    if(!lines.length)return {lines:[],note:"這次沒有新的藥；原本的藥照常吃，不要自己停藥。"};
+    return {lines};
+  },
+  medInfo:[
+    [/sevikar hct/i,"三種降血壓藥合一顆","早上吃；剛開始起身慢一點，會多跑廁所。"],
+    [/sevikar|exforge/i,"兩種降血壓藥合一顆","每天固定時間吃；腳踝腫要告訴醫師。"],
+    [/amlodipine|nifedipine/i,"降血壓（鈣離子阻斷劑）","可能腳踝水腫、臉潮紅，通常不用停藥。"],
+    [/sartan/i,"降血壓、保護腎臟與心臟","吐、拉、吃不下時先暫停；懷孕前要告訴醫師。"],
+    [/spironolactone/i,"降血壓、利尿","要定期驗鉀；不要吃鹽代替品（低鈉鹽）。"],
+    [/bisoprolol|labetalol/i,"降心跳、保護心臟","不要突然停藥；心跳太慢、頭暈要回診。"],
+    [/glyxambi/i,"兩種降糖藥合一顆","多喝水、注意私密處清潔；吐、拉、吃不下時先暫停。"],
+    [/metformin/i,"降血糖","跟飯一起吃比較不會胃不舒服；做顯影劑檢查、或吐拉吃不下時先暫停。"],
+    [/gliclazide|glimepiride/i,"幫忙分泌胰島素","一定要吃飯；可能低血糖，隨身帶糖果。"],
+    [/flozin/i,"從尿液排糖，也護心護腎","多喝水、注意私密處清潔；吐、拉、吃不下時先暫停。"],
+    [/gliptin/i,"幫身體在飯後分泌胰島素","很少低血糖，什麼時間吃都可以。"],
+    [/mounjaro|wegovy|saxenda|ozempic|glutide|tirzepatide/i,"腸泌素：降食慾、穩血糖","剛開始可能噁心：吃少一點、慢一點；固定同一天打。"],
+    [/insulin|glargine/i,"補充胰島素","固定時間打、每次換位置；依空腹血糖調整；隨身帶糖果。"],
+    [/statin/i,"降壞膽固醇","每天固定時間吃；全身肌肉痠痛、尿變深色要回診。"],
+    [/ezetimibe|atozet/i,"減少腸道吸收膽固醇","和 statin 一起吃，效果更好。"],
+    [/fenofibrate/i,"降三酸甘油脂","飯後吃；肌肉痠痛要回診。"],
+    [/evolocumab/i,"打針降膽固醇","每 2 週打一次，冰箱冷藏。"],
+    [/finerenone/i,"保護腎臟和心臟","要定期驗鉀。"],
+    [/dapagliflozin|forxiga/i,"保護腎臟和心臟","多喝水、注意私密處清潔；吐、拉、吃不下時先暫停。"],
+    [/varenicline/i,"減少想抽菸、抽起來不爽","飯後配一杯水；可能噁心、做夢多；第 8 天開始不抽。"],
+    [/貼片/,"穩定補充尼古丁","早上起床貼，每天換位置；睡不好可以睡前撕掉。"],
+    [/口嚼錠|口含錠/,"想抽時用","嚼到有辣味就停，放在臉頰和牙齦中間；用前 15 分鐘不喝咖啡、果汁。"],
+    [/bupropion/i,"減少想抽菸","停菸日前 1–2 週開始吃；兩次間隔 8 小時，第二次不要太晚吃。"]
+  ],
+  plate(){
+    const S=window.CK_SOAP;if(!S)return null;const m=S.mods.filter(k=>k!=="smk");if(!m.length)return null;
+    const side=[];if(m.includes("htn")||m.includes("ckd"))side.push("salt");if(m.includes("dm")||m.includes("wt"))side.push("boba");if(m.includes("ckd"))side.push("star");
+    if(side.length<3&&!m.includes("ckd"))side.push("fruit");if(side.length<3)side.push("water");
+    const tips=[];
+    if(m.includes("htn")||m.includes("ckd"))tips.push("<b>少鹽</b>：湯不要喝完、少沾醬、少加工食品（火腿、泡麵、罐頭）");
+    if(m.includes("dm"))tips.push("飯、麵、地瓜、玉米都算<b>全穀雜糧</b>，每餐固定 1/4 盤；先吃菜和肉，最後吃飯");
+    if(m.includes("lip"))tips.push("<b>少油</b>：少油炸、肥肉、內臟、奶油糕點；多吃魚和豆製品");
+    if(m.includes("wt"))tips.push("每餐先吃<b>蛋白質</b>（豆魚蛋肉），一天約體重 ×1.2–1.6 克，減脂不減肌");
+    if(m.includes("ckd"))tips.push("<b>不吃楊桃</b>；不吃來路不明的草藥、偏方");
+    tips.push("口渴喝白開水或無糖茶，不喝手搖飲和含糖飲料");
+    return {title:"每餐這樣吃",fr:[.5,.25,.25],frLabel:["半盤","1/4 盤","1/4 盤"],side:side.slice(0,3),tips};
+  },
+  move:["每週至少 150 分鐘中等強度運動（快走、騎車、游泳），會微喘還能講話","每週 2–3 次肌力運動（深蹲、彈力帶）","飯後散步 10–15 分鐘","久坐每 30 分鐘起來動一動"],
+  panels(){
+    const S=window.CK_SOAP;if(!S)return [];const m=S.mods,rx=S.mods.flatMap(k=>(S.res[k]&&S.res[k].rx)||[]).join(" "),out=[];
+    if(S.next&&S.next.length)out.push({id:"labs",label:"下次要抽血",icon:"check",title:"下次回診要抽血",on:true,
+      items:[S.next.join("、")].concat(S.next.some(x=>/FPG|Lipid/.test(x))?["<b>要空腹</b>：前一晚 10 點後不吃東西，可以喝白開水；早上的藥抽完血再吃"]:[])});
+    if(m.includes("htn"))out.push({id:"bp",label:"量血壓 722",icon:"cuff",title:"在家量血壓：722",art:"r722",on:true,
+      items:["<b>7</b> 天、每天早晚 <b>2</b> 次、每次量 <b>2</b> 遍","早上：起床 1 小時內、上完廁所、吃藥和早餐前","晚上：睡前","量前坐著休息 5 分鐘，手臂和心臟同高；回診帶紀錄"]});
+    if(m.includes("dm")&&/insulin|glargine|gliclazide/i.test(rx))out.push({id:"hypo",label:"低血糖怎麼辦",icon:"candy",title:"低血糖：15-15 法則",art:"r1515",on:true,
+      items:["發抖、冒冷汗、心跳快、很餓，量血糖低於 70","吃 15 公克糖：方糖 3–4 顆，或果汁、汽水半杯","15 分鐘後再量；還是低就再吃一次"]});
+    if(m.includes("dm"))out.push({id:"foot",label:"照顧腳與每年檢查",icon:"foot",title:"每天看腳、每年檢查",on:true,
+      items:["每天洗腳擦乾，看有沒有傷口、水泡；不打赤腳","每年：眼底、尿蛋白和腎功能、足部檢查、洗牙","流感、肺炎鏈球菌疫苗"]});
+    if(m.includes("ckd"))out.push({id:"kid",label:"保護腎臟",icon:"kidney",title:"保護腎臟",on:true,
+      items:["<b>不要自己吃止痛藥</b>（NSAID，例如布洛芬、某些感冒藥）","看其他科、買成藥時，說自己腎功能不好","不吃草藥、偏方、楊桃；不用低鈉鹽（鉀高）","吐、拉、吃不下時，先問醫師哪些藥要暫停"]});
+    if(m.includes("wt"))out.push({id:"inj",label:"減重針注意事項",icon:"pills",title:"減重針怎麼打、怎麼吃",on:true,
+      items:["固定同一天打，肚子、大腿、上臂輪流換位置","噁心：少量多餐、吃慢一點、有飽足感就停、少油","便秘：多喝水（體重 ×30–35 mL）、慢慢加纖維","懷孕或計畫懷孕要先停藥，告訴醫師"]});
+    if(m.includes("smk"))out.push({id:"crave",label:"想抽菸時",icon:"leaf",title:"想抽菸時，5 分鐘就會過去",on:true,
+      items:["深呼吸 10 次","喝一大杯水","離開現場，去走一走","手和嘴找事做：嚼口香糖、刷牙","戒菸專線 <b>0800-636363</b>（免費）"]});
+    return out;
+  },
+  warn:["胸痛、喘不過氣、單側手腳無力、講話不清楚：打 <b>119</b>"],
+  bring:["所有藥袋"],
+  nextNote(){const S=window.CK_SOAP;return S&&S.next&&S.next.length?"回診要抽："+S.next.join("、")+(S.next.some(x=>/FPG|Lipid/.test(x))?"（空腹）":""):"";}
+};
+</script>
+<!-- ck-config end -->
+<!-- clinic-kit v1 start | shared by every 門診實務 page. Edit clinic/_kit/kit.html, then run: python3 scripts/add_kit.py clinic/*.html -->
+<style id="ck-style">
+/* ---- collapsible parts and steps ---- */
+.ck-tools{display:flex;gap:4px;flex:none}
+.ck-tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 13px var(--body);padding:5px 9px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.ck-tools button:hover{border-color:var(--ink)}
+.ck-tog{all:unset;box-sizing:border-box;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;width:100%;cursor:pointer}
+.ck-tog:focus-visible,.ck-part:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.ck-chev{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;margin-top:3px;transition:transform .2s}
+.ck-chev::before{content:"";width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-2px) rotate(45deg)}
+[aria-expanded="true"]>.ck-chev{transform:rotate(180deg)}
+section.ck-step>.no{cursor:pointer}
+section.ck-closed>.ck-body{display:none}
+section.ck-closed{padding-bottom:12px}
+section.ck-closed h2{margin-bottom:0}
+.ck-part{cursor:pointer;display:flex!important;justify-content:space-between;align-items:center;gap:10px;user-select:none}
+.ck-part .ck-chev{border-color:rgba(255,255,255,.45);background:transparent;margin:0}
+.ck-part .ck-chev::before{border-color:currentColor}
+.ck-group.ck-closed{display:none}
+@media (prefers-reduced-motion:reduce){.ck-chev{transition:none}}
+
+/* ---- handout form ---- */
+.ck-lead{color:var(--mute);font-size:15px}
+.ck-form{display:flex;flex-direction:column;gap:12px}
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ck-form label{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mute)}
+.ck-form input,.ck-form textarea{font:15px var(--body);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:6px 8px;width:100%}
+.ck-form textarea{resize:vertical;line-height:1.6}
+.ck-form fieldset{border:1px solid var(--line);border-radius:6px;padding:8px 12px 10px;margin:0}
+.ck-form legend{font-size:13px;color:var(--mute);padding:0 4px}
+.ck-checks{display:flex;flex-wrap:wrap;gap:6px 16px}
+.ck-checks label{flex-direction:row;align-items:center;gap:6px;color:var(--ink);font-size:14px;cursor:pointer}
+.ck-checks input{width:auto}
+.ck-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ck-btn{border:1px solid var(--ink);background:var(--card);color:var(--ink);font:500 14px var(--body);padding:7px 14px;border-radius:6px;cursor:pointer}
+.ck-btn.ck-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.ck-btn:hover{filter:brightness(.95)}
+#ckPrintNote{font-size:13px;color:var(--mute)}
+#ckPrintNote a{color:var(--accent)}
+.ck-sheetwrap{margin:18px 0 10px;padding:14px;background:#e9e7df;border-radius:8px;overflow:hidden}
+
+/* ---- the handout sheet ---- */
+.ck-sheet{--a:var(--accent);--a2:var(--accent-soft,#f5ece6);max-width:760px;margin:0 auto;background:#fffdf8;color:#2a2622;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.12);
+  padding:22px 24px 18px;font:15.5px/1.7 var(--body);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ck-sheet *{box-sizing:border-box}
+.ck-sh{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:var(--a);color:#fff}
+.ck-sh svg{width:62px;height:62px;flex:none}
+.ck-sh h3{margin:0;font:700 26px/1.25 var(--display);color:#fff}
+.ck-sh p{margin:2px 0 0;font-size:13.5px;opacity:.92}
+.ck-sec{margin-top:16px;break-inside:avoid}
+.ck-sec>h4{display:flex;align-items:center;gap:8px;margin:0 0 8px;font:700 19px/1.3 var(--display);color:#2a2622}
+.ck-sec>h4 svg{width:30px;height:30px;flex:none}
+.ck-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.ck-num{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 12px 8px}
+.ck-nl{font-size:13px;color:#6b645a}
+.ck-nv{font:700 28px/1.2 var(--display);color:var(--a)}
+.ck-nv small{font:13px var(--body);color:#6b645a;margin-left:4px}
+.ck-num>svg{display:block;width:100%;max-width:420px;height:auto;margin:4px 0 2px}
+.ck-num p{margin:2px 0 0;font-size:13.5px;line-height:1.6;color:#4a443c}
+.ck-meds{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ck-med{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start;background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:9px 12px}
+.ck-med svg.ck-pillsvg{width:44px;height:44px}
+.ck-med b{font-size:17px;color:#2a2622}
+.ck-what{display:inline-block;margin-left:8px;font-size:13px;color:#fff;background:var(--a);border-radius:20px;padding:0 9px;vertical-align:2px}
+.ck-times{display:flex;flex-wrap:wrap;gap:5px;margin:3px 0 0}
+.ck-time{display:inline-flex;align-items:center;gap:3px;font-size:13px;background:#f4efe4;border-radius:20px;padding:1px 9px 1px 4px}
+.ck-time svg{width:20px;height:20px}
+.ck-how{margin:2px 0 0;font-size:14.5px}
+.ck-tip{margin:3px 0 0;font-size:13.5px;color:#6a4a12;background:#fff4d9;border-radius:6px;padding:2px 8px}
+.ck-note{background:#fff;border:1.5px dashed #d8cfbd;border-radius:12px;padding:10px 14px;margin:0}
+.ck-two{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:start}
+.ck-plate>svg{display:block;width:100%;height:auto}
+.ck-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:6px 0;font-size:13.5px}
+.ck-legend span{display:inline-flex;align-items:center;gap:5px}
+.ck-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.ck-sheet ul{margin:0;padding-left:1.2em}
+.ck-sheet li{margin:2px 0}
+.ck-move>svg{display:block;width:100%;max-width:260px;height:auto;margin:0 auto 4px}
+.ck-pans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.ck-pan{background:#fff;border:1.5px solid #e6e0d4;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-pan h5{display:flex;align-items:center;gap:8px;margin:0 0 6px;font:700 17px var(--display)}
+.ck-pan h5 svg{width:34px;height:34px;flex:none}
+.ck-pan .ck-art{display:block;width:100%;max-width:300px;height:auto;margin:2px auto 6px}
+.ck-warn{border:2.5px solid #c8352b;background:#fff3f1;border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-warn h5{display:flex;align-items:center;gap:8px;margin:0 0 4px;font:700 18px var(--display);color:#b3261e}
+.ck-warn h5 svg{width:30px;height:30px}
+.ck-next{display:flex;gap:14px;align-items:center;background:var(--a2);border-radius:12px;padding:10px 14px;break-inside:avoid}
+.ck-next svg{width:74px;height:74px;flex:none}
+.ck-next b{font-size:17px}
+.ck-foot{margin-top:12px;padding-top:8px;border-top:1px dashed #d8cfbd;font-size:12px;color:#7a7266;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media (max-width:620px){.ck-sheet{padding:14px 12px;font-size:15px}.ck-two{grid-template-columns:1fr}.ck-sh h3{font-size:22px}.ck-sheetwrap{padding:6px}}
+
+/* ---- print: only the sheet ---- */
+#ckPrintHost{display:none}
+@media print{
+  @page{size:A4;margin:10mm}
+  body.ck-printing>*:not(#ckPrintHost){display:none!important}
+  body.ck-printing{background:#fff!important}
+  body.ck-printing #ckPrintHost{display:block}
+  #ckPrintHost .ck-sheet{box-shadow:none;max-width:none;padding:0;font-size:11pt;border-radius:0}
+  #ckPrintHost .ck-two{grid-template-columns:1.25fr 1fr}
+  #ckPrintHost .ck-sh h3{font-size:20pt}
+  body:not(.ck-printing) .ck-group.ck-closed,body:not(.ck-printing) section.ck-closed>.ck-body{display:block!important}
+}
+</style>
+<script id="ck-script">
+(function(){
+"use strict";
+const C=window.CK_CONFIG||null;
+const main=document.querySelector("main");if(!main)return;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chev='<i class="ck-chev" aria-hidden="true"></i>';
+let gid=0;
+
+/* =========================================================
+   1. Handout section (built first so it gets grouped too)
+   ========================================================= */
+if(C){
+  const part=document.createElement("div");part.className="part";part.innerHTML="<span>最後</span>衛教單張";
+  const sec=document.createElement("section");sec.id="handout";
+  const ins=(C.inputs||[]).map(f=>'<label>'+esc(f.label)+'<input type="number" id="ck_'+f.k+'"'+(f.step?' step="'+f.step+'"':"")+'></label>').join("");
+  sec.innerHTML='<div class="no">給病人</div><h2>衛教單張產生器</h2>'+
+   '<p class="ck-lead">數值和處方會從上面的工具帶進來，也可以直接改。勾選要放的內容，可以把這張單張直接給病人看，或列印、存成 PDF 帶回家。</p>'+
+   '<div class="tool ck-form">'+
+    '<div class="ck-grid"><label>稱呼<input id="ckName" placeholder="例：陳先生"></label><label>日期<input type="date" id="ckDate"></label>'+
+    '<label>下次回診<input type="date" id="ckNext"></label><label>院所／醫師<input id="ckDoc" placeholder="可留空"></label>'+ins+'</div>'+
+    '<label>我的藥（一行一種，「｜」後面寫怎麼吃；可以直接改）<textarea id="ckMeds" rows="4" placeholder="例：Amlodipine 5 mg｜每天 1 次，早上"></textarea></label>'+
+    '<fieldset><legend>要放進單張的內容</legend><div class="ck-checks" id="ckPanels"></div></fieldset>'+
+    '<div class="ck-actions"><button type="button" class="ck-btn" id="ckPull">重新帶入上面的資料</button><button type="button" class="ck-btn ck-primary" id="ckPrint">列印／存成 PDF</button><span id="ckPrintNote"></span></div>'+
+   '</div><div class="ck-sheetwrap"><article class="ck-sheet" id="ckSheet" aria-label="衛教單張預覽"></article></div>';
+  main.append(part,sec);
+  const jump=document.querySelector(".bar .jump");
+  if(jump&&!jump.querySelector('a[href="#handout"]')){const a=document.createElement("a");a.href="#handout";a.textContent="衛教單";jump.appendChild(a);}
+}
+
+/* =========================================================
+   2. Collapsible parts and steps
+   ========================================================= */
+function setStep(sec,open){sec.classList.toggle("ck-closed",!open);const b=sec.querySelector(":scope>h2>.ck-tog");if(b)b.setAttribute("aria-expanded",String(open));if(open&&sec.id==="handout")onHandoutOpen();}
+function setPart(p,open){const g=$(p.getAttribute("aria-controls"));if(!g)return;g.classList.toggle("ck-closed",!open);p.setAttribute("aria-expanded",String(open));}
+[...main.children].reduce((group,el)=>{
+  if(el.classList.contains("part")){
+    const g=document.createElement("div");g.className="ck-group";g.id="ck-g"+(++gid);el.after(g);
+    el.classList.add("ck-part");el.innerHTML='<span class="ck-ptxt">'+el.innerHTML+"</span>"+chev;
+    el.setAttribute("role","button");el.tabIndex=0;el.setAttribute("aria-controls",g.id);
+    const t=()=>setPart(el,g.classList.contains("ck-closed"));
+    el.addEventListener("click",t);el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t();}});
+    setPart(el,true);return g;
+  }
+  if(!group)return null;
+  if(el.tagName==="SECTION"&&!el.querySelector(":scope>.no"))return null; // closing sections (帶走…) stay outside
+  group.appendChild(el);return group;
+},null);
+const steps=[...main.querySelectorAll("section")].filter(s=>s.querySelector(":scope>.no")&&s.querySelector(":scope>h2"));
+steps.forEach(sec=>{
+  const no=sec.querySelector(":scope>.no"),h2=sec.querySelector(":scope>h2");
+  sec.classList.add("ck-step");
+  const body=document.createElement("div");body.className="ck-body";body.id="ck-b"+(++gid);
+  [...sec.children].forEach(c=>{if(c!==no&&c!==h2)body.appendChild(c);});
+  sec.appendChild(body);
+  const b=document.createElement("button");b.type="button";b.className="ck-tog";b.setAttribute("aria-controls",body.id);
+  b.innerHTML="<span>"+h2.innerHTML+"</span>"+chev;h2.innerHTML="";h2.appendChild(b);
+  const t=()=>setStep(sec,sec.classList.contains("ck-closed"));
+  b.addEventListener("click",t);no.addEventListener("click",t);
+  setStep(sec,false);
+});
+const parts=[...main.querySelectorAll(".ck-part")];
+function all(open){parts.forEach(p=>setPart(p,open||true));steps.forEach(s=>setStep(s,open));}
+const barWrap=document.querySelector(".bar .wrap");
+if(barWrap){const t=document.createElement("div");t.className="ck-tools";t.innerHTML='<button type="button" id="ckOpenAll">全部展開</button><button type="button" id="ckCloseAll">全部收合</button>';barWrap.appendChild(t);
+  $("ckOpenAll").onclick=()=>all(true);$("ckCloseAll").onclick=()=>all(false);}
+function reveal(el){
+  if(!el)return;
+  const g=el.closest(".ck-group");if(g&&g.classList.contains("ck-closed")){const p=document.querySelector('[aria-controls="'+g.id+'"]');if(p)setPart(p,true);}
+  const s=el.closest("section.ck-step");if(s&&s.classList.contains("ck-closed"))setStep(s,true);
+}
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;const id=decodeURIComponent(a.getAttribute("href").slice(1));if(!id||id==="clinic")return;reveal($(id));},true);
+function fromHash(){const id=decodeURIComponent(location.hash.slice(1));if(!id||id==="clinic")return;const t=$(id);if(t){reveal(t);requestAnimationFrame(()=>t.scrollIntoView());}}
+addEventListener("hashchange",fromHash);
+addEventListener("beforeprint",()=>{if(!document.body.classList.contains("ck-printing"))all(true);});
+
+if(!C)return;
+
+/* =========================================================
+   3. Drawings (all inline SVG, no image files)
+   ========================================================= */
+const SK="#f6d2b4",INK="#3b332b";
+const face=(x,y,s)=>'<circle cx="'+(x-9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/><circle cx="'+(x+9*s)+'" cy="'+y+'" r="'+3.6*s+'" fill="'+INK+'"/>'+
+  '<path d="M'+(x-7*s)+' '+(y+9*s)+' Q'+x+' '+(y+16*s)+' '+(x+7*s)+' '+(y+9*s)+'" fill="none" stroke="'+INK+'" stroke-width="'+2.6*s+'" stroke-linecap="round"/>'+
+  '<circle cx="'+(x-16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/><circle cx="'+(x+16*s)+'" cy="'+(y+8*s)+'" r="'+4*s+'" fill="#ff8fa3" opacity=".7"/>';
+const MASCOT={
+  heart:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 90C20 68 5 52 5 33 5 18 16 8 30 8c10 0 16 6 20 13 4-7 10-13 20-13 14 0 25 10 25 25 0 19-15 35-45 57z" fill="#ff6b6b" stroke="#fff" stroke-width="4"/>'+face(50,42,1)+'</svg>',
+  drop:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 5C50 5 17 45 17 64c0 19 15 31 33 31s33-12 33-31C83 45 50 5 50 5z" fill="#ffb347" stroke="#fff" stroke-width="4"/>'+face(50,64,1)+'</svg>',
+  kidney:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M60 8c22-1 35 18 33 42-2 27-20 44-43 42-21-2-23-21-12-31 7-6 7-15-2-21C20 31 32 9 60 8z" fill="#c96b8c" stroke="#fff" stroke-width="4"/>'+face(62,46,0.9)+'</svg>',
+  leaf:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M15 85C15 40 45 12 90 10c-2 45-30 75-75 75z" fill="#6cbf55" stroke="#fff" stroke-width="4"/>'+face(52,48,1)+'</svg>',
+  lung:()=>'<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="#f49aa9" stroke="#fff" stroke-width="4" stroke-linejoin="round"><path d="M45 30C30 22 8 40 8 68c0 18 12 26 26 22 10-3 13-12 13-24V34z"/><path d="M55 30c15-8 37 10 37 38 0 18-12 26-26 22-10-3-13-12-13-24V34z"/></g><rect x="45" y="6" width="10" height="30" rx="5" fill="#e98395"/><rect x="40" y="46" width="20" height="30" fill="#f49aa9"/>'+face(50,60,1)+'</svg>'
+};
+const ICON={
+  sun:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="8" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.5 3.5M28.5 28.5 32 32M8 32l3.5-3.5M28.5 11.5 32 8"/></g></svg>',
+  noon:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="#ffa53d"/><circle cx="20" cy="20" r="6" fill="#ffd36b"/></svg>',
+  moon:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M26 6a14 14 0 1 0 8 25A12 12 0 0 1 26 6z" fill="#7c86d8"/><circle cx="30" cy="10" r="1.6" fill="#ffd36b"/></svg>',
+  bed:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M24 6a12 12 0 1 0 8 21A10 10 0 0 1 24 6z" fill="#5b63b8"/><text x="27" y="15" font-size="10" font-weight="700" fill="#5b63b8">z</text></svg>',
+  cuff:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="6" y="10" width="30" height="40" rx="6" fill="#e8f1f6" stroke="#4b7f99" stroke-width="2.5"/><rect x="11" y="16" width="20" height="12" rx="2" fill="#bfe3c7"/><text x="21" y="26" font-size="8" text-anchor="middle" font-weight="700" fill="#2c5a3a">120</text><circle cx="21" cy="38" r="4" fill="#4b7f99"/><path d="M36 30c10 0 12 8 18 8" fill="none" stroke="#4b7f99" stroke-width="2.5"/><rect x="44" y="34" width="12" height="18" rx="3" fill="#7fb3cf"/></svg>',
+  meter:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="26" height="44" rx="7" fill="#eef1fb" stroke="#5864a8" stroke-width="2.5"/><rect x="14" y="12" width="18" height="12" rx="2" fill="#cfe9d5"/><text x="23" y="21.5" font-size="7.5" text-anchor="middle" font-weight="700" fill="#2c5a3a">110</text><circle cx="23" cy="36" r="4" fill="#5864a8"/><path d="M48 22c0 0-7 9-7 14a7 7 0 0 0 14 0c0-5-7-14-7-14z" fill="#e2493b"/></svg>',
+  walk:'<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="32" cy="10" r="6" fill="'+SK+'"/><g stroke="#2f8f6b" stroke-width="5" stroke-linecap="round" fill="none"><path d="M31 18l-3 16M30 22l-9 8M30 22l9 6"/></g><g stroke="#3b5d8a" stroke-width="5" stroke-linecap="round"><path d="M28 34l-8 14M28 34l9 13"/></g></svg>',
+  leaf:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M8 52C8 26 26 9 54 8c-1 27-19 44-46 44z" fill="#6cbf55"/><path d="M12 48C26 34 36 24 48 14" stroke="#3f8a3a" stroke-width="2.5" fill="none"/></svg>',
+  warn:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 38 36H2z" fill="#e2493b"/><rect x="18" y="14" width="4" height="12" rx="2" fill="#fff"/><circle cx="20" cy="31" r="2.4" fill="#fff"/></svg>',
+  candy:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M6 22l10 8-10 8zM54 22l-10 8 10 8z" fill="#ff9fb6"/><ellipse cx="30" cy="30" rx="15" ry="11" fill="#ff6b8a"/><path d="M20 24c4 6 16 6 20 12" stroke="#fff" stroke-width="3" fill="none" opacity=".8"/></svg>',
+  thermo:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="24" y="6" width="12" height="34" rx="6" fill="#fff" stroke="#c8352b" stroke-width="2.5"/><rect x="28" y="18" width="4" height="22" fill="#e2493b"/><circle cx="30" cy="46" r="9" fill="#e2493b"/></svg>',
+  foot:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M22 54c-9 0-11-10-9-20 2-9 4-16 13-16s11 9 9 18c-2 8-3 18-13 18z" fill="'+SK+'" stroke="#c48a63" stroke-width="2"/><g fill="'+SK+'" stroke="#c48a63" stroke-width="1.6"><circle cx="38" cy="14" r="5"/><circle cx="30" cy="9" r="4"/><circle cx="22" cy="9" r="3.4"/><circle cx="16" cy="12" r="3"/><circle cx="12" cy="17" r="2.6"/></g></svg>',
+  eye:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M4 30C14 14 46 14 56 30 46 46 14 46 4 30z" fill="#fff" stroke="#4b7f99" stroke-width="2.5"/><circle cx="30" cy="30" r="9" fill="#4b7f99"/><circle cx="30" cy="30" r="4" fill="#173a4c"/><circle cx="33" cy="27" r="2" fill="#fff"/></svg>',
+  kidney:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M36 6c13-1 20 11 19 25-1 16-12 25-25 24-12-1-13-12-7-18 4-4 4-9-1-12C12 18 19 6 36 6z" fill="#c96b8c"/></svg>',
+  pills:'<svg viewBox="0 0 60 60" aria-hidden="true"><g transform="rotate(-35 30 30)"><rect x="10" y="22" width="40" height="16" rx="8" fill="#fff" stroke="#8a7f70" stroke-width="2"/><path d="M30 22h12a8 8 0 0 1 0 16H30z" fill="#e2493b"/></g><circle cx="46" cy="46" r="7" fill="#ffd36b" stroke="#8a7f70" stroke-width="2"/></svg>',
+  check:'<svg viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="6" width="40" height="50" rx="5" fill="#fff" stroke="#6b645a" stroke-width="2.5"/><rect x="22" y="2" width="16" height="9" rx="3" fill="#6b645a"/><g stroke="#2f8f6b" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M17 22l4 4 7-8M17 36l4 4 7-8"/></g><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M33 23h10M33 37h10"/></g></svg>',
+  salt:'<svg viewBox="0 0 60 60" aria-hidden="true"><path d="M20 22h20l3 30H17z" fill="#f2f2f2" stroke="#8a8a8a" stroke-width="2"/><path d="M21 12h18l2 10H19z" fill="#bdbdbd"/><g fill="#6b6b6b"><circle cx="26" cy="16" r="1.4"/><circle cx="30" cy="16" r="1.4"/><circle cx="34" cy="16" r="1.4"/></g><circle cx="30" cy="34" r="22" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M14 18 46 50" stroke="#e2493b" stroke-width="4"/></svg>'
+};
+function pill(color){return '<svg class="ck-pillsvg" viewBox="0 0 44 44" aria-hidden="true"><g transform="rotate(-35 22 22)"><rect x="5" y="15" width="34" height="14" rx="7" fill="#fff" stroke="#8a7f70" stroke-width="1.8"/><path d="M22 15h10a7 7 0 0 1 0 14H22z" fill="'+color+'"/><rect x="9" y="18" width="9" height="3" rx="1.5" fill="#fff" opacity=".8"/></g></svg>';}
+const PILLC=["#e2493b","#3c8dbc","#f0a020","#5aa469","#8e6bbf","#d96a9a","#3aa6a0"];
+function meter(m){
+  const W=300,x0=10,x1=290,lo=m.min,hi=m.max,f=v=>{if(m.log){v=Math.log10(Math.max(v,1e-3));return x0+(Math.min(Math.max(v,Math.log10(lo)),Math.log10(hi))-Math.log10(lo))/(Math.log10(hi)-Math.log10(lo))*(x1-x0);}return x0+(Math.min(Math.max(v,lo),hi)-lo)/(hi-lo)*(x1-x0);};
+  let s='<svg viewBox="0 0 '+W+' 62" aria-hidden="true">';
+  s+='<defs><clipPath id="ckc'+(++gid)+'"><rect x="'+x0+'" y="20" width="'+(x1-x0)+'" height="14" rx="7"/></clipPath></defs><g clip-path="url(#ckc'+gid+')">';
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);s+='<rect x="'+a+'" y="20" width="'+Math.max(0,b-a)+'" height="14" fill="'+z[2]+'"/>';});
+  s+="</g>";
+  m.zones.forEach(z=>{const a=f(z[0]),b=f(z[1]);if(b-a>24)s+='<text x="'+(a+b)/2+'" y="46" font-size="9" text-anchor="middle" fill="#6b645a">'+esc(z[3])+"</text>";});
+  if(m.target!=null){const t=f(m.target);s+='<line x1="'+t+'" x2="'+t+'" y1="16" y2="38" stroke="#2a2622" stroke-width="2" stroke-dasharray="3 2"/><text x="'+t+'" y="59" font-size="9" text-anchor="middle" font-weight="700" fill="#2a2622">'+esc(m.targetLabel||"目標")+"</text>";}
+  if(m.v!=null&&!isNaN(m.v)){const x=f(m.v);s+='<path d="M'+(x-7)+' 4h14l-7 11z" fill="#2a2622"/><circle cx="'+x+'" cy="27" r="5.5" fill="#fff" stroke="#2a2622" stroke-width="2.5"/>';}
+  return s+"</svg>";
+}
+/* the plate: fr = [vegetables, protein, grains]; side = extra items beside it */
+function plate(p){
+  const cx=128,cy=122,R=88;let s='<svg viewBox="0 0 360 250" aria-hidden="true">';
+  s+='<ellipse cx="'+cx+'" cy="'+(cy+6)+'" rx="104" ry="100" fill="#000" opacity=".06"/><circle cx="'+cx+'" cy="'+cy+'" r="102" fill="#fff" stroke="#ddd5c4" stroke-width="3"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(R+3)+'" fill="#fbf8f1" stroke="#ece5d6" stroke-width="2"/>';
+  const secs=[{k:"veg",f:p.fr[0],c:"#e2f2d6",l:"蔬菜"},{k:"pro",f:p.fr[1],c:"#fbe1d6",l:p.proLabel||"豆魚蛋肉"},{k:"grain",f:p.fr[2],c:"#f6e9cc",l:"全穀雜糧"}];
+  let a=-Math.PI/2;const P=(r,t)=>[cx+r*Math.cos(t),cy+r*Math.sin(t)];
+  const items=[];
+  secs.forEach(sc=>{const b=a+sc.f*Math.PI*2,[x0,y0]=P(R,a),[x1,y1]=P(R,b);
+    s+='<path d="M'+cx+" "+cy+"L"+x0.toFixed(1)+" "+y0.toFixed(1)+"A"+R+" "+R+" 0 "+(sc.f>.5?1:0)+" 1 "+x1.toFixed(1)+" "+y1.toFixed(1)+'Z" fill="'+sc.c+'" stroke="#fff" stroke-width="4"/>';
+    items.push({k:sc.k,a0:a,a1:b,l:sc.l,f:sc.f});a=b;});
+  const draw={
+    broc:(x,y)=>'<rect x="'+(x-3)+'" y="'+(y)+'" width="6" height="12" rx="2" fill="#8bbf5a"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+(x+6)+'" cy="'+(y-2)+'" r="7" fill="#3f8f3a"/><circle cx="'+x+'" cy="'+(y-8)+'" r="8" fill="#4ea845"/>',
+    leaf:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="12" ry="6" fill="#74c25b" transform="rotate(-30 '+x+" "+y+')"/><path d="M'+(x-9)+" "+(y+5)+"L"+(x+9)+" "+(y-5)+'" stroke="#3f8a3a" stroke-width="1.4"/>',
+    carrot:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7" fill="#f08a24"/><circle cx="'+x+'" cy="'+y+'" r="3" fill="#f7b267"/>',
+    tomato:(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="7.5" fill="#e8463b"/><path d="M'+(x-3)+" "+(y-7)+"l3 2 3-2"+'" stroke="#3f8a3a" stroke-width="2" fill="none"/>',
+    fish:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="20" ry="10" fill="#f4a582"/><path d="M'+(x+17)+" "+y+"l12-9v18z"+'" fill="#f08a6a"/><circle cx="'+(x-11)+'" cy="'+(y-2)+'" r="2" fill="'+INK+'"/><path d="M'+(x-3)+" "+(y-6)+"q4 6 0 12"+'" stroke="#e57b5c" stroke-width="1.6" fill="none"/>',
+    egg:(x,y)=>'<path d="M'+(x-13)+" "+y+"c0-9 7-12 13-11s14 3 13 11-6 10-13 10-13-2-13-10z"+'" fill="#fff" stroke="#eadfcf"/><circle cx="'+(x+1)+'" cy="'+(y+1)+'" r="5.5" fill="#f7c548"/>',
+    tofu:(x,y)=>'<rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="18" rx="3" fill="#f3e3b5" stroke="#e2cf98"/><rect x="'+(x-9)+'" y="'+(y-9)+'" width="18" height="5" rx="2" fill="#faf0d0"/>',
+    rice:(x,y,big)=>{const r=big?27:20;let t='<ellipse cx="'+x+'" cy="'+y+'" rx="'+r+'" ry="'+r*.72+'" fill="#fffaf0" stroke="#e8dcc0" stroke-width="1.5"/>';for(let i=0;i<14;i++){const u=(i*137.5)%360*Math.PI/180,d=(i%5+1)/6*r*.75;t+='<ellipse cx="'+(x+Math.cos(u)*d).toFixed(1)+'" cy="'+(y+Math.sin(u)*d*.7).toFixed(1)+'" rx="2.6" ry="1.3" fill="#c79a5e" transform="rotate('+(i*40)+" "+(x+Math.cos(u)*d).toFixed(1)+" "+(y+Math.sin(u)*d*.7).toFixed(1)+')"/>';}return t;},
+    potato:(x,y)=>'<ellipse cx="'+x+'" cy="'+y+'" rx="13" ry="8" fill="#b5524a" transform="rotate(20 '+x+" "+y+')"/><ellipse cx="'+x+'" cy="'+y+'" rx="9" ry="5" fill="#f2b75a" transform="rotate(20 '+x+" "+y+')"/>'
+  };
+  const at=(it,r,frac)=>{const t=it.a0+(it.a1-it.a0)*frac;return P(r,t).map(v=>+v.toFixed(1));};
+  items.forEach(it=>{
+    if(it.k==="veg"){const n=Math.max(4,Math.round(it.f*14)),kinds=["broc","leaf","carrot","broc","tomato","leaf","carrot"];
+      for(let i=0;i<n;i++){const [x,y]=at(it,i%2?62:36,(i+.5)/n);s+=draw[kinds[i%kinds.length]](x,y);}}
+    if(it.k==="pro"){const [x,y]=at(it,52,.5);s+=draw.fish(x,y);if(it.f>.2){const [a,b]=at(it,70,.2);s+=draw.egg(a,b);const [c,d]=at(it,30,.8);s+=draw.tofu(c,d);}else{const [c,d]=at(it,74,.75);s+=draw.tofu(c,d);}}
+    if(it.k==="grain"){const [x,y]=at(it,48,.5);s+=draw.rice(x,y,it.f>.28);if(it.f>.2){const [a,b]=at(it,74,.25);s+=draw.potato(a,b);}}
+    const [lx,ly]=at(it,R*.55,.5);
+    s+='<text x="'+lx+'" y="'+(ly+(it.k==="veg"?32:30))+'" font-size="13" font-weight="700" text-anchor="middle" fill="#2a2622" stroke="#fffdf8" stroke-width="4" paint-order="stroke">'+esc(it.l)+"</text>";
+  });
+  // beside the plate
+  const SIDE={
+    fruit:(x,y)=>'<circle cx="'+x+'" cy="'+(y+4)+'" r="18" fill="#e2493b"/><circle cx="'+(x-6)+'" cy="'+(y-2)+'" r="5" fill="#fff" opacity=".35"/><path d="M'+x+" "+(y-14)+"q2-8 6-10"+'" stroke="#6b4a2b" stroke-width="3" fill="none"/><ellipse cx="'+(x+9)+'" cy="'+(y-20)+'" rx="8" ry="4" fill="#5cae4a" transform="rotate(-25 '+(x+9)+" "+(y-20)+')"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#4a443c">水果 1 拳頭</text>',
+    milk:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#9aa8b5" stroke-width="2"/><path d="M'+(x-13)+" "+(y-12)+"h26l-2.3 29h-21.4z"+'" fill="#f1f4f8"/><text x="'+x+'" y="'+(y+5)+'" font-size="11" text-anchor="middle" font-weight="700" fill="#6c7d8c">奶</text><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">低脂奶 1 杯</text>',
+    water:(x,y)=>'<path d="M'+(x-14)+" "+(y-22)+"h28l-3 40h-22z"+'" fill="#fff" stroke="#7fb3cf" stroke-width="2"/><path d="M'+(x-12.6)+" "+(y-8)+"h25.2l-2 25.6h-21.2z"+'" fill="#bfe3f3"/><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#4a443c">白開水</text>',
+    salt:(x,y)=>'<g transform="translate('+(x-24)+" "+(y-30)+') scale(.8)">'+ICON.salt.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="'+x+'" y="'+(y+36)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">少鹽</text>',
+    boba:(x,y)=>'<path d="M'+(x-14)+" "+(y-20)+"h28l-4 40h-20z"+'" fill="#e9d2b0" stroke="#a5835a" stroke-width="2"/><rect x="'+(x-15)+'" y="'+(y-24)+'" width="30" height="5" rx="2" fill="#a5835a"/><path d="M'+(x+3)+" "+(y-24)+"l5-14"+'" stroke="#e2493b" stroke-width="3"/><g fill="#4a3426"><circle cx="'+(x-6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+x+'" cy="'+(y+15)+'" r="3"/><circle cx="'+(x+6)+'" cy="'+(y+12)+'" r="3"/><circle cx="'+(x-2)+'" cy="'+(y+9)+'" r="3"/></g><circle cx="'+x+'" cy="'+y+'" r="25" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-18)+"L"+(x+17)+" "+(y+18)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不喝含糖飲料</text>',
+    star:(x,y)=>{let pts="";for(let i=0;i<10;i++){const r=i%2?8:19,t=-Math.PI/2+i*Math.PI/5;pts+=(x+r*Math.cos(t)).toFixed(1)+","+(y+r*Math.sin(t)).toFixed(1)+" ";}
+      return '<polygon points="'+pts+'" fill="#f5d33c" stroke="#d9a90d" stroke-width="2"/><circle cx="'+x+'" cy="'+y+'" r="24" fill="none" stroke="#e2493b" stroke-width="4"/><path d="M'+(x-17)+" "+(y-17)+"L"+(x+17)+" "+(y+17)+'" stroke="#e2493b" stroke-width="4"/><text x="'+x+'" y="'+(y+38)+'" font-size="12" text-anchor="middle" fill="#b3261e" font-weight="700">不吃楊桃</text>';}
+  };
+  (p.side||[]).slice(0,3).forEach((k,i)=>{if(SIDE[k])s+=SIDE[k](300,40+i*84);});
+  return s+"</svg>";
+}
+function walker(){
+  return '<svg viewBox="0 0 260 120" aria-hidden="true"><rect x="0" y="96" width="260" height="24" rx="12" fill="#e2f2d6"/><path d="M10 104h240" stroke="#c6dfb3" stroke-width="3" stroke-dasharray="10 8"/>'+
+   '<circle cx="222" cy="26" r="14" fill="#ffc83d"/><g stroke="#ffb000" stroke-width="3" stroke-linecap="round"><path d="M222 4v5M222 43v5M200 26h5M239 26h5"/></g>'+
+   '<g transform="translate(70 6)"><circle cx="30" cy="16" r="11" fill="'+SK+'"/><path d="M19 13c2-9 20-10 23 0-6-3-15-3-23 0z" fill="#3b332b"/>'+
+   '<g stroke-linecap="round" fill="none"><path d="M29 28 25 60" stroke="#2f8f6b" stroke-width="10"/><path d="M28 34 14 48M28 34l15 10" stroke="#2f8f6b" stroke-width="6"/><path d="M25 60 12 86M25 60l16 24" stroke="#3b5d8a" stroke-width="8"/></g>'+
+   '<ellipse cx="9" cy="89" rx="8" ry="4" fill="#e2493b"/><ellipse cx="45" cy="87" rx="8" ry="4" fill="#e2493b"/><g stroke="#b9b1a4" stroke-width="3" stroke-linecap="round"><path d="M-16 34h-14M-12 48h-20M-16 62h-12"/></g></g>'+
+   '<g transform="translate(150 50)"><circle cx="20" cy="20" r="18" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M20 8v12l8 5" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="46" y="18" font-size="14" font-weight="700" fill="#2a2622">30 分</text><text x="46" y="35" font-size="12" fill="#6b645a">× 每週 5 天</text></g></svg>';
+}
+function calendar(dateStr){
+  const d=dateStr?new Date(dateStr+"T00:00:00"):null;
+  const m=d?(d.getMonth()+1)+" 月":"",day=d?d.getDate():"?",wd=d?"週"+"日一二三四五六"[d.getDay()]:"";
+  return '<svg viewBox="0 0 74 74" aria-hidden="true"><rect x="4" y="10" width="66" height="60" rx="9" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M4 19a9 9 0 0 1 9-9h48a9 9 0 0 1 9 9v9H4z" fill="var(--a,#bb3f26)"/>'+
+   '<rect x="18" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><rect x="51" y="3" width="5" height="14" rx="2.5" fill="#2a2622"/><text x="37" y="25" font-size="11" text-anchor="middle" fill="#fff" font-weight="700">'+m+'</text>'+
+   '<text x="37" y="54" font-size="24" text-anchor="middle" font-weight="700" fill="#2a2622">'+day+'</text><text x="37" y="66" font-size="9.5" text-anchor="middle" fill="#6b645a">'+wd+"</text></svg>";
+}
+/* small illustrated strips used by panels */
+const ART={
+  r722:()=>{let s='<svg class="ck-art" viewBox="0 0 300 70" aria-hidden="true">';for(let i=0;i<7;i++){const x=8+i*41;s+='<rect x="'+x+'" y="6" width="36" height="58" rx="6" fill="#fff" stroke="#d8cfbd" stroke-width="1.5"/><text x="'+(x+18)+'" y="19" font-size="10" text-anchor="middle" fill="#6b645a">第'+(i+1)+'天</text>'+
+     '<g transform="translate('+(x+3)+' 23) scale(.4)">'+ICON.sun.replace(/<\/?svg[^>]*>/g,"")+'</g><g transform="translate('+(x+17)+' 23) scale(.4)">'+ICON.moon.replace(/<\/?svg[^>]*>/g,"")+'</g>'+
+     '<text x="'+(x+18)+'" y="56" font-size="9" text-anchor="middle" fill="#2f8f6b" font-weight="700">×2 遍</text>';}return s+"</svg>";},
+  r1515:()=>'<svg class="ck-art" viewBox="0 0 300 74" aria-hidden="true"><g transform="translate(4 10) scale(.85)">'+ICON.candy.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="30" y="70" font-size="11" text-anchor="middle" fill="#4a443c">吃 15 克糖</text>'+
+     '<path d="M64 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><defs><marker id="ckar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b9b1a4"/></marker></defs>'+
+     '<circle cx="128" cy="32" r="22" fill="#fff" stroke="#2a2622" stroke-width="2.5"/><path d="M128 18v14l9 6" stroke="#2a2622" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="128" y="70" font-size="11" text-anchor="middle" fill="#4a443c">等 15 分鐘</text>'+
+     '<path d="M158 34h30" stroke="#b9b1a4" stroke-width="3" marker-end="url(#ckar)"/><g transform="translate(196 4) scale(.95)">'+ICON.meter.replace(/<\/?svg[^>]*>/g,"")+'</g><text x="226" y="70" font-size="11" text-anchor="middle" fill="#4a443c">再量一次</text>'+
+     '<text x="286" y="40" font-size="22" text-anchor="middle" fill="#e2493b" font-weight="700">↺</text></svg>',
+  plate5:()=>'',
+};
+
+/* =========================================================
+   4. Form state, pulling from the page, rendering
+   ========================================================= */
+const today=()=>{const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const addDays=(iso,n)=>{const t=new Date(iso+"T00:00:00");t.setDate(t.getDate()+n);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");};
+const pageVal=id=>{const e=$(id);if(!e)return "";return e.type==="checkbox"?e.checked:e.value;};
+let medsDirty=false,panelOn={};
+function readForm(){const v={name:$("ckName").value.trim(),date:$("ckDate").value,next:$("ckNext").value,doc:$("ckDoc").value.trim()};
+  (C.inputs||[]).forEach(f=>{const x=parseFloat($("ck_"+f.k).value);v[f.k]=isNaN(x)?null:x;});return v;}
+function freqOf(s){
+  let how=[];const t=[];
+  if(/\bTID\b|三餐/i.test(s)){how.push("每天 3 次");t.push("早","中","晚");}
+  else if(/\bBID\b|早晚/i.test(s)){how.push("每天 2 次");t.push("早","晚");}
+  else if(/\bHS\b|睡前/i.test(s)){how.push("睡前");t.push("睡前");}
+  else if(/\bQD\b|每天 ?1 ?次|每日一次/i.test(s)){how.push("每天 1 次");t.push(/早餐|早上/.test(s)?"早":"早");}
+  else if(/每週/.test(s)){how.push("每週 1 次，固定同一天");}
+  if(/早餐前/.test(s))how.push("早餐前");else if(/隨餐|飯後|餐後/.test(s))how.push("吃飯時或飯後");
+  return {how:how.join("，"),times:t};
+}
+function cleanName(s){
+  return s.replace(/<[^>]+>/g,"").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/（[^）]*）|\([^)]*\)/g," ")
+    .replace(/^(改|再加|可同時加|加)\s*/,"").split(/[；。]/)[0]
+    .replace(/\b(QD|BID|TID|HS|qd|bid|tid|hs)\b/g,"").replace(/\s{2,}/g," ").trim();
+}
+function pull(){
+  const v0={};(C.inputs||[]).forEach(f=>{const x=pageVal(f.src);v0[f.k]=x;if(x!==""&&x!=null)$("ck_"+f.k).value=x;});
+  const m=C.meds?C.meds():{lines:[]};
+  const lines=(m.lines||[]).map(raw=>{if(raw.includes("｜"))return raw;const f=freqOf(raw),n=cleanName(raw);return n+(f.how?"｜"+f.how:"");}).filter(Boolean);
+  $("ckMeds").value=lines.join("\n");$("ckMeds").dataset.note=m.note||"";medsDirty=false;
+  const pans=allPanels(readForm(),lines.join("\n"));pans.forEach(p=>{panelOn[p.id]=typeof p.on==="function"?!!p.on(readForm(),lines.join("\n")):p.on!==false;});
+  drawChecks();render();
+}
+/* refresh: re-read meds (unless the doctor edited them) and redraw, keeping the panel choices; used by pages that change continuously (toolbox/soap) */
+function refresh(){
+  if(!medsDirty){const m=C.meds?C.meds():{lines:[]};
+    const lines=(m.lines||[]).map(raw=>{if(raw.includes("｜"))return raw;const f=freqOf(raw),n=cleanName(raw);return n+(f.how?"｜"+f.how:"");}).filter(Boolean);
+    $("ckMeds").value=lines.join("\n");$("ckMeds").dataset.note=m.note||"";}
+  drawChecks();render();
+}
+function allPanels(v,medTxt){
+  const list=[{id:"nums",label:"我的數字"},{id:"meds",label:"我的藥"}];
+  if(C.plate)list.push({id:"plate",label:"飲食餐盤"});
+  if(C.move!==false)list.push({id:"move",label:"運動"}); // a topic with no diet or exercise advice (skin) sets plate undefined and move:false
+  (C.panels?C.panels(v,medTxt):[]).forEach(p=>list.push(p));
+  list.push({id:"warn",label:"何時要馬上就醫"},{id:"next",label:"下次回診"});
+  return list;
+}
+function drawChecks(){const v=readForm();$("ckPanels").innerHTML=allPanels(v,$("ckMeds").value).map(p=>'<label><input type="checkbox" data-p="'+p.id+'"'+(panelOn[p.id]!==false?" checked":"")+">"+esc(p.label)+"</label>").join("");}
+function medList(){
+  const txt=$("ckMeds").value.trim();if(!txt)return [];
+  return txt.split(/\n+/).map(l=>l.trim()).filter(Boolean).map((l,i)=>{
+    const [n,h]=l.split(/[｜|]/);const name=n.trim(),how=(h||"").trim()||freqOf(name).how;
+    const info=(C.medInfo||[]).find(r=>r[0].test(name))||[null,"",""];
+    let times=freqOf(how).times;if(!times.length)times=freqOf(name).times;
+    return {name,how,what:info[1],tip:info[2],times,color:PILLC[i%PILLC.length]};});
+}
+const TIMEICON={早:["sun","早上"],中:["noon","中午"],晚:["moon","晚上"],睡前:["bed","睡前"]};
+function render(){
+  const v=readForm(),meds=medList(),on=id=>panelOn[id]!==false,sheet=$("ckSheet");
+  const who=v.name?esc(v.name)+"的":"我的";
+  let h='<header class="ck-sh">'+(MASCOT[C.mascot]||MASCOT.leaf)()+'<div><h3>'+who+esc(C.sheetTitle)+'</h3><p>'+esc(v.date||today())+(v.doc?"　"+esc(v.doc):"")+"</p></div></header>";
+  if(on("nums")){const ns=C.numbers?C.numbers(v):[];if(ns.length)h+='<div class="ck-sec"><h4>'+ICON.check+'我的數字</h4><div class="ck-nums">'+ns.map(n=>'<div class="ck-num"><div class="ck-nl">'+esc(n.label)+'</div><div class="ck-nv">'+esc(n.value)+(n.unit?"<small>"+esc(n.unit)+"</small>":"")+"</div>"+(n.meter?meter(n.meter):"")+(n.text?"<p>"+n.text+"</p>":"")+"</div>").join("")+"</div></div>";}
+  if(on("meds")){const note=$("ckMeds").dataset.note;
+    h+='<div class="ck-sec"><h4>'+ICON.pills+'我的藥</h4>';
+    if(meds.length)h+='<ul class="ck-meds">'+meds.map(m=>'<li class="ck-med">'+pill(m.color)+'<div><b>'+esc(m.name)+"</b>"+(m.what?'<span class="ck-what">'+esc(m.what)+"</span>":"")+
+      (m.times.length?'<div class="ck-times">'+m.times.map(t=>'<span class="ck-time">'+ICON[TIMEICON[t][0]]+TIMEICON[t][1]+"</span>").join("")+"</div>":"")+
+      (m.how?'<p class="ck-how">'+esc(m.how)+"</p>":"")+(m.tip?'<p class="ck-tip">小提醒：'+esc(m.tip)+"</p>":"")+"</div></li>").join("")+"</ul>";
+    else h+='<p class="ck-note">'+esc(note||"目前沒有新的藥，照醫師說的生活習慣開始。")+"</p>";
+    if(meds.length)h+='<p style="font-size:13.5px;margin:6px 0 0;color:#6b645a">藥不要自己停或加量；有不舒服先打電話問或提早回診。</p>';
+    h+="</div>";}
+  const pl=C.plate?C.plate(v,$("ckMeds").value):null;
+  const showPlate=on("plate")&&pl,showMove=on("move")&&C.move!==false;
+  if(showPlate||showMove){h+='<div class="ck-two">';
+    if(showPlate)h+='<div class="ck-sec ck-plate"><h4>'+ICON.leaf+esc(pl.title||"每餐這樣吃")+'</h4>'+plate(pl)+'<div class="ck-legend"><span><i style="background:#9bd27e"></i>蔬菜 '+esc(pl.frLabel[0])+'</span><span><i style="background:#f4b49a"></i>'+esc(pl.proLabel||"豆魚蛋肉")+" "+esc(pl.frLabel[1])+'</span><span><i style="background:#e9cf8f"></i>全穀雜糧 '+esc(pl.frLabel[2])+"</span></div><ul>"+pl.tips.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    if(showMove)h+='<div class="ck-sec ck-move"><h4>'+ICON.walk+'動一動</h4>'+walker()+"<ul>"+(C.move||[]).map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+    h+="</div>";}
+  const pans=(C.panels?C.panels(v,$("ckMeds").value):[]).filter(p=>on(p.id));
+  if(pans.length)h+='<div class="ck-sec ck-pans">'+pans.map(p=>'<div class="ck-pan"><h5>'+(ICON[p.icon]||"")+esc(p.title||p.label)+"</h5>"+(p.art&&ART[p.art]?ART[p.art]():"")+(p.html||"")+(p.items?"<ul>"+p.items.map(t=>"<li>"+t+"</li>").join("")+"</ul>":"")+"</div>").join("")+"</div>";
+  if(on("warn")&&C.warn)h+='<div class="ck-sec ck-warn"><h5>'+ICON.warn+'這些情況，馬上就醫</h5><ul>'+C.warn.map(t=>"<li>"+t+"</li>").join("")+"</ul></div>";
+  if(on("next")){const nn=C.nextNote?C.nextNote(v,$("ckMeds").value):"";
+    h+='<div class="ck-sec ck-next">'+calendar(v.next)+'<div><b>下次回診：'+(v.next?esc(v.next.replace(/-/g,"/")):"請跟櫃台約時間")+"</b>"+(nn?'<p style="margin:2px 0">'+nn+"</p>":"")+(C.bring?'<p style="margin:2px 0;font-size:14px">記得帶：'+C.bring.map(esc).join("、")+"</p>":"")+"</div></div>";}
+  h+='<div class="ck-foot"><span>這張單張依醫師今天的評估產生；藥名與劑量以處方箋、藥袋為準。</span><span>ycjacademy 門診實務</span></div>';
+  sheet.innerHTML=h;
+}
+let tm=0;const later=()=>{clearTimeout(tm);tm=setTimeout(render,120);};
+const form=document.querySelector(".ck-form");
+form.addEventListener("input",e=>{if(e.target.id==="ckMeds"){medsDirty=true;$("ckMeds").dataset.note="";}if(e.target.dataset.p){panelOn[e.target.dataset.p]=e.target.checked;}later();});
+form.addEventListener("change",e=>{if(e.target.dataset.p)panelOn[e.target.dataset.p]=e.target.checked;later();});
+$("ckPull").onclick=pull;
+$("ckDate").value=today();$("ckNext").value=addDays(today(),C.days||28);
+function onHandoutOpen(){if(!medsDirty)pull();}
+// printing: only the sheet; window.print is blocked inside the claude.ai preview
+const canPrint=/(^|\.)github\.io$|^localhost$|^127\.|^$/.test(location.hostname)||location.protocol==="file:";
+if(!canPrint&&C.siteUrl){$("ckPrint").textContent="到網站版列印";$("ckPrintNote").innerHTML='預覽畫面不能列印，請開 <a href="'+esc(C.siteUrl)+'#handout" target="_blank" rel="noopener">網站版</a>。';}
+$("ckPrint").onclick=()=>{
+  if(!canPrint&&C.siteUrl){window.open(C.siteUrl+"#handout","_blank","noopener");return;}
+  render();let host=$("ckPrintHost");if(!host){host=document.createElement("div");host.id="ckPrintHost";document.body.appendChild(host);}
+  host.innerHTML="";host.appendChild($("ckSheet").cloneNode(true));document.body.classList.add("ck-printing");
+  try{window.print();}catch(e){}
+  setTimeout(()=>document.body.classList.remove("ck-printing"),400);
+};
+addEventListener("afterprint",()=>document.body.classList.remove("ck-printing"));
+pull();
+fromHash();
+window.CK={pull,refresh,render,reveal,setAll:all};
+})();
+</script>
+<!-- clinic-kit v1 end -->
+</body>
+</html>

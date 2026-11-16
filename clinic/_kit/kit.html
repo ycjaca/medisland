@@ -331,6 +331,13 @@ function pull(){
   const pans=allPanels(readForm(),lines.join("\n"));pans.forEach(p=>{panelOn[p.id]=typeof p.on==="function"?!!p.on(readForm(),lines.join("\n")):p.on!==false;});
   drawChecks();render();
 }
+/* refresh: re-read meds (unless the doctor edited them) and redraw, keeping the panel choices; used by pages that change continuously (toolbox/soap) */
+function refresh(){
+  if(!medsDirty){const m=C.meds?C.meds():{lines:[]};
+    const lines=(m.lines||[]).map(raw=>{if(raw.includes("｜"))return raw;const f=freqOf(raw),n=cleanName(raw);return n+(f.how?"｜"+f.how:"");}).filter(Boolean);
+    $("ckMeds").value=lines.join("\n");$("ckMeds").dataset.note=m.note||"";}
+  drawChecks();render();
+}
 function allPanels(v,medTxt){
   const list=[{id:"nums",label:"我的數字"},{id:"meds",label:"我的藥"}];
   if(C.plate)list.push({id:"plate",label:"飲食餐盤"});
@@ -396,7 +403,7 @@ $("ckPrint").onclick=()=>{
 addEventListener("afterprint",()=>document.body.classList.remove("ck-printing"));
 pull();
 fromHash();
-window.CK={pull,render,reveal,setAll:all};
+window.CK={pull,refresh,render,reveal,setAll:all};
 })();
 </script>
 <!-- clinic-kit v1 end -->
