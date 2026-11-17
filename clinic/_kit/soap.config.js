@@ -30,27 +30,74 @@ window.CK_CONFIG={
   },
   meds(){
     const S=window.CK_SOAP;if(!S)return {lines:[]};
-    const raw=S.mods.flatMap(k=>(S.res[k]&&S.res[k].rx)||[]);
+    const raw=(S.acRx||[]).concat(S.mods.flatMap(k=>(S.res[k]&&S.res[k].rx)||[]));
     const lines=[];
     raw.forEach(r=>{
       if(/^（|^或|^停用|^可考慮|^自費|已在/.test(r))return;
-      let s=r.replace(/（[^）]*）/g," ").split(/\s或\s/)[0].replace(/^＋/,"").replace(/^原 statin＋/,"").replace(/^改\s*/,"");
-      let later="";const ar=s.indexOf("→");if(ar>0){later="之後依醫師指示調整";s=s.slice(0,ar).trim();}
+      let s=r.replace(/^[A-Z][A-Z0-9]{2,5}\s+/,"").replace(/（[^）]*）/g," ").split(/\s或\s/)[0].replace(/^＋/,"").replace(/^原 statin＋/,"").replace(/^改\s*/,"");
+      let later="";const dm=s.match(/ x (\d+(?:-\d+)?) days?/);if(dm){later="共 "+dm[1]+" 天";s=s.replace(dm[0],"");}const ar=s.indexOf("→");if(ar>0){later=(later?later+"，":"")+"之後依醫師指示調整";s=s.slice(0,ar).trim();}
       s=s.replace(/（[^）]*）/g,"").trim();
       const how=[];
-      if(/\bTID\b/i.test(s))how.push("每天 3 次");else if(/\bBID\b/i.test(s))how.push("每天 2 次，早晚");
+      if(/\bQID\b/i.test(s))how.push("每天 4 次");else if(/Q6H/i.test(s))how.push("需要時吃，間隔至少 6 小時");else if(/\bTID\b/i.test(s))how.push("每天 3 次");else if(/\bBID\b/i.test(s))how.push("每天 2 次，早晚");
       else if(/\bqw\b/i.test(s))how.push("每週 1 次，固定同一天");else if(/\bHS\b/i.test(s))how.push("睡前");
-      else if(/\bQD\b|\bqd\b/.test(s))how.push("每天 1 次");else if(/PRN/.test(s))how.push("需要時");
+      else if(/\bQD\b|\bqd\b/.test(s))how.push("每天 1 次");if(/PRN/.test(s))how.push("需要時");
       if(/\bAC\b/.test(s))how.push("飯前");else if(/\bPC\b/.test(s))how.push("飯後");
       if(/\bSC\b/.test(s))how.push("皮下注射");
       if(later)how.push(later);
-      const name=s.replace(/\d#/g,"").replace(/\b(QD|qd|BID|TID|HS|qw|PC|AC|SC|PRN|q1-2h)\b/g,"").replace(/\(D[^)]*\)/g,"").replace(/\s{2,}/g," ").trim();
+      const name=s.replace(/\d#/g,"").replace(/\b(QD|qd|BID|TID|QID|HS|qw|PC|AC|SC|PRN|q1-2h|Q6H|Q4-6H|AM|stat)\b/g,"").replace(/\b(fever\/pain|pain|cough|wheeze|nausea|cramp|palpitation)\b/g,"").replace(/\(D[^)]*\)/g,"").replace(/\s{2,}/g," ").trim();
       lines.push(name+"｜"+how.join("，"));
     });
     if(!lines.length)return {lines:[],note:"這次沒有新的藥；原本的藥照常吃，不要自己停藥。"};
     return {lines};
   },
   medInfo:[
+    [/twynsta|exforge|sevikar|olsaaca/i,"兩種降血壓藥合一顆","每天固定時間吃；腳踝腫要告訴醫師。"],
+    [/indapamide|natrilix/i,"降血壓、利尿","早上吃；會多跑廁所；要驗鈉、鉀、尿酸。"],
+    [/doxazosin|xadosin/i,"降血壓、放鬆血管","睡前吃；起身慢一點，小心頭暈。"],
+    [/leqvio|inclisiran/i,"打針降膽固醇","半年打一次，在診間施打。"],
+    [/nilemdo|bempedoic/i,"降壞膽固醇（不是 statin）","可能使尿酸上升。"],
+    [/contrave/i,"降食慾的口服減重藥","每週加 1 顆；不要喝酒；血壓升高或情緒變化要回診。"],
+    [/xenical|orlistat/i,"減少油脂吸收","吃含油的餐才吃；會油便，睡前補綜合維生素。"],
+    [/quickmist/i,"想抽時用的口腔噴劑","對著臉頰內側噴，不要吸入；一次 1–2 噴。"],
+    [/acetaminophen|acetal|apap/i,"退燒止痛","兩次至少隔 4–6 小時；一天不超過 8 顆（500mg）；感冒藥水常含同成分，不要重複吃。"],
+    [/naproxen|meloxicam|melicam|celebrex|celecoxib|diclofenac/i,"消炎止痛（NSAID）","飯後吃；胃痛、黑便要停藥回診；腎臟不好不要自己買來吃。"],
+    [/levocetirizine|loratadine|levozine|clatine/i,"抗過敏、止鼻水","可能想睡，開車小心。"],
+    [/hiros|pseudoephedrine/i,"通鼻塞","可能心悸、睡不著，下午以後少吃；高血壓要告訴醫師。"],
+    [/dextromethorphan|dimemorfan|eufan/i,"止乾咳","有痰時不要一直吃。"],
+    [/ambroxol|musco|acetylcysteine|actein/i,"化痰","多喝水，痰比較好咳出來。"],
+    [/comfflam|benzydamine/i,"喉嚨噴劑","對著喉嚨痛的地方噴，噴完 30 分鐘內少喝水。"],
+    [/amoxicillin|curam|cephalexin|azithromycin|baktar|ciprofloxacin|cinolone|doxycycline/i,"抗生素","照時間吃完全部療程，不要症狀好了就停；出疹或嚴重腹瀉要回診。"],
+    [/oseltamivir|eraflu/i,"抗流感病毒","5 天吃完；可能噁心，飯後吃。"],
+    [/paxlovid/i,"抗 COVID 病毒","5 天吃完；會和很多藥互相影響，其他醫師開藥要告知。"],
+    [/smecta/i,"止瀉（吸附）","泡水喝；和其他藥間隔 2 小時。"],
+    [/bioflor/i,"益生菌","和抗生素間隔 2 小時。"],
+    [/domperidone|domtoo|metoclopramide|promeran/i,"止吐、幫助胃排空","飯前吃；吃幾天就好，不要長期吃。"],
+    [/loperamide|lopedin/i,"止瀉","有發燒或血便時不要吃。"],
+    [/hyoscyamine|buwecon/i,"止肚子絞痛","可能口乾、便秘。"],
+    [/famotidine|voker|pantoloc|pantoprazole/i,"減少胃酸","飯前吃效果較好。"],
+    [/algitab|ulstal/i,"保護胃、止逆流","飯後和睡前嚼碎吞。"],
+    [/mopride|mosapride/i,"幫助胃蠕動","飯前吃。"],
+    [/simethicone|kascoal/i,"消脹氣","飯後吃。"],
+    [/mgo|magnesium oxide/i,"軟便","多喝水；腎臟不好要告訴醫師。"],
+    [/lactul/i,"軟便","可能脹氣；調整到每天軟便 1–2 次。"],
+    [/dulcolax|bisacodyl/i,"刺激排便","睡前吃，隔天早上排便；不要長期吃。"],
+    [/kocel|psyllium/i,"纖維","一定要配一大杯水。"],
+    [/colchicine/i,"痛風急性發作","吃到不痛就照醫師的量吃；腹瀉要減量或停。"],
+    [/prednisolone/i,"類固醇消炎","早上吃，照天數吃完；血糖可能升高。"],
+    [/goodgen|flurbi/i,"外用消炎止痛","擦或貼在痛的地方，不要用在傷口。"],
+    [/cyclobenzaprine|musgud|mephenoxalone/i,"放鬆肌肉","會想睡，不要開車、喝酒。"],
+    [/lyrica|pregabalin/i,"神經痛","會頭暈想睡，從小劑量開始。"],
+    [/imigran|sumatriptan/i,"偏頭痛發作時吃","頭痛一開始就吃；2 小時後可再吃一次，一天最多 4 顆。"],
+    [/propranolol/i,"降心跳、預防偏頭痛","不要突然停藥；氣喘不可用。"],
+    [/flunarizine|suzin/i,"預防偏頭痛","睡前吃；可能想睡、變胖。"],
+    [/diphenidol|dimenhydrinate|trimin/i,"止暈","會想睡；只吃幾天。"],
+    [/betahistine|nilasen/i,"改善眩暈","飯後吃。"],
+    [/synvent|salbutamol/i,"急救用支氣管擴張劑","喘的時候噴 2 下；一個月用超過一支要回診。"],
+    [/symbicort/i,"氣喘控制加急救","每天早晚用，喘時也可以多噴；噴完漱口。"],
+    [/momenase|mometasone nasal|鼻噴/i,"鼻噴類固醇","噴向鼻孔外側；要連續用幾天才有效。"],
+    [/furosemide/i,"利尿","早上吃；頭暈、抽筋要回診驗血。"],
+    [/n\.t\.g|nitroglycerin/i,"心絞痛急救","坐下、舌下含 1 顆；5 分鐘沒好再 1 顆，3 顆沒好打 119。"],
+    [/aspirin|bokey/i,"抗血小板","飯後吃；黑便、流血不止要回診。"],
     [/sevikar hct/i,"三種降血壓藥合一顆","早上吃；剛開始起身慢一點，會多跑廁所。"],
     [/sevikar|exforge/i,"兩種降血壓藥合一顆","每天固定時間吃；腳踝腫要告訴醫師。"],
     [/amlodipine|nifedipine/i,"降血壓（鈣離子阻斷劑）","可能腳踝水腫、臉潮紅，通常不用停藥。"],
@@ -90,7 +137,8 @@ window.CK_CONFIG={
   },
   move:["每週至少 150 分鐘中等強度運動（快走、騎車、游泳），會微喘還能講話","每週 2–3 次肌力運動（深蹲、彈力帶）","飯後散步 10–15 分鐘","久坐每 30 分鐘起來動一動"],
   panels(){
-    const S=window.CK_SOAP;if(!S)return [];const m=S.mods,rx=S.mods.flatMap(k=>(S.res[k]&&S.res[k].rx)||[]).join(" "),out=[];
+    const S=window.CK_SOAP;if(!S)return [];const m=S.mods,rx=(S.acRx||[]).join(" ")+" "+S.mods.flatMap(k=>(S.res[k]&&S.res[k].rx)||[]).join(" "),out=[];
+    if(S.acEdu&&S.acEdu.length)out.push({id:"acute",label:"這次的病",icon:"check",title:"這次的病，這樣照顧",on:true,items:S.acEdu});
     if(S.next&&S.next.length)out.push({id:"labs",label:"下次要抽血",icon:"check",title:"下次回診要抽血",on:true,
       items:[S.next.join("、")].concat(S.next.some(x=>/FPG|Lipid/.test(x))?["<b>要空腹</b>：前一晚 10 點後不吃東西，可以喝白開水；早上的藥抽完血再吃"]:[])});
     if(m.includes("htn"))out.push({id:"bp",label:"量血壓 722",icon:"cuff",title:"在家量血壓：722",art:"r722",on:true,
