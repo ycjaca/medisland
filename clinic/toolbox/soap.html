@@ -113,13 +113,21 @@ details.ccblk{border-left:5px solid #7a5af0}details.ccblk>summary{color:#5a3d99;
 .drug b{font:600 14px "IBM Plex Mono",monospace;color:var(--acc);margin-right:6px}.drug .dn{font-weight:700}
 .drug .dg{color:var(--mute);font-size:13.5px}.drug .dd{font-size:14px;margin-top:2px}.drug .dt{font-size:13.5px;color:#6a4a12;background:#fff4d9;border-radius:6px;padding:2px 8px;margin-top:4px}
 .drug .di{font:12.5px "IBM Plex Mono",monospace;color:var(--mute);margin-top:3px}.drug .dc{font-size:11.5px;color:var(--mute);float:right}
+
+.blrow{display:flex;flex-wrap:wrap;gap:6px 10px;margin:4px 0 6px;align-items:center}
+.blf{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--mute)}
+.blf input,.blf select{font:inherit;font-size:14px;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:4px 6px;background:#fbfbf9;max-width:170px}
+.blf input{width:72px}
+.tg2.blb{font-size:13px;padding:4px 10px}.tg2.blb.on{background:#8a5a12;border-color:#8a5a12}
+.tplcc{margin:4px 0 10px;padding:10px;border:1px dashed #c9b8f0;border-radius:10px;background:#fcfbff}
+#ccAdd .sm{align-self:center}
 footer{font-size:12.5px;color:var(--mute);border-top:1px solid var(--line);padding-top:10px;margin-top:20px}
 footer a{color:var(--acc)}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-  <h1>門診速查 <small>SOAP＋處方 · v0.4 · 2026-11-17</small></h1>
+  <h1>門診速查 <small>SOAP＋處方 · v0.5 · 2026-11-19</small></h1>
   <div class="tabs"><button class="tab" data-tab="gen">慢性病 SOAP 產生器</button><button class="tab" data-tab="tpl">模板查詢</button><button class="tab" data-tab="drug">院內藥品</button></div>
   <div class="drugonly"><input id="dq" type="search" placeholder="代碼、商品名、學名、類別，例如 NAP2、naproxen、PPI…" autocomplete="off"></div>
   <div class="tplonly">
@@ -148,6 +156,7 @@ footer a{color:var(--acc)}
 <div id="toast"></div>
 <script>
 const D=[{"n": 1, "cat": "A. 呼吸道／耳鼻喉", "title": "急性上呼吸道感染 Acute URI", "codes": "J06.9", "soap": "S: Rhinorrhea, sore throat, cough [ ] days; [with/without] fever. Denied dyspnea, chest pain, otalgia.\nO: Pharynx [mild injected], tonsils [not enlarged, no exudate]. Neck LAP [-]. Lungs: clear, no wheeze/crackles.\nA: Acute upper respiratory infection (J06.9)\nP: Acetaminophen 500 mg 1# QID PRN fever/pain x 3 days\n   Cetirizine 10 mg 1# QD x 3 days (或 chlorpheniramine 4 mg 1# TID)\n   Dextromethorphan 15 mg 1# TID x 3 days (乾咳時)\n   No antibiotics indicated. Return if fever >3 days, dyspnea, otalgia.\n", "notes": ["重點：病毒性為主，不需抗生素；健保抗生素管理會監測上呼吸道感染的抗生素使用率。Red flags：呼吸窘迫、SpO2 < 94%、高燒超過 3 天、頸部僵硬。", "衛教：「這是病毒感冒，抗生素沒有用，多喝水休息，3 到 7 天會慢慢好。」不需常規回診。"], "src": "CDC Adult Outpatient Treatment Recommendations；AAFP。", "alias": "uri 上感 感冒 上呼吸道 common cold j06.9 流鼻水 喉嚨痛 fever 發燒", "id": "t1"}, {"n": 2, "cat": "A. 呼吸道／耳鼻喉", "title": "急性咽炎／扁桃腺炎", "codes": "J02.9；鏈球菌 J02.0；扁桃腺炎 J03.90；鏈球菌扁桃腺炎 J03.00", "soap": "S: Sore throat [ ] days, odynophagia. Fever [ ]. Cough [absent/present].\nO: Tonsils [grade ], exudate [+/-]. Tender anterior cervical LAP [+/-]. Centor/McIsaac score: ___.\n   Uvula midline, no trismus, no muffled voice.\nA: Acute [pharyngitis/tonsillitis] ([J02.9/J03.90]) / Streptococcal (J02.0/J03.00) if RADT(+)\nP: (Strep likely/confirmed) Amoxicillin 500 mg 1# BID x 10 days\n   (PCN allergy, non-anaphylaxis) Cephalexin 500 mg 1# BID x 10 days\n   (Anaphylaxis) Azithromycin 500 mg D1 then 250 mg QD D2-5\n   Ibuprofen 400 mg 1# TID PC PRN x 3 days.\n", "notes": ["重點：IDSA 建議，Centor ≥ 3 時做快篩／培養再給抗生素。Red flags：扁桃腺周圍膿瘍（牙關緊閉、懸雍垂偏移、熱馬鈴薯音）、流口水、呼吸道阻塞，應轉耳鼻喉科或急診。", "陷阱：EBV 單核球症給 amoxicillin 會起疹；年輕人如合併脾大、後頸淋巴結腫大，要先想到 EBV。"], "src": "IDSA GAS pharyngitis guideline 2012。", "alias": "pharyngitis tonsillitis 咽炎 喉嚨痛 扁桃腺 strep centor sore throat", "id": "t2"}, {"n": 3, "cat": "A. 呼吸道／耳鼻喉", "title": "急性支氣管炎", "codes": "J20.9", "soap": "S: Cough [ ] days, [productive/dry], no dyspnea. Fever [none/low-grade].\nO: Lungs: [scattered rhonchi], no crackles. RR ___, SpO2 ___%.\nA: Acute bronchitis (J20.9)\nP: Acetylcysteine 600 mg 1# QD 或 Ambroxol 30 mg 1# TID x 5 days\n   (Wheeze) Salbutamol MDI 100 mcg 2 puffs Q6H PRN\n   CXR if HR>100, RR>24, BT>38, or focal chest signs (r/o pneumonia).\n", "notes": ["咳嗽可持續 2 到 3 週，不需抗生素。若合併氣喘或 COPD，改用對應的急性惡化模板。"], "src": "ACCP cough guideline；CDC。", "alias": "bronchitis 支氣管炎 咳嗽 cough", "id": "t3"}, {"n": 4, "cat": "A. 呼吸道／耳鼻喉", "title": "流行性感冒", "codes": "未分型 J11.1；快篩確認 A/B 型 J10.1；合併肺炎 J10.00／J11.00", "soap": "S: Abrupt fever ___°C, myalgia, headache, cough since [ ] (onset < 48 h: [Y/N]). Contact: [ ].\nO: Lungs [clear]. Flu rapid test: [A+/B+/neg/not done].\nA: Influenza ([J10.1 confirmed / J11.1 clinical])\nP: Oseltamivir 75 mg 1# BID x 5 days (CrCl 30-60: 30 mg BID)\n   公費身分: [<5y/≥65y/孕婦或產後2週內/高風險慢性病/肥胖/擴大用藥族群: ___]\n   Acetaminophen 500 mg PRN. Return if dyspnea, chest pain, altered consciousness.\n", "notes": ["給付：流感抗病毒藥**不在健保給付範圍**，僅符合疾管署公費條件者可公費使用，其餘自費。疾管署會視疫情公告「擴大用藥條件」的期間，例如 2026/8/24–9/30 納入有類流感症狀的醫事防疫人員、長照機構、托育人員、學生等高傳播族群。疾管署 2026/10/20 新聞稿已將這項擴大條件（有類流感症狀且屬流感高傳播族群）的適用期限延長至今年 11 月 15 日止，藥劑配置於全國約 4 千家合約醫療機構（克流感、易剋冒）；11/15 以後的適用條件請查疾管署最新公告。病歷要記載公費身分佐證。", "重點：發病 48 小時內用藥效果最好；高風險或重症病人超過 48 小時仍應給藥。"], "src": "衛福部疾管署「流感抗病毒藥劑」Q&A；衛福部 2026/8 新聞稿。", "alias": "flu influenza 流感 克流感 tamiflu oseltamivir fever 發燒", "id": "t4"}, {"n": 5, "cat": "A. 呼吸道／耳鼻喉", "title": "COVID-19", "codes": "U07.1", "soap": "S: [Fever/sore throat/cough] since [ ]. Home Ag test (+) on [ ]. High-risk: [age≥65/DM/CKD/immunocompromised/ ].\nO: SpO2 ___%. Lungs [ ].\nA: COVID-19 (U07.1)\nP: (High risk, ≤5 days) Nirmatrelvir/ritonavir 300/100 mg BID x 5 days (eGFR 30-60: 150/100 mg BID; <30 不建議)\n   → 先核對 CYP3A4 交互作用 (statin, amiodarone, DOAC, tacrolimus...)\n   或 Molnupiravir 800 mg BID x 5 days (孕婦禁用)\n   Symptomatic: acetaminophen, antitussive.\n", "notes": ["口服抗病毒藥公費條件與領藥機制依疾管署當期公告（需自行查證）。SpO2 < 94% 或呼吸喘，轉急診。"], "src": "", "alias": "covid 新冠 covid-19 paxlovid 武漢 fever", "id": "t5"}, {"n": 6, "cat": "A. 呼吸道／耳鼻喉", "title": "急性鼻竇炎", "codes": "未明示 J01.90；上頜竇 J01.00", "soap": "S: Nasal obstruction, purulent rhinorrhea, facial pain [ ] days. Pattern: [>10 days persistent / \"double sickening\" / severe onset ≥3-4 days fever>39].\nO: Maxillary tenderness [+/-]. Purulent PND [+/-]. No periorbital edema, EOM full.\nA: Acute bacterial rhinosinusitis (J01.90)\nP: Amoxicillin/clavulanate 875/125 mg 1# BID x 5-7 days (PCN allergy: doxycycline 100 mg BID)\n   Saline irrigation BID; intranasal steroid (mometasone 2 sprays/nostril QD).\n", "notes": ["Red flags（立即轉診）：眼眶周圍腫脹、複視、視力下降、劇烈頭痛、意識改變。"], "src": "IDSA ABRS guideline 2012。", "alias": "sinusitis 鼻竇炎 abrs", "id": "t6"}, {"n": 7, "cat": "A. 呼吸道／耳鼻喉", "title": "過敏性鼻炎", "codes": "J30.9；季節性 J30.2；塵蟎等常年性 J30.89", "soap": "S: Sneezing, itchy watery rhinorrhea, nasal congestion, [seasonal/perennial]. Triggers: [dust mite/ ].\nO: Pale boggy turbinates, allergic shiners [+/-].\nA: Allergic rhinitis (J30.9)\nP: Fexofenadine 180 mg 或 Levocetirizine 5 mg 1# QD x [14-28] days\n   Mometasone/fluticasone nasal spray 2 puffs each nostril QD\n   Environmental control education.\n", "notes": ["第一線為鼻用類固醇；只有鼻塞時，口服抗組織胺效果有限。需排除鼻息肉、單側症狀（腫瘤）。"], "src": "ARIA 2019/2020。", "alias": "ar allergic rhinitis 過敏性鼻炎 鼻過敏 打噴嚏", "id": "t7"}, {"n": 8, "cat": "A. 呼吸道／耳鼻喉", "title": "氣喘", "codes": "輕度間歇 J45.20｜輕度持續 J45.30｜中度持續 J45.40｜未明示 J45.909｜急性發作 J45.901", "soap": "S: Wheeze/cough/dyspnea; nocturnal symptoms [ ]/mo; reliever use [ ]/wk; exacerbation hx [ ]. ACT score ___.\nO: Wheeze [+/-], SpO2 ___%, PEF ___ L/min (___% predicted). Inhaler technique checked: [Y].\nA: Asthma, [severity], [controlled/partly/uncontrolled] (J45.__)\nP: GINA Track 1: Budesonide/formoterol 160/4.5 1 inhalation PRN (Step 1-2);\n   Step 3-4: maintenance + reliever (MART) 1-2 inh BID + PRN.\n   Spirometry with BD test [ordered]. F/U 1-3 months.\n", "notes": ["GINA 2024 起不建議 SABA 單用。健保對吸入製劑訂有「呼吸道疾患吸入製劑給付規定」，處方時請核對品項限制（需自行查證）。Red flags：講話無法成句、SpO2 < 92%、PEF < 50%，送急診。"], "src": "GINA 2024/2025。", "alias": "asthma 氣喘 哮喘 wheeze", "id": "t8"}, {"n": 9, "cat": "A. 呼吸道／耳鼻喉", "title": "COPD", "codes": "J44.9；急性惡化 J44.1；合併下呼吸道感染 J44.0", "soap": "S: Chronic dyspnea, mMRC ___, CAT ___. Exacerbations last yr: ___ (hospitalized ___). Smoking ___ PPY.\nO: Prolonged expiration, wheeze [ ]. SpO2 ___%.\n   Spirometry: post-BD FEV1/FVC ___ (<0.7), FEV1 ___% pred (GOLD ___).\nA: COPD, GOLD group [A/B/E] (J44.9)\nP: Group A: bronchodilator (LAMA or LABA). Group B: LAMA+LABA. Group E: LAMA+LABA (± ICS if Eos≥300).\n   Smoking cessation, influenza/pneumococcal/RSV vaccine, pulmonary rehab.\n", "notes": ["須有肺功能證實才能診斷。急性惡化：prednisolone 40 mg QD x 5 days；痰變膿時加抗生素。"], "src": "GOLD 2025 Report。", "alias": "copd 慢性阻塞性肺病 肺阻塞", "id": "t9"}, {"n": 10, "cat": "A. 呼吸道／耳鼻喉", "title": "急性中耳炎", "codes": "右 H66.91｜左 H66.92｜雙側 H66.93", "soap": "S: Otalgia [R/L], fever [ ], hearing decrease. Preceding URI.\nO: TM [bulging/erythematous/opaque], mobility decreased; otorrhea [-].\nA: Acute otitis media, [right/left] (H66.9_)\nP: Adult: Amoxicillin 500 mg TID (或 875 mg BID) x 5-7 days; (failure/recent abx) Amox/clav 875/125 BID.\n   Analgesic: ibuprofen 400 mg TID PRN.\n", "notes": ["成人單側反覆中耳積水要排除鼻咽癌（台灣盛行率較高），應轉耳鼻喉科做鼻咽鏡。"], "src": "", "alias": "aom otitis media 中耳炎 耳朵痛 otalgia", "id": "t10"}, {"n": 11, "cat": "A. 呼吸道／耳鼻喉", "title": "外耳炎", "codes": "右 H60.91｜左 H60.92｜雙側 H60.93", "soap": "S: Otalgia, itching, [swimming/ear picking] hx.\nO: Tragal tenderness [+], EAC edema/debris, TM [intact/not visualized].\nA: Acute otitis externa (H60.9_)\nP: Ofloxacin otic 0.3% 10 gtt BID x 7 days. Keep ear dry. Avoid cotton swab.\n", "notes": ["糖尿病或免疫低下老人有劇痛、肉芽組織時，要排除惡性外耳炎，應轉診。"], "src": "", "alias": "aoe otitis externa 外耳炎 耳朵痛", "id": "t11"}, {"n": 12, "cat": "A. 呼吸道／耳鼻喉", "title": "慢性咳嗽", "codes": "R05.3（2023 年版新碼；急性 R05.1、亞急性 R05.2；舊 R05 已不可申報）", "soap": "S: Cough > 8 weeks. Smoker [ ]. ACEI use [ ]. PND, heartburn, wheeze [ ]. Hemoptysis/wt loss/night sweats denied.\nO: Lungs [ ]. Nasal/pharynx [cobblestoning].\nA: Chronic cough (R05.3), r/o UACS / asthma / GERD / ACEI-induced\nP: CXR PA view. Spirometry ± BD test.\n   Empiric: intranasal steroid + 2nd-gen antihistamine x 2-4 wks; stop ACEI → ARB.\n   (TB suspicion) Sputum AFB x3 + TB PCR.\n", "notes": ["台灣結核病雖逐年下降，依疾管署《台灣結核病防治年報》，2024 年新案仍有 6,141 人、發生率每十萬人口 26.2 人，且 65 歲以上占 64.4%。咳嗽超過 2 週應照 CXR；有痰時驗 AFB，符合者依法通報。"], "src": "ACCP 2018 chronic cough；疾管署結核病診治指引。", "alias": "chronic cough 慢性咳嗽 久咳 cough tb 結核", "id": "t12"}, {"n": 13, "cat": "B. 腸胃", "title": "急性腸胃炎", "codes": "感染性 A09；非感染性 K52.9", "soap": "S: Diarrhea ___ times/day x [ ] days, [watery/bloody], vomiting [ ], abd cramp. Food/travel/contact hx [ ].\nO: BT ___. Abd: soft, [diffuse mild tenderness], no rebound, BS [hyperactive]. Dehydration: [mild/none].\nA: Acute gastroenteritis (A09)\nP: ORS; Domperidone 10 mg 1# TID AC x 3 days (QTc 注意; 或 metoclopramide)\n   Loperamide 2 mg PRN (NOT if bloody stool/high fever)\n   Diosmectite 1 pack TID; probiotics.\n", "notes": ["Red flags：血便合併發燒、嚴重脫水、右下腹壓痛（闌尾炎）、老人腹痛與理學檢查不成比例（腸缺血），應轉診。"], "src": "", "alias": "age gastroenteritis 腸胃炎 腹瀉 拉肚子 diarrhea vomiting 嘔吐", "id": "t13"}, {"n": 14, "cat": "B. 腸胃", "title": "胃食道逆流 GERD", "codes": "無食道炎 K21.9；伴食道炎、無出血 K21.00；伴出血 K21.01（舊 K21.0 已細分）", "soap": "S: Heartburn/acid regurgitation [ ]/wk, postprandial, nocturnal. Alarm: dysphagia/wt loss/GI bleed/anemia/age>60 new onset [none].\nO: Abd soft, epigastric tenderness [+/-].\nA: GERD [without esophagitis / LA grade __ esophagitis] (K21.9 / K21.00)\nP: (No endoscopy) Famotidine 20 mg 1# BID 或 antacid (Alginate/aluminium-magnesium) x 14-28 days\n   (Endoscopy-proven LA A/B, report within 4 months) Esomeprazole 40 mg 1# QD AC x 8 wks\n   Lifestyle: avoid late meals, head elevation, weight loss.\n   Arrange EGD if alarm features or refractory.\n", "notes": ["**健保 PPI 給付（藥品給付規定 7.1）**：LA Grade A/B 的消化性潰瘍或逆流性食道炎，使用期間以 4 個月為限，申報時需附 4 個月內有效的上消化道內視鏡或上消化道 X 光報告。LA C/D 經消化系專科醫師確認後，可長期使用 1 年。內視鏡正常但疑似逆流者，需附 24 小時 pH 監測等其他檢查結果。110/12/1 起有兩項放寬：曾發生重大心血管事件或易出血體質、需使用抗血小板藥或抗凝血劑者，可用每日藥費 6.5 元以下的 PPI；曾經內視鏡證實潰瘍、因他病需用 NSAID 者，不必再經消化系專科醫師確認。制酸劑一般不可與 PPI／H2 blocker 併用申報。"], "src": "健保署藥品給付規定 7.1；台灣 GERD 共識（台灣消化系醫學會）。", "alias": "gerd 胃食道逆流 火燒心 heartburn 逆流 chest pain", "id": "t14"}, {"n": 15, "cat": "B. 腸胃", "title": "消化不良／消化性潰瘍", "codes": "功能性消化不良 K30；胃潰瘍 K25.9；十二指腸潰瘍 K26.9", "soap": "S: Epigastric pain/fullness/early satiety [ ] months. NSAID/aspirin use [ ]. Alarm features [none].\nO: Epigastric tenderness [ ]. Pallor [-].\nA: Dyspepsia (K30) / Peptic ulcer (K25.9/K26.9) [endoscopy date ___]\nP: H. pylori test (UBT/stool Ag/CLO) → if (+): eradication per Taiwan consensus\n   e.g., 14-day high-dose dual (Amoxicillin 750 mg QID + Esomeprazole 40 mg BID) 或 bismuth quadruple x 10-14 days\n   Test of cure ≥4 wks after therapy (PPI stopped ≥2 wks).\n", "notes": ["台灣 H. pylori 共識（Taipei Global Consensus II、台灣共識 2023）以 14 天療程為主，並依地區抗藥性選藥。實際處方請依院內藥品與最新共識調整（需自行查證）。"], "src": "", "alias": "dyspepsia pud peptic ulcer 消化不良 胃潰瘍 胃痛 hp h. pylori 幽門桿菌", "id": "t15"}, {"n": 16, "cat": "B. 腸胃", "title": "便秘", "codes": "K59.00；慢性特發性 K59.04", "soap": "S: BM every [ ] days, hard stool, straining. Alarm: hematochezia/wt loss/anemia/age≥50 new onset/FHx CRC [none].\nO: Abd soft, [no mass]. DRE: [done/not done].\nA: Constipation (K59.00)\nP: Magnesium oxide 250 mg 1-2# TID (eGFR<30 避免) 或 PEG 3350 17 g QD\n   PRN: Sennoside 12.5 mg 2# HS 或 Bisacodyl 10 mg suppository.\n   Fiber 25-30 g/d, fluids.\n", "notes": ["50 到 74 歲提醒國健署的 FIT 篩檢；有警訊症狀者安排大腸鏡。"], "src": "", "alias": "constipation 便秘", "id": "t16"}, {"n": 17, "cat": "B. 腸胃", "title": "腸躁症", "codes": "腹瀉型 K58.0｜便秘型 K58.1｜混合型 K58.2｜未明示 K58.9", "soap": "S: Recurrent abd pain ≥1 day/wk x 3 months, related to defecation/stool frequency/form change (Rome IV). Subtype [ ].\nO: Abd soft, [mild LLQ tenderness]. No alarm signs.\nA: Irritable bowel syndrome, [subtype] (K58._)\nP: Mebeverine 135 mg 1# TID AC 或 Hyoscine butylbromide 10 mg TID PRN\n   IBS-D: loperamide PRN; IBS-C: PEG; consider low-FODMAP; low-dose TCA (amitriptyline 10 mg HS).\n   Labs: CBC, CRP (± celiac/TSH as indicated).\n", "notes": [], "src": "", "alias": "ibs 腸躁症 irritable bowel", "id": "t17"}, {"n": 18, "cat": "B. 腸胃", "title": "痔瘡", "codes": "I 度 K64.0｜II 度 K64.1｜III 度 K64.2｜未明示 K64.9｜血栓性外痔 K64.5", "soap": "S: Painless bright red blood on paper/after BM [ ], prolapse [ ]. Pain [ ].\nO: Inspection: [external tag/thrombosed external hemorrhoid]. DRE/anoscopy: [ ].\nA: Hemorrhoids, grade [ ] (K64._)\nP: Topical hemorrhoid ointment/suppository BID x 7 days; Sitz bath; stool softener (MgO).\n   Refer colonoscopy if age ≥45-50, anemia, change in bowel habit, or FHx CRC.\n", "notes": ["陷阱：「直腸出血」都歸咎於痔瘡，會延誤大腸癌診斷。"], "src": "", "alias": "hemorrhoid 痔瘡 血便", "id": "t18"}, {"n": 19, "cat": "B. 腸胃", "title": "脂肪肝（MASLD）", "codes": "K76.0；NASH／MASH K75.81", "soap": "S: Incidental fatty liver on sono / ALT ___. Alcohol ___ g/day (F<20, M<30). Metabolic RF: [obesity/DM/HTN/HLP].\nO: BMI ___, waist ___ cm.\nA: Metabolic dysfunction-associated steatotic liver disease (K76.0)\nP: Labs: AST/ALT, Plt, HbA1c, lipid, HBsAg, anti-HCV.\n   FIB-4 = ___ (<1.3 low risk; ≥1.3 → transient elastography/refer GI).\n   Weight loss 7-10%; treat metabolic comorbidities. Abd sono q6-12m if advanced fibrosis.\n", "notes": ["2023 年版 ICD 尚無 MASLD 專屬碼，仍用 K76.0。"], "src": "", "alias": "masld nafld fatty liver 脂肪肝 mash nash", "id": "t19"}, {"n": 20, "cat": "B. 腸胃", "title": "慢性 B／C 型肝炎追蹤", "codes": "慢性 B 肝 B18.1｜B 肝帶原 Z22.51｜慢性 C 肝 B18.2", "soap": "S: HBV carrier since [ ]. FHx HCC [ ]. Antiviral [none/ ].\nO: Jaundice [-], stigmata of CLD [-].\nA: Chronic hepatitis B (B18.1) / HBV carrier (Z22.51) / Chronic HCV (B18.2)\nP: HBV: ALT, HBeAg, HBV DNA, AFP + abd sono q6-12m (cirrhosis/high risk q6m).\n   HCV: anti-HCV(+) → HCV RNA → DAA (健保全口服新藥, 依健保規定) → refer if needed.\n", "notes": ["健保 B／C 肝抗病毒藥給付有 ALT、HBV DNA、纖維化等條件（藥品給付規定 10.7.x）。家醫科是否可開立及條件細節需自行查證。"], "src": "", "alias": "hbv hcv hepatitis b肝 c肝 肝炎 帶原", "id": "t20"}, {"n": 21, "cat": "C. 心血管代謝", "title": "高血壓", "codes": "原發性 I10；合併 CKD 1–4 期 I12.9（加 N18.x）；合併心衰竭 I11.0（加 I50.x）", "soap": "S: HBP 722 avg: ___/___ mmHg (7 days x AM/PM x 2). Headache/chest pain/dyspnea [denied]. Meds: [ ]. Adherence [ ].\nO: Office BP ___/___ (R), ___/___ (L), HR ___. Heart: RRR, no murmur. Edema [-].\nA: Essential hypertension (I10), [controlled/uncontrolled]; target HBPM <130/80\nP: Amlodipine 5 mg 1# QD 或 Losartan 50 mg 1# QD (或 single-pill combination)\n   Labs (baseline/annual): Cr/eGFR, K, Na, UA, FPG/HbA1c, lipid, UACR; ECG.\n   S-ABCDE lifestyle. F/U 2-4 wks after titration, then q1-3m (慢性病連續處方箋可開).\n", "notes": ["**2022 台灣高血壓指引**（TSOC/THS）：以居家血壓 722 原則（每次量 2 遍、早晚各 1 次、連續 7 天）作為診斷與治療依據，高血壓定義 ≥ 130/80 mmHg，普遍目標 < 130/80 mmHg。", "陷阱：ACEI 與 ARB 不併用；ACEI/ARB 開始後 1 到 2 週追蹤 K 與 Cr；年輕、低血鉀、難治型高血壓要篩次發性（如原發性高醛固酮症）。", "ICD：高血壓合併 CKD 時，依編碼原則推定有因果關係，碼 I12.9 加 N18.x，不要只碼 I10。"], "src": "", "alias": "htn hypertension 高血壓 血壓 bp", "id": "t21"}, {"n": 22, "cat": "C. 心血管代謝", "title": "第 2 型糖尿病", "codes": "無併發症 E11.9｜高血糖 E11.65｜糖尿病 CKD E11.22（加 N18.x）｜腎病變 E11.21｜多發性神經病變 E11.42｜視網膜病變未伴黃斑水腫 E11.319；長期胰島素 Z79.4、口服藥 Z79.84、非胰島素注射劑 Z79.85（2023 年版新碼）", "soap": "S: DM since [ ]. SMBG fasting ___ mg/dL. Hypoglycemia [ ]. Meds: [ ]. Diet/exercise [ ].\nO: BW ___, BMI ___, BP ___/___. Foot: monofilament [intact], pulses [palpable], ulcer [-].\n   HbA1c ___% ([date]), eGFR ___, UACR ___ mg/g, LDL ___.\nA: Type 2 DM [without complication / with CKD stage _] (E11.__), HbA1c ___%\nP: Metformin 500 mg 1# BID PC → titrate to 1000 mg BID (eGFR 30-45 減量 max 1000 mg/d; <30 停用)\n   + SGLT2i: Empagliflozin 10 mg 或 Dapagliflozin 10 mg 1# QD (給付: metformin 最大耐受劑量仍未控制)\n   (ASCVD/HF/CKD) consider SGLT2i/GLP-1 RA with proven benefit.\n   HbA1c q3m; lipid, Cr/eGFR, UACR yearly; eye fundus yearly; foot exam yearly. 糖尿病共照網/P4P 收案 [Y].\n", "notes": ["**健保給付**：", "　SGLT2i 與 DPP-4i 限用於已用最大耐受劑量 metformin 仍控制不理想者，兩類宜擇一使用。114/6/1 起刪除「口服降血糖藥最多四種」上限。", "　GLP-1 RA（liraglutide、dulaglutide、semaglutide）一般須同時符合：已用最大耐受劑量 metformin 及／或 SU，再併用 SGLT2i、DPP-4i、其複方或 insulin 6 個月以上，HbA1c 仍 > 8.5%。曾有心肌梗塞、血管再通術、動脈硬化性缺血性中風者，metformin 控制不佳即可直接使用。GLP-1 RA 不得與 DPP-4i 或 SGLT2i 併用。", "陷阱：SGLT2i 有正常血糖酮酸中毒風險（術前或禁食前 3 天停藥）與生殖器黴菌感染；metformin 在顯影劑檢查或急性腎損傷時要暫停。"], "src": "中華民國糖尿病學會 2022/2024 臨床照護指引；ADA Standards of Care 2025/2026；健保署藥品給付規定 5.1。", "alias": "dm t2dm diabetes 糖尿病 血糖 hba1c", "id": "t22"}, {"n": 23, "cat": "C. 心血管代謝", "title": "高血脂", "codes": "單純高膽固醇 E78.00（舊 E78.0 已細分）｜家族性 E78.01｜混合型 E78.2｜高三酸甘油脂 E78.1｜未明示 E78.5", "soap": "S: Lipid found at [health check]. ASCVD hx [ ]. DM [ ]. CKD [ ]. FHx premature CHD [ ].\nO: Xanthoma [-]. BP ___. Waist ___.\n   TC ___, TG ___, HDL ___, LDL ___ mg/dL. Risk tier (健保表一): [極高/非常高/高/中/低/0 RF], target LDL < ___.\nA: Hyperlipidemia (E78.__), ASCVD risk [ ]\nP: Atorvastatin 10-20 mg (中強度) / 40-80 mg (高強度) 或 Rosuvastatin 5-10 / 20 mg 1# QD\n   ± Ezetimibe 10 mg QD if not at target.\n   Lipid 6-8 wks after start/change, then q6m (中低風險 q6-12m); ALT baseline; CK if myalgia.\n", "notes": ["**健保降膽固醇藥物給付規定表一（115/9/1 起）**：", "　風險因子：高血壓；男 ≥ 45 歲、女 ≥ 55 歲；早發冠心病家族史；HDL 偏低（男 < 40、女 < 50）；抽菸；代謝症候群。CKD 的定義是 UACR ≥ 30 mg/g 或 eGFR < 60，持續 3 個月。", "　部分舊 statin 品項（附表列名的 simvastatin、部分 atorvastatin 學名藥等）仍適用「表二」舊標準。處方前請在健保署品項清單核對（需自行查證院內品項是否列名）。", "病歷要件：記載風險分級、起始與目標值、生活型態介入期間，以及追蹤血脂的日期。"], "src": "健保署「藥品給付規定修訂對照表 第 2 節（自 115 年 9 月 1 日生效）」；2022 台灣高風險病人血脂治療指引。", "table": ["| ASCVD 風險 | 非藥物治療 | 起始 LDL-C | 目標 LDL-C（non-HDL） |", "|---|---|---|---|", "| 極高風險 | 與藥物並行 | ≥ 55 | < 55（< 85） |", "| 非常高風險 | 與藥物並行 | ≥ 70 | < 70（< 100） |", "| 高風險（DM、CKD、LDL ≥ 190、CAC ≥ 400） | 與藥物並行 | ≥ 100 | < 100（< 130） |", "| 中風險（≥ 2 項 RF） | 先 3–6 個月生活型態 | ≥ 115 | < 115（< 145） |", "| 低風險（1 項 RF） | 先 3–6 個月生活型態 | ≥ 130 | < 130（< 160） |", "| 0 項 RF | 先 3–6 個月生活型態 | ≥ 160 | < 160 |"], "alias": "hld hlp dyslipidemia hyperlipidemia 高血脂 血脂 膽固醇 ldl statin", "id": "t23"}, {"n": 24, "cat": "C. 心血管代謝", "title": "痛風／高尿酸血症", "codes": "痛風未明示 M10.9；右踝足特發性痛風 M10.071（左 M10.072）；慢性痛風 M1A.-（第 7 碼為痛風石）；無症狀高尿酸 E79.0", "soap": "S: Acute [R 1st MTP/ankle/knee] pain, swelling since [ ]; prior attacks ___/yr. Tophi [ ]. Diuretic/alcohol [ ].\nO: [Erythema, warmth, swelling, exquisite tenderness] at [ ]. BT ___.\n   UA ___ mg/dL (急性期可能偏低), Cr/eGFR ___.\nA: Acute gout flare, [site] (M10.0__)\nP: Acute: Colchicine 0.5 mg 2# stat, 1# 1h later, then 0.5 mg QD-BID (eGFR<30 減量; 避免與 clarithromycin/強 CYP3A4/P-gp 抑制劑)\n   或 NSAID (Naproxen 500 mg BID / Etoricoxib 120 mg QD x 5-8 days) 或 Prednisolone 30-35 mg QD x 5 days\n   ULT (≥2 flares/yr, tophi, urate stone, CKD≥3): Allopurinol 50-100 mg QD start, titrate q2-4 wks\n     → HLA-B*5801 screening recommended before allopurinol (Han Chinese); target UA <6 (tophi <5)\n   Flare prophylaxis colchicine 0.5 mg QD x 3-6 months when starting ULT.\n", "notes": ["**健保 febuxostat（藥品給付規定 2.11.1）**：限慢性痛風患者的高尿酸血症，需符合下列之一：曾用 benzbromarone 反應不佳、尿酸仍 > 6.0 mg/dL；CKD（eGFR < 45 或 SCr ≥ 1.5）；尿酸性腎或尿路結石；痛風石；肝硬化。**不建議用於無症狀高尿酸血症**。HLA-B*5801 檢測的健保給付狀況需自行查證。", "陷阱：急性期不要停用原有的 ULT；開始 ULT 時要同時給 flare 預防用藥。"], "src": "中華民國風濕病醫學會 2016 痛風與高尿酸血症診治指引；ACR 2020 gout guideline；衛福部 105/8/1 新聞稿。", "alias": "gout 痛風 尿酸 hyperuricemia", "id": "t24"}, {"n": 25, "cat": "C. 心血管代謝", "title": "肥胖／代謝症候群", "codes": "肥胖 E66.9｜病態肥胖 E66.01（加 Z68.4x BMI）；BMI 成人 Z68.30–Z68.45；代謝症候群 E88.81", "soap": "S: Wt gain [ ] kg/[ ] yr. Diet/exercise/sleep [ ]. Prior wt-loss meds [ ]. OSA symptoms [ ].\nO: BW ___ kg, BH ___ cm, BMI ___, waist ___ cm, BP ___/___.\nA: Obesity (E66.9) + BMI __ (Z68.__); Metabolic syndrome (E88.81) [3/5 criteria]\nP: Labs: FPG/HbA1c, lipid, ALT, TSH (if indicated), UA.\n   Goal 5-10% wt loss in 6 months; nutrition consult; 150-300 min/wk exercise.\n   Pharmacotherapy (自費): see M14.\n", "notes": ["台灣成人肥胖定義為 BMI ≥ 27（國健署），過重為 24–27。代謝症候群：腰圍男 ≥ 90、女 ≥ 80 cm，再加血壓、血糖、TG、HDL，五項中符合三項。", "2023 年版 ICD 尚無 E66.811–E66.813（肥胖分級碼），請勿使用（需自行查證健保代碼檔）。"], "src": "", "alias": "obesity 肥胖 減重 代謝症候群 metabolic syndrome bmi", "id": "t25"}, {"n": 26, "cat": "C. 心血管代謝", "title": "慢性腎臟病 CKD", "codes": "N18.1｜N18.2｜3a 期 N18.31｜3b 期 N18.32｜3 期未明示 N18.30（舊 N18.3 已細分）｜N18.4｜N18.5", "soap": "S: CKD stage [ ] since [ ]. Etiology [DM/HTN/ ]. NSAID/herbal use [ ].\nO: BP ___/___. Edema [ ]. eGFR ___ (x2 ≥3 months apart), UACR ___ mg/g.\nA: CKD stage G_\nA: CKD stage G_A_ (N18.__), etiology [DM (E11.22) / HTN (I12.9) / ]\nP: (UACR ≥30) ACEi 或 ARB titrate to max tolerated, e.g. Losartan 50 → 100 mg QD\n     → Cr/K 2-4 wks after start (Cr 上升 ≤30% 可續用)\n   (eGFR ≥20) Dapagliflozin 10 mg 或 Empagliflozin 10 mg 1# QD (健保: 收案 Early CKD/Pre-ESRD 計畫)\n   Avoid NSAID/herbal; renal dose check all meds. BP target <130/80 (UACR ≥30).\n   Labs: Cr/eGFR, UACR, K, Hb, Ca/P [q3-12m by stage]. Early CKD/Pre-ESRD 收案 [Y].\n   Refer nephrology if eGFR <30, UACR ≥300, rapid decline, hematuria, resistant HTN.\n", "notes": ["【A 與 P 為 Claude 補寫】原檔在此截斷，以下依 KDIGO 2024 與原檔 TL;DR 的健保規定補上，請 Ray 核對後再用。", "健保 SGLT2i：114/3/1 起，加入 Early CKD／Pre-ESRD 計畫的 CKD 病人可給付（原檔 TL;DR）。", "ICD：DM 或 HTN 造成的 CKD，病因碼在前（E11.22 或 I12.9），再加 N18.x。", "完整決策流程（分期、選藥、追蹤）見門診實務 CKD 專區。"], "src": "KDIGO 2024 CKD guideline；健保署藥品給付規定（SGLT2i，114/3/1）", "added": true, "alias": "ckd 慢性腎臟病 腎功能 egfr 腎病 uacr", "id": "t26"}, {"n": 101, "cat": "S. 症狀型（先分流）", "title": "胸痛 Chest pain", "codes": "未明示 R07.9｜其他胸痛 R07.89｜呼吸時胸痛 R07.1｜肋軟骨炎 M94.0", "soap": "S: Chest pain since [ ], [pressure/tightness/sharp/burning], duration [ ] min, [exertional/at rest/positional/pleuritic/reproducible].\n   Radiation [arm/jaw/back/none]. Associated: [dyspnea/diaphoresis/nausea/syncope/palpitation] [denied].\n   RF: [HTN/DM/HLP/smoking/FHx premature CAD/CKD]. Recent [immobilization/surgery/long flight].\nO: BP ___/___ (R), ___/___ (L), HR ___, RR ___, SpO2 ___%, BT ___.\n   Heart [RRR, no murmur/rub]. Lungs [clear, equal BS]. Chest wall tenderness [+/-] reproducing pain [Y/N]. Calf swelling [-].\n   ECG (within 10 min): [NSR, no ST-T change / ].\nA: [Chest pain, unspecified (R07.9) / Costochondritis (M94.0) / GERD (K21.9) / ], r/o ACS\nP: (ACS suspected / ECG change / unstable vitals) → 急診轉送 (EMS)\n     Aspirin 300 mg chewed stat if no allergy/active bleeding.\n   (Chest wall pain, low risk) Acetaminophen 500 mg 1# QID PRN 或 Ibuprofen 400 mg TID PC x 5-7 days.\n   (GERD-like) → 見 GERD 模板. (Stable exertional pattern) arrange cardiology referral/stress test.\n   Return/ER if pain at rest >20 min, dyspnea, syncope, diaphoresis.\n", "notes": ["【整張為 Claude 補寫】原檔沒有胸痛模板；這張以分流為主，請 Ray 核對後再用。", "先排除五個致命原因：ACS、主動脈剝離、肺栓塞、張力性氣胸、心包填塞。", "Red flags：休息時胸痛 >20 分鐘、冒冷汗、昏厥、雙手血壓差 >20 mmHg、SpO2 <94%、ECG 新變化。", "陷阱：女性、DM、長者的 ACS 常不典型（喘、上腹痛、疲倦）；按壓會痛不能完全排除 ACS。單次 ECG 正常不能排除。", "基層沒有 troponin 時，懷疑 ACS 就直接轉急診，不要在診間等抽血。"], "src": "2021 AHA/ACC Chest Pain Guideline；ESC 2023 ACS Guideline", "added": true, "see": [14, 1], "alias": "chest pain cp 胸痛 胸悶 acs", "id": "t101"}, {"n": 102, "cat": "S. 症狀型（先分流）", "title": "發燒 Fever", "codes": "未明示 R50.9｜找到病灶時改碼該診斷", "soap": "S: Fever ___°C x [ ] days, [chills/rigor]. Focal sx: [URI/sore throat/cough/dysuria/diarrhea/skin/abd pain/headache] [none].\n   Travel [ ] / dengue area [ ] / contact [ ] / animal [ ]. Immunocompromised [ ]. Recent abx [ ].\nO: BT ___, HR ___, RR ___, BP ___/___, SpO2 ___%. Consciousness [clear].\n   Pharynx [ ], Lungs [ ], Abd [soft], CVA knock [-], Skin [no rash/petechiae], Neck [supple].\nA: Fever, unspecified (R50.9) / [focus Dx]\nP: Acetaminophen 500 mg 1# Q6H PRN BT>38.5 (max 4 g/day; 肝病、酗酒、體重 <50 kg 減量)\n   (Dengue suspected) NS1 rapid test; avoid NSAID/aspirin; 依法通報.\n   Labs if >3 days / no focus: CBC/DC, CRP, U/A (± LFT, Cr, blood culture).\n   Return if consciousness change, dyspnea, neck stiffness, petechiae, poor intake.\n", "notes": ["【整張為 Claude 補寫】原檔沒有發燒模板；請 Ray 核對後再用。找到病灶後，改用該診斷的模板。", "Red flags（轉急診）：意識改變、低血壓、RR ≥22（qSOFA）、頸部僵硬、紫斑、SpO2 <94%、免疫低下或化療中的發燒、3 個月內嬰兒。", "台灣要想到：登革熱（南部、夏秋、不要給 NSAID）、恙蟲病（野外、焦痂）、流感與 COVID（季節）。", "長者發燒常沒有局部症狀，先驗 U/A、看 CXR。"], "src": "疾管署登革熱防治工作指引；Sepsis-3 qSOFA", "added": true, "see": [1, 2, 4, 5, 13], "alias": "fever 發燒 發熱 febrile", "id": "t102"}, {"n": 103, "cat": "S. 症狀型（先分流）", "title": "頭痛 Headache", "codes": "未明示 R51.9｜緊縮型 G44.209｜偏頭痛 G43.909", "soap": "S: Headache since [ ], [first/recurrent], location [ ], [pressing/throbbing], severity [ ]/10, duration [ ] hrs.\n   Associated: [nausea/photophobia/phonophobia/aura]. Analgesic use [ ] days/month.\n   Red flags denied: thunderclap onset, fever/neck stiffness, focal deficit, new onset >50 y, pregnancy, cancer/immunocompromised, positional, worse with Valsalva.\nO: BP ___/___, BT ___. Neck [supple]. Neuro: [alert, pupils equal, no focal deficit, gait normal]. Fundus [ ].\nA: [Tension-type headache (G44.209) / Migraine without aura (G43.909) / Headache (R51.9)]\nP: (Tension) Acetaminophen 500 mg 1-2# Q6H PRN 或 Ibuprofen 400 mg 1# TID PC PRN x 3-5 days.\n   (Migraine) Naproxen 500 mg 1# stat ± Metoclopramide 10 mg 1#; Sumatriptan 50 mg PRN（無 CAD/中風/未控制 HTN）.\n   Headache diary. Limit analgesics <10 days/month (avoid MOH).\n   (≥4 attacks/month) consider prophylaxis: Propranolol 10-40 mg BID 或 Topiramate 25 mg HS.\n   Return/ER if worst headache, fever, weakness, confusion.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "SNOOP 紅旗：全身症狀（發燒、體重減輕、癌症）、神經學異常、突發（雷擊頭痛）、>50 歲新發、型態改變、姿勢或用力時加重、懷孕。有紅旗 → 影像或急診。", "止痛藥一個月用超過 10–15 天，要想到藥物過度使用頭痛（MOH）。", "Topiramate 懷孕禁用（育齡女性要避孕）；triptan 不用於 CAD、中風、未控制高血壓。"], "src": "IHS ICHD-3；AAFP Headache 2018", "added": true, "alias": "headache ha 頭痛 偏頭痛 migraine", "id": "t103"}, {"n": 104, "cat": "S. 症狀型（先分流）", "title": "頭暈 Dizziness", "codes": "頭暈 R42｜BPPV H81.10（右 H81.11、左 H81.12）", "soap": "S: Dizziness since [ ]: [vertigo (spinning)/presyncope/disequilibrium]. Trigger [head turning/standing up/spontaneous]. Duration [seconds/minutes/hours/days].\n   Associated: [nausea, hearing loss, tinnitus]. Denied: diplopia, dysarthria, dysphagia, limb weakness/numbness, ataxia, new headache, chest pain, palpitation, syncope.\n   Meds: [antihypertensives/sedatives/ ].\nO: BP lying ___/___, standing ___/___ (orthostatic [−]). HR ___.\n   Neuro: [no focal deficit, finger-nose normal, gait steady]. Nystagmus [ ]. Dix-Hallpike [R/L +/−]. HINTS [ ].\nA: [BPPV, right/left (H81.11/H81.12) / Dizziness (R42) / Orthostatic hypotension (I95.1)]\nP: (BPPV) Epley maneuver done [Y]; home Brandt-Daroff.\n   (Vertigo, short course) Meclizine 25 mg 1# TID PRN x 3 days（長者小心跌倒）.\n   (Orthostatic) review antihypertensives, hydration, rise slowly.\n   ECG if presyncope/palpitation. Return/ER if weakness, speech change, double vision, unable to walk.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "先分是哪一種暈：天旋地轉（前庭）、快昏倒（心血管、姿勢性）、走不穩（神經、多重因素）。", "中樞性紅旗（5D：diplopia、dysarthria、dysphagia、dysmetria、dizziness＋ataxia）、新頭痛、急性持續性眩暈不能走 → 想後循環中風，轉急診。", "BPPV：翻身或抬頭誘發、數十秒內緩解；Dix-Hallpike 陽性就做 Epley，不需長期吃藥。", "昏厥合併胸痛、心悸、運動時發生、猝死家族史 → 心因性，ECG 並轉診。"], "src": "AAO-HNS BPPV guideline 2017；AAFP Dizziness 2023", "added": true, "alias": "dizziness vertigo 頭暈 眩暈 bppv", "id": "t104"}, {"n": 105, "cat": "S. 症狀型（先分流）", "title": "腹痛 Abdominal pain", "codes": "未明示 R10.9｜上腹 R10.13｜右上 R10.11｜右下 R10.31｜左下 R10.32", "soap": "S: Abdominal pain since [ ], location [ ], [colicky/constant/burning], severity [ ]/10, radiation [ ].\n   Associated: [N/V, diarrhea, constipation, fever, dysuria, hematochezia/melena]. Relation to meals [ ].\n   (F) LMP [ ], pregnancy [ ]. NSAID/alcohol [ ].\nO: BT ___, BP ___/___, HR ___. Abd: [soft/distended], tenderness [location], rebound [−], guarding [−], Murphy [−], McBurney [−], CVA knock [−], BS [ ].\nA: [Abdominal pain, epigastric (R10.13) / ], r/o [ ]\nP: (Benign, no peritoneal sign) Hyoscine butylbromide 10 mg 1# TID PRN 或 antacid x 3 days.\n   Lab as indicated: CBC/DC, CRP, U/A, (lipase, LFT), urine hCG (育齡女性).\n   (Epigastric, ≥40 y or CV risk) ECG to r/o ACS.\n   Return/ER if fever, worsening pain, vomiting, bloody stool, rigid abdomen.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗（轉急診）：腹膜炎徵象、生命徵象不穩、持續嘔吐、腸阻塞、腸胃道出血、長者腹痛遠大於理學檢查（腸缺血、AAA）。", "育齡女性一律問月經、驗孕（子宮外孕）；上腹痛要想到心肌梗塞與下葉肺炎。", "右下腹痛初期可能在肚臍周圍；止痛不會遮蔽闌尾炎診斷，但要安排回診或複評。", "上腹痛反覆 → 見消化不良／GERD 模板。"], "src": "ACR Appropriateness Criteria；AAFP Acute Abdominal Pain 2023", "added": true, "see": [13, 14, 15], "alias": "abdominal pain abd pain 腹痛 肚子痛 胃痛", "id": "t105"}, {"n": 106, "cat": "S. 症狀型（先分流）", "title": "呼吸喘 Dyspnea", "codes": "未明示 R06.00｜呼吸短促 R06.02", "soap": "S: Dyspnea since [ ], [acute/chronic], [exertional (NYHA ___)/rest], orthopnea [ ], PND [ ].\n   Associated: [cough, sputum, wheeze, chest pain, fever, leg swelling, palpitation, hemoptysis]. Smoking [ ] PPY.\nO: RR ___, SpO2 ___% (RA), HR ___, BP ___/___, BT ___. Speak in full sentences [Y].\n   JVE [−]. Lungs: [clear/wheeze/crackles/decreased BS]. Heart [RRR, no murmur/S3]. Leg edema [−], calf asymmetry [−].\nA: Dyspnea (R06.00), r/o [asthma/COPD/HF/pneumonia/PE/anemia]\nP: CXR, ECG; CBC, Cr, (NT-proBNP if available), (D-dimer if PE low-moderate pretest).\n   (Wheeze) Salbutamol MDI 100 mcg 2-4 puffs q4-6h PRN; see asthma/COPD template.\n   Spirometry when stable.\n   Return/ER if rest dyspnea, chest pain, SpO2 <92%, confusion.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗（轉急診）：講話無法成句、SpO2 <92%、RR >24、意識改變、胸痛、單側腿腫合併喘（肺栓塞）、新發心衰竭。", "慢性喘的常見原因：氣喘、COPD、心衰竭、貧血、肥胖與體能差、焦慮；先 CXR、ECG、CBC、肺功能。", "Wells 分數低且 D-dimer 正常可排除肺栓塞；中高機率直接轉院做 CTPA。"], "src": "AAFP Dyspnea 2020；ESC 2019 PE guideline", "added": true, "see": [8, 9], "alias": "dyspnea sob 喘 呼吸喘 呼吸困難 shortness of breath", "id": "t106"}, {"n": 107, "cat": "S. 症狀型（先分流）", "title": "心悸 Palpitations", "codes": "心悸 R00.2｜AF I48.91", "soap": "S: Palpitations since [ ], [regular/irregular], [sudden onset-offset/gradual], duration [ ], frequency [ ].\n   Trigger [caffeine/alcohol/exercise/stress/meds]. Associated: [syncope, chest pain, dyspnea]. FHx sudden death [−].\nO: HR ___ [regular/irregular], BP ___/___. Thyroid [no goiter]. Heart [RRR, no murmur].\n   ECG: [NSR, normal PR/QRS/QTc, no pre-excitation / ].\nA: Palpitations (R00.2), r/o [arrhythmia/hyperthyroidism/anemia/anxiety]\nP: Lab: CBC, TSH (fT4), electrolytes (K, Mg), (glucose).\n   Holter 24-48 h if frequent; event monitor if infrequent.\n   Reduce caffeine, alcohol, energy drinks; review meds (β-agonist, decongestant, thyroxine).\n   (AF on ECG) see AF management: CHA2DS2-VA, rate control, anticoagulation.\n   Return/ER if syncope, chest pain, sustained rapid HR.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗：心悸合併昏厥或快昏倒、胸痛、運動時發生、結構性心臟病、猝死家族史、ECG 異常（WPW、長 QT、Brugada）→ 轉心臟科。", "規則、突然開始突然結束 → PSVT（可教 Valsalva）；不規則 → AF。", "記得問咖啡因、能量飲料、減肥藥、甲狀腺素、焦慮。"], "src": "ESC 2019 SVT guideline；AAFP Palpitations 2017", "added": true, "alias": "palpitation palpitations 心悸 心跳快", "id": "t107"}, {"n": 108, "cat": "S. 症狀型（先分流）", "title": "解尿疼痛／頻尿 Dysuria", "codes": "解尿疼痛 R30.0｜急性膀胱炎 N30.00（血尿 N30.01）｜頻尿 R35.0", "soap": "S: Dysuria, frequency, urgency x [ ] days. Hematuria [ ]. Fever/chills [−], flank pain [−], vaginal discharge [−].\n   (F) LMP [ ], pregnancy [−]. Recurrent UTI [ ]/yr. (M) LUTS [ ].\nO: BT ___. Suprapubic tenderness [+/−]. CVA knock [−].\n   U/A: WBC ___/HPF, nitrite [ ], LE [ ], RBC ___.\nA: Acute cystitis [without/with] hematuria (N30.00/N30.01)\nP: (Uncomplicated female) Nitrofurantoin 100 mg 1# BID x 5 days（eGFR <30 避免；院內有才用）\n     或 Cephalexin 500 mg 1# BID x 7 days 或 Amoxicillin/clavulanate 500/125 mg 1# TID x 5-7 days.\n   (Male/complicated) 7 days; urine culture before abx.\n   Fluids; void after intercourse.\n   Return if fever, flank pain, vomiting (pyelonephritis).\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "單純性：未懷孕、停經前女性、無泌尿道異常；其餘（男性、懷孕、糖尿病控制差、導尿管、反覆感染）做尿液培養。", "有發燒、腰痛、CVA 叩痛 → 腎盂腎炎：尿液培養，口服 fluoroquinolone 或轉診；病況重轉急診。", "台灣大腸桿菌對 TMP-SMX、fluoroquinolone 抗藥性高，經驗療法依院內抗生素譜調整（需自行查證）。", "無症狀菌尿不治療（懷孕、泌尿手術前例外）。"], "src": "IDSA uncomplicated cystitis guideline 2011；AUA rUTI 2019", "added": true, "alias": "dysuria uti cystitis 解尿疼痛 頻尿 尿道炎 膀胱炎", "id": "t108"}, {"n": 109, "cat": "S. 症狀型（先分流）", "title": "水腫 Edema", "codes": "局部 R60.0｜全身或未明示 R60.9", "soap": "S: Leg swelling since [ ], [unilateral/bilateral], [pitting], worse at evening [ ].\n   Associated: [dyspnea/orthopnea, foamy urine, jaundice, calf pain, skin redness].\n   Meds: [amlodipine/NSAID/pioglitazone/steroid/gabapentin].\nO: BP ___/___, BW ___ (previous ___). JVE [−]. Lungs [clear]. Edema [grade ], [pitting/non-pitting], calf tenderness [−], skin [ ].\nA: Edema (R60.9), r/o [drug-induced/venous insufficiency/HF/CKD/nephrotic/liver/hypothyroid]\nP: Lab: Cr/eGFR, U/A (protein), albumin, LFT, TSH, (NT-proBNP); (unilateral) D-dimer/duplex.\n   Review/stop offending drug (e.g., amlodipine → lower dose or switch).\n   Leg elevation; compression stocking if ABI normal.\n   Diuretic only if HF/CKD volume overload.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "單側腿腫：先排除深部靜脈栓塞（Wells、D-dimer、超音波）與蜂窩性組織炎。", "雙側：最常見是藥物（CCB、NSAID、pioglitazone、gabapentin）與靜脈功能不全；再查心、腎、肝、甲狀腺、低白蛋白。", "泡泡尿＋水腫 → 驗 UPCR，懷疑腎病症候群轉腎臟科。", "不要只開利尿劑消腫而沒找原因。"], "src": "AAFP Edema 2022", "added": true, "alias": "edema 水腫 腳腫 leg swelling", "id": "t109"}, {"n": 110, "cat": "S. 症狀型（先分流）", "title": "疲倦 Fatigue", "codes": "其他疲倦 R53.83", "soap": "S: Fatigue x [ ] weeks/months. Sleep [ ] hrs, snoring [ ]. Mood [low/anhedonia]. Appetite [ ], wt change [ ] kg.\n   Red flags denied: fever, night sweats, wt loss, bleeding, lymph node swelling.\n   Meds [ ]. Menstruation [heavy?]. PHQ-2 ___, STOP-BANG ___.\nO: BW ___, BP ___/___, HR ___. Pallor [−]. Thyroid [ ]. LAP [−]. Lungs/heart [ ]. Abd [no hepatosplenomegaly].\nA: Fatigue (R53.83), r/o [anemia/hypothyroid/DM/depression/OSA/medication]\nP: Lab: CBC, ferritin, TSH, FPG/HbA1c, Cr, ALT, (B12 if metformin/elderly), (Ca, ESR/CRP).\n   Sleep hygiene; screen depression (PHQ-9), OSA (refer PSG if high risk).\n   F/U 2 weeks with results.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "先分急性（<1 個月，多為感染）或慢性；問睡眠、情緒、藥物。", "紅旗：體重減輕、夜間盜汗、發燒、出血、淋巴結腫大 → 想惡性腫瘤或慢性感染（含結核）。", "基本抽血正常、症狀 ≥6 個月且活動後惡化 → 考慮 ME/CFS。"], "src": "AAFP Fatigue 2023；NICE ME/CFS 2021", "added": true, "alias": "fatigue 疲倦 累 倦怠 tired", "id": "t110"}, {"n": 111, "cat": "S. 症狀型（先分流）", "title": "下背痛 Low back pain", "codes": "下背痛 M54.50（舊 M54.5 已細分）｜坐骨神經痛 右 M54.41／左 M54.42", "soap": "S: Low back pain since [ ], [after lifting/insidious], radiation [ ] below knee [Y/N], numbness/weakness [ ].\n   Red flags denied: saddle anesthesia, urinary retention/incontinence, fever, cancer hx, wt loss, trauma, steroid use/osteoporosis, night pain, age >50 new onset.\nO: Spine tenderness [ ], ROM [limited]. SLR [R/L −/+ at __°]. Motor [5/5], sensation [intact], reflex [ ].\nA: Low back pain (M54.50) / [lumbago with sciatica, right/left (M54.41/M54.42)]\nP: Stay active, avoid bed rest; heat pack.\n   Ibuprofen 400 mg 1# TID PC 或 Naproxen 250-500 mg 1# BID PC x 5-7 days（CKD/GI bleed/CV 風險小心）\n   ± Muscle relaxant (e.g., Tolperisone 50 mg TID) x 3-5 days.\n   No imaging <6 wks without red flags. Rehab referral if >4 wks.\n   Return/ER if leg weakness, urinary/bowel symptoms.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "馬尾症候群（鞍狀麻木、尿滯留或失禁、雙側無力）→ 立刻轉急診做 MRI。", "癌症病史、體重減輕、發燒、長期類固醇、骨鬆創傷、夜間痛 → 影像與抽血。", "大多數 4–6 週內改善；acetaminophen 單用效果有限。"], "src": "ACP Low back pain guideline 2017", "added": true, "alias": "lbp low back pain 下背痛 腰痛 背痛 sciatica", "id": "t111"}, {"n": 112, "cat": "S. 症狀型（先分流）", "title": "關節痛 Joint pain", "codes": "關節痛 M25.50｜膝 右 M25.561／左 M25.562", "soap": "S: [ ] joint pain since [ ], [mono/oligo/poly], [acute/chronic]. Swelling [ ], redness [ ], morning stiffness [ ] min.\n   Associated: [fever, rash, uveitis, diarrhea/urethritis, psoriasis]. Gout hx [ ]. Trauma [ ].\nO: BT ___. Joint: [swelling/effusion/warmth/erythema/tenderness] at [ ], ROM [ ]. Pattern [symmetric small joints/large joints].\nA: Joint pain (M25.50), r/o [OA/gout/septic arthritis/RA/reactive]\nP: (OA/mechanical) Diclofenac gel topical QID; Acetaminophen PRN; Ibuprofen 400 mg TID PC x 7 days.\n   (Inflammatory polyarthritis) CBC, ESR/CRP, RF, anti-CCP, UA, (ANA) → refer rheumatology.\n   (Acute hot monoarthritis) arthrocentesis/refer to r/o septic arthritis; see gout template.\n   Exercise, weight loss (knee OA).\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "急性單一熱腫關節 → 先當化膿性關節炎，抽關節液或轉診；不要只當痛風。", "對稱小關節＋晨僵 >30–60 分鐘 → 類風濕性關節炎，盡早轉風濕免疫科。", "膝 OA：運動與減重是第一線；外用 NSAID 優先於口服（長者）。"], "src": "ACR 2019 OA guideline；EULAR early arthritis", "added": true, "see": [24], "alias": "joint pain arthralgia 關節痛 膝痛 knee", "id": "t112"}, {"n": 113, "cat": "S. 症狀型（先分流）", "title": "皮疹 Rash", "codes": "皮疹 R21（找到病因改碼該診斷）", "soap": "S: Rash since [ ], location [ ], [itchy/painful], spreading [ ]. New drugs within 8 wks [ ]. Contacts with similar rash [ ]. Fever [ ].\nO: Primary lesion [macule/papule/plaque/vesicle/pustule/wheal], distribution [ ], follicular [Y/N], mucosa [spared].\nA: [Diagnosis] / Rash (R21)\nP: 依診斷 → 門診實務「常見皮膚疾病」鑑別器與處方產生器.\n", "notes": ["【整張為 Claude 補寫】原檔沒有這張；以分流為主，請 Ray 核對後再用。", "紅旗（轉急診）：黏膜糜爛、皮膚痛、水疱或表皮剝落（SJS/TEN）；發燒＋臉腫＋淋巴結腫（DRESS）；紫斑合併發燒（腦膜炎球菌）。", "完整鑑別、圖譜與外用類固醇強度表見門診實務皮膚專區。"], "src": "門診實務：常見皮膚疾病專區", "added": true, "alias": "rash 皮疹 紅疹 癢 skin", "id": "t113"}];
+const MAPPED=new Set([...Array.from({length:26},(_,i)=>i+1),...Array.from({length:12},(_,i)=>101+i)]);
 const M={"rules": ["**理學檢查與陰性所見必須依實際看診修改**。模板列出的 PE 項目，沒有做的請刪除，不可保留。病歷記載與實際不符，會有醫療法律責任（病歷不實）與健保核刪／違規風險。", "**劑量須個別化**：依年齡、體重、eGFR（建議用 CKD-EPI）、肝功能、懷孕哺乳、過敏史與交互作用調整。本文劑量以一般成人、腎功能正常為預設。", "**規定會變動**：健保藥品給付規定、支付標準、ICD 版本與公費用藥條件都會更新。使用前請以健保署「藥品給付規定」最新版、疾管署公告為準。本文標「需自行查證」之處，是我未能從一手條文確認的部分。", "**ICD 版本**：門診以「就醫日期」判斷。113/12/31 以前申報 2014 年版，114/1/1 以後申報 2023 年版。", "縮寫：BID 每日兩次、TID 三次、QID 四次、QD 每日一次、HS/QHS 睡前、PRN 需要時、PO 口服、KUB 腹部 X 光、DXA 雙能量 X 光骨密度。"], "skel": "S: CC: [ ] for [ ] days.\n   PI: Onset [sudden/gradual], [ ]. Associated: [ ]. Denied: [fever/chest pain/dyspnea/wt loss/ ].\n   PMH: [HTN/DM/HLP/CKD/none]. Meds: [ ]. Allergy: [NKDA/ ]. Smoking [ ] PPY, alcohol [ ].\n   (F) LMP [ ], pregnancy/breastfeeding [no/ ].\nO: BT ___ °C, HR ___ /min, RR ___ /min, BP ___/___ mmHg, SpO2 ___ % (RA), BW ___ kg, BMI ___.\n   General: [alert, not ill-looking].\n   (只保留實際有做的 PE)\nA: [Dx] ([ICD])\nP: 1. Medication as below x [ ] days.\n   2. Lab/Imaging: [ ].\n   3. Education: [ ]. Return if [red flags].\n   4. F/U OPD in [ ] days/weeks.\n"};
 const QUICK=['CKD','chest pain','URI','fever','HTN','DM','血脂','GERD','痛風','腸胃炎','咽炎','流感'];
 const $=s=>document.querySelector(s);
@@ -178,8 +187,9 @@ function card(d){
   const rows=Math.min(22,Math.ceil(d.soap.length/34)+2);
   return `<details class="card" id="${d.id}"><summary><span class="ttl">${esc(d.title)}${d.added?'<span class="badge">Claude 補寫</span>':''}<span class="sub">${esc(d.codes)}</span></span></summary>
   <div class="body"><div class="codes"><span class="lbl">ICD（點選複製）</span>${codesHtml(d.codes)}</div>
+  ${MAPPED.has(d.n)?`<div class="tplcc" data-n="${d.n}"></div><details class="sub2"><summary>原始模板文字</summary>`:''}
   <textarea id="ta-${d.id}" rows="${rows}" spellcheck="false">${esc(d.soap)}</textarea>
-  <div class="btns"><button class="b" data-copy="ta-${d.id}">複製 SOAP</button><button class="b o" data-copyskel="ta-${d.id}">骨架＋SOAP 一起複製</button><button class="b g" data-reset="${d.id}">還原</button></div>
+  <div class="btns"><button class="b" data-copy="ta-${d.id}">複製 SOAP</button><button class="b o" data-copyskel="ta-${d.id}">骨架＋SOAP 一起複製</button><button class="b g" data-reset="${d.id}">還原</button></div>${MAPPED.has(d.n)?'</details>':''}
   ${notes?'<ul class="notes">'+notes+'</ul>':''}${see}${d.src?'<div class="src">來源：'+esc(d.src)+'</div>':''}</div></details>`;
 }
 function score(d,q){
@@ -222,8 +232,8 @@ async function copy(text,ta){
 }
 document.addEventListener('click',e=>{
   const t=e.target;
-  if(t.dataset.k!==undefined){$('#q').value=t.dataset.k;render();window.scrollTo(0,0);}
-  else if(t.dataset.c!==undefined){cat=t.dataset.c;document.querySelectorAll('#cats .chip').forEach(b=>b.classList.toggle('on',b===t));render();}
+  if(t.dataset.k!==undefined&&t.closest('#quick')){$('#q').value=t.dataset.k;render();window.scrollTo(0,0);}
+  else if(t.dataset.c!==undefined&&t.closest('#cats')){cat=t.dataset.c;document.querySelectorAll('#cats .chip').forEach(b=>b.classList.toggle('on',b===t));render();}
   else if(t.dataset.copy){const ta=document.getElementById(t.dataset.copy);copy(ta.value,ta);}
   else if(t.dataset.copyskel){const ta=document.getElementById(t.dataset.copyskel);copy($('#skelTa').value+'\n'+ta.value,ta);}
   else if(t.dataset.reset){const d=D.find(x=>x.id===t.dataset.reset);document.getElementById('ta-'+d.id).value=d.soap;toast('已還原');}
@@ -246,8 +256,9 @@ function drender(){const q=$('#dq').value.trim().toLowerCase();const toks=q.spli
  $('#dlist').innerHTML=(q?r:r.slice(0,40)).slice(0,120).map(d=>`<div class="drug"><span class="dc">${esc(d.cat)}</span><b class="code" data-code="${esc(d.code)}" title="點一下複製代碼">${esc(d.code)}</b><span class="dn">${esc(d.brand)}</span><div class="dg">${esc(d.gen)}</div><div class="dd">${esc(d.dose)}</div>${d.tip?`<div class="dt">${esc(d.tip)}</div>`:''}<div class="di">${esc(d.icd)}</div></div>`).join('');}
 let dtm;$('#dq').addEventListener('input',()=>{clearTimeout(dtm);dtm=setTimeout(drender,120)});drender();
 
-function view(v){['gen','tpl','drug'].forEach(x=>document.body.classList.toggle('v'+x,v===x));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===v));try{localStorage.setItem('cq_view',v)}catch(e){}}
+function view(v){['gen','tpl','drug'].forEach(x=>document.body.classList.toggle('v'+x,v===x));window.scrollTo(0,0);document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===v));try{localStorage.setItem('cq_view',v)}catch(e){}}
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{view(b.dataset.tab);history.replaceState(null,'','#'+b.dataset.tab)}));
+window.__view=v=>{view(v);try{history.replaceState(null,'','#'+v)}catch(e){}};
 let v0='gen';try{v0=localStorage.getItem('cq_view')||'gen'}catch(e){}
 view(v0);
 function fromHash(){const h=location.hash.slice(1);if(h==='gen'||h==='tpl'||h==='drug')view(h);else if(/^t\d+$/.test(h)){view('tpl');openId(h);}}
@@ -264,7 +275,7 @@ const COMORB=[
  ['cad','冠心病 CAD'],['cadx','極高風險條件*'],['stroke','缺血性中風／TIA'],['pad','周邊動脈疾病'],['plaque','影像 ≥50% 狹窄'],
  ['hfref','HFrEF'],['af','心房顫動'],['gout','痛風'],['fhx','早發冠心病家族史'],['cac','CAC ≥400'],
  ['prediab','糖尿病前期'],['osa','睡眠呼吸中止'],['frail','衰弱／長者照護'],['preg','懷孕／備孕'],['ifg','空腹血糖 ≥100'],
- ['pcn','PCN 過敏'],['nsaidx','不宜 NSAID（過敏、GI 出血）'],['immuno','免疫低下']];
+ ['pcn','PCN 過敏'],['nsaidx','不宜 NSAID（過敏、GI 出血）'],['immuno','免疫低下'],['liver','肝病／肝硬化'],['dmh','糖尿病（病史）']];
 const F={ // module fields
  htn:[['h_sbp','num','居家 722 收縮壓'],['h_dbp','num','居家 722 舒張壓'],
   ['h_step','sel','目前治療',['未用藥','單藥（NOR1 或 MIC2）','NOR1 5＋MIC2 40','TWY1（telmisartan 80/amlodipine 5）','TWY1＋NOR1（amlodipine 共 10）','上一步＋NAT2 indapamide','上一步＋SPI1 spironolactone']],
@@ -313,7 +324,7 @@ const NSW=X=>{const p=X.p;if(p.nsaidx)return 'NSAID 過敏或 GI 出血史';if(p
 const NSOK=X=>!(X.p.nsaidx||X.p.preg||X.p.egfr<30);
 const ABX_PCN=X=>X.p.pcn?'PCN 過敏':'';
 const CC=[
-{id:'resp',n:'感冒／呼吸道',en:'URI symptoms',days:3,
+{id:'resp',g:'sym',bl:['age','preg','ckd','pcn','immuno'],n:'感冒／呼吸道',en:'URI symptoms',days:3,
  sx:[['fever','發燒','fever'],['sore','喉嚨痛','sore throat'],['odyn','吞嚥痛','odynophagia'],['rhin','流鼻水','rhinorrhea'],['cong','鼻塞','nasal congestion'],['sneeze','打噴嚏、鼻癢','sneezing'],['purul','膿鼻涕','purulent nasal discharge'],['facial','臉頰或額頭痛','facial pain'],['cough','咳嗽','cough'],['sputum','有痰','sputum'],['wheeze','喘鳴','wheezing'],['ear','耳朵痛','otalgia'],['myal','全身痠痛','myalgia'],['ha','頭痛','headache'],['d10','症狀 >10 天或好轉又變差','symptoms >10 days or double sickening'],['contact','家人或同事流感／COVID','sick contact (flu/COVID)'],['flu','流感快篩陽性','influenza rapid test (+)'],['covid','COVID 快篩陽性','COVID-19 Ag (+)']],
  rf:[['dysp','呼吸困難','dyspnea'],['spo2','SpO2 <94%','SpO2 <94%'],['drool','流口水、張口困難','drooling/trismus'],['potato','熱馬鈴薯聲、懸雍垂偏移','muffled voice/uvula deviation'],['neck','頸部僵硬','neck stiffness'],['fever3','高燒 >3 天','high fever >3 days'],['orbit','眼眶周圍腫、視力改變','periorbital swelling/visual change'],['conf','意識改變','altered consciousness']],
  pe:[['inject','咽部紅','pharyngeal injection'],['exud','扁桃腺化膿或腫大','tonsillar exudate/swelling'],['lap','前頸淋巴結壓痛','tender anterior cervical LAP'],['tm','鼓膜膨出','bulging TM'],['sinus','鼻竇壓痛','sinus tenderness'],['wh','肺部喘鳴','wheezing on auscultation'],['crack','肺部囉音','crackles'],['clear','肺音清','clear breath sounds']],
@@ -355,7 +366,7 @@ const CC=[
  edu:X=>[X.dx('strep')||X.dx('sinus')||X.dx('aom')||X.dx('pneu')?'抗生素要吃完整療程，不要自己停。':'這是病毒感冒，抗生素沒有用；多喝水、休息，3–7 天會慢慢好。','咳嗽可以持續 2–3 週。'],
  ret:'fever >3 days, dyspnea, ear pain, or symptoms worsening',refer:'急診或耳鼻喉科'},
 
-{id:'fever',n:'發燒（未明）',en:'Fever',days:2,
+{id:'fever',g:'sym',bl:['age','preg','immuno','liver'],n:'發燒（未明）',en:'Fever',days:2,
  sx:[['chill','畏寒、寒顫','chills/rigor'],['ha','頭痛','headache'],['myal','肌肉痠痛','myalgia'],['rash','皮疹','skin rash'],['dysu','解尿疼痛','dysuria'],['diar','腹瀉','diarrhea'],['abd','腹痛','abdominal pain'],['cough','咳嗽','cough'],['retro','眼窩後痛、骨頭痛','retro-orbital/bone pain'],['travel','近期出國','recent travel'],['outdoor','野外活動或蚊蟲叮咬','outdoor/mosquito exposure'],['eschar','焦痂','eschar']],
  rf:[['conf','意識改變','altered consciousness'],['hypo','低血壓','hypotension'],['rr','RR ≥22','RR ≥22'],['neck','頸部僵硬','neck stiffness'],['petech','紫斑、出血點','petechiae/purpura'],['immuno','免疫低下或化療中','immunocompromised'],['infant','3 個月以下嬰兒','infant <3 months']],
  pe:[['neck','頸部柔軟','supple neck'],['cva','CVA 叩痛','CVA knocking pain'],['rash','皮疹','skin rash'],['lap','淋巴結腫','lymphadenopathy'],['hsm','肝脾腫大','hepatosplenomegaly']],
@@ -366,7 +377,7 @@ const CC=[
  edu:X=>[X.dx('dengue')?'疑似登革熱：只吃 acetaminophen，不要吃 NSAID 或阿斯匹靈；防蚊、依法通報。':'多喝水；退燒藥間隔至少 4–6 小時。','發燒超過 3 天或出現新症狀要回診。'],
  ret:'altered consciousness, dyspnea, petechiae, poor intake, fever >3 days',refer:'急診'},
 
-{id:'age',n:'腹瀉／嘔吐',en:'Diarrhea/vomiting',days:2,
+{id:'age',g:'sym',bl:['age','preg','ckd','immuno'],n:'腹瀉／嘔吐',en:'Diarrhea/vomiting',days:2,
  sx:[['diar','腹瀉','diarrhea'],['watery','水瀉','watery stool'],['blood','血便','bloody stool'],['vomit','嘔吐','vomiting'],['nausea','噁心','nausea'],['cramp','腹部絞痛','abdominal cramping'],['fever','發燒','fever'],['food','同餐者也不舒服','others with same meal affected'],['travel','近期出國','recent travel'],['abx','最近吃抗生素','recent antibiotics']],
  rf:[['dehyd','明顯脫水（頭暈、尿少）','significant dehydration'],['bldfev','血便合併發燒','bloody diarrhea with fever'],['rlq','右下腹痛','RLQ pain'],['dispro','長者腹痛遠大於理學檢查','pain out of proportion (elderly)'],['persist','嘔吐不止、無法進食','intractable vomiting'],['long','腹瀉 >7 天','diarrhea >7 days']],
  pe:[['tender','腹部壓痛','abdominal tenderness'],['rebound','反彈痛','rebound tenderness'],['bs','腸音亢進','hyperactive bowel sounds'],['dry','口腔黏膜乾','dry oral mucosa']],
@@ -381,23 +392,26 @@ const CC=[
  edu:X=>['少量多次喝電解質液或稀釋運動飲料；清淡飲食，不必禁食。','勤洗手；廚房與廁所用稀釋漂白水清潔。'],
  ret:'bloody stool, high fever, unable to drink, decreased urine, severe abdominal pain',refer:'急診'},
 
-{id:'abd',n:'腹痛／胃痛',en:'Abdominal pain',days:3,
- sx:[['epi','上腹痛','epigastric pain'],['ruq','右上腹痛','RUQ pain'],['rlq','右下腹痛','RLQ pain'],['llq','左下腹痛','LLQ pain'],['burn','灼熱感','burning'],['postp','飯後加重','postprandial'],['hunger','空腹痛、吃東西緩解','hunger pain'],['hb','火燒心','heartburn'],['regurg','胃酸逆流','acid regurgitation'],['full','脹、早飽','bloating/early satiety'],['nausea','噁心','nausea'],['nsaid','吃止痛藥（NSAID）','NSAID use'],['alc','喝酒','alcohol use'],['fever','發燒','fever'],['bm','排便改變','change in bowel habit']],
+{id:'abd',g:'sym',bl:['age','sex','preg','ckd','nsaidx','liver','cad'],n:'腹痛／胃痛',en:'Abdominal pain',days:3,
+ sx:[['epi','上腹痛','epigastric pain'],['ruq','右上腹痛','RUQ pain'],['rlq','右下腹痛','RLQ pain'],['llq','左下腹痛','LLQ pain'],['burn','灼熱感','burning'],['postp','飯後加重','postprandial'],['hunger','空腹痛、吃東西緩解','hunger pain'],['hb','火燒心','heartburn'],['regurg','胃酸逆流','acid regurgitation'],['full','脹、早飽','bloating/early satiety'],['nausea','噁心','nausea'],['nsaid','吃止痛藥（NSAID）','NSAID use'],['alc','喝酒','alcohol use'],['fever','發燒','fever'],['bm','排便改變','change in bowel habit'],['hppos','H. pylori 陽性','H. pylori (+)'],['pud','胃鏡證實潰瘍','endoscopy-proven ulcer']],
  rf:[['perit','腹膜炎徵象','peritoneal signs'],['gib','黑便、吐血','melena/hematemesis'],['alarm','體重減輕、吞嚥困難、貧血','weight loss/dysphagia/anemia'],['age60','≥60 歲新發消化不良','new dyspepsia age ≥60'],['preg','可能懷孕','possible pregnancy'],['acs','冒冷汗、喘、胸悶','diaphoresis/dyspnea (r/o ACS)'],['dispro','長者劇痛','severe pain in elderly']],
  pe:[['epit','上腹壓痛','epigastric tenderness'],['mcb','McBurney 壓痛','McBurney tenderness'],['murphy','Murphy sign','Murphy sign'],['rebound','反彈痛','rebound tenderness'],['guard','肌肉僵硬','guarding'],['cva','CVA 叩痛','CVA knocking pain']],
- dx:[{k:'epi',l:'上腹痛',en:'Epigastric pain',icd:'R10.13',a:X=>!X.anyDx},{k:'dysp',l:'功能性消化不良',en:'Functional dyspepsia',icd:'K30',a:X=>X.s('full')===1||X.s('postp')===1},{k:'gerd',l:'胃食道逆流',en:'GERD without esophagitis',icd:'K21.9',a:X=>X.s('hb')===1||X.s('regurg')===1},{k:'gast',l:'胃炎',en:'Gastritis, unspecified, without bleeding',icd:'K29.70',a:X=>X.s('nsaid')===1||X.s('alc')===1},{k:'abdu',l:'腹痛（未明）',en:'Abdominal pain, unspecified',icd:'R10.9',a:X=>false},{k:'appy',l:'疑似闌尾炎（轉診）',en:'Suspected acute appendicitis',icd:'R10.31',a:X=>X.e('mcb')===1}],
+ dx:[{k:'epi',l:'上腹痛',en:'Epigastric pain',icd:'R10.13',a:X=>!X.anyDx},{k:'dysp',l:'功能性消化不良',en:'Functional dyspepsia',icd:'K30',a:X=>X.s('full')===1||X.s('postp')===1},{k:'gerd',l:'胃食道逆流',en:'GERD without esophagitis',icd:'K21.9',a:X=>X.s('hb')===1||X.s('regurg')===1},{k:'gast',l:'胃炎',en:'Gastritis, unspecified, without bleeding',icd:'K29.70',a:X=>X.s('nsaid')===1||X.s('alc')===1},{k:'abdu',l:'腹痛（未明）',en:'Abdominal pain, unspecified',icd:'R10.9',a:X=>false},{k:'appy',l:'疑似闌尾炎（轉診）',en:'Suspected acute appendicitis',icd:'R10.31',a:X=>X.e('mcb')===1},{k:'pu',l:'消化性潰瘍',en:'Peptic ulcer, site unspecified',icd:'K27.9',a:X=>X.s('pud')===1},{k:'hp',l:'H. pylori 感染',en:'Helicobacter pylori as the cause of disease',icd:'B96.81',a:X=>X.s('hppos')===1}],
  med:[{k:'alg',l:'ALG1 Algitab 海藻酸',rx:'ALG1 Algitab 1-2# 嚼服 PC & HS',a:X=>X.dx('gerd')},
   {k:'vok',l:'VOK1 Famotidine',rx:X=>X.p.egfr<50?'VOK1 Voker (famotidine) 20mg 1# HS（CKD 減量）':'VOK1 Voker (famotidine) 20mg 1# BID',a:X=>X.dx('gerd')||X.dx('gast')||X.dx('epi')},
   {k:'pan',l:'PAN4 Pantoprazole（健保需內視鏡）',rx:'PAN4 Pantoloc (pantoprazole) 40mg 1# QD AC',a:X=>false,w:X=>'健保：需 4 個月內內視鏡報告'},
   {k:'mop',l:'MOP1 Mosapride 消化不良',rx:'MOP1 Mopride (mosapride) 5mg 1# TID AC',a:X=>X.dx('dysp')},
   {k:'uls',l:'ULSSC 胃乳（症狀時）',rx:'ULSSC Ulstal susp 10ml PRN',a:X=>X.s('burn')===1},
   {k:'buw',l:'BUW1 Hyoscyamine 絞痛',rx:'BUW1 Buwecon (hyoscyamine) 0.125mg 1# TID PRN',a:X=>false,w:X=>X.p.age>=65?'長者、BPH、青光眼慎用':''},
-  {k:'kas',l:'KAS2 Simethicone 脹氣',rx:'KAS2 Kascoal (simethicone) 40mg 1-2# TID PC',a:X=>X.s('full')===1}],
- lab:[['hp','H. pylori（UBT 或糞便抗原）',X=>X.dx('dysp')],['cbc','CBC',X=>X.r('alarm')===1],['lft','LFT、lipase',X=>X.s('ruq')===1],['ua','U/A',X=>X.e('cva')===1],['hcg','Urine hCG',X=>X.r('preg')===1],['ecg','ECG',X=>X.r('acs')===1||(X.s('epi')===1&&X.p.age>=50)],['egd','安排胃鏡',X=>X.r('alarm')===1||X.r('age60')===1],['sono','腹部超音波',X=>X.s('ruq')===1]],
+  {k:'kas',l:'KAS2 Simethicone 脹氣',rx:'KAS2 Kascoal (simethicone) 40mg 1-2# TID PC',a:X=>X.s('full')===1},
+  {k:'nexpu',l:'NEX1 Esomeprazole（胃鏡證實潰瘍）',rx:'NEX1 Nexium (esomeprazole) 40mg 1# QD AC x 8 weeks',fixed:1,a:X=>X.dx('pu')&&!X.dx('hp'),w:X=>'健保：附 4 個月內胃鏡報告；併 clopidogrel 改 PAN4'},
+  {k:'hpdual',l:'HP 除菌：高劑量雙藥 14 天',rx:'H. pylori high-dose dual x 14 days: NEX1 Nexium 40mg 1# BID ＋ AMO5 Amoxicillin 500mg 2# TID（待核對院內慣用組合）',fixed:1,a:X=>X.dx('hp')&&!X.p.pcn,w:X=>X.p.pcn?'PCN 過敏不可用':''},
+  {k:'hpbq',l:'HP 除菌：鉍劑四合一 14 天',rx:'H. pylori bismuth quadruple x 14 days: NEX1 40mg BID ＋ KCB1 120mg QID ＋ MET8 Metrozole 250mg 2# TID ＋ DOX6 Doxynin 100mg BID（院內無 tetracycline，以 doxycycline 替代；待核對）',fixed:1,a:X=>X.dx('hp')&&X.p.pcn,w:X=>'Metronidazole 期間禁酒'}],
+ lab:[['ubt','除菌後 ≥4 週 UBT（停 PPI ≥2 週）',X=>X.dx('hp')],['hp','H. pylori（UBT 或糞便抗原）',X=>X.dx('dysp')],['cbc','CBC',X=>X.r('alarm')===1],['lft','LFT、lipase',X=>X.s('ruq')===1],['ua','U/A',X=>X.e('cva')===1],['hcg','Urine hCG',X=>X.r('preg')===1],['ecg','ECG',X=>X.r('acs')===1||(X.s('epi')===1&&X.p.age>=50)],['egd','安排胃鏡',X=>X.r('alarm')===1||X.r('age60')===1],['sono','腹部超音波',X=>X.s('ruq')===1]],
  edu:X=>['少量多餐，避免咖啡、酒、油炸、辛辣；睡前 3 小時不進食。','止痛藥（NSAID）會傷胃，先停用。'],
  ret:'black stool, vomiting blood, severe or worsening pain, fever',refer:'急診或胃腸科'},
 
-{id:'const',rxd:7,n:'便秘',en:'Constipation',days:7,
+{id:'const',g:'sym',bl:['age','preg','ckd'],rxd:7,n:'便秘',en:'Constipation',days:7,
  sx:[['hard','糞便硬','hard stool'],['strain','用力解','straining'],['infreq','<3 次／週','<3 BM per week'],['bloat','腹脹','bloating'],['drug','用鴉片、鐵劑、CCB、抗膽鹼藥','constipating drugs'],['ibs','腹痛隨排便改善','pain relieved by defecation'],['alt','便秘腹瀉交替','alternating diarrhea']],
  rf:[['bleed','血便','hematochezia'],['wt','體重減輕','weight loss'],['anemia','貧血','anemia'],['new50','≥50 歲新發','new onset age ≥50'],['fhx','大腸癌家族史','FHx colorectal cancer'],['obst','嘔吐、不排氣','vomiting/no flatus']],
  pe:[['dist','腹脹','abdominal distension'],['mass','腹部腫塊','abdominal mass'],['dre','肛門指診硬便','hard stool on DRE']],
@@ -411,20 +425,20 @@ const CC=[
  edu:X=>['纖維每天 25–30 克、喝足水、每天活動。','固定時間如廁（早餐後），腳踩小凳子。'],
  ret:'bloody stool, vomiting, no flatus, severe abdominal pain',refer:'急診或胃腸科'},
 
-{id:'uti',n:'解尿疼痛／頻尿',en:'Dysuria',days:2,
+{id:'uti',g:'sym',bl:['sex','preg','ckd','pcn','dmh'],n:'解尿疼痛／頻尿',en:'Dysuria',days:2,
  sx:[['dysu','解尿疼痛','dysuria'],['freq','頻尿','frequency'],['urg','急尿','urgency'],['hema','血尿','hematuria'],['supra','下腹痛','suprapubic pain'],['fever','發燒','fever'],['flank','腰痛','flank pain'],['disch','陰道分泌物','vaginal discharge'],['recur','一年 ≥3 次','recurrent UTI']],
  rf:[['pyelo','發燒＋腰痛','fever with flank pain'],['preg','懷孕','pregnancy'],['male','男性','male'],['vomit','嘔吐、無法進食','vomiting'],['cath','導尿管','urinary catheter'],['immuno','免疫低下或 DM 控制差','immunocompromised/poor DM']],
  pe:[['supt','恥骨上壓痛','suprapubic tenderness'],['cva','CVA 叩痛','CVA knocking pain']],
  dx:[{k:'cys',l:'急性膀胱炎',en:'Acute cystitis without hematuria',icd:'N30.00',a:X=>!X.anyDx&&X.s('hema')!==1},{k:'cysh',l:'急性膀胱炎合併血尿',en:'Acute cystitis with hematuria',icd:'N30.01',a:X=>X.s('hema')===1&&!X.dx('pye')},{k:'pye',l:'急性腎盂腎炎',en:'Acute pyelonephritis',icd:'N10',a:X=>X.r('pyelo')===1||(X.s('fever')===1&&X.e('cva')===1)},{k:'uti',l:'泌尿道感染（部位未明）',en:'UTI, site not specified',icd:'N39.0',a:X=>false}],
- med:[{k:'ceph',l:'CEP2 Cephalexin',rx:'CEP2 Cephalexin 500mg 1# QID x 5-7 days',fixed:1,a:X=>(X.dx('cys')||X.dx('cysh'))&&!X.p.pcn},
+ med:[{k:'ceph',l:'CEP2 Cephalexin',rx:X=>X.p.egfr<30?'CEP2 Cephalexin 500mg 1# BID x 7 days（eGFR <30 減量）':'CEP2 Cephalexin 500mg 1# QID x 5-7 days',fixed:1,a:X=>(X.dx('cys')||X.dx('cysh'))&&!X.p.pcn,w:X=>X.p.preg?'懷孕：送尿培養，治療 5–7 天':''},
   {k:'bak',l:'BAK1 Baktar 3 天',rx:'BAK1 Baktar 2# BID x 3 days',fixed:1,a:X=>(X.dx('cys')||X.dx('cysh'))&&X.p.pcn,w:X=>X.p.preg?'懷孕避免':(X.p.egfr<30?'eGFR <30 減量、注意高鉀':'台灣大腸桿菌抗藥率高；高鉀')},
   {k:'cur',l:'CUR2 Amox/Clav',rx:'CUR2 Curam 1g 1# BID x 7 days',fixed:1,a:X=>false,w:ABX_PCN},
   {k:'cin',l:'CIN3 Ciprofloxacin（腎盂腎炎）',rx:'CIN3 Cinolone (ciprofloxacin) 250mg 2# BID x 7 days',fixed:1,a:X=>X.dx('pye'),w:X=>X.p.preg?'懷孕禁用':'先送尿培養；肌腱、QT、血糖'}],
- lab:[['ua','U/A',X=>true],['uc','Urine culture',X=>X.dx('pye')||X.s('recur')===1||X.r('male')===1||X.r('preg')===1||X.r('cath')===1],['hcg','Urine hCG',X=>false]],
+ lab:[['ua','U/A',X=>true],['uc','Urine culture',X=>X.dx('pye')||X.s('recur')===1||X.r('male')===1||X.r('preg')===1||X.r('cath')===1||X.p.preg||X.p.sex==='M'||X.chronic('dm')],['hcg','Urine hCG',X=>false]],
  edu:X=>['多喝水、不憋尿；性行為後排尿。','抗生素要吃完。'],
  ret:'fever, flank pain, vomiting, symptoms not improved in 48 hours',refer:'急診或泌尿科'},
 
-{id:'cp',n:'胸痛',en:'Chest pain',days:1,
+{id:'cp',g:'sym',bl:['age','sex','cad','dmh','nsaidx'],n:'胸痛',en:'Chest pain',days:1,
  sx:[['press','壓迫、悶痛','pressure-like'],['sharp','刺痛','sharp'],['exert','活動時發作','exertional'],['rest','休息時也痛','at rest'],['pleur','呼吸時加重','pleuritic'],['posit','姿勢改變加重','positional'],['rad','痛到左手、下巴','radiation to arm/jaw'],['dia','冒冷汗','diaphoresis'],['dysp','喘','dyspnea'],['palp','心悸','palpitation'],['burn','灼熱、逆流','burning/regurgitation'],['meal','飯後','postprandial'],['cough','咳嗽、發燒','cough/fever'],['anx','焦慮、壓力','anxiety'],['thinkc','病人覺得是心臟問題','patient assumes cardiac origin']],
  rf:[['rest20','休息時痛 >20 分鐘','rest pain >20 min'],['syncope','昏厥','syncope'],['bpdiff','雙手血壓差 >20','arm BP difference >20'],['spo2','SpO2 <94%','SpO2 <94%'],['ecg','ECG 新變化','new ECG change'],['tear','撕裂痛到背','tearing pain to back'],['pe','單側腿腫或咳血','unilateral leg swelling/hemoptysis']],
  pe:[['repro','按壓可重現疼痛','pain reproducible on palpation'],['murmur','心雜音','heart murmur'],['rub','心包摩擦音','pericardial rub'],['crack','肺部囉音','crackles'],['calf','小腿腫脹不對稱','calf asymmetry']],
@@ -442,7 +456,7 @@ const CC=[
  edu:X=>[X.dx('acs')?'請直接到急診，不要自己開車。':'胸壁痛：避免提重物，1–2 週內改善。','胸痛超過 20 分鐘、冒冷汗、喘：打 119。'],
  ret:'chest pain at rest >20 min, dyspnea, syncope, diaphoresis',refer:'急診（119）'},
 
-{id:'ha',rxd:3,n:'頭痛',en:'Headache',days:3,
+{id:'ha',g:'sym',bl:['age','preg','cad','nsaidx'],rxd:3,n:'頭痛',en:'Headache',days:3,
  sx:[['uni','單側','unilateral'],['throb','搏動性','throbbing'],['band','緊箍感','band-like pressing'],['nausea','噁心','nausea'],['photo','怕光怕吵','photophobia/phonophobia'],['aura','先兆','aura'],['act','活動加重','worse with activity'],['overuse','止痛藥 ≥10 天／月','analgesic use ≥10 days/month'],['stress','壓力、肩頸緊','stress/neck tightness'],['mens','經期相關','menstrual related'],['freq','一個月 ≥4 次','≥4 attacks/month']],
  rf:[['thunder','突發劇痛（雷擊）','thunderclap onset'],['fevneck','發燒、頸部僵硬','fever/neck stiffness'],['focal','神經學異常','focal neurological deficit'],['new50','>50 歲新發','new onset age >50'],['preg','懷孕或產後','pregnancy/postpartum'],['cancer','癌症或免疫低下','cancer/immunocompromised'],['posit','姿勢或用力加重','positional/Valsalva'],['trauma','頭部外傷','head trauma'],['anticoag','用抗凝血劑','on anticoagulant']],
  pe:[['neuro','神經學檢查正常','neurologically intact'],['neck','頸部僵硬','neck stiffness'],['peric','頭頸肌肉壓痛','pericranial tenderness'],['ta','顳動脈壓痛','temporal artery tenderness'],['fundus','視乳突水腫','papilledema']],
@@ -458,7 +472,7 @@ const CC=[
  edu:X=>['寫頭痛日記：時間、誘因、吃了什麼藥。','止痛藥一個月不要超過 10 天。','規律睡眠、三餐、運動，少咖啡因。'],
  ret:'worst headache of life, fever, weakness, confusion, vision change',refer:'急診'},
 
-{id:'dizzy',n:'頭暈',en:'Dizziness',days:2,
+{id:'dizzy',g:'sym',bl:['age','cad'],n:'頭暈',en:'Dizziness',days:2,
  sx:[['spin','天旋地轉','vertigo (spinning)'],['light','快昏倒','presyncope'],['imbal','走不穩','disequilibrium'],['turn','翻身、抬頭誘發','triggered by head turning'],['stand','站起來時','orthostatic'],['sec','數十秒內緩解','lasting seconds'],['hrs','持續數小時至數天','lasting hours to days'],['hear','耳鳴、聽力下降','tinnitus/hearing loss'],['nausea','噁心嘔吐','nausea/vomiting'],['uri','最近感冒','recent URI'],['newmed','最近新藥','new medication']],
  rf:[['5d','複視、構音不清、吞嚥困難','diplopia/dysarthria/dysphagia'],['weak','肢體無力或麻','limb weakness/numbness'],['ataxia','無法走路','unable to walk'],['ha','新發劇烈頭痛','new severe headache'],['cp','胸痛、心悸','chest pain/palpitation'],['syncope','昏厥','syncope']],
  pe:[['ortho','姿勢性低血壓','orthostatic hypotension'],['nyst','眼振','nystagmus'],['dhr','Dix-Hallpike 右側','Dix-Hallpike right'],['dhl','Dix-Hallpike 左側','Dix-Hallpike left'],['fn','指鼻測試異常','abnormal finger-nose test'],['gait','步態不穩','unsteady gait']],
@@ -472,7 +486,7 @@ const CC=[
  edu:X=>[X.dx('bppvr')||X.dx('bppvl')?'耳石脫落：照衛教做復位運動，通常幾天到幾週會好。':'起身慢一點：先坐 1 分鐘再站。','頭暈時先坐下，避免開車、爬高。'],
  ret:'weakness, numbness, slurred speech, double vision, unable to walk, chest pain',refer:'急診'},
 
-{id:'lbp',rxd:5,n:'下背痛',en:'Low back pain',days:5,
+{id:'lbp',g:'sym',bl:['age','ckd','nsaidx','cad'],rxd:5,n:'下背痛',en:'Low back pain',days:5,
  sx:[['lift','提重物後','after lifting'],['radr','痛到右腳膝下','radiating below right knee'],['radl','痛到左腳膝下','radiating below left knee'],['numb','腳麻','leg numbness'],['stiff','晨僵 >30 分鐘','morning stiffness >30 min'],['night','夜間痛','night pain'],['chronic','>3 個月','duration >3 months'],['better','活動後改善','improves with activity']],
  rf:[['saddle','鞍狀麻木','saddle anesthesia'],['urine','尿滯留或失禁','urinary retention/incontinence'],['fever','發燒','fever'],['cancer','癌症病史','history of cancer'],['wt','體重減輕','weight loss'],['trauma','外傷或骨鬆','trauma/osteoporosis'],['steroid','長期類固醇','long-term steroid'],['weak','進行性無力','progressive weakness']],
  pe:[['para','脊旁肌壓痛','paraspinal tenderness'],['spin','脊椎棘突壓痛','spinous process tenderness'],['slrr','SLR 右側','SLR right'],['slrl','SLR 左側','SLR left'],['motor','肌力減弱','motor weakness'],['sens','感覺異常','sensory deficit']],
@@ -489,8 +503,8 @@ const CC=[
  edu:X=>['保持活動，不要躺床；熱敷。','4–6 週內大多會改善；無紅旗不需要照 X 光。','提重物時蹲下、靠近身體。'],
  ret:'saddle numbness, urinary problems, leg weakness, fever',refer:'急診或骨科／神經外科'},
 
-{id:'joint',rxd:5,n:'關節痛',en:'Joint pain',days:5,
- sx:[['mono','單一關節','monoarticular'],['poly','多處關節','polyarticular'],['knee','膝蓋','knee'],['mtp','大腳趾根部','1st MTP'],['ankle','腳踝','ankle'],['acute','一天內腫痛','acute onset <24h'],['red','紅、熱','redness/warmth'],['ams','晨僵 >30 分鐘','morning stiffness >30 min'],['trauma','外傷','trauma'],['gouthx','以前痛風發作','prior gout attacks'],['diur','利尿劑、喝酒','diuretic/alcohol'],['stairs','上下樓梯痛','pain on stairs']],
+{id:'joint',g:'sym',bl:['age','ckd','nsaidx','dmh','cad'],rxd:5,n:'關節痛',en:'Joint pain',days:5,
+ sx:[['mono','單一關節','monoarticular'],['poly','多處關節','polyarticular'],['knee','膝蓋','knee'],['mtp','大腳趾根部','1st MTP'],['ankle','腳踝','ankle'],['acute','一天內腫痛','acute onset <24h'],['red','紅、熱','redness/warmth'],['ams','晨僵 >30 分鐘','morning stiffness >30 min'],['trauma','外傷','trauma'],['gouthx','以前痛風發作','prior gout attacks'],['diur','利尿劑、喝酒','diuretic/alcohol'],['stairs','上下樓梯痛','pain on stairs'],['flare2','痛風一年 ≥2 次','≥2 gout flares/year'],['stone','尿酸結石','urate stone'],['onult','已在吃降尿酸藥','on urate-lowering therapy'],['hla','HLA-B*5801 陰性','HLA-B*5801 negative']],
  rf:[['septic','發燒＋單一熱腫關節','fever with hot swollen joint'],['nowt','外傷後無法承重','unable to bear weight after trauma'],['immuno','免疫低下','immunocompromised']],
  pe:[['eff','關節積液','joint effusion'],['warm','局部熱','warmth'],['ery','紅','erythema'],['crep','摩擦音','crepitus'],['rom','活動度受限','limited ROM'],['tophi','痛風石','tophi'],['syn','對稱小關節腫','symmetric small joint swelling']],
  dx:[{k:'gout',l:'急性痛風',en:'Gout, unspecified',icd:'M10.9',a:X=>X.s('mtp')===1&&X.s('acute')===1||X.s('gouthx')===1},{k:'goutr',l:'痛風 右踝足',en:'Idiopathic gout, right ankle and foot',icd:'M10.071',a:X=>false},{k:'goutl',l:'痛風 左踝足',en:'Idiopathic gout, left ankle and foot',icd:'M10.072',a:X=>false},{k:'oa',l:'膝退化性關節炎',en:'Osteoarthritis of knee, unspecified',icd:'M17.9',a:X=>X.s('knee')===1&&(X.e('crep')===1||X.s('stairs')===1)},{k:'ra',l:'疑類風濕性關節炎（轉診）',en:'Inflammatory polyarthritis, r/o RA',icd:'M06.9',a:X=>X.s('poly')===1&&X.s('ams')===1&&X.e('syn')===1},{k:'jp',l:'關節痛（未明）',en:'Pain in unspecified joint',icd:'M25.50',a:X=>!X.anyDx}],
@@ -500,12 +514,15 @@ const CC=[
   {k:'goos',l:'GOOS 外用 NSAID',rx:'GOOS Goodgen gel 患處 TID-QID',a:X=>X.dx('oa')},
   {k:'apap',l:'ACE6 Acetaminophen',rx:'ACE6 Acetaminophen 500mg 1# QID PRN',a:X=>X.dx('oa')||X.dx('jp')},
   {k:'cel',l:'CEL2 Celecoxib',rx:'CEL2 Celebrex 200mg 1# QD',a:X=>false,w:X=>X.p.cad?'CV 疾病慎用':''},
-  {k:'mel',l:'MEL6 Meloxicam',rx:'MEL6 Melicam 15mg 1# QD PC',a:X=>false,w:NSW}],
+  {k:'mel',l:'MEL6 Meloxicam',rx:'MEL6 Melicam 15mg 1# QD PC',a:X=>false,w:NSW},
+  {k:'all',l:'ALL3 Allopurinol（降尿酸）',rx:X=>`ALL3 Allopurinol 100mg ${X.p.egfr<30?'1/2#':'1#'} QD → 每 2–4 週加量，目標 UA <6（痛風石 <5）`,a:X=>X.dx('gout')&&X.s('acute')!==1&&X.s('onult')!==1&&(X.s('flare2')===1||X.e('tophi')===1||X.s('stone')===1||X.p.egfr<60),w:X=>X.s('hla')===1?'':'台灣人先驗 HLA-B*5801（SJS/TEN）'},
+  {k:'feb',l:'FEB1 Febuxostat（健保 2.11.1）',rx:'FEB1 Feburic 80mg 1/2# QD',a:X=>false,w:X=>X.p.cad||X.p.stroke?'心血管疾病慎用':'健保：CKD、痛風石、結石或 benzbromarone 無效等條件'},
+  {k:'colp',l:'COL4 預防發作（開始降尿酸時）',rx:'COL4 Colchicine 0.5mg 1# QD x 3-6 months',fixed:1,a:X=>X.dx('gout')&&X.s('acute')!==1&&X.s('onult')!==1&&(X.s('flare2')===1||X.e('tophi')===1||X.s('stone')===1||X.p.egfr<60)}],
  lab:[['ua','Uric acid、Cr',X=>X.dx('gout')||X.dx('goutr')||X.dx('goutl')],['cbc','CBC、ESR/CRP',X=>X.r('septic')===1||X.dx('ra')],['rf','RF、anti-CCP',X=>X.dx('ra')],['xr','X-ray',X=>X.dx('oa')||X.s('trauma')===1],['tap','關節抽液（轉診）',X=>X.r('septic')===1]],
  edu:X=>[X.dx('gout')||X.dx('goutr')||X.dx('goutl')?'痛風：多喝水、少酒（尤其啤酒）、少含糖飲料與內臟；正在吃降尿酸藥不要停。':'膝關節：股四頭肌運動、減重最有效。','冰敷 15 分鐘，抬高患肢。'],
  ret:'fever, joint very hot and swollen, unable to walk',refer:'急診或風濕免疫科'},
 
-{id:'dysp',n:'呼吸喘',en:'Dyspnea',days:3,
+{id:'dysp',g:'sym',bl:['age','preg','pcn','dmh','hfref'],n:'呼吸喘',en:'Dyspnea',days:3,
  sx:[['exer','活動時喘','exertional dyspnea'],['rest','休息也喘','dyspnea at rest'],['ortho','躺平會喘','orthopnea'],['pnd','夜間陣發性呼吸困難','PND'],['wheeze','喘鳴','wheezing'],['cough','咳嗽','cough'],['sputum','痰變多、變膿','increased purulent sputum'],['fever','發燒','fever'],['leg','腳腫','leg swelling'],['asthma','氣喘病史','history of asthma'],['copd','COPD 病史','history of COPD']],
  rf:[['sent','講話無法成句','unable to speak in full sentences'],['spo2','SpO2 <92%','SpO2 <92%'],['rr','RR >24','RR >24'],['cp','胸痛','chest pain'],['unileg','單側腿腫','unilateral leg swelling'],['hemop','咳血','hemoptysis'],['conf','意識改變','confusion']],
  pe:[['wh','喘鳴','wheezing'],['crack','囉音','crackles'],['dbs','呼吸音減弱','decreased breath sounds'],['jve','頸靜脈怒張','JVE'],['edema','下肢水腫','leg edema']],
@@ -520,7 +537,7 @@ const CC=[
  edu:X=>['吸入器使用技巧：吐氣、含住、慢吸、閉氣 10 秒。','戒菸；打流感、肺炎鏈球菌疫苗。'],
  ret:'unable to speak in sentences, chest pain, lips turning blue, confusion',refer:'急診（119）'},
 
-{id:'palp',n:'心悸',en:'Palpitations',days:3,
+{id:'palp',g:'sym',bl:['age','preg'],n:'心悸',en:'Palpitations',days:3,
  sx:[['reg','規則','regular'],['irreg','不規則','irregular'],['sudden','突然開始、突然停','sudden onset/offset'],['caff','咖啡、茶、能量飲料','caffeine/energy drinks'],['stress','焦慮、壓力','anxiety/stress'],['heat','怕熱、手抖、變瘦','heat intolerance/tremor/wt loss'],['drug','減肥藥、甲狀腺素、支氣管擴張劑','stimulant/thyroxine/β-agonist']],
  rf:[['syncope','昏厥','syncope'],['cp','胸痛','chest pain'],['exer','運動時發作','exertional'],['fhx','猝死家族史','FHx sudden cardiac death'],['shd','結構性心臟病','structural heart disease']],
  pe:[['irr','心律不整','irregular rhythm'],['tachy','心搏過速','tachycardia'],['goiter','甲狀腺腫','goiter'],['murmur','心雜音','murmur']],
@@ -530,7 +547,7 @@ const CC=[
  edu:X=>['減少咖啡因、酒精、能量飲料。','發作時記錄時間、脈搏，或用手機錄心電圖。'],
  ret:'syncope, chest pain, sustained rapid heartbeat, dyspnea',refer:'急診或心臟科'},
 
-{id:'edema',n:'水腫',en:'Leg edema',days:7,
+{id:'edema',g:'sym',bl:['ckd','hfref','liver'],n:'水腫',en:'Leg edema',days:7,
  sx:[['uni','單側','unilateral'],['bil','雙側','bilateral'],['eve','傍晚較嚴重','worse in the evening'],['dysp','喘、躺平會喘','dyspnea/orthopnea'],['foam','泡泡尿','foamy urine'],['jaun','黃疸','jaundice'],['calf','小腿痛','calf pain'],['drug','用 CCB、NSAID、pioglitazone、gabapentin','edema-causing drugs']],
  rf:[['dvt','單側腫＋小腿痛','unilateral swelling with calf pain'],['dysp','休息也喘','dyspnea at rest'],['cell','紅熱痛','redness/warmth (cellulitis)']],
  pe:[['pit','凹陷性水腫','pitting edema'],['jve','頸靜脈怒張','JVE'],['crack','肺部囉音','crackles'],['calft','小腿壓痛','calf tenderness'],['skin','皮膚色素、靜脈曲張','venous stasis changes']],
@@ -540,7 +557,7 @@ const CC=[
  edu:X=>['抬高雙腳、少鹽、少久站久坐。','不要自己買利尿劑消腫。'],
  ret:'one leg suddenly swollen and painful, dyspnea, redness and fever',refer:'急診'},
 
-{id:'fatigue',n:'疲倦',en:'Fatigue',days:30,
+{id:'fatigue',g:'sym',bl:['age','sex','preg'],n:'疲倦',en:'Fatigue',days:30,
  sx:[['sleep','睡不好','poor sleep'],['snore','打呼、白天嗜睡','snoring/daytime sleepiness'],['mood','情緒低落、沒興趣','low mood/anhedonia'],['menor','月經量多','menorrhagia'],['cold','怕冷、便秘、變胖','cold intolerance'],['polyu','多尿、口渴','polyuria/polydipsia']],
  rf:[['wt','體重減輕','weight loss'],['ns','夜間盜汗','night sweats'],['fever','發燒','fever'],['bleed','出血','bleeding'],['lap','淋巴結腫','lymphadenopathy']],
  pe:[['pallor','蒼白','pallor'],['thy','甲狀腺腫','goiter'],['lapx','淋巴結腫大','lymphadenopathy'],['hsm','肝脾腫大','hepatosplenomegaly']],
@@ -548,7 +565,153 @@ const CC=[
  med:[],
  lab:[['cbc','CBC、ferritin',X=>true],['tsh','TSH',X=>true],['glu','FPG/HbA1c',X=>true],['cr','Cr、ALT',X=>true],['b12','B12',X=>X.chronic('dm')||X.p.age>=65],['phq','PHQ-9',X=>X.s('mood')===1],['psg','睡眠檢查轉介',X=>X.s('snore')===1]],
  edu:X=>['規律睡眠、運動；減少酒精。','抽血報告回來再一起討論。'],
- ret:'weight loss, fever, night sweats, bleeding',refer:'相關專科'}
+ ret:'weight loss, fever, night sweats, bleeding',refer:'相關專科'},
+{id:'ar',g:'dx',n:'過敏性鼻炎',en:'Allergic rhinitis',days:30,rxd:28,bl:['age','preg'],
+ sel:[['type','型態',['常年性（塵蟎等）','季節性']],['sev','嚴重度（ARIA）',['輕度：不影響睡眠與日常','中重度：影響睡眠、工作或上學']]],
+ sx:[['sneeze','打噴嚏','sneezing'],['itch','鼻癢','nasal itching'],['rhin','水樣鼻涕','watery rhinorrhea'],['cong','鼻塞','nasal congestion'],['eye','眼睛癢、流淚','itchy watery eyes'],['asthma','合併氣喘','coexisting asthma'],['uni','單側症狀','unilateral symptoms'],['epis','流鼻血','epistaxis']],
+ rf:[['unilat','單側鼻塞、血涕','unilateral obstruction/bloody discharge'],['polyp','鼻息肉','nasal polyp'],['neck','頸部腫塊','neck mass']],
+ pe:[['pale','鼻甲蒼白水腫','pale boggy turbinates'],['shiner','過敏性黑眼圈','allergic shiners'],['polyp','鼻息肉','nasal polyp']],
+ dx:[{k:'ar',l:'過敏性鼻炎',en:'Allergic rhinitis, unspecified',icd:X=>X.v('type')===1?'J30.2':'J30.89',a:X=>true},{k:'ac',l:'過敏性結膜炎',en:'Allergic conjunctivitis',icd:'H10.45',a:X=>X.s('eye')===1}],
+ med:[{k:'avap',l:'AVAP Avamys 鼻噴（第一線）',rx:'AVAP Avamys nasal spray 每鼻孔 2 噴 QD（噴向外側壁）',a:X=>X.v('sev')===1||X.s('cong')===1},
+  {k:'momp',l:'MOMP Momenase 鼻噴',rx:'MOMP Momenase nasal spray 每鼻孔 2 噴 QD',a:X=>false},
+  {k:'lev',l:'LEV3 Levocetirizine',rx:'LEV3 Levocetirizine 5mg 1# HS',a:X=>X.s('sneeze')===1||X.s('rhin')===1||X.s('itch')===1,w:X=>X.p.egfr<30?'eGFR <30 減量':''},
+  {k:'all',l:'ALL5 Fexofenadine（不嗜睡）',rx:'ALL5 Alledine (fexofenadine) 180mg 1# QD',a:X=>false},
+  {k:'duf',l:'DUFP Dufanas（中重度複方噴劑）',rx:'DUFP Dufanas (azelastine/fluticasone) 每鼻孔 1 噴 BID',a:X=>X.v('sev')===1&&X.s('cong')===1},
+  {k:'sin',l:'SIN10 Montelukast（合併氣喘）',rx:'SIN10 Singulair 10mg 1# HS',a:X=>X.s('asthma')===1,w:X=>'神經精神副作用（做惡夢、情緒）'},
+  {k:'pat',l:'PATQ Patanol 眼藥水',rx:'PATQ Patanol 0.1% 1 drop BID OU',a:X=>X.s('eye')===1},
+  {k:'sido',l:'SIDO 鼻塞噴劑（≤5 天）',rx:'SIDO Sindecon nasal spray PRN（連用 ≤3–5 天）',fixed:1,a:X=>false,w:X=>'久用反彈性鼻塞'}],
+ lab:[['ige','過敏原檢測（MAST／IgE）',X=>false],['ent','鼻咽鏡（轉耳鼻喉科）',X=>X.s('uni')===1||X.r('unilat')===1||X.r('neck')===1]],
+ edu:X=>['鼻噴類固醇要每天用，連續幾天才有效；噴向外側（耳朵方向）。','除塵蟎：床單每週 60°C 熱水洗、除濕、少絨毛玩具。'],
+ ret:'unilateral obstruction, bloody discharge, neck mass, wheezing',refer:'耳鼻喉科'},
+
+{id:'asthma',g:'dx',n:'氣喘',en:'Asthma',days:30,rxd:28,bl:['age','preg','dmh'],
+ sel:[['step','目前治療',['沒有控制藥（只用 SABA 或沒用）','需要時 ICS-formoterol（Step 1–2）','低劑量 MART（Step 3）','中劑量 MART（Step 4）','高劑量或已轉診（Step 5）']]],
+ sx:[['day','過去 4 週白天症狀 >2 次／週','daytime symptoms >2/week'],['night','夜間因氣喘醒來','night waking'],['rel','急救藥 >2 次／週','reliever use >2/week'],['limit','活動受限','activity limitation'],['exac','現在急性發作','current exacerbation'],['tech','吸入技巧不正確','poor inhaler technique'],['adh','沒有規則用藥','poor adherence'],['smoke','抽菸','smoker']],
+ rf:[['speak','講話無法成句','unable to speak in full sentences'],['spo2','SpO2 <92%','SpO2 <92%'],['pef','PEF <50%','PEF <50% predicted'],['conf','嗜睡、意識改變','drowsy/confused'],['silent','呼吸音消失','silent chest']],
+ pe:[['wh','喘鳴','wheezing'],['prol','吐氣延長','prolonged expiration'],['acc','使用呼吸輔助肌','accessory muscle use']],
+ score(X){const n=['day','night','rel','limit'].filter(k=>X.s(k)===1).length;return {t:`GINA 控制：${n===0?'控制良好':n<=2?'部分控制':'未控制'}（${n}/4）`,v:n,adv:n===0?'維持目前治療，穩定 3 個月可考慮降階':'先確認吸入技巧、遵從性、誘因，再升一階'}},
+ dx:[{k:'ast',l:'氣喘',en:'Asthma, unspecified, uncomplicated',icd:'J45.909',a:X=>X.s('exac')!==1},{k:'astx',l:'氣喘急性發作',en:'Asthma with acute exacerbation',icd:'J45.901',a:X=>X.s('exac')===1}],
+ med:[{k:'symprn',l:'SYMQ 需要時（Step 1–2）',rx:'SYMQ Symbicort 160/4.5 1 puff PRN（每天最多 12 噴）',a:X=>X.v('step')===0&&X.sc.v<=2},
+  {k:'symlow',l:'SYMQ MART 低劑量（Step 3）',rx:'SYMQ Symbicort 160/4.5 1 puff BID + 1 puff PRN',a:X=>(X.v('step')===1&&X.sc.v>0)||(X.v('step')===0&&X.sc.v>=3)||(X.v('step')===2&&X.sc.v===0)},
+  {k:'symmed',l:'SYMQ MART 中劑量（Step 4）',rx:'SYMQ Symbicort 160/4.5 2 puffs BID + 1 puff PRN',a:X=>(X.v('step')===2&&X.sc.v>0)||(X.v('step')===3)},
+  {k:'sin',l:'SIN10 Montelukast（加成）',rx:'SIN10 Singulair 10mg 1# HS',a:X=>X.v('step')>=3&&X.sc.v>0},
+  {k:'synp',l:'SYNP Salbutamol（急救）',rx:'SYNP Synvent HFA 2 puffs Q4-6H PRN',a:X=>X.s('exac')===1},
+  {k:'pre',l:'PRE6 Prednisolone 40mg x5d',rx:'PRE6 Prednisolone 5mg 8# QD AM x 5 days',fixed:1,a:X=>X.s('exac')===1,w:X=>X.chronic('dm')?'糖尿病：血糖會上升':''},
+  {k:'besq',l:'BESQ 噴霧（診間）',rx:'BESQ Besmate 1 nebula inhalation stat',fixed:1,a:X=>X.s('exac')===1&&X.e('wh')===1}],
+ lab:[['pft','肺功能＋支氣管擴張試驗',X=>false],['pef','PEF',X=>X.s('exac')===1],['eos','CBC（嗜酸性球）',X=>X.v('step')>=3]],
+ edu:X=>['GINA 不再建議只用 SABA；控制藥每天用，喘時用 Symbicort 加噴。','噴完漱口；每次回診帶吸入器檢查技巧。','流感疫苗每年打。'],
+ ret:'unable to speak in sentences, lips turning blue, reliever not helping',refer:'急診（119）'},
+
+{id:'copd',g:'dx',n:'COPD',en:'COPD',days:30,rxd:28,bl:['age','pcn','dmh'],
+ sel:[['mmrc','mMRC 呼吸困難',['0：劇烈運動才喘','1：快走或上坡會喘','2：比同齡走得慢或需停下','3：走 100 公尺就要停','4：穿衣就喘、無法出門']],['exh','過去一年惡化',['0 次','1 次（未住院）','≥2 次，或 ≥1 次住院']]],
+ num:[['eos','嗜酸性球（/µL）'],['fev1','FEV1 %pred']],
+ sx:[['cat','CAT ≥10','CAT ≥10'],['aecopd','現在急性惡化','current exacerbation'],['purul','痰變多、變膿','increased purulent sputum'],['smoke','仍在抽菸','current smoker']],
+ rf:[['spo2','SpO2 <88%','SpO2 <88%'],['conf','嗜睡、意識改變','drowsy/confused'],['rest','休息就喘、無法說話','severe dyspnea at rest'],['edema','新出現下肢水腫','new peripheral edema']],
+ pe:[['wh','喘鳴','wheezing'],['prol','吐氣延長','prolonged expiration'],['dbs','呼吸音減弱','decreased breath sounds']],
+ score(X){const m=X.v('mmrc'),e=X.v('exh');const g=e===2?'E':(m>=2||X.s('cat')===1)?'B':'A';return {t:`GOLD 分組 ${g}${has(X.n('fev1'))?`（GOLD ${X.n('fev1')>=80?1:X.n('fev1')>=50?2:X.n('fev1')>=30?3:4}）`:''}`,v:g==='A'?0:g==='B'?1:2,g,adv:g==='A'?'單一支氣管擴張劑（LAMA）':g==='B'?'LAMA＋LABA':'LAMA＋LABA；嗜酸性球 ≥300 加 ICS'}},
+ dx:[{k:'copd',l:'COPD',en:'COPD, unspecified',icd:'J44.9',a:X=>X.s('aecopd')!==1},{k:'copdx',l:'COPD 急性惡化',en:'COPD with acute exacerbation',icd:'J44.1',a:X=>X.s('aecopd')===1}],
+ med:[{k:'spiq',l:'SPIQ Spiriva（LAMA）',rx:'SPIQ Spiriva Respimat 2 puffs QD',a:X=>X.sc.g==='A'},
+  {k:'anop',l:'ANOP Anoro（LAMA/LABA）',rx:'ANOP Anoro Ellipta 1 inhalation QD',a:X=>X.sc.g!=='A'&&!(X.sc.g==='E'&&X.n('eos')>=300)},
+  {k:'spir',l:'SPIR Spiolto（LAMA/LABA）',rx:'SPIR Spiolto Respimat 2 puffs QD',a:X=>false},
+  {k:'trep',l:'TREP Trelegy（加 ICS）',rx:'TREP Trelegy Ellipta 1 inhalation QD',a:X=>X.sc.g==='E'&&X.n('eos')>=300,w:X=>'肺炎風險略增；嗜酸性球 <100 不建議'},
+  {k:'synp',l:'SYNP Salbutamol（急救）',rx:'SYNP Synvent HFA 2 puffs Q4-6H PRN',a:X=>true},
+  {k:'pre',l:'PRE6 Prednisolone 40mg x5d',rx:'PRE6 Prednisolone 5mg 8# QD AM x 5 days',fixed:1,a:X=>X.s('aecopd')===1,w:X=>X.chronic('dm')?'糖尿病：血糖會上升':''},
+  {k:'cur',l:'CUR2 Amox/Clav（膿痰）',rx:'CUR2 Curam 1g 1# BID x 5 days',fixed:1,a:X=>X.s('aecopd')===1&&X.s('purul')===1&&!X.p.pcn,w:ABX_PCN},
+  {k:'vax',l:'疫苗：VAXA 流感／PREK PCV20／AREA RSV',rx:'Vaccines: VAXA influenza (yearly), PREK PCV20, AREA RSV (≥60, self-pay)',fixed:1,a:X=>!X.s('aecopd')}],
+ lab:[['pft','肺功能（post-BD FEV1/FVC <0.7 確診）',X=>!has(X.n('fev1'))],['cxr','CXR',X=>X.s('aecopd')===1],['cbc','CBC（嗜酸性球）',X=>!has(X.n('eos'))]],
+ edu:X=>['戒菸和打疫苗是唯一能改變病程的做法。','肺部復健、每天走路；學噘嘴呼吸。'],
+ ret:'severe dyspnea, confusion, lips turning blue, new leg swelling',refer:'急診'},
+
+{id:'ear',g:'dx',n:'耳朵痛（中耳炎／外耳炎）',en:'Otalgia',days:2,rxd:7,bl:['age','pcn','dmh'],
+ sel:[['side','側別',['右','左','雙側']]],
+ sx:[['pain','耳痛','otalgia'],['fever','發燒','fever'],['hear','聽力下降、悶塞','hearing loss/fullness'],['otorr','耳漏','otorrhea'],['uri','先有感冒','preceding URI'],['swim','游泳、挖耳朵','swimming/ear picking'],['itch','耳癢','ear itching'],['abx','30 天內用過抗生素','antibiotics within 30 days']],
+ rf:[['malig','DM／長者劇痛＋肉芽（惡性外耳炎）','severe pain with granulation (DM/elderly)'],['facial','顏面神經麻痺','facial palsy'],['mast','乳突壓痛、耳殼外推','mastoid tenderness'],['npc','成人單側中耳積水','unilateral effusion in adult (r/o NPC)']],
+ pe:[['bulge','鼓膜膨出','bulging TM'],['red','鼓膜紅','erythematous TM'],['perf','鼓膜穿孔','TM perforation'],['tragal','耳屏壓痛','tragal tenderness'],['eac','外耳道腫、分泌物','EAC edema/debris'],['effu','中耳積水','middle ear effusion']],
+ dx:[{k:'aom',l:'急性中耳炎',en:'Acute otitis media',icd:X=>['H66.91','H66.92','H66.93'][X.v('side')],a:X=>X.e('bulge')===1},
+  {k:'oe',l:'急性外耳炎',en:'Otitis externa',icd:X=>['H60.91','H60.92','H60.93'][X.v('side')],a:X=>X.e('tragal')===1||X.e('eac')===1},
+  {k:'ome',l:'中耳積水',en:'Otitis media with effusion',icd:X=>['H65.91','H65.92','H65.93'][X.v('side')],a:X=>X.e('effu')===1&&X.e('bulge')!==1}],
+ med:[{k:'amo',l:'AMO5 Amoxicillin（中耳炎）',rx:'AMO5 Amoxicillin 500mg 1# TID x 7 days',fixed:1,a:X=>X.dx('aom')&&!X.p.pcn&&X.s('abx')!==1,w:ABX_PCN},
+  {k:'cur',l:'CUR2 Amox/Clav（30 天內用過抗生素）',rx:'CUR2 Curam 1g 1# BID x 7 days',fixed:1,a:X=>X.dx('aom')&&!X.p.pcn&&X.s('abx')===1,w:ABX_PCN},
+  {k:'zit',l:'ZIT2 Azithromycin（PCN 過敏）',rx:'ZIT2 Azithromycin 250mg 2# D1, then 1# QD D2-5',fixed:1,a:X=>X.dx('aom')&&X.p.pcn},
+  {k:'earp',l:'EARP Earflo 耳滴（外耳炎）',rx:'EARP Earflo (ofloxacin) otic 4 drops BID x 7 days',fixed:1,a:X=>X.dx('oe')||X.e('perf')===1},
+  {k:'apap',l:'ACE6 Acetaminophen',rx:'ACE6 Acetaminophen 500mg 1# Q6H PRN pain',a:X=>true},
+  {k:'nap',l:'NAP2 Naproxen',rx:'NAP2 Naproxen 250mg 1# BID PC PRN',a:X=>false,w:NSW}],
+ lab:[['ent','耳鼻喉科（鼻咽鏡）',X=>X.r('npc')===1||X.r('malig')===1]],
+ edu:X=>[X.dx('oe')?'耳朵保持乾燥，洗澡時用棉花加凡士林塞住；不要挖耳朵。':'多數中耳炎 2–3 天會好轉；止痛最重要。','耳滴劑：側躺滴入，維持 5 分鐘。'],
+ ret:'high fever, swelling behind the ear, facial weakness, severe pain not improving in 48–72 hours',refer:'耳鼻喉科或急診'},
+
+{id:'ccough',g:'dx',n:'慢性咳嗽',en:'Chronic cough',days:60,rxd:14,bl:['age','pcn'],
+ sx:[['d8','咳嗽 >8 週','cough >8 weeks'],['smoke','抽菸','smoker'],['acei','服用 ACEi（ACE1 等）','ACE inhibitor use'],['pnd','鼻涕倒流、清喉嚨','postnasal drip/throat clearing'],['hb','火燒心、逆流','heartburn/regurgitation'],['wheeze','喘鳴、夜咳','wheeze/nocturnal cough'],['tbc','結核接觸史','TB contact'],['sput','有痰','productive']],
+ rf:[['hemop','咳血','hemoptysis'],['wt','體重減輕','weight loss'],['ns','夜間盜汗','night sweats'],['fever','發燒','fever'],['cxr','CXR 異常','abnormal CXR']],
+ pe:[['cobble','咽後壁鵝卵石樣','cobblestoning'],['wh','肺部喘鳴','wheezing'],['crack','囉音','crackles']],
+ dx:[{k:'cc',l:'慢性咳嗽',en:'Chronic cough',icd:'R05.3',a:X=>!X.anyDx||true},{k:'uacs',l:'上呼吸道咳嗽症候群',en:'Postnasal drip (UACS)',icd:'R09.82',a:X=>X.s('pnd')===1||X.e('cobble')===1},{k:'gerd',l:'胃食道逆流',en:'GERD without esophagitis',icd:'K21.9',a:X=>X.s('hb')===1},{k:'cva',l:'咳嗽變異型氣喘',en:'Cough variant asthma',icd:'J45.991',a:X=>X.s('wheeze')===1},{k:'acei',l:'ACEi 引起咳嗽',en:'Adverse effect of ACE inhibitor',icd:'T46.4X5A',a:X=>X.s('acei')===1}],
+ med:[{k:'momp',l:'MOMP 鼻噴類固醇（UACS）',rx:'MOMP Momenase nasal spray 每鼻孔 2 噴 QD',a:X=>X.dx('uacs')},
+  {k:'lev',l:'LEV3 Levocetirizine（UACS）',rx:'LEV3 Levocetirizine 5mg 1# HS',a:X=>X.dx('uacs')},
+  {k:'vok',l:'VOK1 Famotidine（GERD 試驗）',rx:'VOK1 Voker (famotidine) 20mg 1# BID',a:X=>X.dx('gerd')},
+  {k:'sym',l:'SYMQ（咳嗽變異型氣喘試驗）',rx:'SYMQ Symbicort 160/4.5 1 puff BID + PRN',a:X=>X.dx('cva')},
+  {k:'arb',l:'停 ACEi → MIC2 Telmisartan',rx:'Stop ACEi → MIC2 Micardis (telmisartan) 40mg 1# QD（咳嗽 1–4 週內緩解）',fixed:1,a:X=>X.dx('acei')},
+  {k:'dex',l:'DEX3 Dextromethorphan',rx:'DEX3 Dextromethorphan 30mg 1# TID PRN',a:X=>false}],
+ lab:[['cxr','CXR',X=>true],['pft','肺功能＋支氣管擴張試驗',X=>X.dx('cva')],['afb','Sputum AFB x3＋TB PCR',X=>X.s('tbc')===1||X.r('hemop')===1||X.r('wt')===1||X.r('ns')===1||(X.s('d8')===1&&X.s('sput')===1)]],
+ edu:X=>['依最可能的原因試治療 2–4 週，回診評估。','咳嗽超過 2 週、有痰：驗痰排除結核，咳嗽時戴口罩。'],
+ ret:'hemoptysis, fever, weight loss, dyspnea',refer:'胸腔科'},
+
+{id:'ibs',g:'dx',n:'腸躁症',en:'Irritable bowel syndrome',days:90,rxd:14,bl:['age'],
+ sx:[['pain','腹痛 ≥1 天／週、≥3 個月','abdominal pain ≥1 day/week for 3 months'],['defec','與排便有關','related to defecation'],['freq','排便次數改變','change in stool frequency'],['form','糞便型態改變','change in stool form'],['d','以腹瀉為主','predominant diarrhea'],['c','以便秘為主','predominant constipation'],['bloat','脹氣','bloating'],['stress','壓力加重','worse with stress']],
+ rf:[['bleed','血便','rectal bleeding'],['wt','體重減輕','weight loss'],['anemia','貧血','anemia'],['noct','夜間腹瀉','nocturnal diarrhea'],['age50','≥50 歲新發','new onset age ≥50'],['fhx','大腸癌／IBD 家族史','FHx CRC/IBD']],
+ pe:[['tend','下腹輕壓痛','mild lower abdominal tenderness'],['mass','腹部腫塊','abdominal mass']],
+ score(X){const ok=X.s('pain')===1&&['defec','freq','form'].filter(k=>X.s(k)===1).length>=2;if(X.s('pain')!==1)return null;return {t:`Rome IV ${ok?'符合':'未符合'}`,v:ok?1:0,adv:ok?'無警訊症狀可臨床診斷':'需要 ≥2 項：與排便有關、次數改變、型態改變'}},
+ dx:[{k:'ibsd',l:'腸躁症 腹瀉型',en:'IBS with diarrhea',icd:'K58.0',a:X=>X.s('d')===1&&X.s('c')!==1},{k:'ibsc',l:'腸躁症 便秘型',en:'IBS with constipation',icd:'K58.1',a:X=>X.s('c')===1&&X.s('d')!==1},{k:'ibsm',l:'腸躁症 混合型',en:'IBS, mixed',icd:'K58.2',a:X=>X.s('c')===1&&X.s('d')===1},{k:'ibs',l:'腸躁症',en:'IBS without diarrhea',icd:'K58.9',a:X=>!X.anyDx}],
+ med:[{k:'cat',l:'CAT1 Otilonium（腹痛）',rx:'CAT1 Catilon (otilonium) 40mg 1# TID AC',a:X=>X.s('pain')===1},
+  {k:'dic',l:'DIC1 Pinaverium（腹痛）',rx:'DIC1 Dicetel (pinaverium) 50mg 1# TID 隨餐',a:X=>false},
+  {k:'koc',l:'KOC1 Psyllium（便秘型）',rx:'KOC1 Kocel 1 pack QD 配足量水',a:X=>X.dx('ibsc')||X.dx('ibsm')},
+  {k:'mgo',l:'MGO1 MgO（便秘型）',rx:'MGO1 MgO 250mg 2# BID',a:X=>X.dx('ibsc')&&!(X.p.egfr<30)},
+  {k:'lop',l:'LOP2 Loperamide（腹瀉型 PRN）',rx:'LOP2 Lopedin 2mg 1# PRN loose stool（≤8#/day）',a:X=>X.dx('ibsd')},
+  {k:'kas',l:'KAS2 Simethicone（脹氣）',rx:'KAS2 Kascoal 40mg 2# TID PC',a:X=>X.s('bloat')===1}],
+ lab:[['cbc','CBC、CRP',X=>true],['tsh','TSH',X=>X.dx('ibsd')],['fit','FIT',X=>X.p.age>=50],['cfs','大腸鏡',X=>['bleed','wt','anemia','noct','age50','fhx'].some(k=>X.r(k)===1)]],
+ edu:X=>['腸躁症不是癌症；壓力與飲食會影響症狀。','試試低 FODMAP 飲食 4–6 週（少洋蔥、大蒜、豆類、奶類、代糖）。','規律運動、睡眠。'],
+ ret:'bloody stool, weight loss, night-time diarrhea, fever',refer:'胃腸科'},
+
+{id:'hemo',g:'dx',n:'痔瘡',en:'Hemorrhoids',days:7,rxd:7,bl:['age','preg','ckd'],
+ sel:[['grade','分級',['I 度：只出血','II 度：脫出會自行縮回','III 度：要用手推回','IV 度：推不回']]],
+ sx:[['bleed','鮮血在衛生紙或便後','bright red blood'],['prol','脫出','prolapse'],['pain','疼痛','pain'],['itch','肛門癢','pruritus'],['const','便秘、用力解','constipation/straining']],
+ rf:[['anemia','貧血','anemia'],['age45','≥45 歲未做過大腸鏡','age ≥45 without colonoscopy'],['bh','排便習慣改變','change in bowel habit'],['wt','體重減輕','weight loss'],['fhx','大腸癌家族史','FHx colorectal cancer']],
+ pe:[['ext','外痔皮垂','external skin tag'],['thromb','血栓性外痔','thrombosed external hemorrhoid'],['fiss','肛裂','anal fissure'],['dre','肛門指診','DRE done']],
+ dx:[{k:'hem',l:'痔瘡',en:'Hemorrhoids',icd:X=>['K64.0','K64.1','K64.2','K64.3'][X.v('grade')],a:X=>X.e('thromb')!==1},{k:'thr',l:'血栓性外痔',en:'Perianal venous thrombosis',icd:'K64.5',a:X=>X.e('thromb')===1},{k:'fis',l:'肛裂',en:'Anal fissure, unspecified',icd:'K60.2',a:X=>X.e('fiss')===1}],
+ med:[{k:'poso',l:'POSO 痔瘡塞劑',rx:'POSO Posuline supp 1 PR BID',a:X=>true},
+  {k:'daf',l:'DAF1 Daflon（急性期）',rx:'DAF1 Daflon 1000mg 1# TID x 4 days, then 1# BID x 3 days',fixed:1,a:X=>X.s('bleed')===1||X.s('pain')===1},
+  {k:'mgo',l:'MGO1 MgO 軟便',rx:'MGO1 MgO 250mg 2# BID',a:X=>!(X.p.egfr<30),w:X=>X.p.egfr<30?'eGFR <30 改 LACSC':''},
+  {k:'lac',l:'LACSC Lactulose',rx:'LACSC Lactul 15-30ml QD',a:X=>X.p.egfr<30||X.p.preg},
+  {k:'apap',l:'ACE6 Acetaminophen',rx:'ACE6 Acetaminophen 500mg 1# Q6H PRN',a:X=>X.s('pain')===1}],
+ lab:[['cbc','CBC',X=>X.r('anemia')===1],['cfs','大腸鏡',X=>['anemia','age45','bh','wt','fhx'].some(k=>X.r(k)===1)],['cr','大腸直腸外科（III–IV 度、血栓 <72 小時）',X=>X.v('grade')>=2||X.dx('thr')]],
+ edu:X=>['溫水坐浴每次 10 分鐘，一天 2–3 次。','多纖維多喝水；不要久蹲馬桶、不要滑手機。','出血不要都當成痔瘡：45 歲以上或有警訊要做大腸鏡。'],
+ ret:'heavy bleeding, severe pain, fever',refer:'大腸直腸外科'},
+
+{id:'masld',g:'dx',n:'脂肪肝（MASLD）',en:'MASLD',days:90,rxd:28,bl:['age','sex','dmh'],
+ num:[['ast','AST'],['alt','ALT'],['plt','血小板（10³/µL）']],
+ sx:[['obese','肥胖或腰圍過大','obesity/central adiposity'],['dm','糖尿病或前期','diabetes/prediabetes'],['htn','高血壓','hypertension'],['hld','血脂異常','dyslipidemia'],['alc','喝酒（男 ≥30、女 ≥20 g/天）','alcohol ≥30/20 g/day']],
+ rf:[['decomp','黃疸、腹水、出血','jaundice/ascites/bleeding'],['mass','超音波腫塊','liver mass on sono']],
+ pe:[['hep','肝腫大','hepatomegaly'],['stig','慢性肝病徵象','stigmata of chronic liver disease']],
+ score(X){const a=X.p.age,ast=X.n('ast'),alt=X.n('alt'),plt=X.n('plt');if(!(a>0&&ast>0&&alt>0&&plt>0))return {t:'FIB-4：請輸入年齡、AST、ALT、血小板',v:-1,adv:''};const f=Math.round(a*ast/(plt*Math.sqrt(alt))*100)/100;return {t:`FIB-4 ${f}`,v:f,adv:f<1.3?'<1.3：進展性纖維化風險低，1–3 年再評估':f<2.67?'1.3–2.67：中間，安排肝臟彈性檢查（FibroScan）':'≥2.67：高風險，轉胃腸肝膽科'}},
+ dx:[{k:'masld',l:'脂肪肝（MASLD）',en:'Fatty liver (MASLD)',icd:'K76.0',a:X=>X.s('alc')!==1},{k:'metald',l:'MetALD／酒精',en:'Alcoholic fatty liver',icd:'K70.0',a:X=>X.s('alc')===1},{k:'mash',l:'MASH',en:'MASH',icd:'K75.81',a:X=>false}],
+ med:[{k:'wt',l:'減重 7–10%（處方）',rx:'Weight loss 7-10%; Mediterranean diet; exercise 150-300 min/week',fixed:1,a:X=>true},
+  {k:'glp',l:'GLP-1／GIP（合併 DM 或肥胖）',rx:'Consider OZEA Ozempic / MOUC Mounjaro if T2DM or obesity（減重與肝臟獲益）',fixed:1,a:X=>X.s('dm')===1&&X.s('obese')===1},
+  {k:'pio',l:'ACT5 Pioglitazone（DM＋MASH）',rx:'ACT5 Actos (pioglitazone) 15mg 1# QD',a:X=>false,w:X=>'體重增加、水腫；心衰竭禁用'}],
+ lab:[['basic','AST/ALT、Plt、HbA1c、lipid',X=>true],['hep','HBsAg、anti-HCV',X=>true],['sono','腹部超音波',X=>true],['fs','FibroScan',X=>X.sc&&X.sc.v>=1.3]],
+ edu:X=>['減重 5% 肝脂肪下降，7–10% 發炎與纖維化可改善。','少含糖飲料、精緻澱粉；戒酒或少酒。'],
+ ret:'jaundice, abdominal swelling, black stool, vomiting blood',refer:'胃腸肝膽科'},
+
+{id:'hep',g:'dx',n:'B／C 型肝炎追蹤',en:'Chronic viral hepatitis follow-up',days:180,rxd:28,bl:['age','preg','ckd'],
+ sx:[['hbsag','HBsAg 陽性','HBsAg (+)'],['hbeag','HBeAg 陽性','HBeAg (+)'],['alt2','ALT >2 倍正常','ALT >2x ULN'],['hcv','anti-HCV 陽性','anti-HCV (+)'],['rna','HCV RNA 陽性','HCV RNA (+)'],['cirr','肝硬化','cirrhosis'],['fhx','肝癌家族史','FHx HCC'],['tx','正在用抗病毒藥','on antiviral therapy']],
+ rf:[['mass','超音波新腫塊','new liver mass'],['afp','AFP 上升','rising AFP'],['decomp','黃疸、腹水','jaundice/ascites']],
+ pe:[['jaun','黃疸','jaundice'],['stig','慢性肝病徵象','stigmata of chronic liver disease']],
+ dx:[{k:'hbv',l:'慢性 B 型肝炎',en:'Chronic viral hepatitis B',icd:'B18.1',a:X=>X.s('hbsag')===1&&(X.s('alt2')===1||X.s('tx')===1||X.s('hbeag')===1)},{k:'hbc',l:'B 肝帶原',en:'Carrier of viral hepatitis B',icd:'Z22.51',a:X=>X.s('hbsag')===1&&X.s('alt2')!==1&&X.s('tx')!==1&&X.s('hbeag')!==1},{k:'hcv',l:'慢性 C 型肝炎',en:'Chronic viral hepatitis C',icd:'B18.2',a:X=>X.s('hcv')===1||X.s('rna')===1},{k:'cir',l:'肝硬化',en:'Cirrhosis of liver, unspecified',icd:'K74.60',a:X=>X.s('cirr')===1}],
+ med:[{k:'bar',l:'BAR2 Entecavir（依健保 10.7）',rx:'BAR2 Baraclude (entecavir) 0.5mg 1# QD 空腹（健保條件待核對，必要時轉胃腸科）',a:X=>X.s('tx')===1&&X.dx('hbv'),w:X=>X.p.egfr<50?'eGFR <50 需調整間隔':''},
+  {k:'vem',l:'VEM2 Vemlidy（TAF）',rx:'VEM2 Vemlidy (tenofovir alafenamide) 25mg 1# QD 隨餐',a:X=>false,w:X=>'懷孕或腎功能不佳時的選擇；健保條件待核對'},
+  {k:'mav',l:'MAV1 Maviret（C 肝 DAA）',rx:'MAV1 Maviret 3# QD 隨餐 x 8 weeks（健保 DAA 申請；先查交互作用）',fixed:1,a:X=>X.s('rna')===1,w:X=>X.s('cirr')===1?'肝硬化：療程與評估依健保規定，考慮轉診':'與 statin、ethinylestradiol、carbamazepine 交互'}],
+ lab:[['hbv','ALT、HBeAg、HBV DNA',X=>X.s('hbsag')===1],['afp','AFP＋腹部超音波',X=>X.s('hbsag')===1||X.s('hcv')===1||X.s('cirr')===1],['rna','HCV RNA',X=>X.s('hcv')===1&&X.s('rna')!==1],['fib','FIB-4／FibroScan',X=>true]],
+ edu:X=>['B 肝帶原：每 6–12 個月抽血＋超音波（肝硬化每 6 個月）。','C 肝現在有全口服藥，8–12 週治癒率 >95%。','不要喝酒；家人篩檢 B、C 肝，沒抗體的打 B 肝疫苗。'],
+ ret:'jaundice, abdominal swelling, black stool, confusion',refer:'胃腸肝膽科'}
+
 ];
 
 /* ---------- 急性主訴：引擎 ---------- */
@@ -558,7 +721,8 @@ let CCS=[],ccSeq=0;
 function addCC(id){if(CCS.some(x=>x.c.id===id))return;const c=CC.find(x=>x.id===id);CCS.push({uid:++ccSeq,c,st:{sx:{},rf:{},pe:{},dx:{},med:{},lab:{}},dur:durIdx(c.days),rxd:c.rxd||3});}
 function ctx(inst,p){
  const st=inst.st;
- const X={p,s:k=>st.sx[k]||0,r:k=>st.rf[k]||0,e:k=>st.pe[k]||0,chronic:on,nChronic:MODS.filter(m=>on(m.k)).length,anyDx:true,sc:null};
+ st.sel=st.sel||{};st.num=st.num||{};
+ const X={p,s:k=>st.sx[k]||0,r:k=>st.rf[k]||0,e:k=>st.pe[k]||0,v:k=>st.sel[k]||0,n:k=>{const x=st.num[k];return x===undefined||x===''?NaN:+x},chronic:k=>k==='dm'?(on('dm')||p.dmh):on(k),nChronic:MODS.filter(m=>on(m.k)).length,anyDx:true,sc:null};
  X.sc=inst.c.score?inst.c.score(X):null;
  const man=st.dx;
  let sel=inst.c.dx.filter(d=>man[d.k]!==undefined?man[d.k]:d.a(X));
@@ -571,12 +735,30 @@ function ctx(inst,p){
 }
 const rxStr=(m,X,d)=>{let s=typeof m.rx==='function'?m.rx(X):m.rx;if(!m.fixed&&/\b(QD|BID|TID|QID|HS|Q\dH|Q6H|PRN)\b/.test(s)&&!/ x \d/.test(s))s+=` x ${d} days`;return s};
 function triHtml(g,arr,st,red){return arr.map(([k,zh])=>{const v=st[g][k]||0;return `<button type="button" class="tri${v===1?' pos':v===-1?' neg':''}${red?' rf':''}" data-g="${g}" data-k="${k}">${esc(zh)}</button>`}).join('')}
-function selHtml(g,items,selKeys,st,X){return items.map(it=>{const k=g==='lab'?it[0]:it.k,l=g==='lab'?it[1]:(g==='dx'?`${it.l} <small>${it.icd}</small>`:esc(it.l));const on_=selKeys.has(k),man=st[g][k]!==undefined;const w=g==='med'&&it.w?it.w(X):'';return `<button type="button" class="tg2${on_?' on':''}${on_&&!man?' auto':''}${w?' warn':''}" data-g="${g}" data-k="${k}" title="${esc(w)}">${g==='dx'?l:esc(g==='lab'?l:it.l)}${w?' ⚠':''}</button>`}).join('')}
-function cardHtml(inst,p){
+function selHtml(g,items,selKeys,st,X){return items.map(it=>{const k=g==='lab'?it[0]:it.k,l=g==='lab'?it[1]:(g==='dx'?`${it.l} <small>${icdOf(it,X)}</small>`:esc(it.l));const on_=selKeys.has(k),man=st[g][k]!==undefined;const w=g==='med'&&it.w?it.w(X):'';return `<button type="button" class="tg2${on_?' on':''}${on_&&!man?' auto':''}${w?' warn':''}" data-g="${g}" data-k="${k}" title="${esc(w)}">${g==='dx'?l:esc(g==='lab'?l:it.l)}${w?' ⚠':''}</button>`}).join('')}
+const icdOf=(d,X)=>typeof d.icd==='function'?d.icd(X):d.icd;
+const BL={age:['年齡','num','p_age','成人'],sex:['性別','sel','p_sex'],wt:['體重 kg','num','p_wt','—'],preg:['懷孕','chk','x_preg'],pcn:['PCN 過敏','chk','x_pcn'],nsaidx:['不宜 NSAID','chk','x_nsaidx'],cad:['冠心病／中風','chk','x_cad'],hfref:['心衰竭','chk','x_hfref'],immuno:['免疫低下','chk','x_immuno'],liver:['肝病','chk','x_liver'],dmh:['糖尿病','chk','x_dmh'],ckd:['CKD','ckd','p_egfr']};
+const CKDOPT=[['','eGFR ≥60（預設）'],['50','G3a 45–59'],['37','G3b 30–44'],['22','G4 15–29'],['10','G5 <15']];
+function blHtml(keys){
+ const ks=['age','sex','preg','ckd','pcn'].filter(k=>(keys||[]).includes(k)).concat((keys||[]).filter(k=>!['age','sex','preg','ckd','pcn'].includes(k)));
+ return ks.map(k=>{const [l,t,src,def]=BL[k];const el=$(src);
+  if(t==='num')return `<label class="blf">${l}<input data-blnum="${src}" type="number" inputmode="decimal" value="${esc(el.value)}" placeholder="${def}"></label>`;
+  if(t==='sel')return `<label class="blf">${l}<select data-blsel="${src}"><option value="M"${el.value==='M'?' selected':''}>男</option><option value="F"${el.value==='F'?' selected':''}>女</option></select></label>`;
+  if(t==='ckd'){const v=el.value;const opts=CKDOPT.some(o=>o[0]===v)?CKDOPT:[[v,`eGFR ${v}（${gstage(+v)}）`]].concat(CKDOPT);return `<label class="blf">${l}<select data-blsel="${src}">${opts.map(o=>`<option value="${o[0]}"${o[0]===v?' selected':''}>${o[1]}</option>`).join('')}</select></label>`}
+  const on_=el.checked;return `<button type="button" class="tg2 blb${on_?' on':''}" data-bl="${src}">${l}：${on_?'是':'否'}</button>`}).join('');
+}
+function optHtml(c,st){
+ const a=(c.sel||[]).map(([k,l,opts])=>`<label class="blf">${l}<select data-osel="${k}">${opts.map((o,i)=>`<option value="${i}"${(st.sel[k]||0)===i?' selected':''}>${esc(o)}</option>`).join('')}</select></label>`);
+ const b=(c.num||[]).map(([k,l])=>`<label class="blf">${l}<input data-onum="${k}" type="number" inputmode="decimal" value="${st.num[k]===undefined?'':esc(st.num[k])}"></label>`);
+ return a.concat(b).join('');
+}
+function cardHtml(inst,p,solo){
  const c=inst.c,st=inst.st,X=ctx(inst,p);
  const rfOn=c.rf.filter(([k])=>st.rf[k]===1);
  const medW=X.medSel.map(m=>m.w?m.w(X):'').filter(Boolean);
- return `<summary>${esc(c.n)}<span class="ccx" data-rm="${inst.uid}" title="移除">✕</span></summary>
+ return `${solo?'':`<summary>${esc(c.n)}<span class="ccx" data-rm="${inst.uid}" title="移除">✕</span></summary>`}
+ ${c.bl&&c.bl.length?`<div class="sm">病人基本資料（沒填就用預設）</div><div class="blrow">${blHtml(c.bl)}</div>`:''}
+ ${(c.sel||c.num)?`<div class="sm">選項</div><div class="blrow">${optHtml(c,st)}</div>`:''}
  <div class="ccrow"><label class="fld inl"><span>病程</span><select data-dur="${inst.uid}">${DUR.map((d,i)=>`<option value="${i}"${i===inst.dur?' selected':''}>${d[0]}</option>`).join('')}</select></label>
  <label class="fld inl"><span>藥開幾天</span><select data-rxd="${inst.uid}">${[1,2,3,5,7,14].map(d=>`<option${d===inst.rxd?' selected':''}>${d}</option>`).join('')}</select></label></div>
  <div class="sm">症狀　<b class="kpos">點一下＝有</b>　<b class="kneg">右鍵或長按＝沒有</b>　不點＝不寫</div><div class="tgs">${triHtml('sx',c.sx,st)}</div>
@@ -604,13 +786,13 @@ function evalCC(inst,p){
  const dn=neg.concat(rneg);if(dn.length)pi.push('Denied '+dn.map(x=>x[2]).join(', ')+'.');
  S.push(`[${c.en}] ${pi.join(' ')||'[ ]'}`);
  const pe=c.pe.filter(([k])=>st.pe[k]).map(([k,,en])=>`${en} (${st.pe[k]===1?'+':'−'})`);
- const A=X.dxSel.map((d,i)=>`${d.en} (${d.icd})${i===0&&X.sc?`; ${X.sc.t}`:''}`);
- const rx=X.medSel.map(m=>rxStr(m,X,inst.rxd));
+ const A=X.dxSel.map((d,i)=>`${d.en} (${icdOf(d,X)})${i===0&&X.sc?`; ${X.sc.t}`:''}`);
+ const rx=X.medSel.map(m=>{let r=rxStr(m,X,inst.rxd);if(p.liver&&/Acetaminophen/.test(r))r+='（肝病 ≤2 g/day）';return r});
  const P=[`${c.n}${X.dxSel.length?'（'+X.dxSel.map(d=>d.l).join('、')+'）':''}：`];
  rx.forEach(r=>P.push('  '+r));
  if(X.labSel.length)P.push('  Lab/Exam: '+X.labSel.map(l=>l[1]).join(', ')+'.');
  if(rpos.length)P.push(`  Red flag (+) → refer ${c.refer}.`);
- if(X.sc)P.push(`  ${X.sc.t}: ${X.sc.adv}.`);
+ if(X.sc&&X.sc.adv)P.push(`  ${X.sc.t}: ${X.sc.adv}.`);
  P.push('  Return if '+c.ret+'.');
  const warn=X.medSel.map(m=>m.w?`${m.l}：${m.w(X)}`:'').filter(x=>!/：$/.test(x));
  rpos.forEach(r=>warn.unshift(`${c.n} 紅旗：${r[1]} → 轉${c.refer}`));
@@ -648,7 +830,7 @@ G.innerHTML=`
 <div class="sm">*極高風險條件：CAD 合併一年內 MI、≥2 次 MI、多支阻塞、ACS 合併 DM、PAD 或頸動脈狹窄（健保表一）</div>
 </details>
 <div class="sm" style="margin:12px 2px 6px">主訴／急性問題（可加多個）</div>
-<div class="tgs" id="ccAdd">${CC.map(c=>`<button type="button" class="tg2 add" data-add="${c.id}">＋${esc(c.n)}</button>`).join('')}</div>
+<div class="tgs" id="ccAdd"><span class="sm">症狀：</span>${CC.filter(c=>c.g!=='dx').map(c=>`<button type="button" class="tg2 add" data-add="${c.id}">＋${esc(c.n)}</button>`).join('')}<span class="sm" style="margin-left:4px">診斷：</span>${CC.filter(c=>c.g==='dx').map(c=>`<button type="button" class="tg2 add" data-add="${c.id}">＋${esc(c.n)}</button>`).join('')}</div>
 <div id="ccList"></div>
 <div class="sm" style="margin:12px 2px 6px">這次要處理的慢性病（可複選）</div>
 <div class="tgs mods">${MODS.map(m=>`<label class="tg mod" style="--mc:${m.c}"><input type="checkbox" data-mod="${m.k}"><span>${m.n}</span></label>`).join('')}</div>
@@ -1056,22 +1238,74 @@ function build(){
  handout(order,p,res,order.length?fu:1,grp[fu]||[],goals,AC);
 }
 
-/* complaint card events: click = 有, right-click or long-press = 沒有 */
+/* complaint / template card events: click = 有, right-click or long-press = 沒有 */
 let lp=null,lpAt=0;const recent=()=>Date.now()-lpAt<900;
-function triSet(el,v){const inst=CCS.find(x=>x.uid==el.closest('[data-uid]').dataset.uid);const g=el.dataset.g,k=el.dataset.k;const cur=inst.st[g][k]||0;inst.st[g][k]=cur===v?0:v;if(!inst.st[g][k])delete inst.st[g][k];build();}
-G.addEventListener('pointerdown',e=>{const t=e.target.closest('.tri');if(!t)return;clearTimeout(lp);lp=setTimeout(()=>{lpAt=Date.now();if(navigator.vibrate)try{navigator.vibrate(15)}catch(_){};triSet(t,-1)},450)});
-['pointerup','pointerleave','pointercancel'].forEach(ev=>G.addEventListener(ev,()=>clearTimeout(lp)));
-G.addEventListener('contextmenu',e=>{const t=e.target.closest('.tri');if(!t)return;e.preventDefault();clearTimeout(lp);if(recent())return;triSet(t,-1)});
-G.addEventListener('click',e=>{
- const t=e.target.closest('.tri,.tg2,[data-rm]');if(!t)return;
- if(t.dataset.rm){e.preventDefault();CCS=CCS.filter(x=>x.uid!=t.dataset.rm);build();return}
+let TPLI={};
+const findInst=uid=>CCS.find(x=>String(x.uid)===String(uid))||Object.values(TPLI).find(x=>x.uid===uid);
+const instOf=el=>{const h=el.closest('[data-uid]');return h?findInst(h.dataset.uid):null};
+function refresh(inst){if(inst&&inst.tpl)renderTpl(inst);else build();}
+function refreshAll(){build();Object.values(TPLI).forEach(renderTpl);}
+function triSet(el,v){const inst=instOf(el);if(!inst)return;const g=el.dataset.g,k=el.dataset.k;const cur=inst.st[g][k]||0;inst.st[g][k]=cur===v?0:v;if(!inst.st[g][k])delete inst.st[g][k];refresh(inst);}
+const inCards=t=>t.closest&&t.closest('#gen,.tplcc');
+document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('.tri');if(!t||!inCards(t))return;clearTimeout(lp);lp=setTimeout(()=>{lpAt=Date.now();if(navigator.vibrate)try{navigator.vibrate(15)}catch(_){};triSet(t,-1)},450)});
+['pointerup','pointerleave','pointercancel'].forEach(ev=>document.addEventListener(ev,()=>clearTimeout(lp)));
+document.addEventListener('contextmenu',e=>{const t=e.target.closest&&e.target.closest('.tri');if(!t||!inCards(t))return;e.preventDefault();clearTimeout(lp);if(recent())return;triSet(t,-1)});
+document.addEventListener('click',e=>{
+ const t=e.target.closest&&e.target.closest('.tri,.tg2,[data-rm],[data-tpladd],[data-tplmod]');if(!t||!inCards(t))return;
+ if(t.dataset.rm){e.preventDefault();CCS=CCS.filter(x=>String(x.uid)!==t.dataset.rm);build();return}
+ if(t.dataset.bl){const el=$(t.dataset.bl);el.checked=!el.checked;refreshAll();return}
+ if(t.dataset.tpladd){const src=TPLI[t.dataset.tpladd];if(!CCS.some(x=>x.c.id===src.c.id))CCS.push({uid:++ccSeq,c:src.c,st:JSON.parse(JSON.stringify(src.st)),dur:src.dur,rxd:src.rxd});build();if(window.__view)window.__view('gen');window.scrollTo(0,0);return}
+ if(t.dataset.tplmod){const cb=document.querySelector(`[data-mod="${t.dataset.tplmod}"]`);cb.checked=true;build();if(window.__view)window.__view('gen');const m=$('m_'+t.dataset.tplmod);if(m)m.scrollIntoView();return}
  if(t.classList.contains('tri')){if(recent())return;triSet(t,1);return}
  if(t.dataset.add){const id=t.dataset.add;if(CCS.some(x=>x.c.id===id))CCS=CCS.filter(x=>x.c.id!==id);else addCC(id);build();return}
- if(t.dataset.g){const inst=CCS.find(x=>x.uid==t.closest('[data-uid]').dataset.uid);const g=t.dataset.g,k=t.dataset.k;const on_=t.classList.contains('on');inst.st[g][k]=!on_;build();}
+ if(t.dataset.g){const inst=instOf(t);if(!inst)return;const g=t.dataset.g,k=t.dataset.k;const on_=t.classList.contains('on');inst.st[g][k]=!on_;refresh(inst);}
 });
-['input','change'].forEach(ev=>G.addEventListener(ev,e=>{const t=e.target;if(t.dataset.dur||t.dataset.rxd){const inst=CCS.find(x=>x.uid==(t.dataset.dur||t.dataset.rxd));if(t.dataset.dur)inst.dur=+t.value;else inst.rxd=+t.value;}}));
-G.addEventListener('input',e=>{if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
-G.addEventListener('change',e=>{if(e.target.id==='gout'||e.target.id==='gslip')return;build()});
+document.addEventListener('input',e=>{const t=e.target;if(!inCards(t))return;if(t.dataset.dur||t.dataset.rxd){const inst=instOf(t);if(t.dataset.dur)inst.dur=+t.value;else inst.rxd=+t.value;}});
+document.addEventListener('change',e=>{const t=e.target;if(!inCards(t))return;
+ if(t.dataset.blnum||t.dataset.blsel){$(t.dataset.blnum||t.dataset.blsel).value=t.value;refreshAll();return}
+ const inst=instOf(t);if(!inst)return;
+ if(t.dataset.osel){inst.st.sel[t.dataset.osel]=+t.value;refresh(inst);return}
+ if(t.dataset.onum){inst.st.num[t.dataset.onum]=t.value;refresh(inst);return}
+ if(t.dataset.dur||t.dataset.rxd){if(t.dataset.dur)inst.dur=+t.value;else inst.rxd=+t.value;refresh(inst);}
+});
+/* 模板查詢：互動卡 */
+const TMAP={1:['resp',['uri']],2:['resp',['phar']],3:['resp',['bronch']],4:['resp',['flu']],5:['resp',['covid']],6:['resp',['sinus']],7:['ar',[]],8:['asthma',[]],9:['copd',[]],10:['ear',['aom']],11:['ear',['oe']],12:['ccough',[]],13:['age',[]],14:['abd',['gerd']],15:['abd',['dysp']],16:['const',[]],17:['ibs',[]],18:['hemo',[]],19:['masld',[]],20:['hep',[]],21:{mod:'htn',n:'高血壓'},22:{mod:'dm',n:'糖尿病'},23:{mod:'lip',n:'血脂'},24:['joint',['gout']],25:{mod:'wt',n:'減重'},26:{mod:'ckd',n:'CKD'},101:['cp',[]],102:['fever',[]],103:['ha',[]],104:['dizzy',[]],105:['abd',[]],106:['dysp',[]],107:['palp',[]],108:['uti',[]],109:['edema',[]],110:['fatigue',[]],111:['lbp',[]],112:['joint',[]]};
+function soloSOAP(inst){
+ const p=pt(),r=evalCC(inst,p),c=inst.c;
+ const pmh=[];const bl=c.bl||[];
+ if(has(p.age))pmh.push(`Age ${p.age}${p.sex}`);
+ if(bl.includes('preg')&&(p.sex==='F'||p.preg))pmh.push(`Pregnancy ${p.preg?'(+)':'(−)'}`);
+ if(bl.includes('ckd'))pmh.push(has(p.egfr)?`CKD ${gstage(p.egfr)} (eGFR ${p.egfr})`:'eGFR ≥60 [default]');
+ [['dmh','DM'],['cad','CAD/stroke'],['hfref','heart failure'],['liver','liver disease'],['immuno','immunocompromised']].forEach(([k,l])=>{if(bl.includes(k)&&p[k])pmh.push(l)});
+ const allergy=[p.pcn?'penicillin':'',p.nsaidx?'NSAID':''].filter(Boolean);
+ const L=[`S: CC: ${r.cc}.`];r.S.forEach(x=>L.push('   '+x));
+ L.push(`   PMH: ${pmh.length?pmh.join(', '):'[ ]'}. Allergy: ${allergy.length?allergy.join(', '):'[NKDA]'}.`);
+ L.push(`O: BT ${B(p.bt)}°C, BP ${B(p.sbp)}/${B(p.dbp)} mmHg, HR ${B(p.hr)}/min, RR ${B(p.rr)}/min, SpO2 ${B(p.spo2)}%.`);
+ L.push('   PE: '+(r.pe.length?r.pe.join(', '):'[只寫實際有做的項目]')+'.');
+ L.push('A:');r.A.forEach((x,i)=>L.push(`   ${i+1}. ${x}`));
+ L.push('P:');r.P.slice(1).forEach(x=>L.push('   '+x.trim()));
+ if(r.edu.length)L.push('   Education: '+r.edu.join(' '));
+ L.push('   F/U OPD PRN or in [ ] days.');
+ return {txt:L.join('\n'),warn:r.warn};
+}
+function renderTpl(inst){
+ const box=document.querySelector(`.tplcc[data-n="${inst.n}"]`);if(!box)return;
+ const out=soloSOAP(inst);const id='tplout-'+inst.n;const prev=$(id);
+ box.innerHTML=`<div class="tplcard" data-uid="${inst.uid}">${cardHtml(inst,pt(),true)}</div>
+ ${out.warn.length?'<ul class="wl">'+[...new Set(out.warn)].map(w=>'<li>'+esc(w)+'</li>').join('')+'</ul>':''}
+ <div class="sm">產生的 SOAP（可再手改）</div><textarea id="${id}" rows="${Math.min(24,out.txt.split('\n').length+2)}" spellcheck="false">${esc(out.txt)}</textarea>
+ <div class="btns"><button class="b" data-copy="${id}">複製 SOAP</button><button class="b o" data-tpladd="${inst.n}">加入 SOAP 產生器（合併其他主訴與慢性病）</button></div>`;
+}
+function mountTpl(box){
+ const n=+box.dataset.n,m=TMAP[n];box.dataset.m='1';
+ if(!m){box.remove();return}
+ if(!Array.isArray(m)){box.innerHTML=`<div class="notice">這個病用「慢性病 SOAP 產生器」：依病人數值自動算處方、回診抽血與目標，也能和主訴合併。</div><div class="btns"><button class="b" data-tplmod="${m.mod}">到產生器並勾選${esc(m.n)}</button></div>`;return}
+ if(!TPLI[n]){const c=CC.find(x=>x.id===m[0]);const st={sx:{},rf:{},pe:{},dx:{},med:{},lab:{},sel:{},num:{}};m[1].forEach(k=>st.dx[k]=true);TPLI[n]={uid:'t'+n,n,tpl:true,c,st,dur:durIdx(c.days),rxd:c.rxd||3};}
+ renderTpl(TPLI[n]);
+}
+document.addEventListener('toggle',e=>{const d=e.target;if(d.matches&&d.matches('details.card')&&d.open){const b=d.querySelector('.tplcc');if(b&&!b.dataset.m)mountTpl(b)}},true);
+G.addEventListener('input',e=>{if(e.target.closest('#ccList'))return;if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
+G.addEventListener('change',e=>{if(e.target.closest('#ccList'))return;if(e.target.id==='gout'||e.target.id==='gslip')return;build();Object.values(TPLI).forEach(renderTpl)});
 $('gregen').addEventListener('click',build);
 $('gclear').addEventListener('click',()=>{CCS=[];G.querySelectorAll('input').forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''});G.querySelectorAll('select').forEach(s=>s.selectedIndex=0);fillWt();build()});
 // base PE
@@ -1105,6 +1339,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const host=document.getElementById('genHandout');const part=[...document.querySelectorAll('main .ck-part')].find(x=>/衛教單張/.test(x.textContent));
  if(host&&part){const g=document.getElementById(part.getAttribute('aria-controls'));host.append(part);if(g)host.append(g);}
  build();
+ document.querySelectorAll('details.card[open] .tplcc').forEach(b=>{if(!b.dataset.m)mountTpl(b)});
 });
 window.__gen={build,pt,HTN,DM,LIP,CKD,WTM,SMK};
 })();
