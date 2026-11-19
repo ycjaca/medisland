@@ -134,13 +134,21 @@ details.ccblk{border-left:5px solid #7a5af0}details.ccblk>summary{color:#5a3d99;
 .fuadd{display:flex;gap:6px;margin:6px 0}.fuadd input{flex:1;min-width:0;font:inherit;font-size:14px;padding:5px 8px;border:1px solid var(--line);border-radius:7px}.fuadd select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:7px}
 .chrow{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
 .rst{margin-left:auto;font:inherit;font-size:13px;font-weight:500;border:1px solid #b3261e;color:#b3261e;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer}.rst.arm{background:#b3261e;color:#fff}
+
+.tg2.last::before{content:"上次";font-size:10.5px;background:#5d6258;color:#fff;border-radius:6px;padding:0 5px;margin-right:5px;vertical-align:1px}
+.lastinfo{background:#f1efe8;border-radius:8px;padding:6px 10px;font-size:13.5px;margin:4px 0 8px}
+.b.sm2{font-size:12.5px;padding:3px 9px;margin-left:6px}
+.prevcc{background:#fff;border:1px solid var(--line);border-left:4px solid #5d6258;border-radius:8px;padding:6px 10px;margin:6px 0}
+ul.ycjs{font-size:13.5px;margin:6px 0;padding-left:18px}
+#ycjIn{font-family:"IBM Plex Mono",monospace}
+input::placeholder{color:#a9a294}
 footer{font-size:12.5px;color:var(--mute);border-top:1px solid var(--line);padding-top:10px;margin-top:20px}
 footer a{color:var(--acc)}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-  <h1>門診速查 <small>v0.6 · 2026-11-19</small><button type="button" id="resetAll" class="rst">全部還原（換病人）</button></h1>
+  <h1>門診速查 <small>v0.7 · 2026-11-19</small><button type="button" id="resetAll" class="rst">全部還原（換病人）</button></h1>
   <div class="tabs"><button class="tab" data-tab="gen">慢性病 SOAP 產生器</button><button class="tab" data-tab="tpl">模板查詢</button><button class="tab" data-tab="drug">院內藥品</button></div>
   <div class="drugonly"><input id="dq" type="search" placeholder="代碼、商品名、學名、類別，例如 NAP2、naproxen、PPI…" autocomplete="off"></div>
   <div class="tplonly">
@@ -283,7 +291,7 @@ window.addEventListener('hashchange',fromHash);fromHash();
 const G=document.getElementById('gen');
 const MODS=[
  {k:'htn',n:'高血壓',c:'#b5432c'},{k:'dm',n:'糖尿病',c:'#2c6fb5'},{k:'lip',n:'血脂',c:'#1d6b72'},
- {k:'ckd',n:'CKD',c:'#7a5a2c'},{k:'wt',n:'減重針',c:'#8a3d8f'},{k:'smk',n:'戒菸',c:'#3d7a5a'}];
+ {k:'ckd',n:'CKD',c:'#7a5a2c'},{k:'wt',n:'減重針',c:'#8a3d8f'},{k:'smk',n:'戒菸',c:'#3d7a5a'},{k:'trk',n:'其他追蹤',c:'#5d6258'}];
 const COMORB=[
  ['cad','冠心病 CAD'],['cadx','極高風險條件*'],['stroke','缺血性中風／TIA'],['pad','周邊動脈疾病'],['plaque','影像 ≥50% 狹窄'],
  ['hfref','HFrEF'],['af','心房顫動'],['gout','痛風'],['fhx','早發冠心病家族史'],['cac','CAC ≥400'],
@@ -310,7 +318,8 @@ const F={ // module fields
   ['s_stage','sel','這次是',['初診','回診：單一藥 ≥2 週仍有戒斷','上次療程失敗：用過 varenicline','上次療程失敗：用過尼古丁或 bupropion','已戒 8 週，鞏固']],
   ['s_pref','sel','病人偏好',['Varenicline','尼古丁替代','Bupropion']],
   ['s_cur','sel','目前藥物（回診用）',['Varenicline','尼古丁貼片','尼古丁短效','Bupropion']],
-  ['s_bc','chk','Bupropion 禁忌（癲癇、飲食疾患、停酒或 benzo、MAOI、tamoxifen）'],['s_dent','chk','假牙或顳顎關節問題']]
+  ['s_bc','chk','Bupropion 禁忌（癲癇、飲食疾患、停酒或 benzo、MAOI、tamoxifen）'],['s_dent','chk','假牙或顳顎關節問題']],
+ trk:[['t_alt','num','ALT'],['t_ast','num','AST'],['t_hb','num','Hb'],['t_plt','num','Plt (10³/µL)'],['t_wbc','num','WBC'],['t_fer','num','Ferritin'],['t_tsh','num','TSH'],['t_ft4','num','Free T4'],['t_ua','num','Uric acid'],['t_cr','num','Cr'],['t_ca','num','Ca'],['t_a1c','num','HbA1c (%)'],['t_psa','num','PSA'],['t_vd','num','Vit D'],['t_b12','num','B12'],['t_crp','num','CRP'],['t_afp','num','AFP'],['t_cea','num','CEA']]
 };
 const PE={
  base:['General: alert, not ill-looking'],
@@ -319,7 +328,8 @@ const PE={
  lip:['Xanthoma: (-)','Corneal arcus: (-)'],
  ckd:['Pitting edema: (-)','Pallor: (-)'],
  wt:['Waist measured','Acanthosis nigricans: (-)','Thyroid: no nodule'],
- smk:['Oral mucosa: no leukoplakia','Lungs: clear','Exhaled CO: ___ ppm']
+ smk:['Oral mucosa: no leukoplakia','Lungs: clear','Exhaled CO: ___ ppm'],
+ trk:['Thyroid: no nodule','Abdomen: soft, no hepatomegaly','Pallor: (-)','Lymph nodes: not enlarged']
 };
 const WT={
  'MOUC Mounjaro（tirzepatide）':{u:'mg SC qw',d:[2.5,5,7.5,10,12.5,15],min:4},
@@ -834,6 +844,7 @@ function fieldHtml(f){
 }
 function peHtml(k){return `<div class="pe"><div class="sm">理學檢查（只勾有做的，才會寫進 O）</div>${PE[k].map((p,i)=>`<label class="tg pe1"><input type="checkbox" data-pe="${k}" value="${esc(p)}"><span>${esc(p)}</span></label>`).join('')}</div>`}
 G.innerHTML=`
+<details class="blk" id="ycjBox"><summary>帶入 YCJ 編碼（回診）</summary><div class="fuadd"><input id="ycjIn" type="text" placeholder="貼上上次 SOAP 裡的 YCJ1-…" autocomplete="off" spellcheck="false"><button type="button" class="b" id="ycjGo">解析</button></div><div id="ycjPrev"></div></details>
 <details class="blk" open><summary>病人</summary><div class="grid">
  <label class="fld"><span>就診</span><select id="p_visit"><option value="0">回診</option><option value="1">初診</option></select></label>
  <label class="fld"><span>年齡</span><input id="p_age" type="number" inputmode="numeric"></label>
@@ -857,7 +868,7 @@ G.innerHTML=`
 <div class="tgs">${COMORB.map(([k,l])=>`<label class="tg"><input id="x_${k}" type="checkbox"><span>${l}</span></label>`).join('')}</div>
 <div class="sm">*極高風險條件：CAD 合併一年內 MI、≥2 次 MI、多支阻塞、ACS 合併 DM、PAD 或頸動脈狹窄（健保表一）</div>
 </details>
-<div class="sm" style="margin:12px 2px 6px">主訴／急性問題（可加多個）</div>
+<div id="prevBox"></div><div class="sm" style="margin:12px 2px 6px">主訴／急性問題（可加多個）</div>
 <div class="tgs" id="ccAdd"><span class="sm">症狀：</span>${CC.filter(c=>c.g!=='dx').map(c=>`<button type="button" class="tg2 add" data-add="${c.id}">＋${esc(c.n)}</button>`).join('')}<span class="sm" style="margin-left:4px">診斷：</span>${CC.filter(c=>c.g==='dx').map(c=>`<button type="button" class="tg2 add" data-add="${c.id}">＋${esc(c.n)}</button>`).join('')}</div>
 <div id="ccList"></div>
 <div class="sm" style="margin:12px 2px 6px">這次要處理的慢性病（可複選）</div>
@@ -876,7 +887,12 @@ fillWt();
 $('w_drug').addEventListener('change',fillWt);
 window.fillWtHook=v=>{fillWt();$('w_dose').value=v||0};
 
-const n=id=>{const e=$(id);if(!e)return NaN;const v=parseFloat(e.value);return isNaN(v)?NaN:v};
+let PREV={},PREVD='';
+const n=id=>{const e=$(id);if(!e)return NaN;const v=parseFloat(e.value);if(!isNaN(v))return v;return PREV[id]!==undefined?PREV[id]:NaN};
+const pv=(id,u)=>{const e=$(id);const c=e?parseFloat(e.value):NaN,pr=PREV[id];u=u||'';if(!isNaN(c)&&pr!==undefined)return `${c}${u} (prev ${pr}${u})`;if(!isNaN(c))return `${c}${u}`;if(pr!==undefined)return `${pr}${u} (prev ${PREVD}, no new data)`;return '___'};
+const pv2=(a,b,u)=>{const ea=$(a),eb=$(b);const ca=parseFloat(ea.value),cb=parseFloat(eb.value),pa=PREV[a],pb=PREV[b];const cur=!isNaN(ca)||!isNaN(cb),pre=pa!==undefined||pb!==undefined;const f=(x,y)=>`${x===undefined||isNaN(x)?'___':x}/${y===undefined||isNaN(y)?'___':y}`;if(cur&&pre)return `${f(ca,cb)}${u} (prev ${f(pa,pb)})`;if(cur)return f(ca,cb)+u;if(pre)return `${f(pa,pb)}${u} (prev ${PREVD})`;return '___/___'+u};
+function setPrev(id,v){PREV[id]=v;const e=$(id);if(e)e.placeholder='上次 '+v;}
+function clearPrev(){Object.keys(PREV).forEach(id=>{const e=$(id);if(e)e.placeholder=''});PREV={};PREVD='';}
 const sel=id=>+$(id).value;
 const ck=id=>$(id)&&$(id).checked;
 const has=v=>!isNaN(v);
@@ -904,7 +920,7 @@ const lab=(r,item,wk)=>r.labs.push([item,wk]);
 function HTN(p){
  const r=R(),s=n('h_sbp'),d=n('h_dbp');let step=sel('h_step');
  const tgt=[130,80];
- r.S.push(`HTN: HBPM 722 avg ${B(s)}/${B(d)} mmHg. Adherence ${ck('h_adh')?'poor':'[good]'}. ${ck('h_sx')?'Complains of [headache/chest pain/dyspnea/blurred vision].':'Denied headache, chest pain, dyspnea.'}${ck('h_edema')?' Ankle edema (+).':''}`);
+ r.S.push(`HTN: HBPM 722 avg ${pv2('h_sbp','h_dbp',' mmHg')}. Adherence ${ck('h_adh')?'poor':'[good]'}. ${ck('h_sx')?'Complains of [headache/chest pain/dyspnea/blurred vision].':'Denied headache, chest pain, dyspnea.'}${ck('h_edema')?' Ankle edema (+).':''}`);
  if(ck('h_sx'))r.warn.push('高血壓合併症狀：先排除急性器官傷害（胸痛、神經學症狀、喘、視力），需要時轉急診。');
  const dx=p.hfref?'Hypertensive heart disease with HF (I11.0) + I50.2_':(p.ckd&&on('ckd')?`Hypertensive CKD (${has(p.egfr)&&p.egfr<15?'I12.0':'I12.9'}) + ${ncode(p)}`:'Essential hypertension (I10)');
  const known=has(s)&&has(d);
@@ -965,7 +981,7 @@ function DM(p){
  const r=R(),a=n('d_a1c'),lvl=sel('d_lvl');
  const tgt=(p.old||p.frail)?8:7;
  const eg=p.egfr;
- r.S.push(`DM: SMBG fasting ${B(n('d_fpg'))} mg/dL. Hypoglycemia ${ck('d_hypo')?'(+) [frequency/severity]':'denied'}. ${ck('d_sym')?'Polyuria/polydipsia/wt loss (+). ':''}Adherence ${ck('d_adh')?'poor':'[good]'}.`);
+ r.S.push(`DM: SMBG fasting ${pv('d_fpg',' mg/dL')}. Hypoglycemia ${ck('d_hypo')?'(+) [frequency/severity]':'denied'}. ${ck('d_sym')?'Polyuria/polydipsia/wt loss (+). ':''}Adherence ${ck('d_adh')?'poor':'[good]'}.`);
  const atT=has(a)&&a<tgt;
  let code=p.ckd&&on('ckd')?`Type 2 DM with diabetic CKD (E11.22) + ${ncode(p)}`:(has(a)&&!atT?'Type 2 DM with hyperglycemia (E11.65)':'Type 2 DM without complication (E11.9)');
  r.A.push(`${code}, HbA1c ${B(a)}% (target <${tgt}%)`);
@@ -1199,6 +1215,184 @@ function SMK(p){
  r.v={ftnd:ft};
  return r;
 }
+
+/* ---------- 其他追蹤 ---------- */
+const TRKI=[['t_alt','ALT'],['t_ast','AST'],['t_hb','Hb'],['t_plt','Plt'],['t_wbc','WBC'],['t_fer','Ferritin'],['t_tsh','TSH'],['t_ft4','FT4'],['t_ua','Uric acid'],['t_cr','Cr'],['t_ca','Ca'],['t_a1c','HbA1c'],['t_psa','PSA'],['t_vd','25-OH Vit D'],['t_b12','Vit B12'],['t_crp','CRP'],['t_afp','AFP'],['t_cea','CEA']];
+function TRK(p){
+ const r=R();const v=TRKI.map(([id,nm])=>[id,nm,n(id)]).filter(x=>has(x[2]));
+ const hb=n('t_hb'),codes=[];
+ if(n('t_alt')>40||n('t_ast')>40)codes.push('R74.01');
+ if(has(hb)&&hb<(p.sex==='F'?12:13))codes.push('D64.9');
+ if(n('t_fer')<30)codes.push('E61.1');
+ if(n('t_tsh')>4.5||n('t_tsh')<0.4)codes.push('R94.6');
+ if(n('t_ua')>7)codes.push('E79.0');
+ if(n('t_psa')>4)codes.push('R97.20');
+ if(n('t_vd')<20)codes.push('E55.9');
+ if(n('t_b12')<200)codes.push('E53.8');
+ if(n('t_a1c')>=5.7&&n('t_a1c')<6.5)codes.push('R73.03');
+ r.A.push(codes.join(' ')||'Z09');
+ r.info=v.length?v.map(([id,nm])=>nm+' '+pv(id)).join(', '):'追蹤項目 [ ]';
+ r.S.push('Other F/U: '+(v.length?v.map(([id,nm])=>nm+' '+pv(id)).join(', '):'[ ]')+'.');
+ r.P.push('Other F/U（其他追蹤）：');
+ v.forEach(([id,nm])=>lab(r,nm,12));
+ r.fu=v.length?12:26;
+ r.edu.push('報告異常的項目會定期追蹤；有新的症狀提早回診。');
+ return r;
+}
+/* ---------- YCJ 診斷編碼 ----------
+   格式：YCJ1-<Crockford Base32 內容>（每 4 字一組）<3 字檢查碼>
+   內容（位元組）：varint 版本、varint 看診日（2020-01-01 起算天數），之後是區塊：
+     [type][count] + 項目；type 1＝(id, 值)、type 2＝(id)、type 3＝(範圍 id, 藥品 id, 字串雜湊)
+   id：先查登記表（YCJREG，只加不改）；登記表沒有的 key 用 2^20＋FNV 雜湊（20 bit），新選項不用改登記表也能編碼。
+   解碼時不認得的 id 依區塊型別跳過，所以舊編碼在新版、新編碼在舊版都讀得了。 */
+const YCJREG={"f:p_visit": 1, "f:p_age": 2, "f:p_sex": 3, "f:p_ht": 4, "f:p_wt": 5, "f:p_waist": 6, "f:p_sbp": 7, "f:p_dbp": 8, "f:p_hr": 9, "f:p_bt": 10, "f:p_rr": 11, "f:p_spo2": 12, "f:p_egfr": 13, "f:p_uacr": 14, "f:p_k": 15, "f:p_cig": 16, "f:x_cad": 17, "f:x_cadx": 18, "f:x_stroke": 19, "f:x_pad": 20, "f:x_plaque": 21, "f:x_hfref": 22, "f:x_af": 23, "f:x_gout": 24, "f:x_fhx": 25, "f:x_cac": 26, "f:x_prediab": 27, "f:x_osa": 28, "f:x_frail": 29, "f:x_preg": 30, "f:x_ifg": 31, "f:x_pcn": 32, "f:x_nsaidx": 33, "f:x_immuno": 34, "f:x_liver": 35, "f:x_dmh": 36, "mod:htn": 37, "mod:dm": 38, "mod:lip": 39, "mod:ckd": 40, "mod:wt": 41, "mod:smk": 42, "mod:trk": 43, "f:h_sbp": 44, "f:h_dbp": 45, "f:h_step": 46, "f:h_adh": 47, "f:h_edema": 48, "f:h_sx": 49, "f:d_a1c": 50, "f:d_fpg": 51, "f:d_lvl": 52, "f:d_sym": 53, "f:d_hypo": 54, "f:d_gu": 55, "f:d_mci": 56, "f:d_adh": 57, "f:l_ldl": 58, "f:l_hdl": 59, "f:l_tg": 60, "f:l_tc": 61, "f:l_lvl": 62, "f:l_cur": 63, "f:l_my": 64, "f:l_adh": 65, "f:c_prev": 66, "f:c_hema": 67, "f:c_htn": 68, "f:w_drug": 69, "f:w_dose": 70, "f:w_wk": 71, "f:w_base": 72, "f:w_gi": 73, "f:w_ctx": 74, "f:s_yr": 75, "f:s_q1": 76, "f:s_stage": 77, "f:s_pref": 78, "f:s_cur": 79, "f:s_q2": 80, "f:s_q3": 81, "f:s_q5": 82, "f:s_q6": 83, "f:s_bc": 84, "f:s_dent": 85, "cdx:htn:I10": 86, "cdx:htn:I12.9": 87, "cdx:htn:I12.0": 88, "cdx:htn:I11.0": 89, "cdx:htn:I11.9": 90, "cdx:dm:E11.9": 91, "cdx:dm:E11.65": 92, "cdx:dm:E11.22": 93, "cdx:dm:E11.21": 94, "cdx:dm:E11.42": 95, "cdx:dm:E11.319": 96, "cdx:dm:E11.649": 97, "cdx:dm:Z79.84": 98, "cdx:dm:Z79.4": 99, "cdx:dm:Z79.85": 100, "cdx:lip:E78.00": 101, "cdx:lip:E78.01": 102, "cdx:lip:E78.1": 103, "cdx:lip:E78.2": 104, "cdx:lip:E78.5": 105, "cdx:ckd:N18.1": 106, "cdx:ckd:N18.2": 107, "cdx:ckd:N18.31": 108, "cdx:ckd:N18.32": 109, "cdx:ckd:N18.4": 110, "cdx:ckd:N18.5": 111, "cdx:ckd:E11.22": 112, "cdx:ckd:I12.9": 113, "cdx:wt:E66.9": 114, "cdx:wt:E66.01": 115, "cdx:wt:E66.3": 116, "cdx:wt:E88.81": 117, "cdx:smk:F17.210": 118, "cdx:smk:F17.290": 119, "cdx:smk:Z71.6": 120, "cdx:trk:Z09": 121, "cdx:trk:R74.01": 122, "cdx:trk:D64.9": 123, "cdx:trk:E61.1": 124, "cdx:trk:R94.6": 125, "cdx:trk:E03.9": 126, "cdx:trk:E04.1": 127, "cdx:trk:E79.0": 128, "cdx:trk:R97.20": 129, "cdx:trk:E55.9": 130, "cdx:trk:E53.8": 131, "cdx:trk:R73.03": 132, "cdx:trk:R91.1": 133, "cdx:trk:K80.20": 134, "cdx:trk:N28.1": 135, "cdx:trk:Z86.010": 136, "cdx:trk:M81.0": 137, "cdx:htn:N18.1": 138, "cdx:dm:N18.1": 139, "cdx:htn:N18.2": 140, "cdx:dm:N18.2": 141, "cdx:htn:N18.31": 142, "cdx:dm:N18.31": 143, "cdx:htn:N18.32": 144, "cdx:dm:N18.32": 145, "cdx:htn:N18.4": 146, "cdx:dm:N18.4": 147, "cdx:htn:N18.5": 148, "cdx:dm:N18.5": 149, "cdx:dm:I12.0": 150, "cdx:ckd:I12.0": 151, "cdx:htn:E11.649": 152, "cdx:ckd:E11.649": 153, "cdx:wt:Z68.20": 154, "cdx:wt:Z68.21": 155, "cdx:wt:Z68.22": 156, "cdx:wt:Z68.23": 157, "cdx:wt:Z68.24": 158, "cdx:wt:Z68.25": 159, "cdx:wt:Z68.26": 160, "cdx:wt:Z68.27": 161, "cdx:wt:Z68.28": 162, "cdx:wt:Z68.29": 163, "cdx:wt:Z68.30": 164, "cdx:wt:Z68.31": 165, "cdx:wt:Z68.32": 166, "cdx:wt:Z68.33": 167, "cdx:wt:Z68.34": 168, "cdx:wt:Z68.35": 169, "cdx:wt:Z68.36": 170, "cdx:wt:Z68.37": 171, "cdx:wt:Z68.38": 172, "cdx:wt:Z68.39": 173, "cdx:wt:Z68.40": 174, "cdx:wt:Z68.41": 175, "cdx:wt:Z68.42": 176, "cdx:wt:Z68.43": 177, "cdx:wt:Z68.44": 178, "cdx:wt:Z68.45": 179, "drug:MIC2": 180, "drug:APR3": 181, "drug:COD6": 182, "drug:EXF1": 183, "drug:EXF2": 184, "drug:TWY1": 185, "drug:NOR1": 186, "drug:NIF2": 187, "drug:CON1": 188, "drug:CON3": 189, "drug:PRO13": 190, "drug:XAD1": 191, "drug:NAT2": 192, "drug:FUR1": 193, "drug:SPI1": 194, "drug:KER2": 195, "drug:NTG1": 196, "drug:CRE2": 197, "drug:TUL1": 198, "drug:LIP5": 199, "drug:EZE1": 200, "drug:ATO2": 201, "drug:OMA1": 202, "drug:LEQA": 203, "drug:BOK1": 204, "drug:VOL1": 205, "drug:CTL1": 206, "drug:DIM3": 207, "drug:JAN1": 208, "drug:TRA5": 209, "drug:JAR3": 210, "drug:FOR3": 211, "drug:OZEA": 212, "drug:TRUA": 213, "drug:MOUC": 214, "drug:ACT5": 215, "drug:XIG1": 216, "drug:GLY1": 217, "drug:LANA": 218, "drug:WEGA": 219, "drug:XEN1": 220, "drug:CON7": 221, "drug:ELT2": 222, "drug:ALL3": 223, "drug:FEB1": 224, "drug:COL4": 225, "drug:LIQSC": 226, "drug:CEL2": 227, "drug:MEL6": 228, "drug:NAP2": 229, "drug:ACE6": 230, "drug:LYR1": 231, "drug:MET2": 232, "drug:FLRP": 233, "drug:GOOS": 234, "drug:MUS2": 235, "drug:MEP3": 236, "drug:PRE6": 237, "drug:NEX1": 238, "drug:PAN4": 239, "drug:VOK1": 240, "drug:ULSSC": 241, "drug:ALG1": 242, "drug:DOM2": 243, "drug:MOP1": 244, "drug:PRO15": 245, "drug:CAT1": 246, "drug:DIC1": 247, "drug:BUW1": 248, "drug:KAS2": 249, "drug:LOP2": 250, "drug:SME1": 251, "drug:BIO6": 252, "drug:MGO1": 253, "drug:LACSC": 254, "drug:DUL1": 255, "drug:BISP": 256, "drug:KOC1": 257, "drug:POSO": 258, "drug:DAF1": 259, "drug:SYMQ": 260, "drug:TREP": 261, "drug:ANOP": 262, "drug:SPIR": 263, "drug:SPIQ": 264, "drug:SYNP": 265, "drug:BESQ": 266, "drug:SIN10": 267, "drug:DEX3": 268, "drug:EUF1": 269, "drug:ACT2": 270, "drug:MUS1": 271, "drug:COMT": 272, "drug:LEV3": 273, "drug:ALL5": 274, "drug:CLA3": 275, "drug:AVAP": 276, "drug:MOMP": 277, "drug:DUFP": 278, "drug:SIDO": 279, "drug:HIR1": 280, "drug:AMO5": 281, "drug:CUR2": 282, "drug:CEP2": 283, "drug:ZIT2": 284, "drug:DOX6": 285, "drug:BAK1": 286, "drug:CIN3": 287, "drug:ERA3": 288, "drug:PAX6": 289, "drug:BAR2": 290, "drug:VEM2": 291, "drug:MAV1": 292, "drug:LOK5": 293, "drug:PRO14": 294, "drug:IMI3": 295, "drug:NIL1": 296, "drug:DIP1": 297, "drug:SUZ1": 298, "drug:TRI9": 299, "drug:WEL4": 300, "drug:CHA4": 301, "drug:NICOP": 302, "drug:NIC4": 303, "drug:NICQ": 304, "drug:PATQ": 305, "drug:EARP": 306, "drug:TED1": 307, "drug:FOA2": 308, "cfu:htn:Cr/eGFR": 309, "cfu:htn:K": 310, "cfu:htn:Na": 311, "cfu:htn:Uric acid": 312, "cfu:htn:FPG": 313, "cfu:htn:HbA1c": 314, "cfu:htn:Lipid profile": 315, "cfu:htn:UACR": 316, "cfu:htn:U/A": 317, "cfu:htn:ECG": 318, "cfu:htn:722 居家血壓": 319, "cfu:dm:HbA1c": 320, "cfu:dm:FPG": 321, "cfu:dm:Lipid profile": 322, "cfu:dm:Cr/eGFR": 323, "cfu:dm:UACR": 324, "cfu:dm:ALT": 325, "cfu:dm:Vit B12": 326, "cfu:dm:K": 327, "cfu:dm:眼底檢查": 328, "cfu:dm:足部檢查": 329, "cfu:lip:Lipid profile": 330, "cfu:lip:ALT": 331, "cfu:lip:CK": 332, "cfu:lip:HbA1c": 333, "cfu:ckd:Cr/eGFR": 334, "cfu:ckd:UACR": 335, "cfu:ckd:K": 336, "cfu:ckd:CBC (Hb)": 337, "cfu:ckd:Ca/P": 338, "cfu:ckd:HCO3": 339, "cfu:ckd:iPTH": 340, "cfu:ckd:U/A": 341, "cfu:ckd:腎臟超音波": 342, "cfu:wt:體重、腰圍": 343, "cfu:wt:FPG/HbA1c": 344, "cfu:wt:Lipid profile": 345, "cfu:wt:ALT": 346, "cfu:wt:Cr/eGFR": 347, "cfu:wt:TSH": 348, "cfu:smk:吐氣 CO": 349, "cfu:smk:LDCT": 350, "cfu:smk:口腔黏膜檢查": 351, "cfu:trk:ALT": 352, "cfu:trk:AST": 353, "cfu:trk:Hb": 354, "cfu:trk:Ferritin": 355, "cfu:trk:TSH": 356, "cfu:trk:FT4": 357, "cfu:trk:Uric acid": 358, "cfu:trk:Cr": 359, "cfu:trk:PSA": 360, "cfu:trk:25-OH Vit D": 361, "cfu:trk:Vit B12": 362, "cfu:trk:CRP": 363, "cfu:trk:HbA1c": 364, "cfu:trk:AFP": 365, "cfu:trk:腹部超音波": 366, "cfu:trk:甲狀腺超音波": 367, "cfu:trk:胸部 CT": 368, "cfu:trk:大腸鏡": 369, "cfu:trk:胃鏡": 370, "cfu:trk:骨密度 DXA": 371, "cfu:dm:Na": 372, "cfu:lip:Na": 373, "cfu:ckd:Na": 374, "cfu:wt:Na": 375, "cfu:smk:Na": 376, "cfu:trk:Na": 377, "cfu:dm:Uric acid": 378, "cfu:lip:Uric acid": 379, "cfu:ckd:Uric acid": 380, "cfu:wt:Uric acid": 381, "cfu:smk:Uric acid": 382, "cfu:lip:FPG": 383, "cfu:ckd:FPG": 384, "cfu:wt:FPG": 385, "cfu:smk:FPG": 386, "cfu:trk:FPG": 387, "cfu:ckd:HbA1c": 388, "cfu:wt:HbA1c": 389, "cfu:smk:HbA1c": 390, "cfu:ckd:Lipid profile": 391, "cfu:smk:Lipid profile": 392, "cfu:trk:Lipid profile": 393, "cfu:lip:UACR": 394, "cfu:wt:UACR": 395, "cfu:smk:UACR": 396, "cfu:trk:UACR": 397, "cfu:dm:U/A": 398, "cfu:lip:U/A": 399, "cfu:wt:U/A": 400, "cfu:smk:U/A": 401, "cfu:trk:U/A": 402, "cfu:dm:ECG": 403, "cfu:lip:ECG": 404, "cfu:ckd:ECG": 405, "cfu:wt:ECG": 406, "cfu:smk:ECG": 407, "cfu:trk:ECG": 408, "cfu:htn:眼底檢查": 409, "cfu:lip:眼底檢查": 410, "cfu:ckd:眼底檢查": 411, "cfu:wt:眼底檢查": 412, "cfu:smk:眼底檢查": 413, "cfu:trk:眼底檢查": 414, "cfu:htn:足部檢查": 415, "cfu:lip:足部檢查": 416, "cfu:ckd:足部檢查": 417, "cfu:wt:足部檢查": 418, "cfu:smk:足部檢查": 419, "cfu:trk:足部檢查": 420, "cfu:htn:Vit B12": 421, "cfu:lip:Vit B12": 422, "cfu:ckd:Vit B12": 423, "cfu:wt:Vit B12": 424, "cfu:smk:Vit B12": 425, "cfu:htn:ALT": 426, "cfu:ckd:ALT": 427, "cfu:smk:ALT": 428, "cfu:htn:CK": 429, "cfu:dm:CK": 430, "cfu:ckd:CK": 431, "cfu:wt:CK": 432, "cfu:smk:CK": 433, "cfu:trk:CK": 434, "cfu:htn:CBC (Hb)": 435, "cfu:dm:CBC (Hb)": 436, "cfu:lip:CBC (Hb)": 437, "cfu:wt:CBC (Hb)": 438, "cfu:smk:CBC (Hb)": 439, "cfu:trk:CBC (Hb)": 440, "cfu:htn:Ca/P": 441, "cfu:dm:Ca/P": 442, "cfu:lip:Ca/P": 443, "cfu:wt:Ca/P": 444, "cfu:smk:Ca/P": 445, "cfu:trk:Ca/P": 446, "cfu:htn:HCO3": 447, "cfu:dm:HCO3": 448, "cfu:lip:HCO3": 449, "cfu:wt:HCO3": 450, "cfu:smk:HCO3": 451, "cfu:trk:HCO3": 452, "cfu:htn:iPTH": 453, "cfu:dm:iPTH": 454, "cfu:lip:iPTH": 455, "cfu:wt:iPTH": 456, "cfu:smk:iPTH": 457, "cfu:trk:iPTH": 458, "cfu:htn:FPG/HbA1c": 459, "cfu:dm:FPG/HbA1c": 460, "cfu:lip:FPG/HbA1c": 461, "cfu:ckd:FPG/HbA1c": 462, "cfu:smk:FPG/HbA1c": 463, "cfu:trk:FPG/HbA1c": 464, "cfu:lip:Cr/eGFR": 465, "cfu:smk:Cr/eGFR": 466, "cfu:trk:Cr/eGFR": 467, "cfu:lip:K": 468, "cfu:wt:K": 469, "cfu:smk:K": 470, "cfu:trk:K": 471, "cc:resp": 472, "cc:fever": 473, "cc:age": 474, "cc:abd": 475, "cc:const": 476, "cc:uti": 477, "cc:cp": 478, "cc:ha": 479, "cc:dizzy": 480, "cc:lbp": 481, "cc:joint": 482, "cc:dysp": 483, "cc:palp": 484, "cc:edema": 485, "cc:fatigue": 486, "cc:ar": 487, "cc:asthma": 488, "cc:copd": 489, "cc:ear": 490, "cc:ccough": 491, "cc:ibs": 492, "cc:hemo": 493, "cc:masld": 494, "cc:hep": 495, "f:t_alt": 496, "f:t_ast": 497, "f:t_hb": 498, "f:t_plt": 499, "f:t_wbc": 500, "f:t_fer": 501, "f:t_tsh": 502, "f:t_ft4": 503, "f:t_ua": 504, "f:t_cr": 505, "f:t_ca": 506, "f:t_a1c": 507, "f:t_psa": 508, "f:t_vd": 509, "f:t_b12": 510, "f:t_crp": 511, "f:t_afp": 512, "f:t_cea": 513, "cc:resp:dur": 514, "cc:resp:rxd": 515, "pst:resp": 516, "resp:sx:fever": 517, "resp:sx:sore": 518, "resp:sx:odyn": 519, "resp:sx:rhin": 520, "resp:sx:cong": 521, "resp:sx:sneeze": 522, "resp:sx:purul": 523, "resp:sx:facial": 524, "resp:sx:cough": 525, "resp:sx:sputum": 526, "resp:sx:wheeze": 527, "resp:sx:ear": 528, "resp:sx:myal": 529, "resp:sx:ha": 530, "resp:sx:d10": 531, "resp:sx:contact": 532, "resp:sx:flu": 533, "resp:sx:covid": 534, "resp:rf:dysp": 535, "resp:rf:spo2": 536, "resp:rf:drool": 537, "resp:rf:potato": 538, "resp:rf:neck": 539, "resp:rf:fever3": 540, "resp:rf:orbit": 541, "resp:rf:conf": 542, "resp:pe:inject": 543, "resp:pe:exud": 544, "resp:pe:lap": 545, "resp:pe:tm": 546, "resp:pe:sinus": 547, "resp:pe:wh": 548, "resp:pe:crack": 549, "resp:pe:clear": 550, "resp:dx:uri": 551, "resp:dx:phar": 552, "resp:dx:strep": 553, "resp:dx:tons": 554, "resp:dx:flu": 555, "resp:dx:fluc": 556, "resp:dx:covid": 557, "resp:dx:sinus": 558, "resp:dx:ar": 559, "resp:dx:bronch": 560, "resp:dx:aom": 561, "resp:dx:pneu": 562, "resp:med:apap": 563, "resp:med:nap": 564, "resp:med:comt": 565, "resp:med:lev": 566, "resp:med:cla": 567, "resp:med:hir": 568, "resp:med:dex": 569, "resp:med:euf": 570, "resp:med:mus": 571, "resp:med:act": 572, "resp:med:momp": 573, "resp:med:synp": 574, "resp:med:amo": 575, "resp:med:zit": 576, "resp:med:cur": 577, "resp:med:amoaom": 578, "resp:med:cap": 579, "resp:med:era": 580, "resp:med:pax": 581, "resp:lab:flu": 582, "resp:lab:covid": 583, "resp:lab:radt": 584, "resp:lab:cxr": 585, "resp:lab:cbc": 586, "cc:fever:dur": 587, "cc:fever:rxd": 588, "pst:fever": 589, "fever:sx:chill": 590, "fever:sx:ha": 591, "fever:sx:myal": 592, "fever:sx:rash": 593, "fever:sx:dysu": 594, "fever:sx:diar": 595, "fever:sx:abd": 596, "fever:sx:cough": 597, "fever:sx:retro": 598, "fever:sx:travel": 599, "fever:sx:outdoor": 600, "fever:sx:eschar": 601, "fever:rf:conf": 602, "fever:rf:hypo": 603, "fever:rf:rr": 604, "fever:rf:neck": 605, "fever:rf:petech": 606, "fever:rf:immuno": 607, "fever:rf:infant": 608, "fever:pe:neck": 609, "fever:pe:cva": 610, "fever:pe:rash": 611, "fever:pe:lap": 612, "fever:pe:hsm": 613, "fever:dx:fev": 614, "fever:dx:viral": 615, "fever:dx:dengue": 616, "fever:dx:scrub": 617, "fever:med:apap": 618, "fever:med:dox": 619, "fever:lab:cbc": 620, "fever:lab:ua": 621, "fever:lab:ns1": 622, "fever:lab:lft": 623, "fever:lab:bc": 624, "fever:lab:cxr": 625, "cc:age:dur": 626, "cc:age:rxd": 627, "pst:age": 628, "age:sx:diar": 629, "age:sx:watery": 630, "age:sx:blood": 631, "age:sx:vomit": 632, "age:sx:nausea": 633, "age:sx:cramp": 634, "age:sx:fever": 635, "age:sx:food": 636, "age:sx:travel": 637, "age:sx:abx": 638, "age:rf:dehyd": 639, "age:rf:bldfev": 640, "age:rf:rlq": 641, "age:rf:dispro": 642, "age:rf:persist": 643, "age:rf:long": 644, "age:pe:tender": 645, "age:pe:rebound": 646, "age:pe:bs": 647, "age:pe:dry": 648, "age:dx:age": 649, "age:dx:nonin": 650, "age:dx:nv": 651, "age:med:ors": 652, "age:med:sme": 653, "age:med:bio": 654, "age:med:dom": 655, "age:med:lop": 656, "age:med:buw": 657, "age:lab:stool": 658, "age:lab:sc": 659, "age:lab:cbc": 660, "cc:abd:dur": 661, "cc:abd:rxd": 662, "pst:abd": 663, "abd:sx:epi": 664, "abd:sx:ruq": 665, "abd:sx:rlq": 666, "abd:sx:llq": 667, "abd:sx:burn": 668, "abd:sx:postp": 669, "abd:sx:hunger": 670, "abd:sx:hb": 671, "abd:sx:regurg": 672, "abd:sx:full": 673, "abd:sx:nausea": 674, "abd:sx:nsaid": 675, "abd:sx:alc": 676, "abd:sx:fever": 677, "abd:sx:bm": 678, "abd:sx:hppos": 679, "abd:sx:pud": 680, "abd:rf:perit": 681, "abd:rf:gib": 682, "abd:rf:alarm": 683, "abd:rf:age60": 684, "abd:rf:preg": 685, "abd:rf:acs": 686, "abd:rf:dispro": 687, "abd:pe:epit": 688, "abd:pe:mcb": 689, "abd:pe:murphy": 690, "abd:pe:rebound": 691, "abd:pe:guard": 692, "abd:pe:cva": 693, "abd:dx:epi": 694, "abd:dx:dysp": 695, "abd:dx:gerd": 696, "abd:dx:gast": 697, "abd:dx:abdu": 698, "abd:dx:appy": 699, "abd:dx:pu": 700, "abd:dx:hp": 701, "abd:med:alg": 702, "abd:med:vok": 703, "abd:med:pan": 704, "abd:med:mop": 705, "abd:med:uls": 706, "abd:med:buw": 707, "abd:med:kas": 708, "abd:med:nexpu": 709, "abd:med:hpdual": 710, "abd:med:hpbq": 711, "abd:lab:ubt": 712, "abd:lab:hp": 713, "abd:lab:cbc": 714, "abd:lab:lft": 715, "abd:lab:ua": 716, "abd:lab:hcg": 717, "abd:lab:ecg": 718, "abd:lab:egd": 719, "abd:lab:sono": 720, "cc:const:dur": 721, "cc:const:rxd": 722, "pst:const": 723, "const:sx:hard": 724, "const:sx:strain": 725, "const:sx:infreq": 726, "const:sx:bloat": 727, "const:sx:drug": 728, "const:sx:ibs": 729, "const:sx:alt": 730, "const:rf:bleed": 731, "const:rf:wt": 732, "const:rf:anemia": 733, "const:rf:new50": 734, "const:rf:fhx": 735, "const:rf:obst": 736, "const:pe:dist": 737, "const:pe:mass": 738, "const:pe:dre": 739, "const:dx:con": 740, "const:dx:cic": 741, "const:dx:ibsc": 742, "const:med:mgo": 743, "const:med:lac": 744, "const:med:koc": 745, "const:med:dul": 746, "const:med:bisp": 747, "const:lab:fit": 748, "const:lab:cbc": 749, "const:lab:tsh": 750, "const:lab:cfs": 751, "cc:uti:dur": 752, "cc:uti:rxd": 753, "pst:uti": 754, "uti:sx:dysu": 755, "uti:sx:freq": 756, "uti:sx:urg": 757, "uti:sx:hema": 758, "uti:sx:supra": 759, "uti:sx:fever": 760, "uti:sx:flank": 761, "uti:sx:disch": 762, "uti:sx:recur": 763, "uti:rf:pyelo": 764, "uti:rf:preg": 765, "uti:rf:male": 766, "uti:rf:vomit": 767, "uti:rf:cath": 768, "uti:rf:immuno": 769, "uti:pe:supt": 770, "uti:pe:cva": 771, "uti:dx:cys": 772, "uti:dx:cysh": 773, "uti:dx:pye": 774, "uti:dx:uti": 775, "uti:med:ceph": 776, "uti:med:bak": 777, "uti:med:cur": 778, "uti:med:cin": 779, "uti:lab:ua": 780, "uti:lab:uc": 781, "uti:lab:hcg": 782, "cc:cp:dur": 783, "cc:cp:rxd": 784, "pst:cp": 785, "cp:sx:press": 786, "cp:sx:sharp": 787, "cp:sx:exert": 788, "cp:sx:rest": 789, "cp:sx:pleur": 790, "cp:sx:posit": 791, "cp:sx:rad": 792, "cp:sx:dia": 793, "cp:sx:dysp": 794, "cp:sx:palp": 795, "cp:sx:burn": 796, "cp:sx:meal": 797, "cp:sx:cough": 798, "cp:sx:anx": 799, "cp:sx:thinkc": 800, "cp:rf:rest20": 801, "cp:rf:syncope": 802, "cp:rf:bpdiff": 803, "cp:rf:spo2": 804, "cp:rf:ecg": 805, "cp:rf:tear": 806, "cp:rf:pe": 807, "cp:pe:repro": 808, "cp:pe:murmur": 809, "cp:pe:rub": 810, "cp:pe:crack": 811, "cp:pe:calf": 812, "cp:dx:cpu": 813, "cp:dx:costo": 814, "cp:dx:gerd": 815, "cp:dx:pleu": 816, "cp:dx:anx": 817, "cp:dx:acs": 818, "cp:med:asp": 819, "cp:med:ntg": 820, "cp:med:apap": 821, "cp:med:nap": 822, "cp:med:flrp": 823, "cp:med:alg": 824, "cp:med:vok": 825, "cp:lab:ecg": 826, "cp:lab:cxr": 827, "cp:lab:trop": 828, "cp:lab:dd": 829, "cc:ha:dur": 830, "cc:ha:rxd": 831, "pst:ha": 832, "ha:sx:uni": 833, "ha:sx:throb": 834, "ha:sx:band": 835, "ha:sx:nausea": 836, "ha:sx:photo": 837, "ha:sx:aura": 838, "ha:sx:act": 839, "ha:sx:overuse": 840, "ha:sx:stress": 841, "ha:sx:mens": 842, "ha:sx:freq": 843, "ha:rf:thunder": 844, "ha:rf:fevneck": 845, "ha:rf:focal": 846, "ha:rf:new50": 847, "ha:rf:preg": 848, "ha:rf:cancer": 849, "ha:rf:posit": 850, "ha:rf:trauma": 851, "ha:rf:anticoag": 852, "ha:pe:neuro": 853, "ha:pe:neck": 854, "ha:pe:peric": 855, "ha:pe:ta": 856, "ha:pe:fundus": 857, "ha:dx:tth": 858, "ha:dx:mig": 859, "ha:dx:miga": 860, "ha:dx:moh": 861, "ha:dx:hau": 862, "ha:med:apap": 863, "ha:med:nap": 864, "ha:med:pro": 865, "ha:med:imi": 866, "ha:med:prop": 867, "ha:med:suz": 868, "ha:med:mep": 869, "ha:lab:ct": 870, "ha:lab:esr": 871, "cc:dizzy:dur": 872, "cc:dizzy:rxd": 873, "pst:dizzy": 874, "dizzy:sx:spin": 875, "dizzy:sx:light": 876, "dizzy:sx:imbal": 877, "dizzy:sx:turn": 878, "dizzy:sx:stand": 879, "dizzy:sx:sec": 880, "dizzy:sx:hrs": 881, "dizzy:sx:hear": 882, "dizzy:sx:nausea": 883, "dizzy:sx:uri": 884, "dizzy:sx:newmed": 885, "dizzy:rf:5d": 886, "dizzy:rf:weak": 887, "dizzy:rf:ataxia": 888, "dizzy:rf:ha": 889, "dizzy:rf:cp": 890, "dizzy:rf:syncope": 891, "dizzy:pe:ortho": 892, "dizzy:pe:nyst": 893, "dizzy:pe:dhr": 894, "dizzy:pe:dhl": 895, "dizzy:pe:fn": 896, "dizzy:pe:gait": 897, "dizzy:dx:bppvr": 898, "dizzy:dx:bppvl": 899, "dizzy:dx:vn": 900, "dizzy:dx:oh": 901, "dizzy:dx:dz": 902, "dizzy:med:epley": 903, "dizzy:med:dip": 904, "dizzy:med:nil": 905, "dizzy:med:tri": 906, "dizzy:med:dom": 907, "dizzy:lab:ecg": 908, "dizzy:lab:cbc": 909, "dizzy:lab:mri": 910, "cc:lbp:dur": 911, "cc:lbp:rxd": 912, "pst:lbp": 913, "lbp:sx:lift": 914, "lbp:sx:radr": 915, "lbp:sx:radl": 916, "lbp:sx:numb": 917, "lbp:sx:stiff": 918, "lbp:sx:night": 919, "lbp:sx:chronic": 920, "lbp:sx:better": 921, "lbp:rf:saddle": 922, "lbp:rf:urine": 923, "lbp:rf:fever": 924, "lbp:rf:cancer": 925, "lbp:rf:wt": 926, "lbp:rf:trauma": 927, "lbp:rf:steroid": 928, "lbp:rf:weak": 929, "lbp:pe:para": 930, "lbp:pe:spin": 931, "lbp:pe:slrr": 932, "lbp:pe:slrl": 933, "lbp:pe:motor": 934, "lbp:pe:sens": 935, "lbp:dx:lbp": 936, "lbp:dx:scr": 937, "lbp:dx:scl": 938, "lbp:dx:strain": 939, "lbp:med:apap": 940, "lbp:med:nap": 941, "lbp:med:mel": 942, "lbp:med:cel": 943, "lbp:med:mus2": 944, "lbp:med:mep": 945, "lbp:med:flrp": 946, "lbp:med:lyr": 947, "lbp:lab:xr": 948, "lbp:lab:esr": 949, "lbp:lab:mri": 950, "cc:joint:dur": 951, "cc:joint:rxd": 952, "pst:joint": 953, "joint:sx:mono": 954, "joint:sx:poly": 955, "joint:sx:knee": 956, "joint:sx:mtp": 957, "joint:sx:ankle": 958, "joint:sx:acute": 959, "joint:sx:red": 960, "joint:sx:ams": 961, "joint:sx:trauma": 962, "joint:sx:gouthx": 963, "joint:sx:diur": 964, "joint:sx:stairs": 965, "joint:sx:flare2": 966, "joint:sx:stone": 967, "joint:sx:onult": 968, "joint:sx:hla": 969, "joint:rf:septic": 970, "joint:rf:nowt": 971, "joint:rf:immuno": 972, "joint:pe:eff": 973, "joint:pe:warm": 974, "joint:pe:ery": 975, "joint:pe:crep": 976, "joint:pe:rom": 977, "joint:pe:tophi": 978, "joint:pe:syn": 979, "joint:dx:gout": 980, "joint:dx:goutr": 981, "joint:dx:goutl": 982, "joint:dx:oa": 983, "joint:dx:ra": 984, "joint:dx:jp": 985, "joint:med:col": 986, "joint:med:nap5": 987, "joint:med:pre": 988, "joint:med:goos": 989, "joint:med:apap": 990, "joint:med:cel": 991, "joint:med:mel": 992, "joint:med:all": 993, "joint:med:feb": 994, "joint:med:colp": 995, "joint:lab:ua": 996, "joint:lab:cbc": 997, "joint:lab:rf": 998, "joint:lab:xr": 999, "joint:lab:tap": 1000, "cc:dysp:dur": 1001, "cc:dysp:rxd": 1002, "pst:dysp": 1003, "dysp:sx:exer": 1004, "dysp:sx:rest": 1005, "dysp:sx:ortho": 1006, "dysp:sx:pnd": 1007, "dysp:sx:wheeze": 1008, "dysp:sx:cough": 1009, "dysp:sx:sputum": 1010, "dysp:sx:fever": 1011, "dysp:sx:leg": 1012, "dysp:sx:asthma": 1013, "dysp:sx:copd": 1014, "dysp:rf:sent": 1015, "dysp:rf:spo2": 1016, "dysp:rf:rr": 1017, "dysp:rf:cp": 1018, "dysp:rf:unileg": 1019, "dysp:rf:hemop": 1020, "dysp:rf:conf": 1021, "dysp:pe:wh": 1022, "dysp:pe:crack": 1023, "dysp:pe:dbs": 1024, "dysp:pe:jve": 1025, "dysp:pe:edema": 1026, "dysp:dx:dys": 1027, "dysp:dx:asx": 1028, "dysp:dx:copdx": 1029, "dysp:dx:pneu": 1030, "dysp:dx:hf": 1031, "dysp:med:synp": 1032, "dysp:med:besq": 1033, "dysp:med:pre": 1034, "dysp:med:symq": 1035, "dysp:med:cur": 1036, "dysp:med:fur": 1037, "dysp:lab:cxr": 1038, "dysp:lab:ecg": 1039, "dysp:lab:cbc": 1040, "dysp:lab:bnp": 1041, "dysp:lab:dd": 1042, "dysp:lab:pft": 1043, "cc:palp:dur": 1044, "cc:palp:rxd": 1045, "pst:palp": 1046, "palp:sx:reg": 1047, "palp:sx:irreg": 1048, "palp:sx:sudden": 1049, "palp:sx:caff": 1050, "palp:sx:stress": 1051, "palp:sx:heat": 1052, "palp:sx:drug": 1053, "palp:rf:syncope": 1054, "palp:rf:cp": 1055, "palp:rf:exer": 1056, "palp:rf:fhx": 1057, "palp:rf:shd": 1058, "palp:pe:irr": 1059, "palp:pe:tachy": 1060, "palp:pe:goiter": 1061, "palp:pe:murmur": 1062, "palp:dx:palp": 1063, "palp:dx:af": 1064, "palp:dx:anx": 1065, "palp:med:prop": 1066, "palp:lab:ecg": 1067, "palp:lab:tsh": 1068, "palp:lab:cbc": 1069, "palp:lab:holter": 1070, "cc:edema:dur": 1071, "cc:edema:rxd": 1072, "pst:edema": 1073, "edema:sx:uni": 1074, "edema:sx:bil": 1075, "edema:sx:eve": 1076, "edema:sx:dysp": 1077, "edema:sx:foam": 1078, "edema:sx:jaun": 1079, "edema:sx:calf": 1080, "edema:sx:drug": 1081, "edema:rf:dvt": 1082, "edema:rf:dysp": 1083, "edema:rf:cell": 1084, "edema:pe:pit": 1085, "edema:pe:jve": 1086, "edema:pe:crack": 1087, "edema:pe:calft": 1088, "edema:pe:skin": 1089, "edema:dx:ed": 1090, "edema:dx:drug": 1091, "edema:dx:vi": 1092, "edema:med:stock": 1093, "edema:med:fur": 1094, "edema:lab:cr": 1095, "edema:lab:ua": 1096, "edema:lab:alb": 1097, "edema:lab:tsh": 1098, "edema:lab:bnp": 1099, "edema:lab:duplex": 1100, "cc:fatigue:dur": 1101, "cc:fatigue:rxd": 1102, "pst:fatigue": 1103, "fatigue:sx:sleep": 1104, "fatigue:sx:snore": 1105, "fatigue:sx:mood": 1106, "fatigue:sx:menor": 1107, "fatigue:sx:cold": 1108, "fatigue:sx:polyu": 1109, "fatigue:rf:wt": 1110, "fatigue:rf:ns": 1111, "fatigue:rf:fever": 1112, "fatigue:rf:bleed": 1113, "fatigue:rf:lap": 1114, "fatigue:pe:pallor": 1115, "fatigue:pe:thy": 1116, "fatigue:pe:lapx": 1117, "fatigue:pe:hsm": 1118, "fatigue:dx:fat": 1119, "fatigue:dx:ins": 1120, "fatigue:dx:dep": 1121, "fatigue:lab:cbc": 1122, "fatigue:lab:tsh": 1123, "fatigue:lab:glu": 1124, "fatigue:lab:cr": 1125, "fatigue:lab:b12": 1126, "fatigue:lab:phq": 1127, "fatigue:lab:psg": 1128, "cc:ar:dur": 1129, "cc:ar:rxd": 1130, "pst:ar": 1131, "ar:sx:sneeze": 1132, "ar:sx:itch": 1133, "ar:sx:rhin": 1134, "ar:sx:cong": 1135, "ar:sx:eye": 1136, "ar:sx:asthma": 1137, "ar:sx:uni": 1138, "ar:sx:epis": 1139, "ar:rf:unilat": 1140, "ar:rf:polyp": 1141, "ar:rf:neck": 1142, "ar:pe:pale": 1143, "ar:pe:shiner": 1144, "ar:pe:polyp": 1145, "ar:sel:type": 1146, "ar:sel:sev": 1147, "ar:dx:ar": 1148, "ar:dx:ac": 1149, "ar:med:avap": 1150, "ar:med:momp": 1151, "ar:med:lev": 1152, "ar:med:all": 1153, "ar:med:duf": 1154, "ar:med:sin": 1155, "ar:med:pat": 1156, "ar:med:sido": 1157, "ar:lab:ige": 1158, "ar:lab:ent": 1159, "cc:asthma:dur": 1160, "cc:asthma:rxd": 1161, "pst:asthma": 1162, "asthma:sx:day": 1163, "asthma:sx:night": 1164, "asthma:sx:rel": 1165, "asthma:sx:limit": 1166, "asthma:sx:exac": 1167, "asthma:sx:tech": 1168, "asthma:sx:adh": 1169, "asthma:sx:smoke": 1170, "asthma:rf:speak": 1171, "asthma:rf:spo2": 1172, "asthma:rf:pef": 1173, "asthma:rf:conf": 1174, "asthma:rf:silent": 1175, "asthma:pe:wh": 1176, "asthma:pe:prol": 1177, "asthma:pe:acc": 1178, "asthma:sel:step": 1179, "asthma:dx:ast": 1180, "asthma:dx:astx": 1181, "asthma:med:symprn": 1182, "asthma:med:symlow": 1183, "asthma:med:symmed": 1184, "asthma:med:sin": 1185, "asthma:med:synp": 1186, "asthma:med:pre": 1187, "asthma:med:besq": 1188, "asthma:lab:pft": 1189, "asthma:lab:pef": 1190, "asthma:lab:eos": 1191, "cc:copd:dur": 1192, "cc:copd:rxd": 1193, "pst:copd": 1194, "copd:sx:cat": 1195, "copd:sx:aecopd": 1196, "copd:sx:purul": 1197, "copd:sx:smoke": 1198, "copd:rf:spo2": 1199, "copd:rf:conf": 1200, "copd:rf:rest": 1201, "copd:rf:edema": 1202, "copd:pe:wh": 1203, "copd:pe:prol": 1204, "copd:pe:dbs": 1205, "copd:sel:mmrc": 1206, "copd:sel:exh": 1207, "copd:num:eos": 1208, "copd:num:fev1": 1209, "copd:dx:copd": 1210, "copd:dx:copdx": 1211, "copd:med:spiq": 1212, "copd:med:anop": 1213, "copd:med:spir": 1214, "copd:med:trep": 1215, "copd:med:synp": 1216, "copd:med:pre": 1217, "copd:med:cur": 1218, "copd:med:vax": 1219, "copd:lab:pft": 1220, "copd:lab:cxr": 1221, "copd:lab:cbc": 1222, "cc:ear:dur": 1223, "cc:ear:rxd": 1224, "pst:ear": 1225, "ear:sx:pain": 1226, "ear:sx:fever": 1227, "ear:sx:hear": 1228, "ear:sx:otorr": 1229, "ear:sx:uri": 1230, "ear:sx:swim": 1231, "ear:sx:itch": 1232, "ear:sx:abx": 1233, "ear:rf:malig": 1234, "ear:rf:facial": 1235, "ear:rf:mast": 1236, "ear:rf:npc": 1237, "ear:pe:bulge": 1238, "ear:pe:red": 1239, "ear:pe:perf": 1240, "ear:pe:tragal": 1241, "ear:pe:eac": 1242, "ear:pe:effu": 1243, "ear:sel:side": 1244, "ear:dx:aom": 1245, "ear:dx:oe": 1246, "ear:dx:ome": 1247, "ear:med:amo": 1248, "ear:med:cur": 1249, "ear:med:zit": 1250, "ear:med:earp": 1251, "ear:med:apap": 1252, "ear:med:nap": 1253, "ear:lab:ent": 1254, "cc:ccough:dur": 1255, "cc:ccough:rxd": 1256, "pst:ccough": 1257, "ccough:sx:d8": 1258, "ccough:sx:smoke": 1259, "ccough:sx:acei": 1260, "ccough:sx:pnd": 1261, "ccough:sx:hb": 1262, "ccough:sx:wheeze": 1263, "ccough:sx:tbc": 1264, "ccough:sx:sput": 1265, "ccough:rf:hemop": 1266, "ccough:rf:wt": 1267, "ccough:rf:ns": 1268, "ccough:rf:fever": 1269, "ccough:rf:cxr": 1270, "ccough:pe:cobble": 1271, "ccough:pe:wh": 1272, "ccough:pe:crack": 1273, "ccough:dx:cc": 1274, "ccough:dx:uacs": 1275, "ccough:dx:gerd": 1276, "ccough:dx:cva": 1277, "ccough:dx:acei": 1278, "ccough:med:momp": 1279, "ccough:med:lev": 1280, "ccough:med:vok": 1281, "ccough:med:sym": 1282, "ccough:med:arb": 1283, "ccough:med:dex": 1284, "ccough:lab:cxr": 1285, "ccough:lab:pft": 1286, "ccough:lab:afb": 1287, "cc:ibs:dur": 1288, "cc:ibs:rxd": 1289, "pst:ibs": 1290, "ibs:sx:pain": 1291, "ibs:sx:defec": 1292, "ibs:sx:freq": 1293, "ibs:sx:form": 1294, "ibs:sx:d": 1295, "ibs:sx:c": 1296, "ibs:sx:bloat": 1297, "ibs:sx:stress": 1298, "ibs:rf:bleed": 1299, "ibs:rf:wt": 1300, "ibs:rf:anemia": 1301, "ibs:rf:noct": 1302, "ibs:rf:age50": 1303, "ibs:rf:fhx": 1304, "ibs:pe:tend": 1305, "ibs:pe:mass": 1306, "ibs:dx:ibsd": 1307, "ibs:dx:ibsc": 1308, "ibs:dx:ibsm": 1309, "ibs:dx:ibs": 1310, "ibs:med:cat": 1311, "ibs:med:dic": 1312, "ibs:med:koc": 1313, "ibs:med:mgo": 1314, "ibs:med:lop": 1315, "ibs:med:kas": 1316, "ibs:lab:cbc": 1317, "ibs:lab:tsh": 1318, "ibs:lab:fit": 1319, "ibs:lab:cfs": 1320, "cc:hemo:dur": 1321, "cc:hemo:rxd": 1322, "pst:hemo": 1323, "hemo:sx:bleed": 1324, "hemo:sx:prol": 1325, "hemo:sx:pain": 1326, "hemo:sx:itch": 1327, "hemo:sx:const": 1328, "hemo:rf:anemia": 1329, "hemo:rf:age45": 1330, "hemo:rf:bh": 1331, "hemo:rf:wt": 1332, "hemo:rf:fhx": 1333, "hemo:pe:ext": 1334, "hemo:pe:thromb": 1335, "hemo:pe:fiss": 1336, "hemo:pe:dre": 1337, "hemo:sel:grade": 1338, "hemo:dx:hem": 1339, "hemo:dx:thr": 1340, "hemo:dx:fis": 1341, "hemo:med:poso": 1342, "hemo:med:daf": 1343, "hemo:med:mgo": 1344, "hemo:med:lac": 1345, "hemo:med:apap": 1346, "hemo:lab:cbc": 1347, "hemo:lab:cfs": 1348, "hemo:lab:cr": 1349, "cc:masld:dur": 1350, "cc:masld:rxd": 1351, "pst:masld": 1352, "masld:sx:obese": 1353, "masld:sx:dm": 1354, "masld:sx:htn": 1355, "masld:sx:hld": 1356, "masld:sx:alc": 1357, "masld:rf:decomp": 1358, "masld:rf:mass": 1359, "masld:pe:hep": 1360, "masld:pe:stig": 1361, "masld:num:ast": 1362, "masld:num:alt": 1363, "masld:num:plt": 1364, "masld:dx:masld": 1365, "masld:dx:metald": 1366, "masld:dx:mash": 1367, "masld:med:wt": 1368, "masld:med:glp": 1369, "masld:med:pio": 1370, "masld:lab:basic": 1371, "masld:lab:hep": 1372, "masld:lab:sono": 1373, "masld:lab:fs": 1374, "cc:hep:dur": 1375, "cc:hep:rxd": 1376, "pst:hep": 1377, "hep:sx:hbsag": 1378, "hep:sx:hbeag": 1379, "hep:sx:alt2": 1380, "hep:sx:hcv": 1381, "hep:sx:rna": 1382, "hep:sx:cirr": 1383, "hep:sx:fhx": 1384, "hep:sx:tx": 1385, "hep:rf:mass": 1386, "hep:rf:afp": 1387, "hep:rf:decomp": 1388, "hep:pe:jaun": 1389, "hep:pe:stig": 1390, "hep:dx:hbv": 1391, "hep:dx:hbc": 1392, "hep:dx:hcv": 1393, "hep:dx:cir": 1394, "hep:med:bar": 1395, "hep:med:vem": 1396, "hep:med:mav": 1397, "hep:lab:hbv": 1398, "hep:lab:afp": 1399, "hep:lab:rna": 1400, "hep:lab:fib": 1401, "drug:ACE1": 1402, "drug:CAB1": 1403, "drug:DIO3": 1404, "drug:EDA1": 1405, "drug:SEV4": 1406, "drug:OLS1": 1407, "drug:AMT1": 1408, "drug:ATA1": 1409, "drug:CON8": 1410, "drug:LES2": 1411, "drug:HER1": 1412, "drug:NAK1": 1413, "drug:ISO3": 1414, "drug:SYN1": 1415, "drug:SYN3": 1416, "drug:ATE1": 1417, "drug:NEB1": 1418, "drug:LAB2": 1419, "drug:MET4": 1420, "drug:APR4": 1421, "drug:FLU3": 1422, "drug:AMI6": 1423, "drug:ENT3": 1424, "drug:ENT4": 1425, "drug:INS1": 1426, "drug:ISO5": 1427, "drug:IBI1": 1428, "drug:SIG1": 1429, "drug:RAN1": 1430, "drug:COR4": 1431, "drug:DIG1": 1432, "drug:ROS1": 1433, "drug:LIV2": 1434, "drug:ZUL1": 1435, "drug:MEC2": 1436, "drug:LIP7": 1437, "drug:PRA3": 1438, "drug:CAD1": 1439, "drug:NIL2": 1440, "drug:ASP5": 1441, "drug:CLO8": 1442, "drug:PLA2": 1443, "drug:BRI2": 1444, "drug:PLE3": 1445, "drug:PAR4": 1446, "drug:MAF2": 1447, "drug:ELI1": 1448, "drug:ELI2": 1449, "drug:XAR1": 1450, "drug:XAR2": 1451, "drug:LIX1": 1452, "drug:LIX2": 1453, "drug:PRA1": 1454, "drug:PRA2": 1455, "drug:CLEB": 1456, "drug:AMA1": 1457, "drug:MIN2": 1458, "drug:REP1": 1459, "drug:GAL1": 1460, "drug:ONG2": 1461, "drug:JAR1": 1462, "drug:CAN2": 1463, "drug:RYB1": 1464, "drug:ACA5": 1465, "drug:MIG1": 1466, "drug:JAN2": 1467, "drug:GAL2": 1468, "drug:TRA6": 1469, "drug:JAR2": 1470, "drug:GLI6": 1471, "drug:TOUA": 1472, "drug:TREA": 1473, "drug:INSA": 1474, "drug:NOVE": 1475, "drug:HUMFA": 1476, "drug:NOVF": 1477, "drug:RYZA": 1478, "drug:SOLB": 1479, "drug:GLUA": 1480, "drug:MET7": 1481, "drug:NEW4": 1482, "drug:POL1": 1483, "drug:FEB2": 1484, "drug:EUR2": 1485, "drug:FOS4": 1486, "drug:ACLC": 1487, "drug:PROI": 1488, "drug:FORE": 1489, "drug:EVEA": 1490, "drug:MAC1": 1491, "drug:CAL5": 1492, "drug:ECO2": 1493, "drug:VOR2": 1494, "drug:VOR3": 1495, "drug:VORO": 1496, "drug:IND4": 1497, "drug:PON2": 1498, "drug:ACE3": 1499, "drug:JOL1": 1500, "drug:KET3": 1501, "drug:KETC": 1502, "drug:MOBC": 1503, "drug:PIRB": 1504, "drug:PACA": 1505, "drug:APA1": 1506, "drug:ANTSC": 1507, "drug:TRA4": 1508, "drug:MUA1": 1509, "drug:SOM1": 1510, "drug:ANO1": 1511, "drug:LYG1": 1512, "drug:NEU2": 1513, "drug:CAR5": 1514, "drug:DUX1": 1515, "drug:TEIO": 1516, "drug:LIDP": 1517, "drug:BEF1": 1518, "drug:MUS3": 1519, "drug:VIA4": 1520, "drug:HYAC": 1521, "drug:VEJC": 1522, "drug:SHIA": 1523, "drug:DEXB": 1524, "drug:XYLO": 1525, "drug:SINM": 1526, "drug:MET6": 1527, "drug:DEC2": 1528, "drug:KIDSC": 1529, "drug:METD": 1530, "drug:HYDA": 1531, "drug:TAK2": 1532, "drug:PAR3": 1533, "drug:OME2": 1534, "drug:DEX2": 1535, "drug:VOC1": 1536, "drug:SCR1": 1537, "drug:ALU1": 1538, "drug:KCB1": 1539, "drug:CYT1": 1540, "drug:IMPA": 1541, "drug:ESCA": 1542, "drug:SET2": 1543, "drug:ARIP": 1544, "drug:HID1": 1545, "drug:ANT4": 1546, "drug:MIY1": 1547, "drug:EVAO": 1548, "drug:BOK2": 1549, "drug:BIO1": 1550, "drug:CRE1": 1551, "drug:SIL3": 1552, "drug:SAL3": 1553, "drug:PEN3": 1554, "drug:SERR": 1555, "drug:RELQ": 1556, "drug:FOSP": 1557, "drug:TRIR": 1558, "drug:DUAP": 1559, "drug:SALD": 1560, "drug:SIN4": 1561, "drug:MON3": 1562, "drug:XAN1": 1563, "drug:MEP1": 1564, "drug:BAB1": 1565, "drug:REG1": 1566, "drug:ASV1": 1567, "drug:ZCO1": 1568, "drug:COD3": 1569, "drug:ECT1": 1570, "drug:CASSD": 1571, "drug:SORSC": 1572, "drug:BETP": 1573, "drug:ALL4": 1574, "drug:BIS2": 1575, "drug:BEN3": 1576, "drug:ARA1": 1577, "drug:DIPB": 1578, "drug:AZEP": 1579, "drug:SOOA": 1580, "drug:CURSC": 1581, "drug:UCL1": 1582, "drug:CEF3": 1583, "drug:KLA2": 1584, "drug:ZITSC": 1585, "drug:TID1": 1586, "drug:LEF2": 1587, "drug:AVE1": 1588, "drug:MET8": 1589, "drug:GRA1": 1590, "drug:CEFD": 1591, "drug:TRIC": 1592, "drug:FURA": 1593, "drug:SUBA": 1594, "drug:GENB": 1595, "drug:TER2": 1596, "drug:ICO1": 1597, "drug:DIF1": 1598, "drug:VAC1": 1599, "drug:ACY1": 1600, "drug:VIR2": 1601, "drug:FAM1": 1602, "drug:XOF2": 1603, "drug:ALB7": 1604, "drug:COW1": 1605, "drug:PERQ": 1606, "drug:STR3": 1607, "drug:AKU1": 1608, "drug:RIN2": 1609, "drug:INH1": 1610, "drug:EBU2": 1611, "drug:PZA2": 1612, "drug:PPDA": 1613, "drug:VAXA": 1614, "drug:VAXC": 1615, "drug:PREJ": 1616, "drug:PNEB": 1617, "drug:PREK": 1618, "drug:SHID": 1619, "drug:BOOF": 1620, "drug:TETG": 1621, "drug:ENGA": 1622, "drug:HAVD": 1623, "drug:GARE": 1624, "drug:MMRA": 1625, "drug:VARC": 1626, "drug:AREA": 1627, "drug:COVGE": 1628, "drug:DIHA": 1629, "drug:JEVA": 1630, "drug:VERC": 1631, "drug:ROTD": 1632, "drug:HAR3": 1633, "drug:TAM4": 1634, "drug:URI4": 1635, "drug:XAT1": 1636, "drug:PRO3": 1637, "drug:AVO1": 1638, "drug:DUO1": 1639, "drug:BET8": 1640, "drug:VES2": 1641, "drug:DET2": 1642, "drug:CIA4": 1643, "drug:FUL3": 1644, "drug:PRI6": 1645, "drug:DES3": 1646, "drug:BET6": 1647, "drug:KAL2": 1648, "drug:NESG": 1649, "drug:RIZ1": 1650, "drug:ERG2": 1651, "drug:EMGA": 1652, "drug:NUR10": 1653, "drug:CIN2": 1654, "drug:ARE1": 1655, "drug:WIT1": 1656, "drug:EXEQ": 1657, "drug:STI1": 1658, "drug:LEN1": 1659, "drug:EUR1": 1660, "drug:SOM2": 1661, "drug:DAY1": 1662, "drug:ANX1": 1663, "drug:XAN2": 1664, "drug:LEX1": 1665, "drug:LEE1": 1666, "drug:ZOL1": 1667, "drug:JUX1": 1668, "drug:EFE1": 1669, "drug:MIR2": 1670, "drug:MES1": 1671, "drug:SER6": 1672, "drug:NOV1": 1673, "drug:HYDO": 1674, "drug:FLUT": 1675, "drug:MONQ": 1676, "drug:TOPR": 1677, "drug:CLOQ": 1678, "drug:CLOR": 1679, "drug:EXTP": 1680, "drug:MYCQ": 1681, "drug:WINP": 1682, "drug:MENP": 1683, "drug:FUSP": 1684, "drug:SPEO": 1685, "drug:SULS": 1686, "drug:DEHP": 1687, "drug:PROP": 1688, "drug:ELIP": 1689, "drug:DUPD": 1690, "drug:ANTP": 1691, "drug:EURP": 1692, "drug:DIFP": 1693, "drug:ACZP": 1694, "drug:EASQ": 1695, "drug:ROA8": 1696, "drug:DAIP": 1697, "drug:PRO7": 1698, "drug:REGP": 1699, "drug:FESP": 1700, "drug:POVS": 1701, "drug:EASS": 1702, "drug:CRAO": 1703, "drug:TOBS": 1704, "drug:ERYT": 1705, "drug:ARTQ": 1706, "drug:LIPO": 1707, "drug:FOXQ": 1708, "drug:OTOP": 1709, "drug:MYCO": 1710, "drug:LOMV": 1711, "drug:NYSV": 1712, "drug:ESVQ": 1713, "drug:EST1": 1714, "drug:PRO5": 1715, "drug:UTR1": 1716, "drug:VIS1": 1717, "drug:MIRE": 1718, "drug:SID3": 1719, "drug:FEBA": 1720, "drug:V12A": 1721, "drug:BEE2": 1722, "drug:KGLSC": 1723, "drug:EPIS": 1724, "drug:NALC": 1725, "drug:ANEA": 1726, "drug:PRAA": 1727};
+const HB=1<<20;
+const fnv=s=>{let h=0x811c9dc5;for(const ch of unescape(encodeURIComponent(s))){h^=ch.charCodeAt(0);h=Math.imul(h,0x01000193)>>>0}return h>>>0};
+const keyId=k=>YCJREG[k]||(HB+(fnv(k)&0xFFFFF));
+const h16=s=>fnv(s)&0xFFFF;
+const PVF=['p_sbp','p_dbp','p_hr','p_bt','p_rr','p_spo2','p_wt','p_waist','p_egfr','p_uacr','p_k','p_cig','h_sbp','h_dbp','d_a1c','d_fpg','l_ldl','l_hdl','l_tg','l_tc'].concat(TRKI.map(x=>x[0]));
+const NOENC=new Set(['ycjIn','p_alg']);
+const DEC=new Set(['p_k','p_bt','p_wt','p_ht','p_waist','d_a1c','w_base','t_a1c','t_tsh','t_ft4','t_ua','t_cr','t_ca','t_psa','t_hb','t_crp','t_vd','t_alt'].concat([]));const sc=id=>DEC.has(id)?10:1;
+function encFields(){return [...G.querySelectorAll('input[id],select[id]')].filter(el=>!NOENC.has(el.id)&&!/^(ck|gout|gslip)/.test(el.id)&&el.type!=='text'&&!el.closest('#ccList,.chrow,#ycjBox,#prevBox'))}
+function ycjKeys(){
+ const K=[];encFields().forEach(el=>K.push('f:'+el.id));
+ MODS.forEach(m=>{K.push('mod:'+m.k);(MDX[m.k]||[]).forEach(d=>K.push(`cdx:${m.k}:${d[0]}`));(MFU[m.k]||[]).forEach(f=>K.push(`cfu:${m.k}:${f}`))});
+ ['N18.1','N18.2','N18.31','N18.32','N18.4','N18.5','I12.0','E11.649'].forEach(c=>K.push('cdx:htn:'+c,'cdx:dm:'+c,'cdx:ckd:'+c));
+ for(let b=20;b<=45;b++)K.push('cdx:wt:Z68.'+b);
+ ['Na','Uric acid','FPG','HbA1c','Lipid profile','UACR','U/A','ECG','眼底檢查','足部檢查','Vit B12','ALT','CK','CBC (Hb)','Ca/P','HCO3','iPTH','FPG/HbA1c','Cr/eGFR','K'].forEach(f=>MODS.forEach(m=>K.push(`cfu:${m.k}:${f}`)));
+ CC.forEach(c=>{K.push('cc:'+c.id,`cc:${c.id}:dur`,`cc:${c.id}:rxd`,'pst:'+c.id);['sx','rf','pe'].forEach(g=>c[g].forEach(x=>K.push(`${c.id}:${g}:${x[0]}`)));(c.sel||[]).forEach(x=>K.push(`${c.id}:sel:${x[0]}`));(c.num||[]).forEach(x=>K.push(`${c.id}:num:${x[0]}`));c.dx.forEach(d=>K.push(`${c.id}:dx:${d.k}`));c.med.forEach(m=>K.push(`${c.id}:med:${m.k}`));c.lab.forEach(l=>K.push(`${c.id}:lab:${l[0]}`));(c.fu||[]).forEach(f=>K.push(`${c.id}:fu:${f[0]}`))});
+ (typeof FX!=='undefined'?FX:[]).forEach(d=>K.push('drug:'+d.code));
+ return [...new Set(K)];
+}
+let REV=null;
+function revMap(){if(REV)return REV;REV=new Map();Object.entries(YCJREG).forEach(([k,i])=>REV.set(i,k));ycjKeys().forEach(k=>{const i=keyId(k);if(!REV.has(i))REV.set(i,k)});return REV}
+/* bytes */
+const vput=(a,v)=>{v=Math.max(0,Math.round(v));while(v>=128){a.push((v&127)|128);v=Math.floor(v/128)}a.push(v)};
+function vget(b,pos){let v=0,m=1,x;do{if(pos.i>=b.length)throw new Error('short');x=b[pos.i++];v+=(x&127)*m;m*=128}while(x&128);return v}
+const AL='0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+function b32e(bytes){let out='',buf=0,bits=0;for(const x of bytes){buf=(buf<<8)|x;bits+=8;while(bits>=5){out+=AL[(buf>>(bits-5))&31];bits-=5}buf&=(1<<bits)-1}if(bits)out+=AL[(buf<<(5-bits))&31];return out}
+function b32d(str){const s=str.toUpperCase().replace(/[^0-9A-Z]/g,'').replace(/O/g,'0').replace(/[IL]/g,'1');const out=[];let buf=0,bits=0;for(const ch of s){const v=AL.indexOf(ch);if(v<0)throw new Error('char');buf=(buf<<5)|v;bits+=5;if(bits>=8){out.push((buf>>(bits-8))&255);bits-=8;buf&=(1<<bits)-1}}return out}
+function crc16(b){let c=0xFFFF;for(const x of b){c^=x<<8;for(let i=0;i<8;i++)c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF}return c}
+const EPOCH=Date.UTC(2020,0,1);
+const today=()=>Math.floor((Date.now()-EPOCH+8*3600e3)/864e5);
+const dstr=d=>{const t=new Date(EPOCH+d*864e5);return `${t.getUTCFullYear()}/${t.getUTCMonth()+1}/${t.getUTCDate()}`};
+/* 收集這次的狀態 */
+function ycjCollect(only){
+ const T1=[],T2=[],T3=[],T5=[],T6=[];
+ if(!only){
+  encFields().forEach(el=>{const k='f:'+el.id;
+   if(el.type==='checkbox'){if(el.checked)T2.push(keyId(k))}
+   else if(el.tagName==='SELECT'){if(el.selectedIndex>0)T1.push([keyId(k),el.selectedIndex])}
+   else{let v=parseFloat(el.value);if(isNaN(v)&&PREV[el.id]!==undefined)v=PREV[el.id];if(!isNaN(v))T1.push([keyId(k),Math.round(v*sc(el.id))])}});
+  MODS.forEach(m=>{if(!on(m.k))return;T2.push(keyId('mod:'+m.k));const S=CH[m.k];
+   Object.keys(S.dx).forEach(c=>T2.push(keyId(`cdx:${m.k}:${c}`)));
+   const md=Object.keys(S.med);if(md.length)T3.push([keyId('mod:'+m.k),md.map(t=>[keyId('drug:'+t.split(' ')[0]),fnv(t)&255])]);
+   const fg={},fm={};const L=MFU[m.k]||[];Object.entries(S.fu).forEach(([it,w])=>{const ix=L.indexOf(it);if(ix>=0)fm[w]=(fm[w]||0)+2**ix;else(fg[w]=fg[w]||[]).push(keyId(`cfu:${m.k}:${it}`))});Object.entries(fg).forEach(([w,ids])=>T5.push([keyId('mod:'+m.k),+w+2,ids]));Object.entries(fm).forEach(([w,mk])=>T6.push([keyId('mod:'+m.k),+w+2,mk]))});
+  Object.entries(PST).forEach(([id,v])=>T1.push([keyId('pst:'+id),v]));
+ }
+ (only||CCS).forEach(i=>{const c=i.c,st=i.st;T2.push(keyId('cc:'+c.id));if(i.dur!==durIdx(c.days))T1.push([keyId(`cc:${c.id}:dur`),i.dur]);if(i.rxd!==(c.rxd||3))T1.push([keyId(`cc:${c.id}:rxd`),i.rxd]);
+  ['sx','rf','pe'].forEach(g=>Object.entries(st[g]||{}).forEach(([k,v])=>T1.push([keyId(`${c.id}:${g}:${k}`),v===1?1:2])));
+  Object.entries(st.sel||{}).forEach(([k,v])=>T1.push([keyId(`${c.id}:sel:${k}`),v]));
+  Object.entries(st.num||{}).forEach(([k,v])=>{if(v!==''&&!isNaN(+v))T1.push([keyId(`${c.id}:num:${k}`),Math.round(+v*10)])});
+  ['dx','med','lab'].forEach(g=>Object.keys(st[g]||{}).forEach(k=>{if(st[g][k])T2.push(keyId(`${c.id}:${g}:${k}`))}));
+  Object.entries(st.fu||{}).forEach(([it,w])=>T1.push([keyId(`${c.id}:fu:${it}`),w+2]))});
+ return {T1,T2,T3,T5,T6};
+}
+function ycjEncode(only){
+ const {T1,T2,T3,T5,T6}=ycjCollect(only);if(!T1.length&&!T2.length&&!T3.length&&!T5.length&&!T6.length)return '';
+ const b=[];vput(b,1);vput(b,today());
+ if(T1.length){vput(b,1);vput(b,T1.length);T1.forEach(([i,v])=>{vput(b,i);vput(b,v)})}
+ if(T2.length){vput(b,2);vput(b,T2.length);T2.forEach(i=>vput(b,i))}
+ if(T3.length){vput(b,3);vput(b,T3.length);T3.forEach(([a,L])=>{vput(b,a);vput(b,L.length);L.forEach(([d,h])=>{vput(b,d);vput(b,h)})})}
+ if(T6.length){vput(b,6);vput(b,T6.length);T6.forEach(([a,w,mk])=>{vput(b,a);vput(b,w);vput(b,mk)})}
+ if(T5.length){vput(b,5);vput(b,T5.length);T5.forEach(([a,w,ids])=>{vput(b,a);vput(b,w);vput(b,ids.length);ids.forEach(i=>vput(b,i))})}
+ const c=crc16(b);const body=b32e(b)+AL[(c>>10)&31]+AL[(c>>5)&31]+AL[c&31];
+ return 'YCJ1-'+body.match(/.{1,8}/g).join('-');
+}
+function ycjDecode(str){
+ const m=str.trim().toUpperCase().replace(/\s/g,'').match(/^YCJ(\d)-?(.+)$/);if(!m)throw new Error('不是 YCJ 編碼（要以 YCJ1 開頭）');
+ if(m[1]!=='1')throw new Error('這是新版格式 YCJ'+m[1]+'，請更新網頁');
+ const s=m[2].replace(/-/g,'');if(s.length<6)throw new Error('編碼太短');
+ const crcS=s.slice(-3),bytes=b32d(s.slice(0,-3));
+ const c=crc16(bytes);const want=AL[(c>>10)&31]+AL[(c>>5)&31]+AL[c&31];
+ if(want!==crcS.replace(/O/g,'0').replace(/[IL]/g,'1'))throw new Error('檢查碼不符：可能少複製或打錯了');
+ const pos={i:0};const ver=vget(bytes,pos),date=vget(bytes,pos);const R_=revMap();
+ const out={ver,date,vals:{},flags:new Set(),meds:[],unknown:0};
+ while(pos.i<bytes.length){const t=vget(bytes,pos),n_=vget(bytes,pos);
+  for(let j=0;j<n_;j++){
+   if(t===1){const i=vget(bytes,pos),v=vget(bytes,pos);const k=R_.get(i);if(k)out.vals[k]=v;else out.unknown++}
+   else if(t===2){const i=vget(bytes,pos);const k=R_.get(i);if(k)out.flags.add(k);else out.unknown++}
+   else if(t===3){const a=vget(bytes,pos),L=vget(bytes,pos);const ka=R_.get(a);for(let q=0;q<L;q++){const d=vget(bytes,pos),h=vget(bytes,pos);const kd=R_.get(d);if(ka)out.meds.push({scope:ka,drug:kd?kd.slice(5):'',h});else out.unknown++}}
+   else if(t===5){const a=vget(bytes,pos),w=vget(bytes,pos),L=vget(bytes,pos);for(let q=0;q<L;q++){const i=vget(bytes,pos);const k=R_.get(i);if(k)out.vals[k]=w;else out.unknown++}}
+   else if(t===6){const a=vget(bytes,pos),w=vget(bytes,pos),mk=vget(bytes,pos);const ka=R_.get(a);const k=ka?ka.slice(4):null;const L=k?(MFU[k]||[]):[];let x=mk,ix=0;while(x>0){if(x%2){if(L[ix])out.vals[`cfu:${k}:${L[ix]}`]=w;else out.unknown++}x=Math.floor(x/2);ix++}}
+   else{out.unknown++;break}}
+  if(t>6)break;}
+ return out;
+}
+/* 上次的資料 */
+let LAST={},LASTFU={},PREVCC=[],PST={};
+const PSTL=['未選','已痊癒','改善','部分改善','未改善','惡化'];
+const PSTE=['','resolved','improved','partially improved','not improved','worsened'];
+const h8=t=>fnv(t)&255;
+function medTextByHash(scope,h,drug){const k=scope.slice(4);const pool=(MALT[k]||[]).concat(MC[k]?MC[k].med:[]);return pool.find(t=>t.startsWith(drug+' ')&&h8(t)===h)||pool.find(t=>t.startsWith(drug+' '))||drug}
+function ycjSummary(D){
+ const L=[`看診日：${dstr(D.date)}（${today()-D.date} 天前）`];
+ const fv=Object.entries(D.vals).filter(([k])=>k.startsWith('f:')).map(([k,v])=>{const id=k.slice(2),el=$(id);const lab=el?(el.closest('label')?el.closest('label').querySelector('span')?.textContent:id):id;return el&&el.tagName==='SELECT'?`${lab}：${el.options[v]?el.options[v].text:v}`:`${lab} ${v/sc(id)}`});
+ if(fv.length)L.push('數值與設定：'+fv.join('、'));
+ const mods=MODS.filter(m=>D.flags.has('mod:'+m.k));
+ mods.forEach(m=>{const dx=[...D.flags].filter(k=>k.startsWith(`cdx:${m.k}:`)).map(k=>k.split(':')[2]);const md=D.meds.filter(x=>x.scope==='mod:'+m.k).map(x=>medTextByHash(x.scope,x.h,x.drug).split(' (')[0].split('（')[0]);const fu=Object.entries(D.vals).filter(([k])=>k.startsWith(`cfu:${m.k}:`)).map(([k,v])=>`${k.split(':').slice(2).join(':')}（${(FUT.find(t=>t[0]===v-2)||[0,v-2+' 週'])[1]}）`);L.push(`${m.n}：診斷 ${dx.join(', ')||'—'}；用藥 ${md.join('、')||'—'}${fu.length?'；追蹤 '+fu.join('、'):''}`)});
+ CC.filter(c=>D.flags.has('cc:'+c.id)).forEach(c=>{const dx=c.dx.filter(d=>D.flags.has(`${c.id}:dx:${d.k}`)).map(d=>d.l);L.push(`主訴：${c.n}${dx.length?'（'+dx.join('、')+'）':''}`)});
+ if(D.unknown)L.push(`有 ${D.unknown} 項無法辨識（自訂文字，或較新版本才有的選項），已略過。`);
+ return L;
+}
+function ycjApply(D,opt){
+ const days=today()-D.date;
+ if(opt.pt||opt.mods){
+  Object.entries(D.vals).forEach(([k,v])=>{if(!k.startsWith('f:'))return;const id=k.slice(2),el=$(id);if(!el)return;
+   const isPt=id.startsWith('p_')||id.startsWith('x_');if(isPt&&!opt.pt)return;if(!isPt&&!opt.mods)return;
+   if(el.tagName==='SELECT'){if(id==='w_dose'&&window.fillWtHook)window.fillWtHook(v);else el.selectedIndex=v;return}
+   const val=v/sc(id);
+   if(PVF.includes(id)){if(opt.prev)setPrev(id,val);return}
+   if(id==='p_age'){el.value=Math.round(val+days/365.25);return}
+   if(id==='w_wk'){el.value=Math.round(val+days/7);return}
+   el.value=val});
+  [...D.flags].filter(k=>k.startsWith('f:')).forEach(k=>{const id=k.slice(2),el=$(id);if(!el)return;const isPt=id.startsWith('p_')||id.startsWith('x_');if((isPt&&opt.pt)||(!isPt&&opt.mods))el.checked=true});
+  if(opt.pt&&$('p_visit'))$('p_visit').value='0';
+  if(opt.prev&&D.vals['f:p_egfr']!==undefined&&days>=270&&$('c_prev')&&!$('c_prev').value)$('c_prev').value=D.vals['f:p_egfr']/sc('p_egfr');
+  PREVD=dstr(D.date);
+ }
+ if(opt.mods){
+  MODS.forEach(m=>{const cb=document.querySelector(`[data-mod="${m.k}"]`);if(D.flags.has('mod:'+m.k))cb.checked=true;
+   [...D.flags].filter(k=>k.startsWith(`cdx:${m.k}:`)).forEach(k=>CH[m.k].dx[k.split(':')[2]]=true);
+   LAST[m.k]=D.meds.filter(x=>x.scope==='mod:'+m.k).map(x=>({drug:x.drug,h:x.h,text:medTextByHash(x.scope,x.h,x.drug)}));
+   LASTFU[m.k]={};Object.entries(D.vals).filter(([k])=>k.startsWith(`cfu:${m.k}:`)).forEach(([k,v])=>LASTFU[m.k][k.split(':').slice(2).join(':')]=v-2)});
+  carryForward(days);
+ }
+ if(opt.cc){PREVCC=CC.filter(c=>D.flags.has('cc:'+c.id)).map(c=>{const st={sx:{},rf:{},pe:{},dx:{},med:{},lab:{},sel:{},num:{},fu:{}};
+   ['sx','rf','pe'].forEach(g=>c[g].forEach(x=>{const v=D.vals[`${c.id}:${g}:${x[0]}`];if(v)st[g][x[0]]=v===1?1:-1}));
+   (c.sel||[]).forEach(x=>{const v=D.vals[`${c.id}:sel:${x[0]}`];if(v!==undefined)st.sel[x[0]]=v});
+   (c.num||[]).forEach(x=>{const v=D.vals[`${c.id}:num:${x[0]}`];if(v!==undefined)st.num[x[0]]=v/10});
+   ['dx','med','lab'].forEach(g=>(g==='lab'?c.lab.map(l=>l[0]):c[g].map(x=>x.k)).forEach(k=>{if(D.flags.has(`${c.id}:${g}:${k}`))st[g][k]=true}));
+   Object.entries(D.vals).filter(([k])=>k.startsWith(`${c.id}:fu:`)).forEach(([k,v])=>st.fu[k.split(':').slice(2).join(':')]=v-2);
+   return {id:c.id,c,st,date:D.date,dur:D.vals[`cc:${c.id}:dur`]!==undefined?D.vals[`cc:${c.id}:dur`]:durIdx(c.days),rxd:D.vals[`cc:${c.id}:rxd`]||c.rxd||3}});PST={};}
+}
+/* 依上次開的藥，推回「目前治療」 */
+function carryForward(days){
+ const codes=k=>(LAST[k]||[]).map(x=>x.drug),texts=k=>(LAST[k]||[]).map(x=>x.text).join(' ');
+ const H=codes('htn');if(H.length&&$('h_step')){let st=0;const has_=c=>H.includes(c);
+  if(has_('SPI1'))st=6;else if(has_('NAT2')||has_('XAD1')||has_('EXF2'))st=5;else if(has_('TWY1')&&has_('NOR1'))st=4;else if(has_('TWY1'))st=3;else if(has_('EXF1')||(has_('NOR1')&&has_('MIC2')))st=2;else if(has_('NOR1')||has_('MIC2'))st=1;
+  if(st)$('h_step').value=String(st);}
+ const Dm=codes('dm');if(Dm.length&&$('d_lvl')){const cls=new Set();Dm.forEach(c=>{if(/VOL1|CTL1|XIG1|JAN2/.test(c))cls.add('met');if(/DIM3|AMA1/.test(c))cls.add('su');if(/JAR|FOR3|XIG1|GLY1/.test(c))cls.add('sglt');if(/TRA5|JAN|GLY1|GAL/.test(c))cls.add('dpp')});
+  let lv=0;if(Dm.includes('LANA'))lv=6;else if(Dm.some(c=>/OZEA|TRUA/.test(c)))lv=5;else if(cls.size>=3)lv=4;else if(cls.size===2)lv=days>=180?3:2;else if(cls.has('met'))lv=1;
+  if(lv)$('d_lvl').value=String(lv);}
+ const Lp=codes('lip'),tx=texts('lip');if(Lp.length&&$('l_cur')){let cur=0;if(/TUL1[^]*4#/.test(tx))cur=4;else if(/CRE2[^]*2#/.test(tx))cur=5;else if(/TUL1[^]*2#|ATO2/.test(tx))cur=2;else if(/CRE2/.test(tx))cur=3;else if(/TUL1/.test(tx))cur=1;
+  if(cur)$('l_cur').value=String(cur);const eze=Lp.includes('EZE1')||Lp.includes('ATO2');$('l_lvl').value=String(eze?4:(cur?(days>=42?3:2):$('l_lvl').value));}
+ const W=(LAST.wt||[]).map(x=>x.text).find(t=>/MOUC|WEGA|CON7|XEN1/.test(t));if(W&&$('w_drug')){const opts=[...$('w_drug').options];const oi=opts.findIndex(o=>o.text.split(' ')[0]===W.split(' ')[0]);if(oi>=0){$('w_drug').selectedIndex=oi;fillWt();const mg=(W.match(/(\d+(?:\.\d+)?) mg/)||[])[1];const dose=[...$('w_dose').options].findIndex(o=>mg&&o.text.startsWith(mg+' '));if(dose>0){$('w_dose').selectedIndex=dose;$('w_wk').value=Math.floor(days/7)}}}
+}
+function useLast(k){const S=CH[k];const pool=MC[k]?MC[k].med:[];(LAST[k]||[]).forEach(x=>{const t=pool.find(p=>p.startsWith(x.drug+' ')&&h8(p)===x.h)||pool.find(p=>p.startsWith(x.drug+' '));if(t)S.med[t]=true});Object.entries(LASTFU[k]||{}).forEach(([it,w])=>{if(S.fu[it]===undefined)S.fu[it]=w})}
+function prevBoxHtml(){if(!PREVCC.length)return '';return `<div class="sm" style="margin:10px 2px 4px">上次的問題（${dstr(PREVCC[0].date)}）：選這次的狀況，會寫進 S</div>`+PREVCC.map(pc=>{const dx=pc.c.dx.filter(d=>pc.st.dx[d.k]).map(d=>d.l);const cur=PST[pc.id]||0;return `<div class="prevcc"><b>${esc(pc.c.n)}</b>${dx.length?'<span class="sm">（'+esc(dx.join('、'))+'）</span>':''}<div class="tgs">${PSTL.slice(1).map((l,i)=>`<button type="button" class="tg2${cur===i+1?' on':''}" data-pst="${pc.id}" data-v="${i+1}">${l}</button>`).join('')}<button type="button" class="tg2 add" data-reuse="${pc.id}">＋以上次內容重新加入</button></div></div>`}).join('')}
+function prevS(){return PREVCC.filter(pc=>PST[pc.id]).map(pc=>{const dx=pc.c.dx.filter(d=>pc.st.dx[d.k]).map(d=>`${d.en} (${typeof d.icd==='function'?'':d.icd})`.replace(' ()',''));return `F/U previous ${pc.c.en}${dx.length?' ['+dx.join(', ')+']':''} (${dstr(pc.date)}): ${PSTE[PST[pc.id]]}.`})}
+
 /* ---------- 合併 ---------- */
 /* ---------- 慢性病：診斷、用藥、追蹤檢查（推薦＋點選） ---------- */
 let CH={};MODS.forEach(m=>CH[m.k]={dx:{},med:{},fu:{}});
@@ -1208,7 +1402,8 @@ const MDX={
  lip:[['E78.00','Pure hypercholesterolemia'],['E78.01','Familial hypercholesterolemia'],['E78.1','Pure hyperglyceridemia'],['E78.2','Mixed hyperlipidemia'],['E78.5','Hyperlipidemia, unspecified']],
  ckd:[['N18.1','CKD stage 1'],['N18.2','CKD stage 2'],['N18.31','CKD stage 3a'],['N18.32','CKD stage 3b'],['N18.4','CKD stage 4'],['N18.5','CKD stage 5'],['E11.22','Type 2 DM with diabetic CKD'],['I12.9','Hypertensive CKD']],
  wt:[['E66.9','Obesity, unspecified'],['E66.01','Morbid obesity due to excess calories'],['E66.3','Overweight'],['E88.81','Metabolic syndrome']],
- smk:[['F17.210','Nicotine dependence, cigarettes'],['F17.290','Nicotine dependence, other tobacco product'],['Z71.6','Tobacco abuse counseling']]};
+ smk:[['F17.210','Nicotine dependence, cigarettes'],['F17.290','Nicotine dependence, other tobacco product'],['Z71.6','Tobacco abuse counseling']],
+ trk:[['Z09','Follow-up exam after completed treatment'],['R74.01','Elevation of liver transaminase levels'],['D64.9','Anemia, unspecified'],['E61.1','Iron deficiency'],['R94.6','Abnormal results of thyroid function studies'],['E03.9','Hypothyroidism, unspecified'],['E04.1','Nontoxic single thyroid nodule'],['E79.0','Hyperuricemia without gout'],['R97.20','Elevated PSA'],['E55.9','Vitamin D deficiency'],['E53.8','Vitamin B12 deficiency'],['R73.03','Prediabetes'],['R91.1','Solitary pulmonary nodule'],['K80.20','Gallstone without cholecystitis'],['N28.1','Cyst of kidney, acquired'],['Z86.010','Personal history of colonic polyps'],['M81.0','Age-related osteoporosis']]};
 const MALT={
  htn:['NOR1 Norvasc (amlodipine) 5mg 1# QD','NOR1 Norvasc (amlodipine) 5mg 2# QD','MIC2 Micardis (telmisartan) 40mg 1# QD','MIC2 Micardis (telmisartan) 40mg 2# QD','TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD','EXF1 Exforge (valsartan 80/amlodipine 5) 1# QD','EXF2 Exforge HCT (amlodipine 5/valsartan 160/HCTZ 12.5) 1# QD','COD6 Co-Diovan (valsartan 80/HCTZ 12.5) 1# QD','NAT2 Natrilix SR (indapamide) 1.5mg 1# QD','SPI1 Spironolactone 25mg 1# QD','CON1 Concor (bisoprolol) 5mg 1/2# QD','XAD1 Xadosin SR (doxazosin) 4mg 1# HS','續用原降壓藥（慢箋）'],
  dm:['VOL1 Volv (metformin) 500mg 1# BID PC','VOL1 Volv (metformin) 500mg 2# BID PC','CTL1 C.T.L XR (metformin XR) 500mg 2# QD 晚餐後','DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC','JAR3 Jardiance (empagliflozin) 10mg 1# QD','FOR3 Forxiga (dapagliflozin) 10mg 1# QD','TRA5 Trajenta (linagliptin) 5mg 1# QD','JAN1 Januvia (sitagliptin) 100mg 1# QD','GLY1 Glyxambi (empagliflozin 25/linagliptin 5) 1# QD','XIG1 Xigduo XR (dapagliflozin 10/metformin XR 1000) 1# QD 晚餐後','OZEA Ozempic (semaglutide) 0.25mg SC qw x4 → 0.5mg qw','TRUA Trulicity (dulaglutide) 0.75mg SC qw','續用原降血糖藥（慢箋）'],
@@ -1216,7 +1411,7 @@ const MALT={
  ckd:['APR3 Aprovel (irbesartan) 300mg 1/2# QD','APR3 Aprovel (irbesartan) 300mg 1# QD','FOR3 Forxiga (dapagliflozin) 10mg 1# QD','KER2 Kerendia (finerenone) 20mg 1# QD','LOK5 Lokelma 5g 1 pack QD（高血鉀）','PRO14 Procal (calcium acetate) 667mg 1# TID 隨餐（高血磷）'],
  wt:['MOUC Mounjaro（tirzepatide） 2.5 mg SC qw（起始劑量）','WEGA Wegovy（semaglutide） 0.25 mg SC qw（起始劑量）','CON7 Contrave（naltrexone/bupropion） 1# QD AM （起始劑量）','XEN1 Xenical（orlistat） 120mg 1# TID 隨含脂餐'],
  smk:['CHA4 Champix (varenicline) 1mg 1/2# QD (D1–3) → 1/2# BID (D4–7) → 1# BID（第 8 天停菸）','CHA4 Champix (varenicline) 1mg 1# BID','NICOP Nicotinell TTS 20 貼片 1 片 QD','NIC4 Nicotinell 2mg 口嚼錠 q1-2h PRN（想抽時）','NICQ Nicorette QuickMist 口腔噴劑 1-2 噴 PRN（想抽時）','WEL4 Wellbutrin XL (bupropion) 150mg 1# QD AM x 3 days → 2# QD AM']};
-const MFU={htn:['Cr/eGFR','K','Na','Uric acid','FPG','HbA1c','Lipid profile','UACR','U/A','ECG','722 居家血壓'],dm:['HbA1c','FPG','Lipid profile','Cr/eGFR','UACR','ALT','Vit B12','K','眼底檢查','足部檢查'],lip:['Lipid profile','ALT','CK','HbA1c'],ckd:['Cr/eGFR','UACR','K','CBC (Hb)','Ca/P','HCO3','iPTH','U/A','腎臟超音波'],wt:['體重、腰圍','FPG/HbA1c','Lipid profile','ALT','Cr/eGFR','TSH'],smk:['吐氣 CO','LDCT','口腔黏膜檢查']};
+const MFU={htn:['Cr/eGFR','K','Na','Uric acid','FPG','HbA1c','Lipid profile','UACR','U/A','ECG','722 居家血壓'],dm:['HbA1c','FPG','Lipid profile','Cr/eGFR','UACR','ALT','Vit B12','K','眼底檢查','足部檢查'],lip:['Lipid profile','ALT','CK','HbA1c'],ckd:['Cr/eGFR','UACR','K','CBC (Hb)','Ca/P','HCO3','iPTH','U/A','腎臟超音波'],wt:['體重、腰圍','FPG/HbA1c','Lipid profile','ALT','Cr/eGFR','TSH'],smk:['吐氣 CO','LDCT','口腔黏膜檢查'],trk:['ALT','AST','Hb','Ferritin','TSH','FT4','Uric acid','Cr','PSA','25-OH Vit D','Vit B12','CRP','HbA1c','AFP','腹部超音波','甲狀腺超音波','胸部 CT','大腸鏡','胃鏡','骨密度 DXA']};
 const MC={};
 function chronicChips(k,r,p){
  const codes=[...new Set((r.A.join(' ').match(/\b[A-Z]\d{2}(?:\.[0-9A-Z]{1,4})?/g)||[]))].filter(c=>/\./.test(c)||/^I10$/.test(c));
@@ -1233,8 +1428,10 @@ function chronicChips(k,r,p){
  MC[k]={dx:dxl.map(d=>d[0]),med:meds,dxen:Object.fromEntries(dxl),recDx,recMed,firsts,fuc};
  const S=CH[k];
  const dxb=dxl.map(([c,en],i)=>{const rc=recDx.has(c),o=!!S.dx[c];return `<button type="button" class="tg2${o?' on':''}${rc?' rec':''}" style="${rc?rot():''}" data-chm="${k}" data-chg="dx" data-chi="${i}">${esc(c)} <small>${esc(en)}</small></button>`}).join('');
- const mdb=meds.map((m,i)=>{const rc=recMed.has(m),o=!!S.med[m];return `<button type="button" class="tg2${o?' on':''}${rc?' rec':''}" style="${rc?rot():''}" data-chm="${k}" data-chg="med" data-chi="${i}">${esc(m)}</button>`}).join('');
- return `<div class="adoptrow"><button type="button" class="b adopt" data-adoptm="${k}">全部採用推薦</button><button type="button" class="b g" data-unselm="${k}">清除已選</button></div>
+ const LL=LAST[k]||[];const isLast=m=>LL.some(x=>m.startsWith(x.drug+' ')&&(x.h===h8(m)||!meds.some(q=>q.startsWith(x.drug+' ')&&h8(q)===x.h)));
+ const mdb=meds.map((m,i)=>{const rc=recMed.has(m),o=!!S.med[m];return `<button type="button" class="tg2${o?' on':''}${rc?' rec':''}${isLast(m)?' last':''}" style="${rc?rot():''}" data-chm="${k}" data-chg="med" data-chi="${i}">${esc(m)}</button>`}).join('');
+ const lastInfo=(LL.length||Object.keys(LASTFU[k]||{}).length)?`<div class="lastinfo">上次（${PREVD}）：${esc(LL.map(x=>x.text.split(' (')[0].split('（')[0]).join('、')||'—')}${Object.keys(LASTFU[k]||{}).length?'；追蹤 '+esc(Object.keys(LASTFU[k]).join('、')):''} <button type="button" class="b o sm2" data-lastm="${k}">沿用上次</button></div>`:'';
+ return `${lastInfo}<div class="adoptrow"><button type="button" class="b adopt" data-adoptm="${k}">全部採用推薦</button><button type="button" class="b g" data-unselm="${k}">清除已選</button></div>
  <div class="sm">診斷（<span class="reck">亮框＝推薦</span>，點了才寫進病歷）</div><div class="tgs">${dxb}</div>
  <div class="sm">用藥（推薦依上面的數值與規則；也可以改點院內其他品項）</div><div class="tgs">${mdb}</div>
  <div class="sm">追蹤檢查（可選時間）</div>${fuHtml('m:'+k,fuc,S.fu)}`;
@@ -1251,9 +1448,10 @@ function build(){
  const p=pt();const order=MODS.map(m=>m.k).filter(on);
  MODS.forEach(m=>{$('m_'+m.k).hidden=!on(m.k)});
  renderCCs();
+ $('prevBox').innerHTML=prevBoxHtml();
  const AC=CCS.map(i=>evalCC(i,p));
  {const seen=new Set();AC.forEach(a=>{a.rx=a.rx.filter(r=>{const code=r.split(' ')[0];if(/^[A-Z][A-Z0-9]{2,5}$/.test(code)&&seen.has(code)){a.P=a.P.map(l=>l==='  '+r?`  ${code}：同上，不重複開`:l);return false}seen.add(code);return true})})}
- if(!order.length&&!AC.length){$('gout').value='先加入主訴，或勾選這次要處理的慢性病。';$('gslip').value='';$('gwarn').innerHTML='';handout([],p,{},4,[],[],[]);saveState();return}
+ if(!order.length&&!AC.length&&!Object.keys(PST).length){$('gout').value='先加入主訴，或勾選這次要處理的慢性病。';$('gslip').value='';$('gwarn').innerHTML='';handout([],p,{},4,[],[],[]);saveState();return}
  const res={};const ctx={};
  if(on('htn')){res.htn=HTN(p);ctx.htnArb=res.htn.rx.some(m=>/sartan|TWY1|EXF|MIC2|APR3/.test(m))}
  if(on('dm')){res.dm=DM(p);ctx.dmSglt=res.dm.rx.some(m=>/flozin|GLY1|Glyxambi/.test(m))}
@@ -1261,27 +1459,31 @@ function build(){
  if(on('ckd'))res.ckd=CKD(p,ctx);
  if(on('wt'))res.wt=WTM(p);
  if(on('smk'))res.smk=SMK(p);
+ if(on('trk'))res.trk=TRK(p);
  order.forEach(k=>{const r=res[k];$('chips_'+k).innerHTML=chronicChips(k,r,p);r.rxRec=r.rx;r.rx=MC[k].med.filter(m=>CH[k].med[m]);});
- const names={htn:'HTN',dm:'T2DM',lip:'HLD',ckd:'CKD',wt:'Obesity',smk:'Smoking'};
+ const names={htn:'HTN',dm:'T2DM',lip:'HLD',ckd:'CKD',wt:'Obesity',smk:'Smoking',trk:'Other F/U'};
  const S=[];
  if(AC.length)S.push(`S: CC: ${AC.map(a=>a.cc).join('; ')}.`);
  if(order.length)S.push(`${AC.length?'   Also':'S:'} ${p.visit?'initial visit':'F/U'} for ${order.map(k=>names[k]).join(', ')}.`);
+ if(!S.length)S.push('S: F/U.');
+ prevS().forEach(x=>S.push('   '+x));
  AC.forEach(a=>a.S.forEach(x=>S.push('   '+x)));
  const pmh=order.map(k=>names[k]).concat(COMORB.filter(([k])=>p[k]&&['cad','stroke','pad','hfref','af','gout','osa','prediab'].includes(k)).map(([,l])=>l));
  S.push(`   PMH: ${pmh.length?pmh.join(', '):'[ ]'}. Meds: [ ]. Allergy: ${alg(p)}.`);
  S.push(`   Smoking: ${p.smoker?B(p.cig)+' cig/day':'[non-smoker]'}. Alcohol: [ ].${p.sex==='F'&&has(p.age)&&p.age<55?' Pregnancy: '+(p.preg?'(+)':'[no]')+'.':''}`);
  order.forEach(k=>res[k].S.forEach(x=>S.push('   '+x)));
- const O=[`O: BT ${B(p.bt)}°C, BP ${B(p.sbp)}/${B(p.dbp)} mmHg, HR ${B(p.hr)}/min, RR ${B(p.rr)}/min, SpO2 ${B(p.spo2)}%${order.length||has(p.wt)?`, BW ${B(p.wt)} kg${order.length?`, BH ${B(p.ht)} cm, BMI ${B(p.bmi)}`:''}`:''}${has(p.waist)?', waist '+p.waist+' cm':''}.`];
+ const O=[`O: BT ${B(p.bt)}°C, BP ${pv2('p_sbp','p_dbp',' mmHg')}, HR ${pv('p_hr')}/min, RR ${B(p.rr)}/min, SpO2 ${B(p.spo2)}%${order.length||has(p.wt)?`, BW ${pv('p_wt',' kg')}${order.length?`, BH ${B(p.ht)} cm, BMI ${B(p.bmi)}`:''}`:''}${has(p.waist)?', waist '+p.waist+' cm':''}.`];
  const pe=[...document.querySelectorAll('[data-pe]:checked')].filter(x=>x.dataset.pe==='base'||on(x.dataset.pe)).map(x=>x.value);
  const peU=[...new Set(pe)];
  const acPe=AC.flatMap(a=>a.pe);
  if(peU.length||acPe.length){if(peU.length)O.push('   PE: '+peU.join('; ')+'.');if(acPe.length)O.push('   '+(peU.length?'':'PE: ')+acPe.join(', ')+'.')}else O.push('   PE: [只寫實際有做的項目]');
  if(order.length){const L=[];
-  if(on('dm')&&has(n('d_a1c')))L.push('HbA1c '+n('d_a1c')+'%');
-  if(on('lip')){['l_tc','l_ldl','l_hdl','l_tg'].forEach(i=>{if(has(n(i)))L.push(i.slice(2).toUpperCase().replace('LDL','LDL-C').replace('HDL','HDL-C')+' '+n(i))})}
-  if(has(p.egfr))L.push('eGFR '+p.egfr);if(has(p.uacr))L.push('UACR '+p.uacr+' mg/g');if(has(p.k))L.push('K '+p.k);
+  if(on('dm')&&has(n('d_a1c')))L.push('HbA1c '+pv('d_a1c','%'));
+  if(on('lip')){[['l_tc','TC'],['l_ldl','LDL-C'],['l_hdl','HDL-C'],['l_tg','TG']].forEach(([i,l])=>{if(has(n(i)))L.push(l+' '+pv(i))})}
+  if(has(p.egfr))L.push('eGFR '+pv('p_egfr'));if(has(p.uacr))L.push('UACR '+pv('p_uacr',' mg/g'));if(has(p.k))L.push('K '+pv('p_k'));
   O.push('   Lab ([date]): '+(L.length?L.join(', '):'[ ]')+'.');}
  const A=['A:'];let i=1;AC.forEach(a=>a.A.forEach(x=>A.push(`   ${i++}. ${x}`)));order.forEach(k=>{const sl=MC[k].dx.filter(c=>CH[k].dx[c]);A.push(`   ${i++}. ${sl.length?sl.map(c=>`${MC[k].dxen[c]||c} (${c})`).join(' + '):'[ ]'}; ${res[k].info||''}`)});
+ const YC=ycjEncode();if(YC)A.push('   YCJ: '+YC);
  const P=['P:'];let j=1;
  AC.forEach(a=>a.P.forEach((x,ix)=>P.push(ix===0?`   ${j++}. ${x}`:`     ${x.trim()}`)));
  order.forEach(k=>{const r=res[k];P.push(`   ${j++}. ${r.P[0]}`);r.rx.forEach(x=>P.push(`     ${x}`));r.P.slice(1).filter(x=>x!==''&&!r.rxRec.includes(x.trim())).forEach(x=>P.push(`     ${x.trim()}`))});
@@ -1334,10 +1536,13 @@ document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.c
 ['pointerup','pointerleave','pointercancel'].forEach(ev=>document.addEventListener(ev,()=>clearTimeout(lp)));
 document.addEventListener('contextmenu',e=>{const t=e.target.closest&&e.target.closest('.tri');if(!t||!inCards(t))return;e.preventDefault();clearTimeout(lp);if(recent())return;triSet(t,-1)});
 document.addEventListener('click',e=>{
- const t=e.target.closest&&e.target.closest('.tri,.tg2,[data-rm],[data-tpladd],[data-tplmod],[data-adopt],[data-unsel],[data-adoptm],[data-unselm],[data-fux]');if(!t||!inCards(t))return;
+ const t=e.target.closest&&e.target.closest('.tri,.tg2,[data-rm],[data-tpladd],[data-tplmod],[data-adopt],[data-unsel],[data-adoptm],[data-unselm],[data-fux],[data-lastm]');if(!t||!inCards(t))return;
  if(t.dataset.adopt){const inst=findInst(t.dataset.adopt);adoptInst(inst);refresh(inst);return}
  if(t.dataset.unsel){const inst=findInst(t.dataset.unsel);Object.assign(inst.st,{dx:{},med:{},lab:{},fu:{}});refresh(inst);return}
  if(t.dataset.adoptm){adoptModule(t.dataset.adoptm);build();return}
+ if(t.dataset.lastm){useLast(t.dataset.lastm);build();return}
+ if(t.dataset.pst){const v=+t.dataset.v;PST[t.dataset.pst]=PST[t.dataset.pst]===v?0:v;if(!PST[t.dataset.pst])delete PST[t.dataset.pst];build();return}
+ if(t.dataset.reuse){const pc=PREVCC.find(x=>x.id===t.dataset.reuse);if(pc&&!CCS.some(x=>x.c.id===pc.id))CCS.push({uid:++ccSeq,c:pc.c,st:JSON.parse(JSON.stringify(pc.st)),dur:pc.dur,rxd:pc.rxd});build();return}
  if(t.dataset.unselm){CH[t.dataset.unselm]={dx:{},med:{},fu:{}};build();return}
  if(t.dataset.chm){const k=t.dataset.chm,g=t.dataset.chg,key=MC[k][g][+t.dataset.chi];const o=CH[k][g];if(o[key])delete o[key];else o[key]=true;build();return}
  if(t.dataset.fuo){const ow=t.dataset.fuo,o=fuObj(ow);if(!o)return;
@@ -1493,7 +1698,7 @@ function doSave(){try{
  const pe=[...G.querySelectorAll('[data-pe]')].map(x=>x.checked);
  const cc=CCS.map(i=>({id:i.c.id,st:i.st,dur:i.dur,rxd:i.rxd,preset:i.preset||[]}));
  const tp={};Object.values(TPLI).forEach(i=>tp[i.n]={st:i.st,dur:i.dur,rxd:i.rxd});
- localStorage.setItem(SKEY,JSON.stringify({t:Date.now(),inp,mods,pe,cc,ch:CH,tp}));}catch(e){}}
+ localStorage.setItem(SKEY,JSON.stringify({t:Date.now(),inp,mods,pe,cc,ch:CH,tp,prev:PREV,prevd:PREVD,last:LAST,lastfu:LASTFU,pcc:PREVCC.map(x=>({id:x.id,st:x.st,date:x.date,dur:x.dur,rxd:x.rxd})),pst:PST}));}catch(e){}}
 addEventListener('pagehide',()=>{clearTimeout(saveT);doSave()});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(saveT);doSave()}});
 function restoreState(){try{const j=JSON.parse(localStorage.getItem(SKEY)||'null');if(!j||Date.now()-j.t>12*3600e3)return false;
  Object.entries(j.inp||{}).forEach(([id,v])=>{const el=$(id);if(!el)return;if(el.type==='checkbox')el.checked=v;else el.value=v});
@@ -1502,6 +1707,7 @@ function restoreState(){try{const j=JSON.parse(localStorage.getItem(SKEY)||'null
  G.querySelectorAll('[data-pe]').forEach((x,i)=>x.checked=!!(j.pe||[])[i]);
  CCS=(j.cc||[]).map(o=>({uid:++ccSeq,c:CC.find(c=>c.id===o.id),st:o.st,dur:o.dur,rxd:o.rxd,preset:o.preset})).filter(x=>x.c);
  if(j.ch)MODS.forEach(m=>{if(j.ch[m.k])CH[m.k]=j.ch[m.k]});
+ Object.entries(j.prev||{}).forEach(([id,v])=>setPrev(id,v));PREVD=j.prevd||'';LAST=j.last||{};LASTFU=j.lastfu||{};PST=j.pst||{};PREVCC=(j.pcc||[]).map(o=>({...o,c:CC.find(c=>c.id===o.id)})).filter(x=>x.c);
  Object.entries(j.tp||{}).forEach(([n_,o])=>{const m=TMAP[n_];if(Array.isArray(m)){const c=CC.find(x=>x.id===m[0]);TPLI[n_]={uid:'t'+n_,n:+n_,tpl:true,c,st:o.st,preset:m[1],dur:o.dur,rxd:o.rxd}}});
  return true}catch(e){return false}}
 let rstT=0;
@@ -1509,13 +1715,21 @@ function resetAll(btn){
  if(Date.now()-rstT>3000){rstT=Date.now();btn.textContent='再按一次確認還原';btn.classList.add('arm');setTimeout(()=>{btn.textContent='全部還原（換病人）';btn.classList.remove('arm')},3000);return}
  rstT=0;btn.textContent='全部還原（換病人）';btn.classList.remove('arm');
  G.querySelectorAll('input,select').forEach(el=>{if(el.type==='checkbox')el.checked=false;else if(el.tagName==='SELECT')el.selectedIndex=0;else el.value=''});
- fillWt();CCS=[];MODS.forEach(m=>CH[m.k]={dx:{},med:{},fu:{}});TPLI={};
+ fillWt();CCS=[];MODS.forEach(m=>CH[m.k]={dx:{},med:{},fu:{}});TPLI={};clearPrev();LAST={};LASTFU={};PREVCC=[];PST={};$('ycjPrev').innerHTML='';
  document.querySelectorAll('.tplcc').forEach(b=>{b.innerHTML='';delete b.dataset.m;const d=b.closest('details.card');if(d&&d.open)mountTpl(b)});
  try{localStorage.removeItem(SKEY)}catch(e){}
  build();window.scrollTo(0,0);
 }
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#resetAll');if(b)resetAll(b)});
 
+
+let YD=null;
+document.addEventListener('click',e=>{const t=e.target;
+ if(t.id==='ycjGo'){const box=$('ycjPrev');try{YD=ycjDecode($('ycjIn').value);box.innerHTML='<ul class="ycjs">'+ycjSummary(YD).map(l=>'<li>'+esc(l)+'</li>').join('')+'</ul><div class="tgs"><label class="tg"><input type="checkbox" id="yo_pt" checked><span>病人資料</span></label><label class="tg"><input type="checkbox" id="yo_mods" checked><span>慢性病（診斷、上次用藥、追蹤）</span></label><label class="tg"><input type="checkbox" id="yo_prev" checked><span>上次數值</span></label><label class="tg"><input type="checkbox" id="yo_cc" checked><span>上次的問題</span></label></div><button type="button" class="b" id="ycjApply">帶入</button>'}catch(err){YD=null;box.innerHTML='<div class="rfwarn">'+esc(err.message)+'</div>'}}
+ if(t.id==='ycjApply'&&YD){ycjApply(YD,{pt:$('yo_pt').checked,mods:$('yo_mods').checked,prev:$('yo_prev').checked,cc:$('yo_cc').checked});$('ycjPrev').innerHTML='<div class="score">已帶入 '+dstr(YD.date)+' 的資料。灰字是上次的數值，輸入這次的數值就會取代。</div>';$('ycjIn').value='';YD=null;build();}
+});
+document.addEventListener('keydown',e=>{if(e.target.id==='ycjIn'&&e.key==='Enter'){e.preventDefault();$('ycjGo').click()}});
+window.__ycjKeys=ycjKeys;window.__ycj={enc:ycjEncode,dec:ycjDecode,col:ycjCollect,rev:()=>revMap()};
 /* 模板查詢：互動卡 */
 const TMAP={1:['resp',['uri']],2:['resp',['phar']],3:['resp',['bronch']],4:['resp',['flu']],5:['resp',['covid']],6:['resp',['sinus']],7:['ar',[]],8:['asthma',[]],9:['copd',[]],10:['ear',['aom']],11:['ear',['oe']],12:['ccough',[]],13:['age',[]],14:['abd',['gerd']],15:['abd',['dysp']],16:['const',[]],17:['ibs',[]],18:['hemo',[]],19:['masld',[]],20:['hep',[]],21:{mod:'htn',n:'高血壓'},22:{mod:'dm',n:'糖尿病'},23:{mod:'lip',n:'血脂'},24:['joint',['gout']],25:{mod:'wt',n:'減重'},26:{mod:'ckd',n:'CKD'},101:['cp',[]],102:['fever',[]],103:['ha',[]],104:['dizzy',[]],105:['abd',[]],106:['dysp',[]],107:['palp',[]],108:['uti',[]],109:['edema',[]],110:['fatigue',[]],111:['lbp',[]],112:['joint',[]]};
 const alg=p=>{const l=[p.pcn?'penicillin':'',p.nsaidx?'NSAID':'',p.alg].filter(Boolean);return l.length?l.join(', '):'[NKDA]'};
@@ -1532,6 +1746,7 @@ function soloSOAP(inst){
  L.push(`O: BT ${B(p.bt)}°C, BP ${B(p.sbp)}/${B(p.dbp)} mmHg, HR ${B(p.hr)}/min, RR ${B(p.rr)}/min, SpO2 ${B(p.spo2)}%.`);
  L.push('   PE: '+(r.pe.length?r.pe.join(', '):'[只寫實際有做的項目]')+'.');
  L.push('A:');r.A.forEach((x,i)=>L.push(`   ${i+1}. ${x}`));
+ const yc=ycjEncode([inst]);if(yc)L.push('   YCJ: '+yc);
  L.push('P:');r.P.slice(1).forEach(x=>L.push('   '+x.trim()));
  if(r.edu.length)L.push('   Education: '+r.edu.join(' '));
  L.push('   F/U OPD PRN or in [ ] days.');
@@ -1553,8 +1768,8 @@ function mountTpl(box){
  renderTpl(TPLI[n]);
 }
 document.addEventListener('toggle',e=>{const d=e.target;if(d.matches&&d.matches('details.card')&&d.open){const b=d.querySelector('.tplcc');if(b&&!b.dataset.m)mountTpl(b)}},true);
-G.addEventListener('input',e=>{if(e.target.closest('#ccList,.chrow'))return;if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
-G.addEventListener('change',e=>{if(e.target.closest('#ccList,.chrow'))return;if(e.target.tagName==='INPUT'&&/^(number|text)$/.test(e.target.type))return;if(e.target.id==='gout'||e.target.id==='gslip')return;build();Object.values(TPLI).forEach(renderTpl)});
+G.addEventListener('input',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox'))return;if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
+G.addEventListener('change',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox'))return;if(e.target.tagName==='INPUT'&&/^(number|text)$/.test(e.target.type))return;if(e.target.id==='gout'||e.target.id==='gslip')return;build();Object.values(TPLI).forEach(renderTpl)});
 $('gregen').addEventListener('click',build);
 $('gclear').addEventListener('click',()=>{CCS=[];G.querySelectorAll('input').forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''});G.querySelectorAll('select').forEach(s=>s.selectedIndex=0);fillWt();build()});
 // base PE
@@ -1562,14 +1777,15 @@ const bp=document.createElement('div');bp.innerHTML=peHtml('base');G.querySelect
 build();
 /* ---------- 衛教單張（門診實務共用套件 clinic-kit） ---------- */
 const HO={
- mascot:{htn:'heart',dm:'drop',lip:'heart',ckd:'kidney',wt:'leaf',smk:'lung'},
- title:{htn:'血壓照護單',dm:'血糖照護單',lip:'血脂照護單',ckd:'護腎照護單',wt:'體重管理單',smk:'戒菸計畫單'},
- warn:{htn:'血壓超過 180/120，合併頭痛、胸痛、視力模糊或手腳無力',
+ mascot:{htn:'heart',dm:'drop',lip:'heart',ckd:'kidney',wt:'leaf',smk:'lung',trk:'leaf'},
+ title:{htn:'血壓照護單',dm:'血糖照護單',lip:'血脂照護單',ckd:'護腎照護單',wt:'體重管理單',smk:'戒菸計畫單',trk:'追蹤照護單'},
+ warn:{trk:'新的症狀或報告異常時，提早回診',htn:'血壓超過 180/120，合併頭痛、胸痛、視力模糊或手腳無力',
   dm:'血糖一直超過 300、很渴尿很多、噁心嘔吐；低血糖吃糖 15 分鐘後沒改善或叫不醒：打 <b>119</b>',
   lip:'全身肌肉痛、沒力氣、尿變成可樂色',
   ckd:'尿量變很少、全身水腫、喘到不能躺平',
   wt:'上腹痛很厲害、痛到背，或一直吐、吃不下（可能是胰臟炎或膽結石）',
-  smk:'用戒菸藥後情緒明顯低落、異常激動：先停藥並馬上聯絡醫師'}
+  smk:'用戒菸藥後情緒明顯低落、異常激動：先停藥並馬上聯絡醫師'},
+ trk:['TED1 Tedalin (ferric hydroxide) 100mg 1# BID','ELT2 Eltroxin (levothyroxine) 50ug 1# QD AC','LIQSC LiquiD (vitamin D3 400IU/drop) 2 drops QD','MET2 Methycobal (mecobalamin) 500ug 1# TID','FOA2 Folic acid 5mg 1# QD','ALL3 Allopurinol 100mg 1# QD']
 };
 function handout(order,p,res,fu,next,goals,AC){
  AC=AC||[];const V={};order.forEach(k=>Object.assign(V,res[k].v||{}));
@@ -1577,7 +1793,7 @@ function handout(order,p,res,fu,next,goals,AC){
  const C=window.CK_CONFIG;if(!C)return;
  C.mascot=HO.mascot[order[0]]||'leaf';
  C.sheetTitle=order.length===1&&!AC.length?HO.title[order[0]]:order.length?'慢性病照護單':'看診照護單';
- if(!('_move' in C))C._move=C.move;C.move=order.filter(k=>k!=='smk').length?C._move:false;
+ if(!('_move' in C))C._move=C.move;C.move=order.filter(k=>k!=='smk'&&k!=='trk').length?C._move:false;
  const rx=order.flatMap(k=>res[k].rx||[]).join(' ');
  C.warn=['胸痛、喘不過氣、單側手腳無力、講話不清楚：打 <b>119</b>'].concat(order.map(k=>HO.warn[k])).concat(AC.length?['這次的病：'+AC.map(a=>a.ret).join('; ')]:[]).concat(/flozin|GLY1|Glyxambi/.test(rx)?['吃 -flozin 類的藥：吐、肚子痛、很喘很累，就算血糖不高也要就醫']:[]);
  C.bring=['所有藥袋'].concat(order.includes('htn')?['7 天血壓紀錄']:[]).concat(order.includes('dm')&&/insulin|glargine|gliclazide/i.test(rx)?['血糖紀錄']:[]).concat(['其他醫院的檢驗報告']);
@@ -1722,7 +1938,7 @@ window.CK_CONFIG={
     [/bupropion/i,"減少想抽菸","停菸日前 1–2 週開始吃；兩次間隔 8 小時，第二次不要太晚吃。"]
   ],
   plate(){
-    const S=window.CK_SOAP;if(!S)return null;const m=S.mods.filter(k=>k!=="smk");if(!m.length)return null;
+    const S=window.CK_SOAP;if(!S)return null;const m=S.mods.filter(k=>k!=="smk"&&k!=="trk");if(!m.length)return null;
     const side=[];if(m.includes("htn")||m.includes("ckd"))side.push("salt");if(m.includes("dm")||m.includes("wt"))side.push("boba");if(m.includes("ckd"))side.push("star");
     if(side.length<3&&!m.includes("ckd"))side.push("fruit");if(side.length<3)side.push("water");
     const tips=[];

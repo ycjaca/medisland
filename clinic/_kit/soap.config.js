@@ -123,7 +123,7 @@ window.CK_CONFIG={
     [/bupropion/i,"減少想抽菸","停菸日前 1–2 週開始吃；兩次間隔 8 小時，第二次不要太晚吃。"]
   ],
   plate(){
-    const S=window.CK_SOAP;if(!S)return null;const m=S.mods.filter(k=>k!=="smk");if(!m.length)return null;
+    const S=window.CK_SOAP;if(!S)return null;const m=S.mods.filter(k=>k!=="smk"&&k!=="trk");if(!m.length)return null;
     const side=[];if(m.includes("htn")||m.includes("ckd"))side.push("salt");if(m.includes("dm")||m.includes("wt"))side.push("boba");if(m.includes("ckd"))side.push("star");
     if(side.length<3&&!m.includes("ckd"))side.push("fruit");if(side.length<3)side.push("water");
     const tips=[];
