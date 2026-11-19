@@ -1402,7 +1402,7 @@ $("ckPull").onclick=pull;
 $("ckDate").value=today();$("ckNext").value=addDays(today(),C.days||28);
 function onHandoutOpen(){if(!medsDirty)pull();}
 // printing: only the sheet; window.print is blocked inside the claude.ai preview
-const canPrint=/(^|\.)github\.io$|^localhost$|^127\.|^$/.test(location.hostname)||location.protocol==="file:";
+const canPrint=!(/claude|anthropic/i.test(location.hostname)||/claude\.ai/.test(document.referrer)||[...(location.ancestorOrigins||[])].some(o=>/claude|anthropic/i.test(o)));
 if(!canPrint&&C.siteUrl){$("ckPrint").textContent="到網站版列印";$("ckPrintNote").innerHTML='預覽畫面不能列印，請開 <a href="'+esc(C.siteUrl)+'#handout" target="_blank" rel="noopener">網站版</a>。';}
 $("ckPrint").onclick=()=>{
   if(!canPrint&&C.siteUrl){window.open(C.siteUrl+"#handout","_blank","noopener");return;}
