@@ -142,6 +142,9 @@ details.ccblk{border-left:5px solid #7a5af0}details.ccblk>summary{color:#5a3d99;
 .consn{color:#6b5a1f;background:#faf5e6;border-radius:6px;padding:4px 8px}
 input.bad{outline:2px solid #d9534f;background:#fff1f0}
 #custLab .furow input{flex:0 1 7em}
+.lrow{display:flex;width:100%;margin:2px 0}.lrow small{color:#7a7468}
+#labIn{width:100%;box-sizing:border-box;font:13px/1.4 ui-monospace,monospace;padding:8px;border:1px solid var(--line);border-radius:8px}
+.cufav{margin:4px 0}.cufav .ccx{font-size:11px;padding:0 4px;margin-left:-4px}
 .lastinfo{background:#f1efe8;border-radius:8px;padding:6px 10px;font-size:13.5px;margin:4px 0 8px}
 .b.sm2{font-size:12.5px;padding:3px 9px;margin-left:6px}
 .prevcc{background:#fff;border:1px solid var(--line);border-left:4px solid #5d6258;border-radius:8px;padding:6px 10px;margin:6px 0}
@@ -154,7 +157,7 @@ footer a{color:var(--acc)}
 </head>
 <body>
 <header><div class="wrap">
-  <h1>門診速查 <small>v0.8 · 2026-11-20</small><button type="button" id="resetAll" class="rst">全部還原（換病人）</button></h1>
+  <h1>門診速查 <small>v0.9 · 2026-11-20</small><button type="button" id="resetAll" class="rst">全部還原（換病人）</button></h1>
   <div class="tabs"><button class="tab" data-tab="gen">慢性病 SOAP 產生器</button><button class="tab" data-tab="tpl">模板查詢</button><button class="tab" data-tab="drug">院內藥品</button></div>
   <div class="drugonly"><input id="dq" type="search" placeholder="代碼、商品名、學名、類別，例如 NAP2、naproxen、PPI…" autocomplete="off"></div>
   <div class="tplonly">
@@ -889,6 +892,7 @@ function fieldHtml(f){
 function peHtml(k){return `<div class="pe"><div class="sm">理學檢查（只勾有做的，才會寫進 O）</div>${PE[k].map((p,i)=>`<label class="tg pe1"><input type="checkbox" data-pe="${k}" value="${esc(p)}"><span>${esc(p)}</span></label>`).join('')}</div>`}
 G.innerHTML=`
 <details class="blk" id="ycjBox"><summary>帶入 YCJ 編碼（回診）</summary><div class="fuadd"><input id="ycjIn" type="text" placeholder="貼上上次 SOAP 裡的 YCJ1-…" autocomplete="off" spellcheck="false"><button type="button" class="b" id="ycjGo">解析</button></div><div id="ycjPrev"></div></details>
+<details class="blk" id="labBox"><summary>貼上檢驗報告（自動填數值）</summary><textarea id="labIn" rows="5" spellcheck="false" placeholder="從 HIS 複製檢驗結果整段貼上，例如&#10;Creatinine 1.23 mg/dL&#10;HbA1c 7.4 %&#10;LDL-C 128 mg/dL"></textarea><div class="btns"><button type="button" class="b" id="labGo">解析</button><button type="button" class="b g" id="labClr">清空</button></div><div id="labPrev"></div></details>
 <details class="blk" open><summary>病人</summary><div class="grid">
  <label class="fld"><span>就診</span><select id="p_visit"><option value="0">回診</option><option value="1">初診</option></select></label>
  <label class="fld"><span>年齡</span><input id="p_age" type="number" inputmode="numeric"></label>
@@ -1419,7 +1423,7 @@ const h16=s=>fnv(s)&0xFFFF;
 const PVF=['p_sbp','p_dbp','p_hr','p_bt','p_rr','p_spo2','p_wt','p_waist','p_egfr','p_cr','p_na','th_tsh','th_ft4','th_ft3','p_uacr','p_k','p_cig','h_sbp','h_dbp','d_a1c','d_fpg','l_ldl','l_hdl','l_tg','l_tc'].concat(TRKI.map(x=>x[0]));
 const NOENC=new Set(['ycjIn','p_alg']);
 const DEC=new Set(['p_k','p_bt','p_wt','p_ht','p_waist','d_a1c','w_base','t_a1c','t_tsh','t_ft4','t_ua','t_cr','t_ca','t_psa','t_hb','t_crp','t_vd','t_alt','th_ft3'].concat([]));const SCX={p_cr:100,th_tsh:1000,th_ft4:100};const sc=id=>SCX[id]||(DEC.has(id)?10:1);
-function encFields(){return [...G.querySelectorAll('input[id],select[id]')].filter(el=>!NOENC.has(el.id)&&!/^(ck|gout|gslip)/.test(el.id)&&el.type!=='text'&&!el.closest('#ccList,.chrow,#ycjBox,#prevBox'))}
+function encFields(){return [...G.querySelectorAll('input[id],select[id]')].filter(el=>!NOENC.has(el.id)&&!/^(ck|gout|gslip)/.test(el.id)&&el.type!=='text'&&!el.closest('#ccList,.chrow,#ycjBox,#prevBox,#labBox'))}
 function ycjKeys(){
  const K=[];encFields().forEach(el=>K.push('f:'+el.id));
  MODS.forEach(m=>{K.push('mod:'+m.k);(MDX[m.k]||[]).forEach(d=>K.push(`cdx:${m.k}:${d[0]}`));(MFU[m.k]||[]).forEach(f=>K.push(`cfu:${m.k}:${f}`))});
@@ -1810,14 +1814,74 @@ document.addEventListener('change',e=>{const t=e.target;if(!inCards(t))return;
 document.addEventListener('keydown',e=>{const t=e.target;if(e.key==='Enter'&&t.classList&&t.classList.contains('funame')){e.preventDefault();const b=t.parentElement.querySelector('[data-fuadd]');if(b)b.click()}});
 /* ---------- 其他抽血數值（自己新增） ---------- */
 let CUST=[];
-function renderCust(){const box=$('custLab');if(!box)return;
- box.innerHTML=CUST.map((c,i)=>`<div class="furow"><span>${esc(c.n)}</span><input data-cuv="${i}" type="text" inputmode="decimal" value="${esc(c.v)}" placeholder="${c.pv!==undefined&&c.pv!==''?'上次 '+esc(c.pv):'數值'}" style="max-width:7em"><span class="sm">${esc(c.u||'')}</span><button type="button" class="ccx" data-cux="${i}">✕</button></div>`).join('')+
+const FKEY='soap_cufav';
+const favGet=()=>{try{return JSON.parse(localStorage.getItem(FKEY)||'[]')}catch(e){return []}};
+const favSet=a=>{try{localStorage.setItem(FKEY,JSON.stringify(a))}catch(e){}};
+function renderCust(){const box=$('custLab');if(!box)return;const FV=favGet();
+ const favRow=FV.length?`<div class="tgs cufav"><span class="sm">常用：</span>${FV.map((f,i)=>`<button type="button" class="tg2${CUST.some(c=>c.n===f.n)?' on':''}" data-cufav="${i}">${esc(f.n)}</button><button type="button" class="ccx sm2" data-cufx="${i}" title="從常用移除">✕</button>`).join('')}</div>`:'';
+ box.innerHTML=favRow+CUST.map((c,i)=>`<div class="furow"><span>${esc(c.n)}</span><input data-cuv="${i}" type="text" inputmode="decimal" value="${esc(c.v)}" placeholder="${c.pv!==undefined&&c.pv!==''?'上次 '+esc(c.pv):'數值'}" style="max-width:7em"><span class="sm">${esc(c.u||'')}</span>${FV.some(f=>f.n===c.n)?'':`<button type="button" class="tg2 sm2" data-cusave="${i}" title="存成常用">☆常用</button>`}<button type="button" class="ccx" data-cux="${i}">✕</button></div>`).join('')+
  `<div class="fuadd"><input id="cuN" placeholder="項目，例如 HBsAg、PSA"><input id="cuV" placeholder="數值" style="max-width:6em"><input id="cuU" placeholder="單位" style="max-width:5em"><button type="button" class="tg2" id="cuAdd">＋加入</button></div>`}
 function cuAdd(){const nm=$('cuN').value.trim();if(!nm)return;const v=$('cuV').value.trim(),u=$('cuU').value.trim();const ex=CUST.find(c=>c.n===nm);if(ex){ex.v=v;if(u)ex.u=u}else CUST.push({n:nm,v,u});renderCust();build();const f=$('cuN');if(f)f.focus()}
-document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;if(t.id==='cuAdd'){cuAdd();return}const x=t.closest('[data-cux]');if(x){CUST.splice(+x.dataset.cux,1);renderCust();build()}});
+document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;if(t.id==='cuAdd'){cuAdd();return}const x=t.closest('[data-cux]');if(x){CUST.splice(+x.dataset.cux,1);renderCust();build();return}
+ const fv=t.closest('[data-cufav]');if(fv){const f=favGet()[+fv.dataset.cufav];if(!f)return;const ix=CUST.findIndex(c=>c.n===f.n);if(ix<0){CUST.push({n:f.n,v:'',u:f.u||''});renderCust();build();const ins=document.querySelectorAll('#custLab [data-cuv]');const el=ins[ins.length-1];if(el)el.focus()}else{const el=document.querySelector(`#custLab [data-cuv="${ix}"]`);if(el)el.focus()}return}
+ const fx=t.closest('[data-cufx]');if(fx){const a=favGet();a.splice(+fx.dataset.cufx,1);favSet(a);renderCust();return}
+ const sv=t.closest('[data-cusave]');if(sv){const c=CUST[+sv.dataset.cusave];if(c){const a=favGet();if(!a.some(f=>f.n===c.n))a.push({n:c.n,u:c.u||''});favSet(a);renderCust()}}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&/^cu[NVU]$/.test(e.target.id)){e.preventDefault();cuAdd()}});
 document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.cuv!==undefined){const c=CUST[+t.dataset.cuv];if(c)c.v=t.value.trim()}});
 renderCust();
+/* ---------- 貼上檢驗報告：自動抓數值 ----------
+   一行抓一項（HIS 複製通常一行一項）；名稱後面第一個數字就是結果（略過 H/L、<、>）。
+   依序比對，先比較長、容易混淆的名稱（UACR、CrCl、eGFR、CRP 要排在 Cr 前面）。 */
+const LABP=[
+ ['p_uacr','UACR',/(UACR|micro\s*alb[a-z]*\s*\/\s*cr|alb(umin)?\s*\/\s*cre?a?t?|ACR\b|尿白蛋白.*肌酸酐)/i,null],
+ ['skip','CrCl',/(CCr|CrCl|creatinine\s*clearance)/i],
+ ['egfr','eGFR',/(e-?GFR|腎絲球過濾率)/i],
+ ['p_cr','Cr',/(\bcreatinine\b|\bCREA?\b|\bCr\b|肌酸酐)(?!\s*(ratio|clear))/i,null],
+ ['t_crp','CRP',/(hs-?CRP|\bCRP\b|C-?反應蛋白)/i,'trk'],
+ ['d_a1c','HbA1c',/(Hb\s*A1c|glyco[a-z]*\s*Hb|醣化血色素|糖化血色素)/i,'dm'],
+ ['d_fpg','FPG',/(glucose\s*\(?\s*(AC|fasting)|\bFPG\b|\bGlu[a-z]*[-\s]?AC\b|空腹血糖|飯前血糖)/i,'dm'],
+ ['l_ldl','LDL-C',/(\bLDL)/i,'lip'],['l_hdl','HDL-C',/(\bHDL)/i,'lip'],
+ ['l_tg','TG',/(\bTG\b|triglycerides?|三酸甘油)/i,'lip'],['l_tc','TC',/(\bT-?CHO|total\s*cholesterol|\bCHOL|總膽固醇)/i,'lip'],
+ ['th_ft4','FT4',/(free[\s-]*T4|\bF-?T4\b)/i,'thy'],['th_ft3','FT3',/(free[\s-]*T3|\bF-?T3\b)/i,'thy'],['th_tsh','TSH',/(\bTSH\b|甲狀腺刺激素)/i,'thy'],
+ ['p_k','K',/(\bK\b|\bK\+|potassium|鉀)/i,null],['p_na','Na',/(\bNa\b|\bNa\+|sodium|鈉)/i,null],
+ ['t_alt','ALT',/(\bALT\b|\bGPT\b|SGPT)/i,'trk'],['t_ast','AST',/(\bAST\b|\bGOT\b|SGOT)/i,'trk'],
+ ['t_hb','Hb',/(\bHb\b|\bHGB\b|hemoglobin|血色素)(?!\s*A1c)/i,'trk'],['t_plt','Plt',/(\bPLT\b|platelet|血小板)/i,'trk'],['t_wbc','WBC',/(\bWBC\b|白血球)/i,'trk'],
+ ['t_fer','Ferritin',/(ferritin|鐵蛋白)/i,'trk'],['t_ua','Uric acid',/(uric\s*acid|\bURIC\b|尿酸)/i,'trk'],['t_ca','Ca',/(\bCa\b|calcium|鈣)(?!\s*\d{2,3}\b)/i,'trk'],
+ ['t_psa','PSA',/(\bPSA\b)/i,'trk'],['t_vd','Vit D',/(25-?OH|vit(amin)?\s*D)/i,'trk'],['t_b12','B12',/(B12|cobalamin)/i,'trk'],
+ ['t_afp','AFP',/(\bAFP\b|alpha-?feto)/i,'trk'],['t_cea','CEA',/(\bCEA\b)/i,'trk'],['mcv','MCV',/(\bMCV\b)/i,'card'],['lip','Lipase',/(lipase)/i,'card']];
+/* 主訴卡上的同名數值：一起填 */
+const CARDNUM={t_ua:'ua',t_hb:'hb',mcv:'mcv',t_fer:'fer',th_tsh:'tsh',t_wbc:'wbc',t_crp:'crp',t_plt:'plt',t_ast:'ast',t_alt:'alt',lip:'lip'};
+function labParse(txt){const out=[],seen=new Set();
+ txt.split(/\r?\n/).forEach(line=>{const L=line.trim();if(!L)return;
+  for(const [id,nm,re,mod] of LABP){const m=re.exec(L);if(!m)continue;
+   const rest=' '+L.slice(m.index+m[0].length);const v=rest.match(/[\s:=：(（,][<>≦≧]?\s*(\d+(?:\.\d+)?)(?![\w.])/);
+   if(!v)break;const val=parseFloat(v[1]);if(seen.has(id))break;
+   const g=RANGE[id];const bad=g&&(val<g[0]||val>g[1]);seen.add(id);out.push({id,nm,v:val,mod,bad,line:L.slice(0,60)});break}});
+ return out}
+function trkAbn(id,v,p){const T={t_alt:[null,40],t_ast:[null,40],t_hb:[p.sex==='F'?12:13,null],t_plt:[150,400],t_wbc:[4,10],t_fer:[30,null],t_ua:[null,7],t_ca:[8.5,10.5],t_psa:[null,4],t_vd:[20,null],t_b12:[200,null],t_crp:[null,0.5],t_afp:[null,20],t_cea:[null,5]}[id];return T&&((T[0]!=null&&v<T[0])||(T[1]!=null&&v>T[1]))}
+let LABR=[];
+function labPreview(){const box=$('labPrev');const p=pt();LABR=labParse($('labIn').value);
+ if(!LABR.length){box.innerHTML='<div class="rfwarn">沒有認出任何項目。每行一項、名稱後面接數字，例如「Creatinine 1.23」。</div>';return}
+ const MN={dm:'糖尿病',lip:'血脂',thy:'甲狀腺',trk:'其他追蹤'};
+ box.innerHTML='<div class="sm">勾選要帶入的項目（灰色的需要另外勾慢性病專區）</div>'+LABR.map((r,i)=>{
+  const def=!r.bad&&r.id!=='skip'&&r.id!=='egfr'&&(r.mod!=='trk'||trkAbn(r.id,r.v,p));
+  const note=r.bad?'（超出合理範圍，可能抓錯）':r.id==='egfr'?'（報告上的 eGFR；勾了會覆蓋 CKD-EPI 計算值）':r.id==='skip'?'（不帶入）':r.mod==='card'?'（填進主訴卡）':r.mod&&!on(r.mod)?`（會勾「${MN[r.mod]}」）`:'';
+  return `<label class="tg lrow"><input type="checkbox" data-lr="${i}"${def?' checked':''}${r.id==='skip'?' disabled':''}><span><b>${esc(r.nm)} ${r.v}</b> <small>${esc(note)}</small></span></label>`}).join('')+
+  '<div class="btns"><button type="button" class="b" id="labApply">帶入</button></div>'}
+function labApply(){const p=pt();let n_=0;
+ document.querySelectorAll('#labPrev [data-lr]').forEach(cb=>{if(!cb.checked)return;const r=LABR[+cb.dataset.lr];if(!r)return;
+  const cid=CARDNUM[r.id];if(cid)CCS.forEach(i=>{if((i.c.num||[]).some(x=>x[0]===cid))i.st.num[cid]=String(r.v)});
+  if(r.mod==='card'){n_++;return}
+  const fid=r.id==='egfr'?'p_egfr':r.id;const el=$(fid);if(!el)return;el.value=r.v;n_++;
+  if(r.mod&&r.mod!=='card'&&!on(r.mod)){const m=document.querySelector(`[data-mod="${r.mod}"]`);if(m)m.checked=true}});
+ $('labPrev').innerHTML=`<div class="score">已帶入 ${n_} 項，請核對數值。</div>`;$('labIn').value='';build();Object.values(TPLI).forEach(renderTpl)}
+document.addEventListener('click',e=>{const t=e.target;if(t.id==='labGo')labPreview();else if(t.id==='labApply')labApply();else if(t.id==='labClr'){$('labIn').value='';$('labPrev').innerHTML=''}});
+/* 數值欄位按 Enter 跳下一格 */
+document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing)return;const t=e.target;if(!t.matches||!t.matches('#gen input[type=number],#gen input[data-cuv]'))return;e.preventDefault();
+ const all=[...document.querySelectorAll('#gen input[type=number],#gen input[data-cuv]')].filter(x=>x.offsetParent!==null&&!x.disabled);const i=all.indexOf(t);
+ t.dispatchEvent(new Event('change',{bubbles:true}));const nx=all[i+1];if(!nx){t.blur();return}nx.focus();if(nx.select)nx.select();
+ const card=nx.closest('[data-uid]');const sel=nx.id?'#'+nx.id:(card?`[data-uid="${card.dataset.uid}"] `:'')+['onum','blnum','cuv'].map(a=>nx.dataset[a]!==undefined?`[data-${a}="${nx.dataset[a]}"]`:'').join('');
+ setTimeout(()=>{if(!nx.isConnected){const z=document.querySelector(sel);if(z){z.focus();if(z.select)z.select()}}},330)});
 /* ---------- 交互作用、腎劑量、去重、全部還原、自動暫存 ---------- */
 const D_RENAL=[
  /* diabetes */
@@ -2018,8 +2082,8 @@ function mountTpl(box){
  renderTpl(TPLI[n]);
 }
 document.addEventListener('toggle',e=>{const d=e.target;if(d.matches&&d.matches('details.card')&&d.open){const b=d.querySelector('.tplcc');if(b&&!b.dataset.m)mountTpl(b)}},true);
-G.addEventListener('input',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox,#custLab .fuadd'))return;if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
-G.addEventListener('change',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox,#custLab'))return;if(e.target.tagName==='INPUT'&&/^(number|text)$/.test(e.target.type))return;if(e.target.id==='gout'||e.target.id==='gslip')return;build();Object.values(TPLI).forEach(renderTpl)});
+G.addEventListener('input',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox,#custLab .fuadd,#labBox'))return;if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
+G.addEventListener('change',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox,#custLab,#labBox'))return;if(e.target.tagName==='INPUT'&&/^(number|text)$/.test(e.target.type))return;if(e.target.id==='gout'||e.target.id==='gslip')return;build();Object.values(TPLI).forEach(renderTpl)});
 $('gregen').addEventListener('click',build);
 $('gclear').addEventListener('click',()=>{CCS=[];G.querySelectorAll('input').forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''});G.querySelectorAll('select').forEach(s=>s.selectedIndex=0);fillWt();build()});
 // base PE
