@@ -52,6 +52,11 @@ window.CK_CONFIG={
   },
   medInfo:[
     [/twynsta|exforge|sevikar|olsaaca/i,"兩種降血壓藥合一顆","每天固定時間吃；腳踝腫要告訴醫師。"],
+    [/eltroxin|levothyroxine/i,"甲狀腺素（補充不足）","早上空腹吃，30–60 分鐘後再吃早餐；和鈣片、鐵劑、胃藥間隔 4 小時；不要自己停。"],
+    [/methimazole|carbimazole|newmazole|polupi|ptu/i,"抗甲狀腺（降低甲狀腺素）","發燒、喉嚨痛要先停藥，當天回診抽血；皮膚癢、眼白變黃要回診。"],
+    [/propranolol/i,"減慢心跳、改善手抖","氣喘的人不能吃；頭暈、心跳太慢要回診。"],
+    [/tedalin|ferric|sideral/i,"補鐵","大便會變黑是正常的；和茶、咖啡、鈣片間隔 2 小時。"],
+    [/methycobal|mecobalamin/i,"維生素 B12","飯後吃。"],
     [/indapamide|natrilix/i,"降血壓、利尿","早上吃；會多跑廁所；要驗鈉、鉀、尿酸。"],
     [/doxazosin|xadosin/i,"降血壓、放鬆血管","睡前吃；起身慢一點，小心頭暈。"],
     [/leqvio|inclisiran/i,"打針降膽固醇","半年打一次，在診間施打。"],

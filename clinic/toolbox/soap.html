@@ -136,6 +136,12 @@ details.ccblk{border-left:5px solid #7a5af0}details.ccblk>summary{color:#5a3d99;
 .rst{margin-left:auto;font:inherit;font-size:13px;font-weight:500;border:1px solid #b3261e;color:#b3261e;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer}.rst.arm{background:#b3261e;color:#fff}
 
 .tg2.last::before{content:"上次";font-size:10.5px;background:#5d6258;color:#fff;border-radius:6px;padding:0 5px;margin-right:5px;vertical-align:1px}
+.role{font-size:11px;color:#8a6d1f;background:#f6efd9;border-radius:6px;padding:0 5px;margin-left:3px;font-weight:500;white-space:nowrap}
+.tg2.on .role{background:rgba(255,255,255,.25);color:inherit}
+.tg2.cons{border-style:dashed}.tg2.cons.on{border-style:solid}
+.consn{color:#6b5a1f;background:#faf5e6;border-radius:6px;padding:4px 8px}
+input.bad{outline:2px solid #d9534f;background:#fff1f0}
+#custLab .furow input{flex:0 1 7em}
 .lastinfo{background:#f1efe8;border-radius:8px;padding:6px 10px;font-size:13.5px;margin:4px 0 8px}
 .b.sm2{font-size:12.5px;padding:3px 9px;margin-left:6px}
 .prevcc{background:#fff;border:1px solid var(--line);border-left:4px solid #5d6258;border-radius:8px;padding:6px 10px;margin:6px 0}
@@ -148,7 +154,7 @@ footer a{color:var(--acc)}
 </head>
 <body>
 <header><div class="wrap">
-  <h1>門診速查 <small>v0.7 · 2026-11-19</small><button type="button" id="resetAll" class="rst">全部還原（換病人）</button></h1>
+  <h1>門診速查 <small>v0.8 · 2026-11-20</small><button type="button" id="resetAll" class="rst">全部還原（換病人）</button></h1>
   <div class="tabs"><button class="tab" data-tab="gen">慢性病 SOAP 產生器</button><button class="tab" data-tab="tpl">模板查詢</button><button class="tab" data-tab="drug">院內藥品</button></div>
   <div class="drugonly"><input id="dq" type="search" placeholder="代碼、商品名、學名、類別，例如 NAP2、naproxen、PPI…" autocomplete="off"></div>
   <div class="tplonly">
@@ -291,7 +297,7 @@ window.addEventListener('hashchange',fromHash);fromHash();
 const G=document.getElementById('gen');
 const MODS=[
  {k:'htn',n:'高血壓',c:'#b5432c'},{k:'dm',n:'糖尿病',c:'#2c6fb5'},{k:'lip',n:'血脂',c:'#1d6b72'},
- {k:'ckd',n:'CKD',c:'#7a5a2c'},{k:'wt',n:'減重針',c:'#8a3d8f'},{k:'smk',n:'戒菸',c:'#3d7a5a'},{k:'trk',n:'其他追蹤',c:'#5d6258'}];
+ {k:'ckd',n:'CKD',c:'#7a5a2c'},{k:'wt',n:'減重針',c:'#8a3d8f'},{k:'smk',n:'戒菸',c:'#3d7a5a'},{k:'thy',n:'甲狀腺',c:'#4a6fa0'},{k:'trk',n:'其他追蹤',c:'#5d6258'}];
 const COMORB=[
  ['cad','冠心病 CAD'],['cadx','極高風險條件*'],['stroke','缺血性中風／TIA'],['pad','周邊動脈疾病'],['plaque','影像 ≥50% 狹窄'],
  ['hfref','HFrEF'],['af','心房顫動'],['gout','痛風'],['fhx','早發冠心病家族史'],['cac','CAC ≥400'],
@@ -319,6 +325,13 @@ const F={ // module fields
   ['s_pref','sel','病人偏好',['Varenicline','尼古丁替代','Bupropion']],
   ['s_cur','sel','目前藥物（回診用）',['Varenicline','尼古丁貼片','尼古丁短效','Bupropion']],
   ['s_bc','chk','Bupropion 禁忌（癲癇、飲食疾患、停酒或 benzo、MAOI、tamoxifen）'],['s_dent','chk','假牙或顳顎關節問題']],
+ thy:[['th_tsh','num','TSH (µIU/mL)'],['th_ft4','num','Free T4 (ng/dL)'],['th_ft3','num','Free T3 (pg/mL)'],
+  ['th_type','sel','診斷方向',['依數值判斷','甲狀腺低下','甲狀腺亢進']],
+  ['th_cur','sel','目前治療',['未用藥','Eltroxin（levothyroxine）','Methimazole／carbimazole','PTU']],
+  ['th_dose','num','目前 Eltroxin µg/day'],['th_mmi','num','目前 methimazole mg/day'],
+  ['th_tri','sel','孕期',['未懷孕','計畫懷孕','第一孕期','第二孕期','第三孕期']],
+  ['th_nod','sel','甲狀腺結節',['無','單一結節','多發結節']],
+  ['th_tpo','chk','anti-TPO 陽性'],['th_trab','chk','TRAb 陽性（Graves）'],['th_post','chk','甲狀腺手術或放射碘後'],['th_hsx','chk','怕冷、疲倦、便秘、變胖'],['th_sx','chk','心悸、手抖、怕熱、變瘦'],['th_amd','chk','使用 amiodarone 或 lithium']],
  trk:[['t_alt','num','ALT'],['t_ast','num','AST'],['t_hb','num','Hb'],['t_plt','num','Plt (10³/µL)'],['t_wbc','num','WBC'],['t_fer','num','Ferritin'],['t_tsh','num','TSH'],['t_ft4','num','Free T4'],['t_ua','num','Uric acid'],['t_cr','num','Cr'],['t_ca','num','Ca'],['t_a1c','num','HbA1c (%)'],['t_psa','num','PSA'],['t_vd','num','Vit D'],['t_b12','num','B12'],['t_crp','num','CRP'],['t_afp','num','AFP'],['t_cea','num','CEA']]
 };
 const PE={
@@ -329,6 +342,7 @@ const PE={
  ckd:['Pitting edema: (-)','Pallor: (-)'],
  wt:['Waist measured','Acanthosis nigricans: (-)','Thyroid: no nodule'],
  smk:['Oral mucosa: no leukoplakia','Lungs: clear','Exhaled CO: ___ ppm'],
+ thy:['Thyroid: no goiter','Thyroid: diffuse goiter','Thyroid: palpable nodule','Fine tremor: (-)','Exophthalmos: (-)','Reflex: normal'],
  trk:['Thyroid: no nodule','Abdomen: soft, no hepatomegaly','Pallor: (-)','Lymph nodes: not enlarged']
 };
 const WT={
@@ -348,6 +362,8 @@ const NSOK=X=>!(X.p.nsaidx||X.p.preg||X.p.egfr<30);
 const ABX_PCN=X=>X.p.pcn?'PCN 過敏':'';
 const CC=[
 {id:'resp',g:'sym',bl:['age','preg','ckd','pcn','immuno'],n:'感冒／呼吸道',en:'URI symptoms',days:3,
+ num:[['wbc','WBC','10³/µL',4,10],['crp','CRP','mg/dL',null,0.5]],
+ labw:X=>{const w=X.n('wbc'),c=X.n('crp');if(!has(w)&&!has(c))return [];if(c>=10||w>15)return ['發炎指數高：疑細菌感染或肺炎，評估 CXR、抗生素'];if((!has(c)||c<2)&&(!has(w)||w<=11))return ['發炎指數不高：支持病毒感染，不需抗生素'];return []},
  sx:[['fever','發燒','fever'],['sore','喉嚨痛','sore throat'],['odyn','吞嚥痛','odynophagia'],['rhin','流鼻水','rhinorrhea'],['cong','鼻塞','nasal congestion'],['sneeze','打噴嚏、鼻癢','sneezing'],['purul','膿鼻涕','purulent nasal discharge'],['facial','臉頰或額頭痛','facial pain'],['cough','咳嗽','cough'],['sputum','有痰','sputum'],['wheeze','喘鳴','wheezing'],['ear','耳朵痛','otalgia'],['myal','全身痠痛','myalgia'],['ha','頭痛','headache'],['d10','症狀 >10 天或好轉又變差','symptoms >10 days or double sickening'],['contact','家人或同事流感／COVID','sick contact (flu/COVID)'],['flu','流感快篩陽性','influenza rapid test (+)'],['covid','COVID 快篩陽性','COVID-19 Ag (+)']],
  rf:[['dysp','呼吸困難','dyspnea'],['spo2','SpO2 <94%','SpO2 <94%'],['drool','流口水、張口困難','drooling/trismus'],['potato','熱馬鈴薯聲、懸雍垂偏移','muffled voice/uvula deviation'],['neck','頸部僵硬','neck stiffness'],['fever3','高燒 >3 天','high fever >3 days'],['orbit','眼眶周圍腫、視力改變','periorbital swelling/visual change'],['conf','意識改變','altered consciousness']],
  pe:[['inject','咽部紅','pharyngeal injection'],['exud','扁桃腺化膿或腫大','tonsillar exudate/swelling'],['lap','前頸淋巴結壓痛','tender anterior cervical LAP'],['tm','鼓膜膨出','bulging TM'],['sinus','鼻竇壓痛','sinus tenderness'],['wh','肺部喘鳴','wheezing on auscultation'],['crack','肺部囉音','crackles'],['clear','肺音清','clear breath sounds']],
@@ -390,6 +406,8 @@ const CC=[
  ret:'fever >3 days, dyspnea, ear pain, or symptoms worsening',refer:'急診或耳鼻喉科'},
 
 {id:'fever',g:'sym',bl:['age','preg','immuno','liver'],n:'發燒（未明）',en:'Fever',days:2,
+ num:[['wbc','WBC','10³/µL',4,10],['crp','CRP','mg/dL',null,0.5],['plt','Plt','10³/µL',150,null]],
+ labw:X=>{const o=[],w=X.n('wbc'),c=X.n('crp'),pl=X.n('plt');if(pl<100)o.push(`Plt ${pl}：登革熱警示 → 轉診或每天追蹤`);if(w<4)o.push(`WBC ${w} 偏低：病毒感染、登革熱、恙蟲病`);if(c>=10||w>15)o.push('發炎指數高：疑細菌感染，找感染源（U/A、CXR、血液培養）');return o},
  sx:[['chill','畏寒、寒顫','chills/rigor'],['ha','頭痛','headache'],['myal','肌肉痠痛','myalgia'],['rash','皮疹','skin rash'],['dysu','解尿疼痛','dysuria'],['diar','腹瀉','diarrhea'],['abd','腹痛','abdominal pain'],['cough','咳嗽','cough'],['retro','眼窩後痛、骨頭痛','retro-orbital/bone pain'],['travel','近期出國','recent travel'],['outdoor','野外活動或蚊蟲叮咬','outdoor/mosquito exposure'],['eschar','焦痂','eschar']],
  rf:[['conf','意識改變','altered consciousness'],['hypo','低血壓','hypotension'],['rr','RR ≥22','RR ≥22'],['neck','頸部僵硬','neck stiffness'],['petech','紫斑、出血點','petechiae/purpura'],['immuno','免疫低下或化療中','immunocompromised'],['infant','3 個月以下嬰兒','infant <3 months']],
  pe:[['neck','頸部柔軟','supple neck'],['cva','CVA 叩痛','CVA knocking pain'],['rash','皮疹','skin rash'],['lap','淋巴結腫','lymphadenopathy'],['hsm','肝脾腫大','hepatosplenomegaly']],
@@ -416,10 +434,12 @@ const CC=[
  ret:'bloody stool, high fever, unable to drink, decreased urine, severe abdominal pain',refer:'急診'},
 
 {id:'abd',g:'sym',bl:['age','sex','preg','ckd','nsaidx','liver','cad'],n:'腹痛／胃痛',en:'Abdominal pain',days:3,
+ num:[['ast','AST','U/L',null,40],['alt','ALT','U/L',null,40],['lip','Lipase','U/L',null,60]],
+ labw:X=>{const o=[];if(X.n('lip')>=180)o.push(`Lipase ${X.n('lip')}（≥3 倍上限）：疑急性胰臟炎 → 轉急診`);if(X.n('alt')>=120||X.n('ast')>=120)o.push('AST/ALT ≥3 倍上限：疑肝膽問題 → 腹部超音波，右上腹痛合併發燒轉急診');return o},
  sx:[['epi','上腹痛','epigastric pain'],['ruq','右上腹痛','RUQ pain'],['rlq','右下腹痛','RLQ pain'],['llq','左下腹痛','LLQ pain'],['burn','灼熱感','burning'],['postp','飯後加重','postprandial'],['hunger','空腹痛、吃東西緩解','hunger pain'],['hb','火燒心','heartburn'],['regurg','胃酸逆流','acid regurgitation'],['full','脹、早飽','bloating/early satiety'],['nausea','噁心','nausea'],['nsaid','吃止痛藥（NSAID）','NSAID use'],['alc','喝酒','alcohol use'],['fever','發燒','fever'],['bm','排便改變','change in bowel habit'],['hppos','H. pylori 陽性','H. pylori (+)'],['pud','胃鏡證實潰瘍','endoscopy-proven ulcer']],
  rf:[['perit','腹膜炎徵象','peritoneal signs'],['gib','黑便、吐血','melena/hematemesis'],['alarm','體重減輕、吞嚥困難、貧血','weight loss/dysphagia/anemia'],['age60','≥60 歲新發消化不良','new dyspepsia age ≥60'],['preg','可能懷孕','possible pregnancy'],['acs','冒冷汗、喘、胸悶','diaphoresis/dyspnea (r/o ACS)'],['dispro','長者劇痛','severe pain in elderly']],
  pe:[['epit','上腹壓痛','epigastric tenderness'],['mcb','McBurney 壓痛','McBurney tenderness'],['murphy','Murphy sign','Murphy sign'],['rebound','反彈痛','rebound tenderness'],['guard','肌肉僵硬','guarding'],['cva','CVA 叩痛','CVA knocking pain']],
- dx:[{k:'epi',l:'上腹痛',en:'Epigastric pain',icd:'R10.13',a:X=>!X.anyDx},{k:'dysp',l:'功能性消化不良',en:'Functional dyspepsia',icd:'K30',a:X=>X.s('full')===1||X.s('postp')===1},{k:'gerd',l:'胃食道逆流',en:'GERD without esophagitis',icd:'K21.9',a:X=>X.s('hb')===1||X.s('regurg')===1},{k:'gast',l:'胃炎',en:'Gastritis, unspecified, without bleeding',icd:'K29.70',a:X=>X.s('nsaid')===1||X.s('alc')===1},{k:'abdu',l:'腹痛（未明）',en:'Abdominal pain, unspecified',icd:'R10.9',a:X=>false},{k:'appy',l:'疑似闌尾炎（轉診）',en:'Suspected acute appendicitis',icd:'R10.31',a:X=>X.e('mcb')===1},{k:'pu',l:'消化性潰瘍',en:'Peptic ulcer, site unspecified',icd:'K27.9',a:X=>X.s('pud')===1},{k:'hp',l:'H. pylori 感染',en:'Helicobacter pylori as the cause of disease',icd:'B96.81',a:X=>X.s('hppos')===1}],
+ dx:[{k:'epi',l:'上腹痛',en:'Epigastric pain',icd:'R10.13',a:X=>!X.anyDx},{k:'dysp',l:'功能性消化不良',en:'Functional dyspepsia',icd:'K30',a:X=>X.s('full')===1||X.s('postp')===1},{k:'gerd',l:'胃食道逆流',en:'GERD without esophagitis',icd:'K21.9',a:X=>X.s('hb')===1||X.s('regurg')===1},{k:'gast',l:'胃炎',en:'Gastritis, unspecified, without bleeding',icd:'K29.70',a:X=>X.s('nsaid')===1||X.s('alc')===1},{k:'abdu',l:'腹痛（未明）',en:'Abdominal pain, unspecified',icd:'R10.9',a:X=>false},{k:'appy',l:'疑似闌尾炎（轉診）',en:'Suspected acute appendicitis',icd:'R10.31',a:X=>X.e('mcb')===1},{k:'pu',l:'消化性潰瘍',en:'Peptic ulcer, site unspecified',icd:'K27.9',a:X=>X.s('pud')===1},{k:'hp',l:'H. pylori 感染',en:'Helicobacter pylori as the cause of disease',icd:'B96.81',a:X=>X.s('hppos')===1},{k:'panc',l:'疑急性胰臟炎（轉診）',en:'Acute pancreatitis, unspecified',icd:'K85.90',a:X=>X.n('lip')>=180}],
  med:[{k:'alg',l:'ALG1 Algitab 海藻酸',rx:'ALG1 Algitab 1-2# 嚼服 PC & HS',a:X=>X.dx('gerd')},
   {k:'vok',l:'VOK1 Famotidine',rx:X=>X.p.egfr<50?'VOK1 Voker (famotidine) 20mg 1# HS（CKD 減量）':'VOK1 Voker (famotidine) 20mg 1# BID',a:X=>X.dx('gerd')||X.dx('gast')||X.dx('epi')},
   {k:'pan',l:'PAN4 Pantoprazole（健保需內視鏡）',rx:'PAN4 Pantoloc (pantoprazole) 40mg 1# QD AC',a:X=>false,w:X=>'健保：需 4 個月內內視鏡報告'},
@@ -449,6 +469,8 @@ const CC=[
  ret:'bloody stool, vomiting, no flatus, severe abdominal pain',refer:'急診或胃腸科'},
 
 {id:'uti',g:'sym',bl:['sex','preg','ckd','pcn','dmh'],n:'解尿疼痛／頻尿',en:'Dysuria',days:2,
+ sel:[['nit','U/A nitrite',['未驗','陰性','陽性'],'Nitrite']],num:[['uwbc','U/A WBC','/HPF',null,5]],
+ labw:X=>{const w=X.n('uwbc'),nt=X.v('nit');if(nt===2||w>=10)return ['U/A 支持泌尿道感染'];if(nt===1&&has(w)&&w<5)return ['U/A 沒有膿尿、nitrite 陰性：UTI 可能性低，考慮陰道炎、性傳染病、間質性膀胱炎'];return []},
  sx:[['dysu','解尿疼痛','dysuria'],['freq','頻尿','frequency'],['urg','急尿','urgency'],['hema','血尿','hematuria'],['supra','下腹痛','suprapubic pain'],['fever','發燒','fever'],['flank','腰痛','flank pain'],['disch','陰道分泌物','vaginal discharge'],['recur','一年 ≥3 次','recurrent UTI']],
  rf:[['pyelo','發燒＋腰痛','fever with flank pain'],['preg','懷孕','pregnancy'],['male','男性','male'],['vomit','嘔吐、無法進食','vomiting'],['cath','導尿管','urinary catheter'],['immuno','免疫低下或 DM 控制差','immunocompromised/poor DM']],
  pe:[['supt','恥骨上壓痛','suprapubic tenderness'],['cva','CVA 叩痛','CVA knocking pain']],
@@ -527,10 +549,12 @@ const CC=[
  ret:'saddle numbness, urinary problems, leg weakness, fever',refer:'急診或骨科／神經外科'},
 
 {id:'joint',g:'sym',bl:['age','ckd','nsaidx','dmh','cad'],rxd:5,n:'關節痛',en:'Joint pain',days:5,
+ num:[['ua','尿酸','mg/dL',null,7,'UA']],
+ labw:X=>{const u=X.n('ua');if(!has(u))return [];const t=X.e('tophi')===1?5:6;return [X.s('onult')===1?(u<t?`UA ${u} 已達標（<${t}），維持降尿酸藥`:`UA ${u} 未達標（目標 <${t}）→ 降尿酸藥每 2–4 週加量`):(u>=t?`UA ${u}：開始降尿酸後目標 <${t}`:'')]},
  sx:[['mono','單一關節','monoarticular'],['poly','多處關節','polyarticular'],['knee','膝蓋','knee'],['mtp','大腳趾根部','1st MTP'],['ankle','腳踝','ankle'],['acute','一天內腫痛','acute onset <24h'],['red','紅、熱','redness/warmth'],['ams','晨僵 >30 分鐘','morning stiffness >30 min'],['trauma','外傷','trauma'],['gouthx','以前痛風發作','prior gout attacks'],['diur','利尿劑、喝酒','diuretic/alcohol'],['stairs','上下樓梯痛','pain on stairs'],['flare2','痛風一年 ≥2 次','≥2 gout flares/year'],['stone','尿酸結石','urate stone'],['onult','已在吃降尿酸藥','on urate-lowering therapy'],['hla','HLA-B*5801 陰性','HLA-B*5801 negative']],
  rf:[['septic','發燒＋單一熱腫關節','fever with hot swollen joint'],['nowt','外傷後無法承重','unable to bear weight after trauma'],['immuno','免疫低下','immunocompromised']],
  pe:[['eff','關節積液','joint effusion'],['warm','局部熱','warmth'],['ery','紅','erythema'],['crep','摩擦音','crepitus'],['rom','活動度受限','limited ROM'],['tophi','痛風石','tophi'],['syn','對稱小關節腫','symmetric small joint swelling']],
- dx:[{k:'gout',l:'急性痛風',en:'Gout, unspecified',icd:'M10.9',a:X=>X.s('mtp')===1&&X.s('acute')===1||X.s('gouthx')===1},{k:'goutr',l:'痛風 右踝足',en:'Idiopathic gout, right ankle and foot',icd:'M10.071',a:X=>false},{k:'goutl',l:'痛風 左踝足',en:'Idiopathic gout, left ankle and foot',icd:'M10.072',a:X=>false},{k:'oa',l:'膝退化性關節炎',en:'Osteoarthritis of knee, unspecified',icd:'M17.9',a:X=>X.s('knee')===1&&(X.e('crep')===1||X.s('stairs')===1)},{k:'ra',l:'疑類風濕性關節炎（轉診）',en:'Inflammatory polyarthritis, r/o RA',icd:'M06.9',a:X=>X.s('poly')===1&&X.s('ams')===1&&X.e('syn')===1},{k:'jp',l:'關節痛（未明）',en:'Pain in unspecified joint',icd:'M25.50',a:X=>!X.anyDx}],
+ dx:[{k:'gout',l:'急性痛風',en:'Gout, unspecified',icd:'M10.9',a:X=>X.s('mtp')===1&&X.s('acute')===1||X.s('gouthx')===1},{k:'goutr',l:'痛風 右踝足',en:'Idiopathic gout, right ankle and foot',icd:'M10.071',a:X=>false},{k:'goutl',l:'痛風 左踝足',en:'Idiopathic gout, left ankle and foot',icd:'M10.072',a:X=>false},{k:'oa',l:'膝退化性關節炎',en:'Osteoarthritis of knee, unspecified',icd:'M17.9',a:X=>X.s('knee')===1&&(X.e('crep')===1||X.s('stairs')===1)},{k:'ra',l:'疑類風濕性關節炎（轉診）',en:'Inflammatory polyarthritis, r/o RA',icd:'M06.9',a:X=>X.s('poly')===1&&X.s('ams')===1&&X.e('syn')===1},{k:'jp',l:'關節痛（未明）',en:'Pain in unspecified joint',icd:'M25.50',a:X=>!X.anyDx},{k:'hua',l:'高尿酸血症',en:'Hyperuricemia without signs of inflammatory arthritis',icd:'E79.0',a:X=>X.n('ua')>7&&X.s('acute')!==1&&X.s('gouthx')!==1}],
  med:[{k:'col',l:'COL4 Colchicine',rx:X=>X.p.egfr<30?'COL4 Colchicine 0.5mg 1# QD（eGFR <30 減量）':'COL4 Colchicine 0.5mg 2# stat, 1# 1h later, then 1# BID',a:X=>X.dx('gout')||X.dx('goutr')||X.dx('goutl'),w:X=>'避免與 clarithromycin、強 CYP3A4 抑制劑併用'},
   {k:'nap5',l:'NAP2 Naproxen 500 BID（痛風）',rx:'NAP2 Naproxen 250mg 2# BID PC x 5-7 days',a:X=>(X.dx('gout')||X.dx('goutr')||X.dx('goutl'))&&NSOK(X),w:NSW},
   {k:'pre',l:'PRE6 Prednisolone 30mg x5d',rx:'PRE6 Prednisolone 5mg 6# QD AM x 5 days',a:X=>(X.dx('gout')||X.dx('goutr')||X.dx('goutl'))&&!NSOK(X),w:X=>X.chronic('dm')?'糖尿病：血糖會上升':''},
@@ -539,6 +563,7 @@ const CC=[
   {k:'cel',l:'CEL2 Celecoxib',rx:'CEL2 Celebrex 200mg 1# QD',a:X=>false,w:X=>X.p.cad?'CV 疾病慎用':''},
   {k:'mel',l:'MEL6 Meloxicam',rx:'MEL6 Melicam 15mg 1# QD PC',a:X=>false,w:NSW},
   {k:'all',l:'ALL3 Allopurinol（降尿酸）',rx:X=>`ALL3 Allopurinol 100mg ${X.p.egfr<30?'1/2#':'1#'} QD → 每 2–4 週加量，目標 UA <6（痛風石 <5）`,a:X=>X.dx('gout')&&X.s('acute')!==1&&X.s('onult')!==1&&(X.s('flare2')===1||X.e('tophi')===1||X.s('stone')===1||X.p.egfr<60),w:X=>X.s('hla')===1?'':'台灣人先驗 HLA-B*5801（SJS/TEN）'},
+  {k:'allup',l:'ALL3 加量（UA 未達標）',rx:X=>`ALL3 Allopurinol 100mg 再加 1#（每 2–4 週加 100mg；UA ${X.n('ua')}，目標 <${X.e('tophi')===1?5:6}）`,fixed:1,a:X=>X.s('onult')===1&&X.n('ua')>=(X.e('tophi')===1?5:6),w:X=>X.p.egfr<30?'eGFR <30：加量要慢，追蹤皮疹':''},
   {k:'feb',l:'FEB1 Febuxostat（健保 2.11.1）',rx:'FEB1 Feburic 80mg 1/2# QD',a:X=>false,w:X=>X.p.cad||X.p.stroke?'心血管疾病慎用':'健保：CKD、痛風石、結石或 benzbromarone 無效等條件'},
   {k:'colp',l:'COL4 預防發作（開始降尿酸時）',rx:'COL4 Colchicine 0.5mg 1# QD x 3-6 months',fixed:1,a:X=>X.dx('gout')&&X.s('acute')!==1&&X.s('onult')!==1&&(X.s('flare2')===1||X.e('tophi')===1||X.s('stone')===1||X.p.egfr<60)}],
  lab:[['ua','Uric acid、Cr',X=>X.dx('gout')||X.dx('goutr')||X.dx('goutl')],['cbc','CBC、ESR/CRP',X=>X.r('septic')===1||X.dx('ra')],['rf','RF、anti-CCP',X=>X.dx('ra')],['xr','X-ray',X=>X.dx('oa')||X.s('trauma')===1],['tap','關節抽液（轉診）',X=>X.r('septic')===1]],
@@ -561,11 +586,13 @@ const CC=[
  ret:'unable to speak in sentences, chest pain, lips turning blue, confusion',refer:'急診（119）'},
 
 {id:'palp',g:'sym',bl:['age','preg'],n:'心悸',en:'Palpitations',days:3,
+ num:[['tsh','TSH','µIU/mL',0.4,4.5]],
+ labw:X=>{const t=X.n('tsh');return t<0.4?[`TSH ${t} 偏低：疑甲狀腺亢進 → 勾「甲狀腺」專區`]:[]},
  sx:[['reg','規則','regular'],['irreg','不規則','irregular'],['sudden','突然開始、突然停','sudden onset/offset'],['caff','咖啡、茶、能量飲料','caffeine/energy drinks'],['stress','焦慮、壓力','anxiety/stress'],['heat','怕熱、手抖、變瘦','heat intolerance/tremor/wt loss'],['drug','減肥藥、甲狀腺素、支氣管擴張劑','stimulant/thyroxine/β-agonist']],
  rf:[['syncope','昏厥','syncope'],['cp','胸痛','chest pain'],['exer','運動時發作','exertional'],['fhx','猝死家族史','FHx sudden cardiac death'],['shd','結構性心臟病','structural heart disease']],
  pe:[['irr','心律不整','irregular rhythm'],['tachy','心搏過速','tachycardia'],['goiter','甲狀腺腫','goiter'],['murmur','心雜音','murmur']],
- dx:[{k:'palp',l:'心悸',en:'Palpitations',icd:'R00.2',a:X=>!X.anyDx},{k:'af',l:'心房顫動',en:'Atrial fibrillation, unspecified',icd:'I48.91',a:X=>X.e('irr')===1&&X.s('irreg')===1},{k:'anx',l:'焦慮',en:'Anxiety disorder, unspecified',icd:'F41.9',a:X=>false}],
- med:[{k:'prop',l:'PRO13 Propranolol PRN',rx:'PRO13 Propranolol 10mg 1# PRN palpitation',a:X=>false,w:X=>'氣喘禁用；心搏過緩'}],
+ dx:[{k:'palp',l:'心悸',en:'Palpitations',icd:'R00.2',a:X=>!X.anyDx},{k:'af',l:'心房顫動',en:'Atrial fibrillation, unspecified',icd:'I48.91',a:X=>X.e('irr')===1&&X.s('irreg')===1},{k:'anx',l:'焦慮',en:'Anxiety disorder, unspecified',icd:'F41.9',a:X=>false},{k:'thyr',l:'甲狀腺亢進（疑）',en:'Thyrotoxicosis, unspecified',icd:'E05.90',a:X=>X.n('tsh')<0.1}],
+ med:[{k:'prop',l:'PRO13 Propranolol PRN',rx:'PRO13 Propranolol 10mg 1# PRN palpitation',a:X=>X.dx('thyr'),w:X=>'氣喘禁用；心搏過緩'}],
  lab:[['ecg','ECG',X=>true],['tsh','TSH、fT4',X=>true],['cbc','CBC、Na/K/Mg',X=>true],['holter','Holter',X=>X.s('irreg')===1||X.s('sudden')===1]],
  edu:X=>['減少咖啡因、酒精、能量飲料。','發作時記錄時間、脈搏，或用手機錄心電圖。'],
  ret:'syncope, chest pain, sustained rapid heartbeat, dyspnea',refer:'急診或心臟科'},
@@ -581,12 +608,19 @@ const CC=[
  ret:'one leg suddenly swollen and painful, dyspnea, redness and fever',refer:'急診'},
 
 {id:'fatigue',g:'sym',bl:['age','sex','preg'],n:'疲倦',en:'Fatigue',days:30,
+ num:[['hb','Hb','g/dL',p=>p.sex==='F'?12:13,null],['mcv','MCV','fL',80,100],['fer','Ferritin','ng/mL',30,null],['tsh','TSH','µIU/mL',0.4,4.5]],
+ labw:X=>{const t=X.n('tsh'),o=[];if(t<0.4)o.push(`TSH ${t} 偏低：疑甲狀腺亢進 → 勾「甲狀腺」專區`);if(t>4.5)o.push(`TSH ${t} 偏高：甲狀腺低下 → 勾「甲狀腺」專區`);if(X.n('hb')<8)o.push(`Hb ${X.n('hb')}：嚴重貧血，評估出血與轉診`);return o},
  sx:[['sleep','睡不好','poor sleep'],['snore','打呼、白天嗜睡','snoring/daytime sleepiness'],['mood','情緒低落、沒興趣','low mood/anhedonia'],['menor','月經量多','menorrhagia'],['cold','怕冷、便秘、變胖','cold intolerance'],['polyu','多尿、口渴','polyuria/polydipsia']],
  rf:[['wt','體重減輕','weight loss'],['ns','夜間盜汗','night sweats'],['fever','發燒','fever'],['bleed','出血','bleeding'],['lap','淋巴結腫','lymphadenopathy']],
  pe:[['pallor','蒼白','pallor'],['thy','甲狀腺腫','goiter'],['lapx','淋巴結腫大','lymphadenopathy'],['hsm','肝脾腫大','hepatosplenomegaly']],
- dx:[{k:'fat',l:'疲倦',en:'Other fatigue',icd:'R53.83',a:X=>!X.anyDx},{k:'ins',l:'失眠',en:'Insomnia, unspecified',icd:'G47.00',a:X=>X.s('sleep')===1},{k:'dep',l:'憂鬱（篩檢陽性）',en:'Depressive episode, unspecified',icd:'F32.A',a:X=>false}],
- med:[],
- lab:[['cbc','CBC、ferritin',X=>true],['tsh','TSH',X=>true],['glu','FPG/HbA1c',X=>true],['cr','Cr、ALT',X=>true],['b12','B12',X=>X.chronic('dm')||X.p.age>=65],['phq','PHQ-9',X=>X.s('mood')===1],['psg','睡眠檢查轉介',X=>X.s('snore')===1]],
+ dx:[{k:'fat',l:'疲倦',en:'Other fatigue',icd:'R53.83',a:X=>!X.anyDx},{k:'ins',l:'失眠',en:'Insomnia, unspecified',icd:'G47.00',a:X=>X.s('sleep')===1},{k:'dep',l:'憂鬱（篩檢陽性）',en:'Depressive episode, unspecified',icd:'F32.A',a:X=>false},
+  {k:'ida',l:'缺鐵性貧血',en:'Iron deficiency anemia, unspecified',icd:'D50.9',a:X=>X.n('hb')<(X.p.sex==='F'?12:13)&&(X.n('fer')<30||(!has(X.n('fer'))&&X.n('mcv')<80))},
+  {k:'b12a',l:'B12 缺乏貧血（疑）',en:'Vitamin B12 deficiency anemia, unspecified',icd:'D51.9',a:X=>X.n('hb')<(X.p.sex==='F'?12:13)&&X.n('mcv')>100},
+  {k:'anem',l:'貧血（未明）',en:'Anemia, unspecified',icd:'D64.9',a:X=>X.n('hb')<(X.p.sex==='F'?12:13)&&!(X.n('fer')<30)&&!(X.n('mcv')<80)&&!(X.n('mcv')>100)},
+  {k:'idnoa',l:'缺鐵（無貧血）',en:'Iron deficiency',icd:'E61.1',a:X=>X.n('fer')<30&&!(X.n('hb')<(X.p.sex==='F'?12:13))}],
+ med:[{k:'ted',l:'TED1 Tedalin 鐵劑',rx:'TED1 Tedalin (ferric hydroxide) 100mg 1# BID x 1 month（持續到 ferritin 正常後 3 個月）',fixed:1,a:X=>X.dx('ida')||X.dx('idnoa'),w:X=>(X.p.sex==='M'||X.p.age>=50)?'男性或停經後缺鐵：安排胃鏡、大腸鏡找出血':''},
+  {k:'b12',l:'MET2 Methycobal（B12）',rx:'MET2 Methycobal (mecobalamin) 500µg 1# TID x 1 month',fixed:1,a:X=>X.dx('b12a'),w:X=>'先驗 B12、folate；嚴重缺乏或吸收不良改 V12A 針劑'}],
+ lab:[['cbc','CBC、ferritin',X=>true],['tsh','TSH',X=>true],['glu','FPG/HbA1c',X=>true],['cr','Cr、ALT',X=>true],['b12','B12',X=>X.chronic('dm')||X.p.age>=65||X.n('mcv')>100],['phq','PHQ-9',X=>X.s('mood')===1],['psg','睡眠檢查轉介',X=>X.s('snore')===1]],
  edu:X=>['規律睡眠、運動；減少酒精。','抽血報告回來再一起討論。'],
  ret:'weight loss, fever, night sweats, bleeding',refer:'相關專科'},
 {id:'ar',g:'dx',n:'過敏性鼻炎',en:'Allergic rhinitis',days:30,rxd:28,bl:['age','preg'],
@@ -754,6 +788,8 @@ function ctx(inst,p){
  const sel=c.dx.filter(d=>st.dx[d.k]===true);
  const eff=new Set((sel.length?sel:rec).map(d=>d.k));X.dx=k=>eff.has(k);X.dxSel=sel;X.dxRec=rec;
  X.medRec=c.med.filter(m=>!!m.a(X));X.medSel=c.med.filter(m=>st.med[m.k]===true);
+ X.consNote=[];{const o={drive:cs('ac','drive'),gi:cs('ac','gi'),cv:cs('ac','cv'),old:cs('ac','old')||(has(p.age)&&p.age>=65),preg:cs('ac','preg')||p.preg};if(o.drive||o.gi||o.cv||o.old||o.preg)X.medRec=consFilter(X.medRec,c.med,X,o);}
+ X.labw=c.labw?c.labw(X).filter(Boolean):[];
  X.labRec=c.lab.filter(l=>!!l[2](X));X.labSel=c.lab.filter(l=>st.lab[l[0]]===true);
  X.fuRec=(c.fu||[]).filter(f=>!f[2]||f[2](X));
  return X;
@@ -761,7 +797,7 @@ function ctx(inst,p){
 const rxStr=(m,X,d)=>{let s=typeof m.rx==='function'?m.rx(X):m.rx;if(!m.fixed&&/\b(QD|BID|TID|QID|HS|Q\dH|Q6H|PRN)\b/.test(s)&&!/ x \d/.test(s))s+=` x ${d} days`;return s};
 function triHtml(g,arr,st,red){return arr.map(([k,zh])=>{const v=st[g][k]||0;return `<button type="button" class="tri${v===1?' pos':v===-1?' neg':''}${red?' rf':''}" data-g="${g}" data-k="${k}">${esc(zh)}</button>`}).join('')}
 const rot=()=>`--d:-${Date.now()%2400}ms`;
-function selHtml(g,items,selSet,recSet,X){return items.map(it=>{const k=g==='lab'?it[0]:it.k,l=g==='lab'?esc(it[1]):(g==='dx'?`${esc(it.l)} <small>${icdOf(it,X)}</small>`:esc(it.l));const on_=selSet.has(k),rc=recSet.has(k);const w=g==='med'&&it.w?it.w(X):'';return `<button type="button" class="tg2${on_?' on':''}${rc?' rec':''}${w?' warn':''}" style="${rc?rot():''}" data-g="${g}" data-k="${k}" title="${esc(w)}">${l}${w?' ⚠':''}</button>`}).join('')}
+function selHtml(g,items,selSet,recSet,X){return items.map(it=>{const k=g==='lab'?it[0]:it.k,l=g==='lab'?esc(it[1]):(g==='dx'?`${esc(it.l)} <small>${icdOf(it,X)}</small>`:esc(it.l)+(roleOf(it.l)?` <small class="role">${esc(roleOf(it.l))}</small>`:''));const on_=selSet.has(k),rc=recSet.has(k);const w=g==='med'&&it.w?it.w(X):'';return `<button type="button" class="tg2${on_?' on':''}${rc?' rec':''}${w?' warn':''}" style="${rc?rot():''}" data-g="${g}" data-k="${k}" title="${esc(w)}">${l}${w?' ⚠':''}</button>`}).join('')}
 /* 追蹤檢查（主訴與慢性病共用） */
 const FUT=[[0,'今天'],[-1,'下次回診'],[2,'2 週'],[4,'1 個月'],[8,'6–8 週'],[12,'3 個月'],[17,'4 個月'],[26,'6 個月'],[52,'1 年']];
 const FUC={};
@@ -784,7 +820,7 @@ function blHtml(keys){
 }
 function optHtml(c,st){
  const a=(c.sel||[]).map(([k,l,opts])=>`<label class="blf">${l}<select data-osel="${k}">${opts.map((o,i)=>`<option value="${i}"${(st.sel[k]||0)===i?' selected':''}>${esc(o)}</option>`).join('')}</select></label>`);
- const b=(c.num||[]).map(([k,l])=>`<label class="blf">${l}<input data-onum="${k}" type="number" inputmode="decimal" value="${st.num[k]===undefined?'':esc(st.num[k])}"></label>`);
+ const b=(c.num||[]).map(([k,l,u])=>{const pr=st.pnum&&st.pnum[k];return `<label class="blf">${l}${u?' <small>'+esc(u)+'</small>':''}<input data-onum="${k}" type="number" inputmode="decimal" step="any" value="${st.num[k]===undefined?'':esc(st.num[k])}" placeholder="${pr!==undefined&&pr!==''?'上次 '+esc(pr):''}"></label>`});
  return a.concat(b).join('');
 }
 function cardHtml(inst,p,solo){
@@ -794,7 +830,7 @@ function cardHtml(inst,p,solo){
  return `${solo?'':`<summary>${esc(c.n)}<span class="ccx" data-rm="${inst.uid}" title="移除">✕</span></summary>`}
  <div class="adoptrow"><button type="button" class="b adopt" data-adopt="${inst.uid}">全部採用推薦</button><button type="button" class="b g" data-unsel="${inst.uid}">清除已選</button></div>
  ${c.bl&&c.bl.length?`<div class="sm">病人基本資料（沒填就用預設）</div><div class="blrow">${blHtml(c.bl)}</div>`:''}
- ${(c.sel||c.num)?`<div class="sm">選項</div><div class="blrow">${optHtml(c,st)}</div>`:''}
+ ${(c.sel||c.num)?`<div class="sm">選項與抽血數值（有填才會改推薦、寫進 O）</div><div class="blrow">${optHtml(c,st)}</div>`:''}
  <div class="ccrow"><label class="fld inl"><span>病程</span><select data-dur="${inst.uid}">${DUR.map((d,i)=>`<option value="${i}"${i===inst.dur?' selected':''}>${d[0]}</option>`).join('')}</select></label>
  <label class="fld inl"><span>藥開幾天</span><select data-rxd="${inst.uid}">${[1,2,3,5,7,14].map(d=>`<option${d===inst.rxd?' selected':''}>${d}</option>`).join('')}</select></label></div>
  <div class="sm">症狀　<b class="kpos">點一下＝有</b>　<b class="kneg">右鍵或長按＝沒有</b>　不點＝不寫</div><div class="tgs">${triHtml('sx',c.sx,st)}</div>
@@ -802,8 +838,10 @@ function cardHtml(inst,p,solo){
  ${rfOn.length?`<div class="rfwarn">紅旗：${rfOn.map(r=>esc(r[1])).join('、')} → 轉${esc(c.refer)}</div>`:''}
  <div class="sm">理學檢查</div><div class="tgs">${triHtml('pe',c.pe,st)}</div>
  ${X.sc?`<div class="score">${esc(X.sc.t)}：${esc(X.sc.adv)}</div>`:''}
+ ${X.labw.length?`<div class="score">${X.labw.map(esc).join('<br>')}</div>`:''}
  <div class="sm">診斷（可複選；<span class="reck">亮框＝推薦</span>，點了才寫進病歷）</div><div class="tgs">${selHtml('dx',c.dx,new Set(X.dxSel.map(d=>d.k)),new Set(X.dxRec.map(d=>d.k)),X)}</div>
  ${c.med.length?`<div class="sm">用藥</div><div class="tgs">${selHtml('med',c.med,new Set(X.medSel.map(m=>m.k)),new Set(X.medRec.map(m=>m.k)),X)}</div>`:''}
+ ${X.consNote.length?`<div class="sm consn">考量：${X.consNote.map(esc).join('；')}</div>`:''}
  ${medW.length?`<div class="sm medw">⚠ ${medW.map(esc).join('；')}</div>`:''}
  <div class="sm">今天的檢查</div><div class="tgs">${selHtml('lab',c.lab,new Set(X.labSel.map(l=>l[0])),new Set(X.labRec.map(l=>l[0])),X)}</div>
  <div class="sm">追蹤檢查（可選時間）</div>${fuHtml('i:'+inst.uid,X.fuRec.map(f=>[f[0],f[1],true]),st.fu)}`;
@@ -823,6 +861,10 @@ function evalCC(inst,p){
  const dn=neg.concat(rneg);if(dn.length)pi.push('Denied '+dn.map(x=>x[2]).join(', ')+'.');
  S.push(`[${c.en}] ${pi.join(' ')||'[ ]'}`);
  const pe=c.pe.filter(([k])=>st.pe[k]).map(([k,,en])=>`${en} (${st.pe[k]===1?'+':'−'})`);
+ const labs=(c.num||[]).map(([k,l,u,lo,hi,en])=>{const v=X.n(k),pr=st.pnum&&st.pnum[k]!==undefined&&st.pnum[k]!==''?+st.pnum[k]:undefined;if(!has(v)&&pr===undefined)return '';
+  const L=typeof lo==='function'?lo(p):lo,nm=en||l,uu=u?' '+u:'';const f=x=>L!=null&&x<L?' (L)':hi!=null&&x>hi?' (H)':'';
+  return has(v)?`${nm} ${v}${uu}${f(v)}${pr!==undefined?` (prev ${pr}${arw(v,pr)})`:''}`:`${nm} ${pr}${uu}${f(pr)} (prev, no new data)`}).filter(Boolean);
+ (c.sel||[]).filter(x=>x[3]).forEach(([k,,opts,en])=>{const v=st.sel[k]||0;if(v)labs.push(`${en} ${opts[v]}`)});
  const A=X.dxSel.length?X.dxSel.map((d,i)=>`${d.en} (${icdOf(d,X)})${i===0&&X.sc?`; ${X.sc.t}`:''}`):[`[ ]${X.sc?`; ${X.sc.t}`:''}`];
  const rx=X.medSel.map(m=>{let r=rxStr(m,X,inst.rxd);if(p.liver&&/Acetaminophen/.test(r))r+='（肝病 ≤2 g/day）';return r});
  const P=[`${c.n}${X.dxSel.length?'（'+X.dxSel.map(d=>d.l).join('、')+'）':''}：`];
@@ -830,10 +872,12 @@ function evalCC(inst,p){
  if(X.labSel.length)P.push('  Lab/Exam: '+X.labSel.map(l=>l[1]).join(', ')+'.');
  if(rpos.length)P.push(`  Red flag (+) → refer ${c.refer}.`);
  if(X.sc&&X.sc.adv)P.push(`  ${X.sc.t}: ${X.sc.adv}.`);
+ X.labw.forEach(w=>P.push('  Lab: '+w+'.'));
  P.push('  Return if '+c.ret+'.');
  const warn=X.medSel.map(m=>m.w?`${m.l}：${m.w(X)}`:'').filter(x=>!/：$/.test(x));
  rpos.forEach(r=>warn.unshift(`${c.n} 紅旗：${r[1]} → 轉${c.refer}`));
- return {cc,S,pe,A,P,rx,edu:c.edu?c.edu(X):[],warn,ret:c.ret,fu:Object.entries(st.fu||{})};
+ X.labw.filter(w=>/轉|急診|疑|甲狀腺/.test(w)).forEach(w=>warn.push(`${c.n}：${w}`));
+ return {cc,S,pe,A,P,rx,labs,edu:c.edu?c.edu(X):[],warn,ret:c.ret,fu:Object.entries(st.fu||{})};
 }
 
 function fieldHtml(f){
@@ -858,19 +902,22 @@ G.innerHTML=`
  <label class="fld"><span>體溫 °C</span><input id="p_bt" type="number" inputmode="decimal" step="0.1"></label>
  <label class="fld"><span>呼吸</span><input id="p_rr" type="number" inputmode="numeric"></label>
  <label class="fld"><span>SpO2 %</span><input id="p_spo2" type="number" inputmode="numeric"></label>
- <label class="fld"><span>eGFR</span><input id="p_egfr" type="number" inputmode="decimal"></label>
+ <label class="fld"><span>Cr mg/dL</span><input id="p_cr" type="number" inputmode="decimal" step="0.01"></label>
+ <label class="fld"><span id="egfrL">eGFR</span><input id="p_egfr" type="number" inputmode="decimal"></label>
  <label class="fld"><span>UACR mg/g</span><input id="p_uacr" type="number" inputmode="decimal"></label>
  <label class="fld"><span>K</span><input id="p_k" type="number" inputmode="decimal" step="0.1"></label>
+ <label class="fld"><span>Na</span><input id="p_na" type="number" inputmode="numeric"></label>
  <label class="fld"><span>每天抽菸（支）</span><input id="p_cig" type="number" inputmode="numeric"></label>
  <label class="fld" style="grid-column:span 2"><span>其他過敏（自由輸入）</span><input id="p_alg" type="text" placeholder="例如 sulfa、aspirin"></label>
 </div>
+<div class="sm" style="margin-top:8px">其他抽血數值（自己新增，會寫進 O）</div><div id="custLab"></div>
 <div class="sm" style="margin-top:8px">共病與風險因子</div>
 <div class="tgs">${COMORB.map(([k,l])=>`<label class="tg"><input id="x_${k}" type="checkbox"><span>${l}</span></label>`).join('')}</div>
 <div class="sm">*極高風險條件：CAD 合併一年內 MI、≥2 次 MI、多支阻塞、ACS 合併 DM、PAD 或頸動脈狹窄（健保表一）</div>
 </details>
 <div id="prevBox"></div><div class="sm" style="margin:12px 2px 6px">主訴／急性問題（可加多個）</div>
 <div class="tgs" id="ccAdd"><span class="sm">症狀：</span>${CC.filter(c=>c.g!=='dx').map(c=>`<button type="button" class="tg2 add" data-add="${c.id}">＋${esc(c.n)}</button>`).join('')}<span class="sm" style="margin-left:4px">診斷：</span>${CC.filter(c=>c.g==='dx').map(c=>`<button type="button" class="tg2 add" data-add="${c.id}">＋${esc(c.n)}</button>`).join('')}</div>
-<div id="ccList"></div>
+<div id="acCons"></div><div id="ccList"></div>
 <div class="sm" style="margin:12px 2px 6px">這次要處理的慢性病（可複選）</div>
 <div class="tgs mods">${MODS.map(m=>`<label class="tg mod" style="--mc:${m.c}"><input type="checkbox" data-mod="${m.k}"><span>${m.n}</span></label>`).join('')}</div>
 ${MODS.map(m=>`<details class="blk mblk" id="m_${m.k}" open hidden style="--mc:${m.c}"><summary>${m.n}</summary><div class="grid">${F[m.k].filter(f=>f[1]!=='chk').map(fieldHtml).join('')}</div><div class="tgs">${F[m.k].filter(f=>f[1]==='chk').map(fieldHtml).join('')}</div>${peHtml(m.k)}<div class="chrow" id="chips_${m.k}"></div></details>`).join('')}
@@ -888,9 +935,21 @@ $('w_drug').addEventListener('change',fillWt);
 window.fillWtHook=v=>{fillWt();$('w_dose').value=v||0};
 
 let PREV={},PREVD='';
-const n=id=>{const e=$(id);if(!e)return NaN;const v=parseFloat(e.value);if(!isNaN(v))return v;return PREV[id]!==undefined?PREV[id]:NaN};
-const pv=(id,u)=>{const e=$(id);const c=e?parseFloat(e.value):NaN,pr=PREV[id];u=u||'';if(!isNaN(c)&&pr!==undefined)return `${c}${u} (prev ${pr}${u})`;if(!isNaN(c))return `${c}${u}`;if(pr!==undefined)return `${pr}${u} (prev ${PREVD}, no new data)`;return '___'};
+const n=id=>{const e=$(id);if(!e)return NaN;const v=parseFloat(e.value);if(!isNaN(v)){const g=RANGE[id];return g&&(v<g[0]||v>g[1])?NaN:v}return PREV[id]!==undefined?PREV[id]:NaN};
+const arw=(a,b)=>a>b?' ↑':a<b?' ↓':'';
+const pv=(id,u)=>{const e=$(id);const c=e?parseFloat(e.value):NaN,pr=PREV[id];u=u||'';if(!isNaN(c)&&pr!==undefined)return `${c}${u} (prev ${pr}${u}${arw(c,pr)})`;if(!isNaN(c))return `${c}${u}`;if(pr!==undefined)return `${pr}${u} (prev ${PREVD}, no new data)`;return '___'};
 const pv2=(a,b,u)=>{const ea=$(a),eb=$(b);const ca=parseFloat(ea.value),cb=parseFloat(eb.value),pa=PREV[a],pb=PREV[b];const cur=!isNaN(ca)||!isNaN(cb),pre=pa!==undefined||pb!==undefined;const f=(x,y)=>`${x===undefined||isNaN(x)?'___':x}/${y===undefined||isNaN(y)?'___':y}`;if(cur&&pre)return `${f(ca,cb)}${u} (prev ${f(pa,pb)})`;if(cur)return f(ca,cb)+u;if(pre)return `${f(pa,pb)}${u} (prev ${PREVD})`;return '___/___'+u};
+/* 參考範圍（標 H/L）與合理範圍（抓打錯） */
+const REF={p_cr:p=>p.sex==='F'?[0.5,1.1]:[0.7,1.3],p_k:[3.5,5],p_na:[135,145],p_uacr:[null,29],d_a1c:[null,6.4],d_fpg:[70,99],l_tg:[null,149],l_hdl:p=>[p.sex==='F'?50:40,null],th_tsh:[0.4,4.5],th_ft4:[0.8,1.8],th_ft3:[2.3,4.2]};
+const RLAB={p_cr:'Cr',p_k:'K',p_na:'Na',p_uacr:'UACR',d_a1c:'HbA1c',d_fpg:'FPG',l_tg:'TG',l_hdl:'HDL-C',th_tsh:'TSH',th_ft4:'FT4',th_ft3:'FT3'};
+const flg=(id,v,p)=>{let r=REF[id];if(typeof r==='function')r=r(p);if(!r||isNaN(v))return '';return r[0]!=null&&v<r[0]?' (L)':r[1]!=null&&v>r[1]?' (H)':''};
+const pvF=(id,u,p)=>{u=u||'';const e=$(id);const c=e?parseFloat(e.value):NaN,pr=PREV[id];
+ if(!isNaN(c)&&pr!==undefined)return `${c}${u}${flg(id,c,p)} (prev ${pr}${u}${arw(c,pr)})`;if(!isNaN(c))return `${c}${u}${flg(id,c,p)}`;if(pr!==undefined)return `${pr}${u}${flg(id,pr,p)} (prev ${PREVD}, no new data)`;return '___'};
+const RANGE={p_age:[0,120],p_wt:[2,300],p_ht:[40,230],p_waist:[30,250],p_sbp:[50,300],p_dbp:[20,200],p_hr:[20,250],p_bt:[33,43],p_rr:[4,80],p_spo2:[50,100],p_egfr:[1,200],p_cr:[0.1,20],p_k:[1.5,9],p_na:[100,180],p_uacr:[0,30000],p_cig:[0,200],h_sbp:[60,260],h_dbp:[30,160],d_a1c:[3.5,20],d_fpg:[20,900],l_ldl:[10,600],l_hdl:[5,200],l_tg:[10,8000],l_tc:[50,1000],th_tsh:[0,500],th_ft4:[0,12],th_ft3:[0,40],th_dose:[12.5,400],th_mmi:[1,60],w_base:[30,300],t_hb:[2,25],t_ua:[0.5,20],t_a1c:[3.5,20],t_cr:[0.1,20],t_tsh:[0,500],t_ft4:[0,12],t_alt:[1,5000],t_ast:[1,5000],t_plt:[1,2000]};
+function rangeWarn(){const out=[];Object.entries(RANGE).forEach(([id,[lo,hi]])=>{const e=$(id);if(!e)return;const v=parseFloat(e.value);const bad=!isNaN(v)&&(v<lo||v>hi);e.classList.toggle('bad',bad);if(bad){const sp=e.closest('label')&&e.closest('label').querySelector('span');out.push(`數值可能打錯：${sp?sp.textContent:id} ${v}（合理範圍 ${lo}–${hi}）`)}});
+ const cr=parseFloat(($('p_cr')||{}).value),eg=parseFloat(($('p_egfr')||{}).value);if(!isNaN(cr)&&!isNaN(eg)&&((cr>=4&&eg>=45)||(cr<=0.9&&eg<30)))out.push(`Cr ${cr} 和手動 eGFR ${eg} 對不起來：確認單位或清掉 eGFR 讓它自動算`);
+ return out}
+function abnList(p){return Object.keys(REF).map(id=>{const e=$(id);if(!e)return '';if(e.closest('.mblk')&&e.closest('.mblk').hidden)return '';const c=parseFloat(e.value);if(isNaN(c))return '';const f=flg(id,c,p);return f?RLAB[id]+' '+c+f:''}).filter(Boolean)}
 function setPrev(id,v){PREV[id]=v;const e=$(id);if(e)e.placeholder='上次 '+v;}
 function clearPrev(){Object.keys(PREV).forEach(id=>{const e=$(id);if(e)e.placeholder=''});PREV={};PREVD='';}
 const sel=id=>+$(id).value;
@@ -902,6 +961,11 @@ const on=k=>!!document.querySelector(`[data-mod="${k}"]`).checked;
 function pt(){
  const p={visit:sel('p_visit'),age:n('p_age'),sex:$('p_sex').value,ht:n('p_ht'),wt:n('p_wt'),waist:n('p_waist'),sbp:n('p_sbp'),dbp:n('p_dbp'),hr:n('p_hr'),alg:($('p_alg')||{value:''}).value.trim(),bt:n('p_bt'),rr:n('p_rr'),spo2:n('p_spo2'),egfr:n('p_egfr'),uacr:n('p_uacr'),k:n('p_k'),cig:n('p_cig')};
  COMORB.forEach(([k])=>p[k]=ck('x_'+k));
+ p.cr=n('p_cr');p.na=n('p_na');p.egfrSrc='';
+ {const eIn=parseFloat($('p_egfr').value),crIn=parseFloat($('p_cr').value);
+  if(isNaN(eIn)&&has(p.age)&&!isNaN(crIn)){p.egfr=ckdepi(crIn,p.age,p.sex);p.egfrSrc='cr'}
+  else if(isNaN(eIn)&&!has(p.egfr)&&has(p.cr)&&has(p.age)){p.egfr=ckdepi(p.cr,p.age,p.sex);p.egfrSrc='crprev'}}
+ p.crcl=has(p.cr)&&has(p.age)&&has(p.wt)?Math.round((140-p.age)*p.wt/(72*p.cr)*(p.sex==='F'?0.85:1)):NaN;
  p.bmi=has(p.ht)&&has(p.wt)?Math.round(p.wt/((p.ht/100)**2)*10)/10:NaN;
  p.old=has(p.age)&&p.age>=75;
  p.smoker=(has(p.cig)&&p.cig>0)||on('smk');
@@ -909,6 +973,11 @@ function pt(){
  p.ascvd=p.cad||p.stroke||p.pad||p.plaque;
  return p;
 }
+/* CKD-EPI 2021（不分種族）：Cr mg/dL、年齡、性別 → eGFR */
+const ckdepi=(cr,age,sex)=>{const F=sex==='F',k=F?0.7:0.9,a=F?-0.241:-0.302;return Math.round(142*Math.min(cr/k,1)**a*Math.max(cr/k,1)**-1.2*0.9938**age*(F?1.012:1))};
+function egfrUI(p){const e=$('p_egfr'),l=$('egfrL');if(!e||!l)return;const man=e.value!=='';
+ l.textContent=p.egfrSrc&&!man?'eGFR（由 Cr 計算）':'eGFR';
+ e.placeholder=p.egfrSrc==='cr'&&!man?'≈ '+p.egfr:(PREV.p_egfr!==undefined?'上次 '+PREV.p_egfr:(p.egfrSrc==='crprev'?'由上次 Cr 算 '+p.egfr:''));}
 function gstage(e){return e>=90?'G1':e>=60?'G2':e>=45?'G3a':e>=30?'G3b':e>=15?'G4':'G5'}
 function astage(u){return u<30?'A1':u<300?'A2':'A3'}
 const NCODE={G1:'N18.1',G2:'N18.2',G3a:'N18.31',G3b:'N18.32',G4:'N18.4',G5:'N18.5'};
@@ -919,6 +988,7 @@ const lab=(r,item,wk)=>r.labs.push([item,wk]);
 /* ---------- 高血壓 ---------- */
 function HTN(p){
  const r=R(),s=n('h_sbp'),d=n('h_dbp');let step=sel('h_step');
+ const gout=p.gout||cs('htn','gout'),frail=p.frail||cs('htn','old'),edemaF=ck('h_edema')||cs('htn','edema'),one=cs('htn','one');
  const tgt=[130,80];
  r.S.push(`HTN: HBPM 722 avg ${pv2('h_sbp','h_dbp',' mmHg')}. Adherence ${ck('h_adh')?'poor':'[good]'}. ${ck('h_sx')?'Complains of [headache/chest pain/dyspnea/blurred vision].':'Denied headache, chest pain, dyspnea.'}${ck('h_edema')?' Ankle edema (+).':''}`);
  if(ck('h_sx'))r.warn.push('高血壓合併症狀：先排除急性器官傷害（胸痛、神經學症狀、喘、視力），需要時轉急診。');
@@ -931,14 +1001,14 @@ function HTN(p){
  r.goals.push('居家血壓 <130/80');
  const arb20='MIC2 Micardis (telmisartan) 40mg 1# QD';
  const arb40='MIC2 Micardis (telmisartan) 40mg 2# QD';
- const arbName=p.gout?'losartan':'olmesartan';
- const preferArb=on('dm')||p.ckd||p.hfref||(has(p.uacr)&&p.uacr>=30);
+ const arbName=gout?'losartan':'olmesartan';
+ const preferArb=on('dm')||p.ckd||p.hfref||(has(p.uacr)&&p.uacr>=30)||cs('htn','prot')||edemaF;
  const LAD=[[],
-  [preferArb?(p.frail?'MIC2 Micardis (telmisartan) 40mg 1/2# QD':arb20):(p.frail?'NOR1 Norvasc (amlodipine) 5mg 1/2# QD':'NOR1 Norvasc (amlodipine) 5mg 1# QD')],
+  [preferArb?(frail?'MIC2 Micardis (telmisartan) 40mg 1/2# QD':arb20):(frail?'NOR1 Norvasc (amlodipine) 5mg 1/2# QD':'NOR1 Norvasc (amlodipine) 5mg 1# QD')],
   ['NOR1 Norvasc (amlodipine) 5mg 1# QD',arb20],
   ['TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD'],
   ['TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD','NOR1 Norvasc (amlodipine) 5mg 1# QD（amlodipine 共 10mg）'],
-  p.gout?['TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD','NOR1 Norvasc (amlodipine) 5mg 1# QD（amlodipine 共 10mg）','XAD1 Xadosin SR (doxazosin) 4mg 1# HS（痛風：不加利尿劑）']:['TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD','NOR1 Norvasc (amlodipine) 5mg 1# QD（amlodipine 共 10mg）','NAT2 Natrilix SR (indapamide) 1.5mg 1# QD'],
+  gout?['TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD','NOR1 Norvasc (amlodipine) 5mg 1# QD（amlodipine 共 10mg）','XAD1 Xadosin SR (doxazosin) 4mg 1# HS（痛風：不加利尿劑）']:['TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD','NOR1 Norvasc (amlodipine) 5mg 1# QD（amlodipine 共 10mg）','NAT2 Natrilix SR (indapamide) 1.5mg 1# QD'],
   null];
  let next=step,why='';
  if(!known){r.P.push('HTN: 請輸入 722 平均才能算處方。');}
@@ -957,11 +1027,12 @@ function HTN(p){
   } else meds=LAD[next]||[];
   if(next===0)meds=[];
   if(p.hfref&&!p.preg){meds=meds.concat(['CON3 Concor (bisoprolol) 1.25mg 1# QD（HFrEF 每 2 週倍增）']);r.warn.push('HFrEF：依 GDMT（ARNI/ARB、β-blocker、MRA、SGLT2i），轉心臟科。');}
-  else if((p.cad||p.af)&&!p.preg&&!meds.some(m=>/Concor/.test(m)))meds=meds.concat(['CON1 Concor (bisoprolol) 5mg 1/2# QD（CAD／AF）']);
-  if(ck('h_edema')&&meds.some(m=>/共 10mg/.test(m))){r.warn.push('CCB 水腫：amlodipine 改回 5mg，改加 NAT2 indapamide。')}
+  else if((p.cad||p.af||cs('htn','tachy'))&&!p.preg&&!meds.some(m=>/Concor/.test(m)))meds=meds.concat(['CON1 Concor (bisoprolol) 5mg 1/2# QD（心跳快／CAD／AF）']);
+  if(edemaF&&!p.preg){meds=meds.map(m=>/共 10mg/.test(m)?(gout?'XAD1 Xadosin SR (doxazosin) 4mg 1# HS（腳腫：amlodipine 不加到 10mg）':'NAT2 Natrilix SR (indapamide) 1.5mg 1# QD（腳腫：amlodipine 不加到 10mg）'):m);const seen=new Set();meds=meds.filter(m=>{const c=m.split(' ')[0];if(seen.has(c))return false;seen.add(c);return true})}
+  if(one&&!p.preg){const t=meds.join('|');if(/^NOR1 [^|]*1# QD\|MIC2 [^|]*1# QD$/.test(t))meds=['EXF1 Exforge (valsartan 80/amlodipine 5) 1# QD（一天一顆）'];else if(meds.length===3&&/TWY1/.test(t)&&/共 10mg/.test(t)&&/NAT2/.test(t))meds=['EXF2 Exforge HCT (amlodipine 5/valsartan 160/HCTZ 12.5) 1# QD（一天一顆；amlodipine 比原方案少 5mg）']}
   if(has(p.k)&&p.k>=5.5)r.warn.push('K ≥5.5：暫停 ARB／spironolactone，複驗 K。');
-  if(p.gout)r.edu.push('痛風：避開利尿劑（thiazide、indapamide）。');
-  const nm=next===2&&!p.preg?'（兩藥穩定後可改單一複方 TWY1 Twynsta 或 EXF1 Exforge，少一顆）':'';
+  if(gout)r.edu.push('痛風：避開利尿劑（thiazide、indapamide）。');
+  const nm=next===2&&!p.preg&&!one?'（兩藥穩定後可改單一複方 TWY1 Twynsta 或 EXF1 Exforge，少一顆）':'';
   r.P.push(`HTN（${why}）：`);meds.forEach(m=>r.P.push('  '+m));if(nm)r.P.push('  '+nm);
   r.rx=meds;
   const changed=next!==step;
@@ -981,6 +1052,7 @@ function DM(p){
  const r=R(),a=n('d_a1c'),lvl=sel('d_lvl');
  const tgt=(p.old||p.frail)?8:7;
  const eg=p.egfr;
+ const noSU=ck('d_hypo')||cs('dm','hypo'),noInj=cs('dm','noinj'),wtl=cs('dm','wtl'),hfckd=cs('dm','hfckd'),cost=cs('dm','cost');
  r.S.push(`DM: SMBG fasting ${pv('d_fpg',' mg/dL')}. Hypoglycemia ${ck('d_hypo')?'(+) [frequency/severity]':'denied'}. ${ck('d_sym')?'Polyuria/polydipsia/wt loss (+). ':''}Adherence ${ck('d_adh')?'poor':'[good]'}.`);
  const atT=has(a)&&a<tgt;
  let code=p.ckd&&on('ckd')?`Type 2 DM with diabetic CKD (E11.22) + ${ncode(p)}`:(has(a)&&!atT?'Type 2 DM with hyperglycemia (E11.65)':'Type 2 DM without complication (E11.9)');
@@ -990,35 +1062,38 @@ function DM(p){
  const metOK=!ck('d_mci')&&!(has(eg)&&eg<30);
  const metDose=has(eg)&&eg<45?'VOL1 Volv (metformin) 500mg 1# BID PC（eGFR 30–45 最多 1000mg/d）':'VOL1 Volv (metformin) 500mg 1# BID PC → 2 週後 2# BID';
  const sglt=!(has(eg)&&eg<20);
- const wantS=p.ascvd||p.hfref||p.ckd||(has(p.bmi)&&p.bmi>=27);
+ const wantS=p.ascvd||p.hfref||p.ckd||(has(p.bmi)&&p.bmi>=27)||wtl||hfckd;
  const wantD=p.old||p.frail||(has(p.bmi)&&p.bmi<22)||ck('d_gu');
  let second;
  if(!sglt)second='TRA5 Trajenta (linagliptin) 5mg 1# QD（eGFR <20 不用 SGLT2i）';
  else if(wantD&&!wantS)second='TRA5 Trajenta (linagliptin) 5mg 1# QD';
+ else if(cost&&!wantS&&!noSU&&!p.old&&!p.frail)second='DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC（在意費用）';
  else second='JAR3 Jardiance (empagliflozin) 10mg 1# QD 或 FOR3 Forxiga (dapagliflozin) 10mg 1# QD';
- const isS=/flozin/.test(second);
+ const isS=/flozin/.test(second);const isSU=/DIM3/.test(second);
  if(isS&&wantD)r.warn.push('SGLT2i 用在長者／衰弱：衛教脫水、生殖器清潔、手術或禁食前 3 天停藥。');
  const meds=[];let why='';
  if(!has(a)){r.P.push('DM: 請輸入 HbA1c 才能算處方。');}
  else if(atT){why='已達標，維持'}
  else if(ck('d_adh')&&lvl>0){why='遵從性差：先處理服藥與飲食，暫不加藥'}
  else if(lvl===0){
-  if(a>=10||ck('d_sym')){const u=has(p.wt)?Math.round(p.wt*(p.old?0.1:0.15)):'___';meds.push(`LANA Lantus (insulin glargine) ${u} U SC HS（${p.old?'0.1':'0.15'} U/kg）`);if(metOK)meds.push(metDose);why='HbA1c ≥10% 或有症狀 → 基礎胰島素';r.fu=1;r.edu.push('打胰島素要量空腹血糖；每 3 天空腹 >130 加 2 單位（依醫囑）。');}
+  if((a>=10||ck('d_sym'))&&noInj){if(metOK)meds.push(metDose);meds.push(second);if(!noSU&&!isSU)meds.push('DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC');why='HbA1c ≥10% 但不想打針 → 口服多藥';r.warn.push('HbA1c ≥10% 或有高血糖症狀：胰島素最快最有效；病人不想打針先口服，2–4 週複評。');r.fu=2;}
+  else if(a>=10||ck('d_sym')){const u=has(p.wt)?Math.round(p.wt*(p.old?0.1:0.15)):'___';meds.push(`LANA Lantus (insulin glargine) ${u} U SC HS（${p.old?'0.1':'0.15'} U/kg）`);if(metOK)meds.push(metDose);why='HbA1c ≥10% 或有症狀 → 基礎胰島素';r.fu=1;r.edu.push('打胰島素要量空腹血糖；每 3 天空腹 >130 加 2 單位（依醫囑）。');}
   else if(metOK){meds.push(metDose);
-   if(a-tgt>=1.5){if(p.old||p.frail)meds.push(second),why='高於目標 ≥1.5%（長者不加 SU）';else meds.push('DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC'),why='高於目標 ≥1.5% → metformin＋SU（健保初始雙藥）';}
+   if(a-tgt>=1.5){if(p.old||p.frail||noSU||wtl||hfckd)meds.push(second),why=`高於目標 ≥1.5%（${p.old||p.frail?'長者':noSU?'怕低血糖':wtl?'想減重':'心衰竭／CKD'}：不加 SU）`;else meds.push('DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC'),why='高於目標 ≥1.5% → metformin＋SU（健保初始雙藥）';}
    else why='高於目標 <1.5% → metformin';}
   else{meds.push(second);why='Metformin 禁忌 → 直接第二類（健保待核對）'}
  }
  else if(lvl===1){meds.push(second);why=`metformin 足量未達標 → 加${isS?' SGLT2i':' DPP-4i'}`}
  else if(lvl===2){why='第二類未滿 6 個月：續用，3 個月後再評估（健保多數加藥需滿 6 個月）'}
- else if(lvl===3){if(a>7.5)meds.push('改 GLY1 Glyxambi (empagliflozin 25/linagliptin 5) 1# QD（取代原 SGLT2i 或 DPP-4i）'),why='兩類 ≥6 個月仍 >7.5% → 第三類（複方）';else{meds.push('DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC'),why='差距小 → 加 SU（低血糖衛教）'}}
- else if(lvl===4){if(a>8.5){if(on('wt')&&sel('w_dose')>0&&/MOUC|WEGA/.test($('w_drug').selectedOptions[0].text)){meds.push('（已在用減重針，不重複開 GLP-1 RA；減重針劑量上調後 3 個月再評估，仍 >8.5% 加基礎胰島素）');why='>8.5%，GLP-1 類已由減重針提供'}else if((has(p.bmi)&&p.bmi>=25)||p.ascvd){meds.push('OZEA Ozempic (semaglutide) 0.25mg SC qw x4 → 0.5mg qw');meds.push('停用 DPP-4i（健保：GLP-1 RA 不可與 DPP-4i、SGLT2i 併用；SGLT2i 續用需確認給付）');why='>8.5% → GLP-1 RA'}else{const u=has(p.wt)?Math.round(p.wt*0.15):'___';meds.push(`LANA Lantus (insulin glargine) ${u} U SC HS`);why='>8.5% → 基礎胰島素';r.fu=1}}else why='7–8.5%：檢查遵從、飲食，或加 SU'}
+ else if(lvl===3){if(a>7.5)meds.push('改 GLY1 Glyxambi (empagliflozin 25/linagliptin 5) 1# QD（取代原 SGLT2i 或 DPP-4i）'),why='兩類 ≥6 個月仍 >7.5% → 第三類（複方）';else if(noSU){meds.push('改 GLY1 Glyxambi (empagliflozin 25/linagliptin 5) 1# QD（取代原 SGLT2i 或 DPP-4i）'),why='差距小，但怕低血糖 → 不用 SU，改複方'}else{meds.push('DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC'),why='差距小 → 加 SU（低血糖衛教）'}}
+ else if(lvl===4){if(a>8.5){if(on('wt')&&sel('w_dose')>0&&/MOUC|WEGA/.test($('w_drug').selectedOptions[0].text)){meds.push('（已在用減重針，不重複開 GLP-1 RA；減重針劑量上調後 3 個月再評估，仍 >8.5% 加基礎胰島素）');why='>8.5%，GLP-1 類已由減重針提供'}else if(noInj){if(!noSU)meds.push('DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC');why='>8.5% 但不想打針 → 口服已接近極限';r.warn.push('口服三類仍 >8.5%：GLP-1 RA 或基礎胰島素效果最好，下次再討論打針。')}else if((has(p.bmi)&&p.bmi>=25)||p.ascvd||wtl){meds.push('OZEA Ozempic (semaglutide) 0.25mg SC qw x4 → 0.5mg qw');meds.push('停用 DPP-4i（健保：GLP-1 RA 不可與 DPP-4i、SGLT2i 併用；SGLT2i 續用需確認給付）');why='>8.5% → GLP-1 RA'}else{const u=has(p.wt)?Math.round(p.wt*0.15):'___';meds.push(`LANA Lantus (insulin glargine) ${u} U SC HS`);why='>8.5% → 基礎胰島素';r.fu=1}}else why='7–8.5%：檢查遵從、飲食，或加 SU'}
+ else if(lvl===5&&noInj){why='GLP-1 RA 未達標，不想打胰島素';r.warn.push('GLP-1 RA 未達標：下一步是基礎胰島素；病人不想打針，先確認遵從與飲食。')}
  else if(lvl===5){const u=has(p.wt)?Math.round(p.wt*0.1):'___';meds.push(`LANA Lantus (insulin glargine) ${u} U SC HS（加上 GLP-1 RA）`);why='GLP-1 RA 未達標 → 加基礎胰島素';r.fu=1}
  else if(lvl===6){meds.push('LANA Lantus：依空腹血糖每 3 天 +2 U，目標 FPG 80–130');why='胰島素滴定（教學簡化）';if(a>9)r.warn.push('基礎胰島素已高（>0.5 U/kg）仍未達標：考慮加 GLP-1 RA 或餐前胰島素，轉新陳代謝科。')}
  if(has(a)){r.P.push(`DM（${why}）：`);meds.forEach(m=>r.P.push('  '+m));if(!meds.length&&!atT&&why)r.P.push('  Continue current regimen.');r.rx=meds;}
  if(metOK&&lvl<=1&&has(eg)&&eg<45&&eg>=30)r.warn.push('eGFR 30–45：metformin 最多 1000 mg/d；<30 停用。');
  if(!metOK&&has(eg)&&eg<30)r.warn.push('eGFR <30：停 metformin。');
- if(ck('d_hypo'))r.warn.push('有低血糖：SU 減量或停用，目標放寬。');
+ if(noSU)r.warn.push((ck('d_hypo')?'有低血糖':'怕低血糖')+'：避開 SU；已在用 SU 要減量或停用。');
  if(on('wt'))r.warn.push('同時開減重針：與 GLP-1 RA 擇一，不要重複；SU／胰島素要減量防低血糖。');
  lab(r,'HbA1c',atT?26:12);
  ['Lipid profile','Cr/eGFR','UACR','ALT'].forEach(x=>lab(r,x,52));
@@ -1049,10 +1124,11 @@ function riskTier(p){
  return[rf.length>=2?3:rf.length===1?4:5,rf.length?rf:['無']];
 }
 function LIP(p){
- const r=R(),ldl=n('l_ldl'),tg=n('l_tg'),hdl=n('l_hdl'),tc=n('l_tc'),lvl=sel('l_lvl'),cur=sel('l_cur');
+ const r=R(),ldl=n('l_ldl'),tg=n('l_tg'),hdl=n('l_hdl'),tc=n('l_tc'),lvl0=sel('l_lvl'),cur=sel('l_cur');
+ const lvl=(cs('lip','myal')&&lvl0>=2&&lvl0<=4)?5:lvl0,ddi=cs('lip','ddi'),cost=cs('lip','cost');
  const [ti,why]=riskTier(p);const T=TIER[ti];
  const nh=has(tc)&&has(hdl)?tc-hdl:NaN;
- r.S.push(`HLD: ${['drug-naive','lifestyle modification x 3-6 months','on statin <6-8 wks','on statin ≥6-8 wks','on statin + ezetimibe','statin intolerance'][lvl]}. Myalgia ${ck('l_my')?'(+)':'denied'}. Adherence ${ck('l_adh')?'poor':'[good]'}.`);
+ r.S.push(`HLD: ${['drug-naive','lifestyle modification x 3-6 months','on statin <6-8 wks','on statin ≥6-8 wks','on statin + ezetimibe','statin intolerance'][lvl0]}. Myalgia ${ck('l_my')?'(+)':'denied'}. Adherence ${ck('l_adh')?'poor':'[good]'}.`);
  const atT=has(ldl)&&ldl<T[2];
  const code=has(tg)&&tg>=150&&has(ldl)&&ldl>=T[2]?'Mixed hyperlipidemia (E78.2)':(has(tg)&&tg>=150&&atT?'Hypertriglyceridemia (E78.1)':'Pure hypercholesterolemia (E78.00)');
  r.A.push(`${code}; 健保表一 ${T[0]}（${why.join('、')}），LDL ${B(ldl)} → target <${T[2]}${T[3]?`（non-HDL <${T[3]}${has(nh)?'，目前 '+nh:''}）`:''}`);
@@ -1082,7 +1158,11 @@ function LIP(p){
    else{meds.push(egLow?'TUL1 Tulip (atorvastatin) 10mg 4# QD':'CRE2 Crestor (rosuvastatin) 10mg 2# QD');meds.push('＋EZE1 Ezetrol (ezetimibe) 10mg 1# QD');wy=`還差 ${need}% → 高強度＋ezetimibe`}
   } else {meds.push('原 statin＋EZE1 Ezetrol (ezetimibe) 10mg 1# QD');wy='高強度未達標 → 加 ezetimibe'}
  }
- else if(lvl===4){if(ti<=1)meds.push('LEQA Leqvio (inclisiran) 284mg SC，3 個月後再一劑，之後每 6 個月（健保條件嚴格，待核對）'),wy='statin＋ezetimibe 未達標，極高／非常高風險';else meds.push('自費選項：NIL2 Nilemdo (bempedoic acid) 180mg QD、LEQA Leqvio'),wy='statin＋ezetimibe 未達標'}
+ else if(lvl===4){if(ti<=1)meds.push('LEQA Leqvio (inclisiran) 284mg SC，3 個月後再一劑，之後每 6 個月（健保條件嚴格，待核對）'),wy='statin＋ezetimibe 未達標，極高／非常高風險';else if(cost)meds.push('（在意費用：維持最大耐受 statin＋ezetimibe，加強生活型態）'),wy='statin＋ezetimibe 未達標'; else meds.push('自費選項：NIL2 Nilemdo (bempedoic acid) 180mg QD、LEQA Leqvio'),wy='statin＋ezetimibe 未達標'}
+ if(ddi){const MAP=[[/^TUL1 Tulip \(atorvastatin\) 10mg 1# QD/,'CRE2 Crestor (rosuvastatin) 10mg 1/2# QD（避開 CYP3A4 交互作用）'],[/^TUL1 Tulip \(atorvastatin\) 10mg 2# QD/,'CRE2 Crestor (rosuvastatin) 10mg 1# QD（避開 CYP3A4 交互作用）'],[/^TUL1 Tulip \(atorvastatin\) 10mg 4# QD/,'CRE2 Crestor (rosuvastatin) 10mg 1# QD（eGFR <30 上限 10mg；避開 CYP3A4）']];
+  const m2=meds.map(m=>{const x=MAP.find(q=>q[0].test(m));return x?x[1]:m});if(m2.join()!==meds.join()){meds.length=0;meds.push(...m2);wy+='；避開 CYP3A4'}
+  r.warn.push('有 CYP3A4 交互作用（例如 clarithromycin、azole、HIV 藥、amiodarone、diltiazem、葡萄柚）：避開 atorvastatin、simvastatin，用 rosuvastatin 或 pitavastatin。')}
+ if(cs('lip','myal')&&lvl0>=2&&lvl0<=4)r.warn.push('肌肉痠痛：先走 statin 不耐受路線（停藥 2–4 週、驗 CK，再換低劑量或 ezetimibe）。');
  if(has(tg)&&tg>=500){meds.push(egLow?'（TG ≥500：eGFR <30 避免 fenofibrate，轉介）':'LIP5 Lipanthyl (fenofibrate) 160mg 1# QD（TG ≥500，防胰臟炎）')}
  if(has(ldl)){r.P.push(`HLD（${wy}）：`);meds.forEach(m=>r.P.push('  '+m));r.rx=meds.filter(m=>!/^（/.test(m));}
  if(ck('l_my'))r.warn.push('肌肉痠痛：驗 CK；CK >10 倍正常上限或症狀嚴重先停 statin，2–4 週後換低劑量或其他 statin。'),lab(r,'CK',0);
@@ -1216,6 +1296,92 @@ function SMK(p){
  return r;
 }
 
+/* ---------- 甲狀腺 ---------- */
+const ELTX=ug=>{const t=ug/50;const w=Math.floor(t),f=t-w;const fr={0:'',0.25:'1/4',0.5:'1/2',0.75:'3/4'}[f];return (w&&fr?`${w} ${fr}`:w?String(w):fr)+'#'};
+const eltRx=(ug,note)=>`ELT2 Eltroxin (levothyroxine) 50µg ${ELTX(ug)} QD AC（${ug} µg/day${note?'；'+note:''}）`;
+const r125=v=>Math.max(12.5,Math.round(v/12.5)*12.5);
+const mmiRx=mg=>{mg=Math.max(2.5,Math.round(mg/2.5)*2.5);const t=mg/5;const tb=t===0.5?'1/2#':(t%1?`${Math.floor(t)} 1/2#`:t+'#');return mg<=15?`MET7 Methimazole 5mg ${tb} QD（${mg} mg/day）`:`MET7 Methimazole 5mg ${(mg/10)%1?`${Math.floor(mg/10)} 1/2#`:mg/10+'#'} BID（${mg} mg/day）`};
+function thyTgt(p){const tri=sel('th_tri');if(tri===2||(p.preg&&tri===0))return [0.1,2.5,'第一孕期'];if(tri>=3)return [0.2,3,'第二／三孕期'];if(tri===1)return [0.4,2.5,'計畫懷孕'];if(has(p.age)&&p.age>=70)return [0.4,6,'≥70 歲可放寬'];return [0.4,4.5,'']}
+function THY(p){
+ const r=R(),tsh=n('th_tsh'),ft4=n('th_ft4'),ft3=n('th_ft3'),typ=sel('th_type'),cur=sel('th_cur'),dose=n('th_dose'),mmi=n('th_mmi'),tri=sel('th_tri'),nod=sel('th_nod');
+ const preg=tri>=1||p.preg,t1=tri===1||tri===2||(p.preg&&tri===0);
+ const [tl,th,tlab]=thyTgt(p);
+ const k4=has(ft4),hiT=has(tsh)&&tsh>4.5,loT=has(tsh)&&tsh<0.4,loF=k4&&ft4<0.8,hiF=(k4&&ft4>1.8)||(has(ft3)&&ft3>4.2);
+ let st='unk';if(has(tsh)){if(hiT)st=loF?'hypo':(k4?'shypo':(tsh>=10?'hypo':'shypo'));else if(loT)st=hiF?'hyper':'shyper';else st=hiF?'hyper':'euth'}
+ const dir=cur===1?'hypo':cur>=2?'hyper':typ===1?'hypo':typ===2?'hyper':/hypo/.test(st)?'hypo':/hyper/.test(st)?'hyper':'';
+ const frailT=(has(p.age)&&p.age>=65)||p.cad||p.af||p.ascvd||p.hfref;
+ r.S.push(`Thyroid: ${dir==='hyper'?'palpitation/tremor/heat intolerance '+(ck('th_sx')?'(+)':'denied'):'cold intolerance/fatigue/constipation '+(ck('th_hsx')?'(+)':'denied')}. ${['No thyroid medication','On levothyroxine '+B(dose)+' µg/day','On methimazole '+B(mmi)+' mg/day','On PTU'][cur]}.${ck('th_amd')?' On amiodarone/lithium.':''}${preg?' Pregnancy: '+(['(+)','planning','1st trimester','2nd trimester','3rd trimester'][tri])+'.':''}`);
+ const codes=[];let lbl='';
+ if(dir==='hypo'){if(ck('th_post')){codes.push('E89.0');lbl='Postprocedural hypothyroidism'}else if(ck('th_tpo')){codes.push('E06.3');lbl='Hashimoto thyroiditis'}else if(st==='shypo'&&cur===0){codes.push('E02');lbl='Subclinical hypothyroidism'}else{codes.push('E03.9');lbl='Hypothyroidism'}}
+ else if(dir==='hyper'){if(ck('th_trab')){codes.push('E05.00');lbl='Graves disease'}else{codes.push('E05.90');lbl=st==='shyper'?'Subclinical hyperthyroidism':'Thyrotoxicosis'}}
+ if(nod)codes.push(nod===1?'E04.1':'E04.2');
+ if(!codes.length){codes.push(st==='euth'||st==='unk'?'E07.9':'R94.6');lbl=st==='euth'?'Euthyroid':'Thyroid disorder'}
+ const tf=`TSH ${has(tsh)?tsh:'___'}${has(ft4)?', FT4 '+ft4:''}${has(ft3)?', FT3 '+ft3:''}`;
+ r.A.push(`${lbl} (${codes[0]})${nod?` + thyroid nodule (${codes[codes.length-1]})`:''}; ${tf}${dir==='hypo'?`; TSH target ${tl}–${th}${tlab?'（'+tlab+'）':''}`:''}`);
+ r.info=`${tf}${dir==='hypo'?`；目標 TSH ${tl}–${th}${tlab?'（'+tlab+'）':''}`:''}`;
+ const meds=[];let why='';let changed=false;
+ if(!has(tsh)&&cur===0&&!nod){r.P.push('Thyroid: 請輸入 TSH（與 FT4）才能判斷。');lab(r,'TSH',0);lab(r,'FT4',0);}
+ else if(dir==='hypo'){
+  if(cur===0){
+   const treat=(st==='hypo'||st==='shypo')&&(st==='hypo'||tsh>=10||preg||(ck('th_hsx')&&!(has(p.age)&&p.age>=70)));
+   if(st==='euth'||st==='unk'){why=st==='euth'?'TSH、FT4 正常，不需治療':'請輸入 TSH'}
+   else if(!treat){why=`亞臨床低下（TSH ${tsh} <10、無症狀、未懷孕）：先不治療，6–12 週複驗排除暫時性`;lab(r,'TSH',8);lab(r,'FT4',8);lab(r,'anti-TPO',8);}
+   else{changed=true;let ug;
+    if(st==='hypo'&&!frailT&&!preg){ug=has(p.wt)?Math.min(150,r125(p.wt*1.6)):50;why=`明顯低下 → 足量 1.6 µg/kg${has(p.wt)?'':'（沒有體重，先 50 µg）'}`}
+    else if(st==='hypo'&&preg){ug=has(p.wt)?Math.min(150,r125(p.wt*1.6)):75;why='懷孕合併明顯低下 → 足量，轉產科共照'}
+    else if(frailT&&!preg){ug=25;why='長者或心臟病 → 從 25 µg 開始，慢慢加'}
+    else{ug=preg?50:(tsh>=10?50:25);why=preg?'懷孕或計畫懷孕：TSH 高就治療':(tsh>=10?'TSH ≥10 → 治療':'有症狀 → 低劑量試用 3 個月')}
+    meds.push(eltRx(ug,'起始'));}
+  } else if(cur===1){
+   if(!has(tsh)){why='請輸入 TSH';}
+   else if(tsh>th){changed=true;const step=tsh>=10&&!frailT?25:(frailT?12.5:25);const nd=has(dose)?r125(dose+step):NaN;meds.push(has(dose)?eltRx(nd,`由 ${dose} 加 ${step}`):`ELT2 Eltroxin 加 ${step} µg/day（請填目前劑量）`);why=`TSH ${tsh} 高於目標 ${th} → 加量`}
+   else if(tsh<tl){changed=true;const step=tsh<0.1?25:12.5;const nd=has(dose)?r125(dose-step):NaN;meds.push(has(dose)?eltRx(nd,`由 ${dose} 減 ${step}`):`ELT2 Eltroxin 減 ${step} µg/day（請填目前劑量）`);why=`TSH ${tsh} 低於 ${tl} → 過量，減量`;if(frailT)r.warn.push('長者或心臟病 TSH 過低：AF、骨鬆風險，要減量。')}
+   else{if(has(dose))meds.push(eltRx(dose,'維持'));why='TSH 在目標內，維持'}
+   if(preg&&tri>=1&&tri<=2&&!changed)r.warn.push('確認懷孕：Eltroxin 每週多吃 2 天份（約 +25–30%），4 週驗 TSH。');
+  }
+  if(ck('th_tpo')&&preg)r.warn.push('anti-TPO 陽性合併懷孕：TSH 每 4 週追蹤到第 20 週。');
+ }
+ else if(dir==='hyper'){
+  const sym=ck('th_sx')||(has(p.hr)&&p.hr>90);const asth=CCS.some(i=>/asthma|copd/.test(i.c.id));
+  const bb=sym&&!asth&&!p.hfref?'PRO13 Propranolol 10mg 1# TID（控制心悸、手抖；心跳 <60 停）':'';
+  if(cur===0){
+   if(st==='hyper'||(st==='unk'&&typ===2)){changed=true;
+    if(t1){meds.push('POL1 Polupi (PTU) 50mg 2# TID（第一孕期或計畫懷孕）');why='懷孕早期 → PTU，轉產科與新陳代謝科'}
+    else{const ratio=k4?ft4/1.8:1.5;const mg=ratio<=1.5?10:ratio<=2?20:30;meds.push(mmiRx(mg));why=`FT4 ${k4?ft4:'___'}（${k4?'約上限 '+Math.round(ratio*10)/10+' 倍':'未知'}）→ methimazole ${mg} mg/day`}
+    if(bb)meds.push(bb);
+    if(!ck('th_trab'))r.warn.push('先確認是 Graves（驗 TRAb）：亞急性或無痛甲狀腺炎不用抗甲狀腺藥，只用 β-blocker 症狀治療。'),lab(r,'TRAb',0);
+    lab(r,'CBC',0);lab(r,'ALT',0);
+   } else if(st==='shyper'){
+    if(tsh<0.1&&(frailT||(has(p.age)&&p.age>=65)))why='亞臨床亢進 TSH <0.1，合併長者或心臟病 → 轉新陳代謝科評估治療';
+    else why='亞臨床亢進：6–12 週複驗 TSH、FT4、FT3';lab(r,'TSH',8);lab(r,'FT4',8);lab(r,'FT3',8);if(bb&&ck('th_sx'))meds.push(bb);
+   } else why='甲狀腺功能正常範圍';
+  } else if(cur===2){
+   if(!has(tsh)&&!k4)why='請輸入 TSH、FT4';
+   else if(hiT||loF){changed=true;meds.push(has(mmi)?mmiRx(mmi*0.5):'MET7 Methimazole 減量約一半（請填目前劑量）');why='TSH 高或 FT4 低：抗甲狀腺藥過量 → 減量'}
+   else if(hiF){changed=true;meds.push(has(mmi)?mmiRx(mmi+(mmi>=20?10:5)):'MET7 Methimazole 加量（請填目前劑量）');why='FT4 仍高 → 加量'}
+   else{if(has(mmi))meds.push(mmiRx(mmi));why='FT4 正常，維持（TSH 可能低好幾個月，依 FT4 調）；總療程 12–18 個月後驗 TRAb 評估停藥'}
+   if(bb&&hiF)meds.push(bb);
+   if(preg&&t1)r.warn.push('懷孕早期：methimazole 改 PTU（致畸風險），轉產科與新陳代謝科。');
+  } else if(cur===3){
+   if(tri>=3){changed=true;meds.push('改 MET7 Methimazole（第二孕期起；PTU 肝毒性）');why='第二孕期起改回 methimazole'}else{meds.push('POL1 Polupi (PTU) 50mg 依 FT4 調整');why='PTU 續用，FT4 維持正常上限附近'}
+  }
+  if(cur>=2||meds.some(m=>/MET7|NEW4|POL1/.test(m))){r.warn.push('抗甲狀腺藥：發燒、喉嚨痛要立刻停藥抽血（顆粒球缺乏）；PTU 注意肝毒性。');lab(r,'CBC',changed?4:12);lab(r,'ALT',changed?4:12);r.edu.push('吃抗甲狀腺藥時發燒、喉嚨痛：先停藥，當天回診抽血。')}
+  if(has(p.hr)&&p.hr>=130||ck('th_sx')&&has(p.bt)&&p.bt>=38.5)r.warn.push('心跳很快或發燒合併亢進：評估甲狀腺風暴（Burch-Wartofsky），需要時轉急診。');
+ }
+ else if(st==='euth'){why='甲狀腺功能正常'}
+ if(nod){r.P.push(`  Thyroid nodule（${nod===1?'單一':'多發'}）：refer thyroid surgery（甲狀腺外科）for sono ± FNA.`);r.warn.push('甲狀腺結節：轉甲狀腺外科追蹤（超音波 ± 細針抽吸）。');if(st==='hyper'||st==='shyper')r.warn.push('結節合併亢進：考慮毒性結節（甲狀腺掃描），轉診時註明。')}
+ if(ck('th_amd')){r.warn.push('Amiodarone／lithium：每 6 個月驗 TSH、FT4；amiodarone 可造成低下或亢進。');lab(r,'TSH',26);lab(r,'FT4',26)}
+ if(why||meds.length){r.P.unshift(`Thyroid（${why||'—'}）：`);meds.forEach((m,i)=>r.P.splice(i+1,0,'  '+m))}else r.P.unshift('Thyroid：');
+ r.rx=meds;
+ if(changed){const wk=preg?4:(dir==='hyper'?4:8);lab(r,'TSH',wk);lab(r,'FT4',wk);r.fu=wk}
+ else if(cur>0){lab(r,'TSH',dir==='hyper'?12:26);lab(r,'FT4',dir==='hyper'?12:26);r.fu=dir==='hyper'?12:(preg?4:26)}
+ else if(r.fu===99)r.fu=nod?4:12;
+ if(r.fu===99)r.fu=12;
+ if(dir==='hypo'){r.goals.push(`TSH ${tl}–${th}`);r.edu.push('Eltroxin 早上空腹吃，30–60 分鐘後再吃早餐；和鈣片、鐵劑、胃藥間隔 4 小時。')}
+ if(dir==='hyper')r.goals.push('FT4 正常、心悸手抖改善');
+ r.v={tsh,ft4};
+ return r;
+}
 /* ---------- 其他追蹤 ---------- */
 const TRKI=[['t_alt','ALT'],['t_ast','AST'],['t_hb','Hb'],['t_plt','Plt'],['t_wbc','WBC'],['t_fer','Ferritin'],['t_tsh','TSH'],['t_ft4','FT4'],['t_ua','Uric acid'],['t_cr','Cr'],['t_ca','Ca'],['t_a1c','HbA1c'],['t_psa','PSA'],['t_vd','25-OH Vit D'],['t_b12','Vit B12'],['t_crp','CRP'],['t_afp','AFP'],['t_cea','CEA']];
 function TRK(p){
@@ -1245,14 +1411,14 @@ function TRK(p){
      [type][count] + 項目；type 1＝(id, 值)、type 2＝(id)、type 3＝(範圍 id, 藥品 id, 字串雜湊)
    id：先查登記表（YCJREG，只加不改）；登記表沒有的 key 用 2^20＋FNV 雜湊（20 bit），新選項不用改登記表也能編碼。
    解碼時不認得的 id 依區塊型別跳過，所以舊編碼在新版、新編碼在舊版都讀得了。 */
-const YCJREG={"f:p_visit": 1, "f:p_age": 2, "f:p_sex": 3, "f:p_ht": 4, "f:p_wt": 5, "f:p_waist": 6, "f:p_sbp": 7, "f:p_dbp": 8, "f:p_hr": 9, "f:p_bt": 10, "f:p_rr": 11, "f:p_spo2": 12, "f:p_egfr": 13, "f:p_uacr": 14, "f:p_k": 15, "f:p_cig": 16, "f:x_cad": 17, "f:x_cadx": 18, "f:x_stroke": 19, "f:x_pad": 20, "f:x_plaque": 21, "f:x_hfref": 22, "f:x_af": 23, "f:x_gout": 24, "f:x_fhx": 25, "f:x_cac": 26, "f:x_prediab": 27, "f:x_osa": 28, "f:x_frail": 29, "f:x_preg": 30, "f:x_ifg": 31, "f:x_pcn": 32, "f:x_nsaidx": 33, "f:x_immuno": 34, "f:x_liver": 35, "f:x_dmh": 36, "mod:htn": 37, "mod:dm": 38, "mod:lip": 39, "mod:ckd": 40, "mod:wt": 41, "mod:smk": 42, "mod:trk": 43, "f:h_sbp": 44, "f:h_dbp": 45, "f:h_step": 46, "f:h_adh": 47, "f:h_edema": 48, "f:h_sx": 49, "f:d_a1c": 50, "f:d_fpg": 51, "f:d_lvl": 52, "f:d_sym": 53, "f:d_hypo": 54, "f:d_gu": 55, "f:d_mci": 56, "f:d_adh": 57, "f:l_ldl": 58, "f:l_hdl": 59, "f:l_tg": 60, "f:l_tc": 61, "f:l_lvl": 62, "f:l_cur": 63, "f:l_my": 64, "f:l_adh": 65, "f:c_prev": 66, "f:c_hema": 67, "f:c_htn": 68, "f:w_drug": 69, "f:w_dose": 70, "f:w_wk": 71, "f:w_base": 72, "f:w_gi": 73, "f:w_ctx": 74, "f:s_yr": 75, "f:s_q1": 76, "f:s_stage": 77, "f:s_pref": 78, "f:s_cur": 79, "f:s_q2": 80, "f:s_q3": 81, "f:s_q5": 82, "f:s_q6": 83, "f:s_bc": 84, "f:s_dent": 85, "cdx:htn:I10": 86, "cdx:htn:I12.9": 87, "cdx:htn:I12.0": 88, "cdx:htn:I11.0": 89, "cdx:htn:I11.9": 90, "cdx:dm:E11.9": 91, "cdx:dm:E11.65": 92, "cdx:dm:E11.22": 93, "cdx:dm:E11.21": 94, "cdx:dm:E11.42": 95, "cdx:dm:E11.319": 96, "cdx:dm:E11.649": 97, "cdx:dm:Z79.84": 98, "cdx:dm:Z79.4": 99, "cdx:dm:Z79.85": 100, "cdx:lip:E78.00": 101, "cdx:lip:E78.01": 102, "cdx:lip:E78.1": 103, "cdx:lip:E78.2": 104, "cdx:lip:E78.5": 105, "cdx:ckd:N18.1": 106, "cdx:ckd:N18.2": 107, "cdx:ckd:N18.31": 108, "cdx:ckd:N18.32": 109, "cdx:ckd:N18.4": 110, "cdx:ckd:N18.5": 111, "cdx:ckd:E11.22": 112, "cdx:ckd:I12.9": 113, "cdx:wt:E66.9": 114, "cdx:wt:E66.01": 115, "cdx:wt:E66.3": 116, "cdx:wt:E88.81": 117, "cdx:smk:F17.210": 118, "cdx:smk:F17.290": 119, "cdx:smk:Z71.6": 120, "cdx:trk:Z09": 121, "cdx:trk:R74.01": 122, "cdx:trk:D64.9": 123, "cdx:trk:E61.1": 124, "cdx:trk:R94.6": 125, "cdx:trk:E03.9": 126, "cdx:trk:E04.1": 127, "cdx:trk:E79.0": 128, "cdx:trk:R97.20": 129, "cdx:trk:E55.9": 130, "cdx:trk:E53.8": 131, "cdx:trk:R73.03": 132, "cdx:trk:R91.1": 133, "cdx:trk:K80.20": 134, "cdx:trk:N28.1": 135, "cdx:trk:Z86.010": 136, "cdx:trk:M81.0": 137, "cdx:htn:N18.1": 138, "cdx:dm:N18.1": 139, "cdx:htn:N18.2": 140, "cdx:dm:N18.2": 141, "cdx:htn:N18.31": 142, "cdx:dm:N18.31": 143, "cdx:htn:N18.32": 144, "cdx:dm:N18.32": 145, "cdx:htn:N18.4": 146, "cdx:dm:N18.4": 147, "cdx:htn:N18.5": 148, "cdx:dm:N18.5": 149, "cdx:dm:I12.0": 150, "cdx:ckd:I12.0": 151, "cdx:htn:E11.649": 152, "cdx:ckd:E11.649": 153, "cdx:wt:Z68.20": 154, "cdx:wt:Z68.21": 155, "cdx:wt:Z68.22": 156, "cdx:wt:Z68.23": 157, "cdx:wt:Z68.24": 158, "cdx:wt:Z68.25": 159, "cdx:wt:Z68.26": 160, "cdx:wt:Z68.27": 161, "cdx:wt:Z68.28": 162, "cdx:wt:Z68.29": 163, "cdx:wt:Z68.30": 164, "cdx:wt:Z68.31": 165, "cdx:wt:Z68.32": 166, "cdx:wt:Z68.33": 167, "cdx:wt:Z68.34": 168, "cdx:wt:Z68.35": 169, "cdx:wt:Z68.36": 170, "cdx:wt:Z68.37": 171, "cdx:wt:Z68.38": 172, "cdx:wt:Z68.39": 173, "cdx:wt:Z68.40": 174, "cdx:wt:Z68.41": 175, "cdx:wt:Z68.42": 176, "cdx:wt:Z68.43": 177, "cdx:wt:Z68.44": 178, "cdx:wt:Z68.45": 179, "drug:MIC2": 180, "drug:APR3": 181, "drug:COD6": 182, "drug:EXF1": 183, "drug:EXF2": 184, "drug:TWY1": 185, "drug:NOR1": 186, "drug:NIF2": 187, "drug:CON1": 188, "drug:CON3": 189, "drug:PRO13": 190, "drug:XAD1": 191, "drug:NAT2": 192, "drug:FUR1": 193, "drug:SPI1": 194, "drug:KER2": 195, "drug:NTG1": 196, "drug:CRE2": 197, "drug:TUL1": 198, "drug:LIP5": 199, "drug:EZE1": 200, "drug:ATO2": 201, "drug:OMA1": 202, "drug:LEQA": 203, "drug:BOK1": 204, "drug:VOL1": 205, "drug:CTL1": 206, "drug:DIM3": 207, "drug:JAN1": 208, "drug:TRA5": 209, "drug:JAR3": 210, "drug:FOR3": 211, "drug:OZEA": 212, "drug:TRUA": 213, "drug:MOUC": 214, "drug:ACT5": 215, "drug:XIG1": 216, "drug:GLY1": 217, "drug:LANA": 218, "drug:WEGA": 219, "drug:XEN1": 220, "drug:CON7": 221, "drug:ELT2": 222, "drug:ALL3": 223, "drug:FEB1": 224, "drug:COL4": 225, "drug:LIQSC": 226, "drug:CEL2": 227, "drug:MEL6": 228, "drug:NAP2": 229, "drug:ACE6": 230, "drug:LYR1": 231, "drug:MET2": 232, "drug:FLRP": 233, "drug:GOOS": 234, "drug:MUS2": 235, "drug:MEP3": 236, "drug:PRE6": 237, "drug:NEX1": 238, "drug:PAN4": 239, "drug:VOK1": 240, "drug:ULSSC": 241, "drug:ALG1": 242, "drug:DOM2": 243, "drug:MOP1": 244, "drug:PRO15": 245, "drug:CAT1": 246, "drug:DIC1": 247, "drug:BUW1": 248, "drug:KAS2": 249, "drug:LOP2": 250, "drug:SME1": 251, "drug:BIO6": 252, "drug:MGO1": 253, "drug:LACSC": 254, "drug:DUL1": 255, "drug:BISP": 256, "drug:KOC1": 257, "drug:POSO": 258, "drug:DAF1": 259, "drug:SYMQ": 260, "drug:TREP": 261, "drug:ANOP": 262, "drug:SPIR": 263, "drug:SPIQ": 264, "drug:SYNP": 265, "drug:BESQ": 266, "drug:SIN10": 267, "drug:DEX3": 268, "drug:EUF1": 269, "drug:ACT2": 270, "drug:MUS1": 271, "drug:COMT": 272, "drug:LEV3": 273, "drug:ALL5": 274, "drug:CLA3": 275, "drug:AVAP": 276, "drug:MOMP": 277, "drug:DUFP": 278, "drug:SIDO": 279, "drug:HIR1": 280, "drug:AMO5": 281, "drug:CUR2": 282, "drug:CEP2": 283, "drug:ZIT2": 284, "drug:DOX6": 285, "drug:BAK1": 286, "drug:CIN3": 287, "drug:ERA3": 288, "drug:PAX6": 289, "drug:BAR2": 290, "drug:VEM2": 291, "drug:MAV1": 292, "drug:LOK5": 293, "drug:PRO14": 294, "drug:IMI3": 295, "drug:NIL1": 296, "drug:DIP1": 297, "drug:SUZ1": 298, "drug:TRI9": 299, "drug:WEL4": 300, "drug:CHA4": 301, "drug:NICOP": 302, "drug:NIC4": 303, "drug:NICQ": 304, "drug:PATQ": 305, "drug:EARP": 306, "drug:TED1": 307, "drug:FOA2": 308, "cfu:htn:Cr/eGFR": 309, "cfu:htn:K": 310, "cfu:htn:Na": 311, "cfu:htn:Uric acid": 312, "cfu:htn:FPG": 313, "cfu:htn:HbA1c": 314, "cfu:htn:Lipid profile": 315, "cfu:htn:UACR": 316, "cfu:htn:U/A": 317, "cfu:htn:ECG": 318, "cfu:htn:722 居家血壓": 319, "cfu:dm:HbA1c": 320, "cfu:dm:FPG": 321, "cfu:dm:Lipid profile": 322, "cfu:dm:Cr/eGFR": 323, "cfu:dm:UACR": 324, "cfu:dm:ALT": 325, "cfu:dm:Vit B12": 326, "cfu:dm:K": 327, "cfu:dm:眼底檢查": 328, "cfu:dm:足部檢查": 329, "cfu:lip:Lipid profile": 330, "cfu:lip:ALT": 331, "cfu:lip:CK": 332, "cfu:lip:HbA1c": 333, "cfu:ckd:Cr/eGFR": 334, "cfu:ckd:UACR": 335, "cfu:ckd:K": 336, "cfu:ckd:CBC (Hb)": 337, "cfu:ckd:Ca/P": 338, "cfu:ckd:HCO3": 339, "cfu:ckd:iPTH": 340, "cfu:ckd:U/A": 341, "cfu:ckd:腎臟超音波": 342, "cfu:wt:體重、腰圍": 343, "cfu:wt:FPG/HbA1c": 344, "cfu:wt:Lipid profile": 345, "cfu:wt:ALT": 346, "cfu:wt:Cr/eGFR": 347, "cfu:wt:TSH": 348, "cfu:smk:吐氣 CO": 349, "cfu:smk:LDCT": 350, "cfu:smk:口腔黏膜檢查": 351, "cfu:trk:ALT": 352, "cfu:trk:AST": 353, "cfu:trk:Hb": 354, "cfu:trk:Ferritin": 355, "cfu:trk:TSH": 356, "cfu:trk:FT4": 357, "cfu:trk:Uric acid": 358, "cfu:trk:Cr": 359, "cfu:trk:PSA": 360, "cfu:trk:25-OH Vit D": 361, "cfu:trk:Vit B12": 362, "cfu:trk:CRP": 363, "cfu:trk:HbA1c": 364, "cfu:trk:AFP": 365, "cfu:trk:腹部超音波": 366, "cfu:trk:甲狀腺超音波": 367, "cfu:trk:胸部 CT": 368, "cfu:trk:大腸鏡": 369, "cfu:trk:胃鏡": 370, "cfu:trk:骨密度 DXA": 371, "cfu:dm:Na": 372, "cfu:lip:Na": 373, "cfu:ckd:Na": 374, "cfu:wt:Na": 375, "cfu:smk:Na": 376, "cfu:trk:Na": 377, "cfu:dm:Uric acid": 378, "cfu:lip:Uric acid": 379, "cfu:ckd:Uric acid": 380, "cfu:wt:Uric acid": 381, "cfu:smk:Uric acid": 382, "cfu:lip:FPG": 383, "cfu:ckd:FPG": 384, "cfu:wt:FPG": 385, "cfu:smk:FPG": 386, "cfu:trk:FPG": 387, "cfu:ckd:HbA1c": 388, "cfu:wt:HbA1c": 389, "cfu:smk:HbA1c": 390, "cfu:ckd:Lipid profile": 391, "cfu:smk:Lipid profile": 392, "cfu:trk:Lipid profile": 393, "cfu:lip:UACR": 394, "cfu:wt:UACR": 395, "cfu:smk:UACR": 396, "cfu:trk:UACR": 397, "cfu:dm:U/A": 398, "cfu:lip:U/A": 399, "cfu:wt:U/A": 400, "cfu:smk:U/A": 401, "cfu:trk:U/A": 402, "cfu:dm:ECG": 403, "cfu:lip:ECG": 404, "cfu:ckd:ECG": 405, "cfu:wt:ECG": 406, "cfu:smk:ECG": 407, "cfu:trk:ECG": 408, "cfu:htn:眼底檢查": 409, "cfu:lip:眼底檢查": 410, "cfu:ckd:眼底檢查": 411, "cfu:wt:眼底檢查": 412, "cfu:smk:眼底檢查": 413, "cfu:trk:眼底檢查": 414, "cfu:htn:足部檢查": 415, "cfu:lip:足部檢查": 416, "cfu:ckd:足部檢查": 417, "cfu:wt:足部檢查": 418, "cfu:smk:足部檢查": 419, "cfu:trk:足部檢查": 420, "cfu:htn:Vit B12": 421, "cfu:lip:Vit B12": 422, "cfu:ckd:Vit B12": 423, "cfu:wt:Vit B12": 424, "cfu:smk:Vit B12": 425, "cfu:htn:ALT": 426, "cfu:ckd:ALT": 427, "cfu:smk:ALT": 428, "cfu:htn:CK": 429, "cfu:dm:CK": 430, "cfu:ckd:CK": 431, "cfu:wt:CK": 432, "cfu:smk:CK": 433, "cfu:trk:CK": 434, "cfu:htn:CBC (Hb)": 435, "cfu:dm:CBC (Hb)": 436, "cfu:lip:CBC (Hb)": 437, "cfu:wt:CBC (Hb)": 438, "cfu:smk:CBC (Hb)": 439, "cfu:trk:CBC (Hb)": 440, "cfu:htn:Ca/P": 441, "cfu:dm:Ca/P": 442, "cfu:lip:Ca/P": 443, "cfu:wt:Ca/P": 444, "cfu:smk:Ca/P": 445, "cfu:trk:Ca/P": 446, "cfu:htn:HCO3": 447, "cfu:dm:HCO3": 448, "cfu:lip:HCO3": 449, "cfu:wt:HCO3": 450, "cfu:smk:HCO3": 451, "cfu:trk:HCO3": 452, "cfu:htn:iPTH": 453, "cfu:dm:iPTH": 454, "cfu:lip:iPTH": 455, "cfu:wt:iPTH": 456, "cfu:smk:iPTH": 457, "cfu:trk:iPTH": 458, "cfu:htn:FPG/HbA1c": 459, "cfu:dm:FPG/HbA1c": 460, "cfu:lip:FPG/HbA1c": 461, "cfu:ckd:FPG/HbA1c": 462, "cfu:smk:FPG/HbA1c": 463, "cfu:trk:FPG/HbA1c": 464, "cfu:lip:Cr/eGFR": 465, "cfu:smk:Cr/eGFR": 466, "cfu:trk:Cr/eGFR": 467, "cfu:lip:K": 468, "cfu:wt:K": 469, "cfu:smk:K": 470, "cfu:trk:K": 471, "cc:resp": 472, "cc:fever": 473, "cc:age": 474, "cc:abd": 475, "cc:const": 476, "cc:uti": 477, "cc:cp": 478, "cc:ha": 479, "cc:dizzy": 480, "cc:lbp": 481, "cc:joint": 482, "cc:dysp": 483, "cc:palp": 484, "cc:edema": 485, "cc:fatigue": 486, "cc:ar": 487, "cc:asthma": 488, "cc:copd": 489, "cc:ear": 490, "cc:ccough": 491, "cc:ibs": 492, "cc:hemo": 493, "cc:masld": 494, "cc:hep": 495, "f:t_alt": 496, "f:t_ast": 497, "f:t_hb": 498, "f:t_plt": 499, "f:t_wbc": 500, "f:t_fer": 501, "f:t_tsh": 502, "f:t_ft4": 503, "f:t_ua": 504, "f:t_cr": 505, "f:t_ca": 506, "f:t_a1c": 507, "f:t_psa": 508, "f:t_vd": 509, "f:t_b12": 510, "f:t_crp": 511, "f:t_afp": 512, "f:t_cea": 513, "cc:resp:dur": 514, "cc:resp:rxd": 515, "pst:resp": 516, "resp:sx:fever": 517, "resp:sx:sore": 518, "resp:sx:odyn": 519, "resp:sx:rhin": 520, "resp:sx:cong": 521, "resp:sx:sneeze": 522, "resp:sx:purul": 523, "resp:sx:facial": 524, "resp:sx:cough": 525, "resp:sx:sputum": 526, "resp:sx:wheeze": 527, "resp:sx:ear": 528, "resp:sx:myal": 529, "resp:sx:ha": 530, "resp:sx:d10": 531, "resp:sx:contact": 532, "resp:sx:flu": 533, "resp:sx:covid": 534, "resp:rf:dysp": 535, "resp:rf:spo2": 536, "resp:rf:drool": 537, "resp:rf:potato": 538, "resp:rf:neck": 539, "resp:rf:fever3": 540, "resp:rf:orbit": 541, "resp:rf:conf": 542, "resp:pe:inject": 543, "resp:pe:exud": 544, "resp:pe:lap": 545, "resp:pe:tm": 546, "resp:pe:sinus": 547, "resp:pe:wh": 548, "resp:pe:crack": 549, "resp:pe:clear": 550, "resp:dx:uri": 551, "resp:dx:phar": 552, "resp:dx:strep": 553, "resp:dx:tons": 554, "resp:dx:flu": 555, "resp:dx:fluc": 556, "resp:dx:covid": 557, "resp:dx:sinus": 558, "resp:dx:ar": 559, "resp:dx:bronch": 560, "resp:dx:aom": 561, "resp:dx:pneu": 562, "resp:med:apap": 563, "resp:med:nap": 564, "resp:med:comt": 565, "resp:med:lev": 566, "resp:med:cla": 567, "resp:med:hir": 568, "resp:med:dex": 569, "resp:med:euf": 570, "resp:med:mus": 571, "resp:med:act": 572, "resp:med:momp": 573, "resp:med:synp": 574, "resp:med:amo": 575, "resp:med:zit": 576, "resp:med:cur": 577, "resp:med:amoaom": 578, "resp:med:cap": 579, "resp:med:era": 580, "resp:med:pax": 581, "resp:lab:flu": 582, "resp:lab:covid": 583, "resp:lab:radt": 584, "resp:lab:cxr": 585, "resp:lab:cbc": 586, "cc:fever:dur": 587, "cc:fever:rxd": 588, "pst:fever": 589, "fever:sx:chill": 590, "fever:sx:ha": 591, "fever:sx:myal": 592, "fever:sx:rash": 593, "fever:sx:dysu": 594, "fever:sx:diar": 595, "fever:sx:abd": 596, "fever:sx:cough": 597, "fever:sx:retro": 598, "fever:sx:travel": 599, "fever:sx:outdoor": 600, "fever:sx:eschar": 601, "fever:rf:conf": 602, "fever:rf:hypo": 603, "fever:rf:rr": 604, "fever:rf:neck": 605, "fever:rf:petech": 606, "fever:rf:immuno": 607, "fever:rf:infant": 608, "fever:pe:neck": 609, "fever:pe:cva": 610, "fever:pe:rash": 611, "fever:pe:lap": 612, "fever:pe:hsm": 613, "fever:dx:fev": 614, "fever:dx:viral": 615, "fever:dx:dengue": 616, "fever:dx:scrub": 617, "fever:med:apap": 618, "fever:med:dox": 619, "fever:lab:cbc": 620, "fever:lab:ua": 621, "fever:lab:ns1": 622, "fever:lab:lft": 623, "fever:lab:bc": 624, "fever:lab:cxr": 625, "cc:age:dur": 626, "cc:age:rxd": 627, "pst:age": 628, "age:sx:diar": 629, "age:sx:watery": 630, "age:sx:blood": 631, "age:sx:vomit": 632, "age:sx:nausea": 633, "age:sx:cramp": 634, "age:sx:fever": 635, "age:sx:food": 636, "age:sx:travel": 637, "age:sx:abx": 638, "age:rf:dehyd": 639, "age:rf:bldfev": 640, "age:rf:rlq": 641, "age:rf:dispro": 642, "age:rf:persist": 643, "age:rf:long": 644, "age:pe:tender": 645, "age:pe:rebound": 646, "age:pe:bs": 647, "age:pe:dry": 648, "age:dx:age": 649, "age:dx:nonin": 650, "age:dx:nv": 651, "age:med:ors": 652, "age:med:sme": 653, "age:med:bio": 654, "age:med:dom": 655, "age:med:lop": 656, "age:med:buw": 657, "age:lab:stool": 658, "age:lab:sc": 659, "age:lab:cbc": 660, "cc:abd:dur": 661, "cc:abd:rxd": 662, "pst:abd": 663, "abd:sx:epi": 664, "abd:sx:ruq": 665, "abd:sx:rlq": 666, "abd:sx:llq": 667, "abd:sx:burn": 668, "abd:sx:postp": 669, "abd:sx:hunger": 670, "abd:sx:hb": 671, "abd:sx:regurg": 672, "abd:sx:full": 673, "abd:sx:nausea": 674, "abd:sx:nsaid": 675, "abd:sx:alc": 676, "abd:sx:fever": 677, "abd:sx:bm": 678, "abd:sx:hppos": 679, "abd:sx:pud": 680, "abd:rf:perit": 681, "abd:rf:gib": 682, "abd:rf:alarm": 683, "abd:rf:age60": 684, "abd:rf:preg": 685, "abd:rf:acs": 686, "abd:rf:dispro": 687, "abd:pe:epit": 688, "abd:pe:mcb": 689, "abd:pe:murphy": 690, "abd:pe:rebound": 691, "abd:pe:guard": 692, "abd:pe:cva": 693, "abd:dx:epi": 694, "abd:dx:dysp": 695, "abd:dx:gerd": 696, "abd:dx:gast": 697, "abd:dx:abdu": 698, "abd:dx:appy": 699, "abd:dx:pu": 700, "abd:dx:hp": 701, "abd:med:alg": 702, "abd:med:vok": 703, "abd:med:pan": 704, "abd:med:mop": 705, "abd:med:uls": 706, "abd:med:buw": 707, "abd:med:kas": 708, "abd:med:nexpu": 709, "abd:med:hpdual": 710, "abd:med:hpbq": 711, "abd:lab:ubt": 712, "abd:lab:hp": 713, "abd:lab:cbc": 714, "abd:lab:lft": 715, "abd:lab:ua": 716, "abd:lab:hcg": 717, "abd:lab:ecg": 718, "abd:lab:egd": 719, "abd:lab:sono": 720, "cc:const:dur": 721, "cc:const:rxd": 722, "pst:const": 723, "const:sx:hard": 724, "const:sx:strain": 725, "const:sx:infreq": 726, "const:sx:bloat": 727, "const:sx:drug": 728, "const:sx:ibs": 729, "const:sx:alt": 730, "const:rf:bleed": 731, "const:rf:wt": 732, "const:rf:anemia": 733, "const:rf:new50": 734, "const:rf:fhx": 735, "const:rf:obst": 736, "const:pe:dist": 737, "const:pe:mass": 738, "const:pe:dre": 739, "const:dx:con": 740, "const:dx:cic": 741, "const:dx:ibsc": 742, "const:med:mgo": 743, "const:med:lac": 744, "const:med:koc": 745, "const:med:dul": 746, "const:med:bisp": 747, "const:lab:fit": 748, "const:lab:cbc": 749, "const:lab:tsh": 750, "const:lab:cfs": 751, "cc:uti:dur": 752, "cc:uti:rxd": 753, "pst:uti": 754, "uti:sx:dysu": 755, "uti:sx:freq": 756, "uti:sx:urg": 757, "uti:sx:hema": 758, "uti:sx:supra": 759, "uti:sx:fever": 760, "uti:sx:flank": 761, "uti:sx:disch": 762, "uti:sx:recur": 763, "uti:rf:pyelo": 764, "uti:rf:preg": 765, "uti:rf:male": 766, "uti:rf:vomit": 767, "uti:rf:cath": 768, "uti:rf:immuno": 769, "uti:pe:supt": 770, "uti:pe:cva": 771, "uti:dx:cys": 772, "uti:dx:cysh": 773, "uti:dx:pye": 774, "uti:dx:uti": 775, "uti:med:ceph": 776, "uti:med:bak": 777, "uti:med:cur": 778, "uti:med:cin": 779, "uti:lab:ua": 780, "uti:lab:uc": 781, "uti:lab:hcg": 782, "cc:cp:dur": 783, "cc:cp:rxd": 784, "pst:cp": 785, "cp:sx:press": 786, "cp:sx:sharp": 787, "cp:sx:exert": 788, "cp:sx:rest": 789, "cp:sx:pleur": 790, "cp:sx:posit": 791, "cp:sx:rad": 792, "cp:sx:dia": 793, "cp:sx:dysp": 794, "cp:sx:palp": 795, "cp:sx:burn": 796, "cp:sx:meal": 797, "cp:sx:cough": 798, "cp:sx:anx": 799, "cp:sx:thinkc": 800, "cp:rf:rest20": 801, "cp:rf:syncope": 802, "cp:rf:bpdiff": 803, "cp:rf:spo2": 804, "cp:rf:ecg": 805, "cp:rf:tear": 806, "cp:rf:pe": 807, "cp:pe:repro": 808, "cp:pe:murmur": 809, "cp:pe:rub": 810, "cp:pe:crack": 811, "cp:pe:calf": 812, "cp:dx:cpu": 813, "cp:dx:costo": 814, "cp:dx:gerd": 815, "cp:dx:pleu": 816, "cp:dx:anx": 817, "cp:dx:acs": 818, "cp:med:asp": 819, "cp:med:ntg": 820, "cp:med:apap": 821, "cp:med:nap": 822, "cp:med:flrp": 823, "cp:med:alg": 824, "cp:med:vok": 825, "cp:lab:ecg": 826, "cp:lab:cxr": 827, "cp:lab:trop": 828, "cp:lab:dd": 829, "cc:ha:dur": 830, "cc:ha:rxd": 831, "pst:ha": 832, "ha:sx:uni": 833, "ha:sx:throb": 834, "ha:sx:band": 835, "ha:sx:nausea": 836, "ha:sx:photo": 837, "ha:sx:aura": 838, "ha:sx:act": 839, "ha:sx:overuse": 840, "ha:sx:stress": 841, "ha:sx:mens": 842, "ha:sx:freq": 843, "ha:rf:thunder": 844, "ha:rf:fevneck": 845, "ha:rf:focal": 846, "ha:rf:new50": 847, "ha:rf:preg": 848, "ha:rf:cancer": 849, "ha:rf:posit": 850, "ha:rf:trauma": 851, "ha:rf:anticoag": 852, "ha:pe:neuro": 853, "ha:pe:neck": 854, "ha:pe:peric": 855, "ha:pe:ta": 856, "ha:pe:fundus": 857, "ha:dx:tth": 858, "ha:dx:mig": 859, "ha:dx:miga": 860, "ha:dx:moh": 861, "ha:dx:hau": 862, "ha:med:apap": 863, "ha:med:nap": 864, "ha:med:pro": 865, "ha:med:imi": 866, "ha:med:prop": 867, "ha:med:suz": 868, "ha:med:mep": 869, "ha:lab:ct": 870, "ha:lab:esr": 871, "cc:dizzy:dur": 872, "cc:dizzy:rxd": 873, "pst:dizzy": 874, "dizzy:sx:spin": 875, "dizzy:sx:light": 876, "dizzy:sx:imbal": 877, "dizzy:sx:turn": 878, "dizzy:sx:stand": 879, "dizzy:sx:sec": 880, "dizzy:sx:hrs": 881, "dizzy:sx:hear": 882, "dizzy:sx:nausea": 883, "dizzy:sx:uri": 884, "dizzy:sx:newmed": 885, "dizzy:rf:5d": 886, "dizzy:rf:weak": 887, "dizzy:rf:ataxia": 888, "dizzy:rf:ha": 889, "dizzy:rf:cp": 890, "dizzy:rf:syncope": 891, "dizzy:pe:ortho": 892, "dizzy:pe:nyst": 893, "dizzy:pe:dhr": 894, "dizzy:pe:dhl": 895, "dizzy:pe:fn": 896, "dizzy:pe:gait": 897, "dizzy:dx:bppvr": 898, "dizzy:dx:bppvl": 899, "dizzy:dx:vn": 900, "dizzy:dx:oh": 901, "dizzy:dx:dz": 902, "dizzy:med:epley": 903, "dizzy:med:dip": 904, "dizzy:med:nil": 905, "dizzy:med:tri": 906, "dizzy:med:dom": 907, "dizzy:lab:ecg": 908, "dizzy:lab:cbc": 909, "dizzy:lab:mri": 910, "cc:lbp:dur": 911, "cc:lbp:rxd": 912, "pst:lbp": 913, "lbp:sx:lift": 914, "lbp:sx:radr": 915, "lbp:sx:radl": 916, "lbp:sx:numb": 917, "lbp:sx:stiff": 918, "lbp:sx:night": 919, "lbp:sx:chronic": 920, "lbp:sx:better": 921, "lbp:rf:saddle": 922, "lbp:rf:urine": 923, "lbp:rf:fever": 924, "lbp:rf:cancer": 925, "lbp:rf:wt": 926, "lbp:rf:trauma": 927, "lbp:rf:steroid": 928, "lbp:rf:weak": 929, "lbp:pe:para": 930, "lbp:pe:spin": 931, "lbp:pe:slrr": 932, "lbp:pe:slrl": 933, "lbp:pe:motor": 934, "lbp:pe:sens": 935, "lbp:dx:lbp": 936, "lbp:dx:scr": 937, "lbp:dx:scl": 938, "lbp:dx:strain": 939, "lbp:med:apap": 940, "lbp:med:nap": 941, "lbp:med:mel": 942, "lbp:med:cel": 943, "lbp:med:mus2": 944, "lbp:med:mep": 945, "lbp:med:flrp": 946, "lbp:med:lyr": 947, "lbp:lab:xr": 948, "lbp:lab:esr": 949, "lbp:lab:mri": 950, "cc:joint:dur": 951, "cc:joint:rxd": 952, "pst:joint": 953, "joint:sx:mono": 954, "joint:sx:poly": 955, "joint:sx:knee": 956, "joint:sx:mtp": 957, "joint:sx:ankle": 958, "joint:sx:acute": 959, "joint:sx:red": 960, "joint:sx:ams": 961, "joint:sx:trauma": 962, "joint:sx:gouthx": 963, "joint:sx:diur": 964, "joint:sx:stairs": 965, "joint:sx:flare2": 966, "joint:sx:stone": 967, "joint:sx:onult": 968, "joint:sx:hla": 969, "joint:rf:septic": 970, "joint:rf:nowt": 971, "joint:rf:immuno": 972, "joint:pe:eff": 973, "joint:pe:warm": 974, "joint:pe:ery": 975, "joint:pe:crep": 976, "joint:pe:rom": 977, "joint:pe:tophi": 978, "joint:pe:syn": 979, "joint:dx:gout": 980, "joint:dx:goutr": 981, "joint:dx:goutl": 982, "joint:dx:oa": 983, "joint:dx:ra": 984, "joint:dx:jp": 985, "joint:med:col": 986, "joint:med:nap5": 987, "joint:med:pre": 988, "joint:med:goos": 989, "joint:med:apap": 990, "joint:med:cel": 991, "joint:med:mel": 992, "joint:med:all": 993, "joint:med:feb": 994, "joint:med:colp": 995, "joint:lab:ua": 996, "joint:lab:cbc": 997, "joint:lab:rf": 998, "joint:lab:xr": 999, "joint:lab:tap": 1000, "cc:dysp:dur": 1001, "cc:dysp:rxd": 1002, "pst:dysp": 1003, "dysp:sx:exer": 1004, "dysp:sx:rest": 1005, "dysp:sx:ortho": 1006, "dysp:sx:pnd": 1007, "dysp:sx:wheeze": 1008, "dysp:sx:cough": 1009, "dysp:sx:sputum": 1010, "dysp:sx:fever": 1011, "dysp:sx:leg": 1012, "dysp:sx:asthma": 1013, "dysp:sx:copd": 1014, "dysp:rf:sent": 1015, "dysp:rf:spo2": 1016, "dysp:rf:rr": 1017, "dysp:rf:cp": 1018, "dysp:rf:unileg": 1019, "dysp:rf:hemop": 1020, "dysp:rf:conf": 1021, "dysp:pe:wh": 1022, "dysp:pe:crack": 1023, "dysp:pe:dbs": 1024, "dysp:pe:jve": 1025, "dysp:pe:edema": 1026, "dysp:dx:dys": 1027, "dysp:dx:asx": 1028, "dysp:dx:copdx": 1029, "dysp:dx:pneu": 1030, "dysp:dx:hf": 1031, "dysp:med:synp": 1032, "dysp:med:besq": 1033, "dysp:med:pre": 1034, "dysp:med:symq": 1035, "dysp:med:cur": 1036, "dysp:med:fur": 1037, "dysp:lab:cxr": 1038, "dysp:lab:ecg": 1039, "dysp:lab:cbc": 1040, "dysp:lab:bnp": 1041, "dysp:lab:dd": 1042, "dysp:lab:pft": 1043, "cc:palp:dur": 1044, "cc:palp:rxd": 1045, "pst:palp": 1046, "palp:sx:reg": 1047, "palp:sx:irreg": 1048, "palp:sx:sudden": 1049, "palp:sx:caff": 1050, "palp:sx:stress": 1051, "palp:sx:heat": 1052, "palp:sx:drug": 1053, "palp:rf:syncope": 1054, "palp:rf:cp": 1055, "palp:rf:exer": 1056, "palp:rf:fhx": 1057, "palp:rf:shd": 1058, "palp:pe:irr": 1059, "palp:pe:tachy": 1060, "palp:pe:goiter": 1061, "palp:pe:murmur": 1062, "palp:dx:palp": 1063, "palp:dx:af": 1064, "palp:dx:anx": 1065, "palp:med:prop": 1066, "palp:lab:ecg": 1067, "palp:lab:tsh": 1068, "palp:lab:cbc": 1069, "palp:lab:holter": 1070, "cc:edema:dur": 1071, "cc:edema:rxd": 1072, "pst:edema": 1073, "edema:sx:uni": 1074, "edema:sx:bil": 1075, "edema:sx:eve": 1076, "edema:sx:dysp": 1077, "edema:sx:foam": 1078, "edema:sx:jaun": 1079, "edema:sx:calf": 1080, "edema:sx:drug": 1081, "edema:rf:dvt": 1082, "edema:rf:dysp": 1083, "edema:rf:cell": 1084, "edema:pe:pit": 1085, "edema:pe:jve": 1086, "edema:pe:crack": 1087, "edema:pe:calft": 1088, "edema:pe:skin": 1089, "edema:dx:ed": 1090, "edema:dx:drug": 1091, "edema:dx:vi": 1092, "edema:med:stock": 1093, "edema:med:fur": 1094, "edema:lab:cr": 1095, "edema:lab:ua": 1096, "edema:lab:alb": 1097, "edema:lab:tsh": 1098, "edema:lab:bnp": 1099, "edema:lab:duplex": 1100, "cc:fatigue:dur": 1101, "cc:fatigue:rxd": 1102, "pst:fatigue": 1103, "fatigue:sx:sleep": 1104, "fatigue:sx:snore": 1105, "fatigue:sx:mood": 1106, "fatigue:sx:menor": 1107, "fatigue:sx:cold": 1108, "fatigue:sx:polyu": 1109, "fatigue:rf:wt": 1110, "fatigue:rf:ns": 1111, "fatigue:rf:fever": 1112, "fatigue:rf:bleed": 1113, "fatigue:rf:lap": 1114, "fatigue:pe:pallor": 1115, "fatigue:pe:thy": 1116, "fatigue:pe:lapx": 1117, "fatigue:pe:hsm": 1118, "fatigue:dx:fat": 1119, "fatigue:dx:ins": 1120, "fatigue:dx:dep": 1121, "fatigue:lab:cbc": 1122, "fatigue:lab:tsh": 1123, "fatigue:lab:glu": 1124, "fatigue:lab:cr": 1125, "fatigue:lab:b12": 1126, "fatigue:lab:phq": 1127, "fatigue:lab:psg": 1128, "cc:ar:dur": 1129, "cc:ar:rxd": 1130, "pst:ar": 1131, "ar:sx:sneeze": 1132, "ar:sx:itch": 1133, "ar:sx:rhin": 1134, "ar:sx:cong": 1135, "ar:sx:eye": 1136, "ar:sx:asthma": 1137, "ar:sx:uni": 1138, "ar:sx:epis": 1139, "ar:rf:unilat": 1140, "ar:rf:polyp": 1141, "ar:rf:neck": 1142, "ar:pe:pale": 1143, "ar:pe:shiner": 1144, "ar:pe:polyp": 1145, "ar:sel:type": 1146, "ar:sel:sev": 1147, "ar:dx:ar": 1148, "ar:dx:ac": 1149, "ar:med:avap": 1150, "ar:med:momp": 1151, "ar:med:lev": 1152, "ar:med:all": 1153, "ar:med:duf": 1154, "ar:med:sin": 1155, "ar:med:pat": 1156, "ar:med:sido": 1157, "ar:lab:ige": 1158, "ar:lab:ent": 1159, "cc:asthma:dur": 1160, "cc:asthma:rxd": 1161, "pst:asthma": 1162, "asthma:sx:day": 1163, "asthma:sx:night": 1164, "asthma:sx:rel": 1165, "asthma:sx:limit": 1166, "asthma:sx:exac": 1167, "asthma:sx:tech": 1168, "asthma:sx:adh": 1169, "asthma:sx:smoke": 1170, "asthma:rf:speak": 1171, "asthma:rf:spo2": 1172, "asthma:rf:pef": 1173, "asthma:rf:conf": 1174, "asthma:rf:silent": 1175, "asthma:pe:wh": 1176, "asthma:pe:prol": 1177, "asthma:pe:acc": 1178, "asthma:sel:step": 1179, "asthma:dx:ast": 1180, "asthma:dx:astx": 1181, "asthma:med:symprn": 1182, "asthma:med:symlow": 1183, "asthma:med:symmed": 1184, "asthma:med:sin": 1185, "asthma:med:synp": 1186, "asthma:med:pre": 1187, "asthma:med:besq": 1188, "asthma:lab:pft": 1189, "asthma:lab:pef": 1190, "asthma:lab:eos": 1191, "cc:copd:dur": 1192, "cc:copd:rxd": 1193, "pst:copd": 1194, "copd:sx:cat": 1195, "copd:sx:aecopd": 1196, "copd:sx:purul": 1197, "copd:sx:smoke": 1198, "copd:rf:spo2": 1199, "copd:rf:conf": 1200, "copd:rf:rest": 1201, "copd:rf:edema": 1202, "copd:pe:wh": 1203, "copd:pe:prol": 1204, "copd:pe:dbs": 1205, "copd:sel:mmrc": 1206, "copd:sel:exh": 1207, "copd:num:eos": 1208, "copd:num:fev1": 1209, "copd:dx:copd": 1210, "copd:dx:copdx": 1211, "copd:med:spiq": 1212, "copd:med:anop": 1213, "copd:med:spir": 1214, "copd:med:trep": 1215, "copd:med:synp": 1216, "copd:med:pre": 1217, "copd:med:cur": 1218, "copd:med:vax": 1219, "copd:lab:pft": 1220, "copd:lab:cxr": 1221, "copd:lab:cbc": 1222, "cc:ear:dur": 1223, "cc:ear:rxd": 1224, "pst:ear": 1225, "ear:sx:pain": 1226, "ear:sx:fever": 1227, "ear:sx:hear": 1228, "ear:sx:otorr": 1229, "ear:sx:uri": 1230, "ear:sx:swim": 1231, "ear:sx:itch": 1232, "ear:sx:abx": 1233, "ear:rf:malig": 1234, "ear:rf:facial": 1235, "ear:rf:mast": 1236, "ear:rf:npc": 1237, "ear:pe:bulge": 1238, "ear:pe:red": 1239, "ear:pe:perf": 1240, "ear:pe:tragal": 1241, "ear:pe:eac": 1242, "ear:pe:effu": 1243, "ear:sel:side": 1244, "ear:dx:aom": 1245, "ear:dx:oe": 1246, "ear:dx:ome": 1247, "ear:med:amo": 1248, "ear:med:cur": 1249, "ear:med:zit": 1250, "ear:med:earp": 1251, "ear:med:apap": 1252, "ear:med:nap": 1253, "ear:lab:ent": 1254, "cc:ccough:dur": 1255, "cc:ccough:rxd": 1256, "pst:ccough": 1257, "ccough:sx:d8": 1258, "ccough:sx:smoke": 1259, "ccough:sx:acei": 1260, "ccough:sx:pnd": 1261, "ccough:sx:hb": 1262, "ccough:sx:wheeze": 1263, "ccough:sx:tbc": 1264, "ccough:sx:sput": 1265, "ccough:rf:hemop": 1266, "ccough:rf:wt": 1267, "ccough:rf:ns": 1268, "ccough:rf:fever": 1269, "ccough:rf:cxr": 1270, "ccough:pe:cobble": 1271, "ccough:pe:wh": 1272, "ccough:pe:crack": 1273, "ccough:dx:cc": 1274, "ccough:dx:uacs": 1275, "ccough:dx:gerd": 1276, "ccough:dx:cva": 1277, "ccough:dx:acei": 1278, "ccough:med:momp": 1279, "ccough:med:lev": 1280, "ccough:med:vok": 1281, "ccough:med:sym": 1282, "ccough:med:arb": 1283, "ccough:med:dex": 1284, "ccough:lab:cxr": 1285, "ccough:lab:pft": 1286, "ccough:lab:afb": 1287, "cc:ibs:dur": 1288, "cc:ibs:rxd": 1289, "pst:ibs": 1290, "ibs:sx:pain": 1291, "ibs:sx:defec": 1292, "ibs:sx:freq": 1293, "ibs:sx:form": 1294, "ibs:sx:d": 1295, "ibs:sx:c": 1296, "ibs:sx:bloat": 1297, "ibs:sx:stress": 1298, "ibs:rf:bleed": 1299, "ibs:rf:wt": 1300, "ibs:rf:anemia": 1301, "ibs:rf:noct": 1302, "ibs:rf:age50": 1303, "ibs:rf:fhx": 1304, "ibs:pe:tend": 1305, "ibs:pe:mass": 1306, "ibs:dx:ibsd": 1307, "ibs:dx:ibsc": 1308, "ibs:dx:ibsm": 1309, "ibs:dx:ibs": 1310, "ibs:med:cat": 1311, "ibs:med:dic": 1312, "ibs:med:koc": 1313, "ibs:med:mgo": 1314, "ibs:med:lop": 1315, "ibs:med:kas": 1316, "ibs:lab:cbc": 1317, "ibs:lab:tsh": 1318, "ibs:lab:fit": 1319, "ibs:lab:cfs": 1320, "cc:hemo:dur": 1321, "cc:hemo:rxd": 1322, "pst:hemo": 1323, "hemo:sx:bleed": 1324, "hemo:sx:prol": 1325, "hemo:sx:pain": 1326, "hemo:sx:itch": 1327, "hemo:sx:const": 1328, "hemo:rf:anemia": 1329, "hemo:rf:age45": 1330, "hemo:rf:bh": 1331, "hemo:rf:wt": 1332, "hemo:rf:fhx": 1333, "hemo:pe:ext": 1334, "hemo:pe:thromb": 1335, "hemo:pe:fiss": 1336, "hemo:pe:dre": 1337, "hemo:sel:grade": 1338, "hemo:dx:hem": 1339, "hemo:dx:thr": 1340, "hemo:dx:fis": 1341, "hemo:med:poso": 1342, "hemo:med:daf": 1343, "hemo:med:mgo": 1344, "hemo:med:lac": 1345, "hemo:med:apap": 1346, "hemo:lab:cbc": 1347, "hemo:lab:cfs": 1348, "hemo:lab:cr": 1349, "cc:masld:dur": 1350, "cc:masld:rxd": 1351, "pst:masld": 1352, "masld:sx:obese": 1353, "masld:sx:dm": 1354, "masld:sx:htn": 1355, "masld:sx:hld": 1356, "masld:sx:alc": 1357, "masld:rf:decomp": 1358, "masld:rf:mass": 1359, "masld:pe:hep": 1360, "masld:pe:stig": 1361, "masld:num:ast": 1362, "masld:num:alt": 1363, "masld:num:plt": 1364, "masld:dx:masld": 1365, "masld:dx:metald": 1366, "masld:dx:mash": 1367, "masld:med:wt": 1368, "masld:med:glp": 1369, "masld:med:pio": 1370, "masld:lab:basic": 1371, "masld:lab:hep": 1372, "masld:lab:sono": 1373, "masld:lab:fs": 1374, "cc:hep:dur": 1375, "cc:hep:rxd": 1376, "pst:hep": 1377, "hep:sx:hbsag": 1378, "hep:sx:hbeag": 1379, "hep:sx:alt2": 1380, "hep:sx:hcv": 1381, "hep:sx:rna": 1382, "hep:sx:cirr": 1383, "hep:sx:fhx": 1384, "hep:sx:tx": 1385, "hep:rf:mass": 1386, "hep:rf:afp": 1387, "hep:rf:decomp": 1388, "hep:pe:jaun": 1389, "hep:pe:stig": 1390, "hep:dx:hbv": 1391, "hep:dx:hbc": 1392, "hep:dx:hcv": 1393, "hep:dx:cir": 1394, "hep:med:bar": 1395, "hep:med:vem": 1396, "hep:med:mav": 1397, "hep:lab:hbv": 1398, "hep:lab:afp": 1399, "hep:lab:rna": 1400, "hep:lab:fib": 1401, "drug:ACE1": 1402, "drug:CAB1": 1403, "drug:DIO3": 1404, "drug:EDA1": 1405, "drug:SEV4": 1406, "drug:OLS1": 1407, "drug:AMT1": 1408, "drug:ATA1": 1409, "drug:CON8": 1410, "drug:LES2": 1411, "drug:HER1": 1412, "drug:NAK1": 1413, "drug:ISO3": 1414, "drug:SYN1": 1415, "drug:SYN3": 1416, "drug:ATE1": 1417, "drug:NEB1": 1418, "drug:LAB2": 1419, "drug:MET4": 1420, "drug:APR4": 1421, "drug:FLU3": 1422, "drug:AMI6": 1423, "drug:ENT3": 1424, "drug:ENT4": 1425, "drug:INS1": 1426, "drug:ISO5": 1427, "drug:IBI1": 1428, "drug:SIG1": 1429, "drug:RAN1": 1430, "drug:COR4": 1431, "drug:DIG1": 1432, "drug:ROS1": 1433, "drug:LIV2": 1434, "drug:ZUL1": 1435, "drug:MEC2": 1436, "drug:LIP7": 1437, "drug:PRA3": 1438, "drug:CAD1": 1439, "drug:NIL2": 1440, "drug:ASP5": 1441, "drug:CLO8": 1442, "drug:PLA2": 1443, "drug:BRI2": 1444, "drug:PLE3": 1445, "drug:PAR4": 1446, "drug:MAF2": 1447, "drug:ELI1": 1448, "drug:ELI2": 1449, "drug:XAR1": 1450, "drug:XAR2": 1451, "drug:LIX1": 1452, "drug:LIX2": 1453, "drug:PRA1": 1454, "drug:PRA2": 1455, "drug:CLEB": 1456, "drug:AMA1": 1457, "drug:MIN2": 1458, "drug:REP1": 1459, "drug:GAL1": 1460, "drug:ONG2": 1461, "drug:JAR1": 1462, "drug:CAN2": 1463, "drug:RYB1": 1464, "drug:ACA5": 1465, "drug:MIG1": 1466, "drug:JAN2": 1467, "drug:GAL2": 1468, "drug:TRA6": 1469, "drug:JAR2": 1470, "drug:GLI6": 1471, "drug:TOUA": 1472, "drug:TREA": 1473, "drug:INSA": 1474, "drug:NOVE": 1475, "drug:HUMFA": 1476, "drug:NOVF": 1477, "drug:RYZA": 1478, "drug:SOLB": 1479, "drug:GLUA": 1480, "drug:MET7": 1481, "drug:NEW4": 1482, "drug:POL1": 1483, "drug:FEB2": 1484, "drug:EUR2": 1485, "drug:FOS4": 1486, "drug:ACLC": 1487, "drug:PROI": 1488, "drug:FORE": 1489, "drug:EVEA": 1490, "drug:MAC1": 1491, "drug:CAL5": 1492, "drug:ECO2": 1493, "drug:VOR2": 1494, "drug:VOR3": 1495, "drug:VORO": 1496, "drug:IND4": 1497, "drug:PON2": 1498, "drug:ACE3": 1499, "drug:JOL1": 1500, "drug:KET3": 1501, "drug:KETC": 1502, "drug:MOBC": 1503, "drug:PIRB": 1504, "drug:PACA": 1505, "drug:APA1": 1506, "drug:ANTSC": 1507, "drug:TRA4": 1508, "drug:MUA1": 1509, "drug:SOM1": 1510, "drug:ANO1": 1511, "drug:LYG1": 1512, "drug:NEU2": 1513, "drug:CAR5": 1514, "drug:DUX1": 1515, "drug:TEIO": 1516, "drug:LIDP": 1517, "drug:BEF1": 1518, "drug:MUS3": 1519, "drug:VIA4": 1520, "drug:HYAC": 1521, "drug:VEJC": 1522, "drug:SHIA": 1523, "drug:DEXB": 1524, "drug:XYLO": 1525, "drug:SINM": 1526, "drug:MET6": 1527, "drug:DEC2": 1528, "drug:KIDSC": 1529, "drug:METD": 1530, "drug:HYDA": 1531, "drug:TAK2": 1532, "drug:PAR3": 1533, "drug:OME2": 1534, "drug:DEX2": 1535, "drug:VOC1": 1536, "drug:SCR1": 1537, "drug:ALU1": 1538, "drug:KCB1": 1539, "drug:CYT1": 1540, "drug:IMPA": 1541, "drug:ESCA": 1542, "drug:SET2": 1543, "drug:ARIP": 1544, "drug:HID1": 1545, "drug:ANT4": 1546, "drug:MIY1": 1547, "drug:EVAO": 1548, "drug:BOK2": 1549, "drug:BIO1": 1550, "drug:CRE1": 1551, "drug:SIL3": 1552, "drug:SAL3": 1553, "drug:PEN3": 1554, "drug:SERR": 1555, "drug:RELQ": 1556, "drug:FOSP": 1557, "drug:TRIR": 1558, "drug:DUAP": 1559, "drug:SALD": 1560, "drug:SIN4": 1561, "drug:MON3": 1562, "drug:XAN1": 1563, "drug:MEP1": 1564, "drug:BAB1": 1565, "drug:REG1": 1566, "drug:ASV1": 1567, "drug:ZCO1": 1568, "drug:COD3": 1569, "drug:ECT1": 1570, "drug:CASSD": 1571, "drug:SORSC": 1572, "drug:BETP": 1573, "drug:ALL4": 1574, "drug:BIS2": 1575, "drug:BEN3": 1576, "drug:ARA1": 1577, "drug:DIPB": 1578, "drug:AZEP": 1579, "drug:SOOA": 1580, "drug:CURSC": 1581, "drug:UCL1": 1582, "drug:CEF3": 1583, "drug:KLA2": 1584, "drug:ZITSC": 1585, "drug:TID1": 1586, "drug:LEF2": 1587, "drug:AVE1": 1588, "drug:MET8": 1589, "drug:GRA1": 1590, "drug:CEFD": 1591, "drug:TRIC": 1592, "drug:FURA": 1593, "drug:SUBA": 1594, "drug:GENB": 1595, "drug:TER2": 1596, "drug:ICO1": 1597, "drug:DIF1": 1598, "drug:VAC1": 1599, "drug:ACY1": 1600, "drug:VIR2": 1601, "drug:FAM1": 1602, "drug:XOF2": 1603, "drug:ALB7": 1604, "drug:COW1": 1605, "drug:PERQ": 1606, "drug:STR3": 1607, "drug:AKU1": 1608, "drug:RIN2": 1609, "drug:INH1": 1610, "drug:EBU2": 1611, "drug:PZA2": 1612, "drug:PPDA": 1613, "drug:VAXA": 1614, "drug:VAXC": 1615, "drug:PREJ": 1616, "drug:PNEB": 1617, "drug:PREK": 1618, "drug:SHID": 1619, "drug:BOOF": 1620, "drug:TETG": 1621, "drug:ENGA": 1622, "drug:HAVD": 1623, "drug:GARE": 1624, "drug:MMRA": 1625, "drug:VARC": 1626, "drug:AREA": 1627, "drug:COVGE": 1628, "drug:DIHA": 1629, "drug:JEVA": 1630, "drug:VERC": 1631, "drug:ROTD": 1632, "drug:HAR3": 1633, "drug:TAM4": 1634, "drug:URI4": 1635, "drug:XAT1": 1636, "drug:PRO3": 1637, "drug:AVO1": 1638, "drug:DUO1": 1639, "drug:BET8": 1640, "drug:VES2": 1641, "drug:DET2": 1642, "drug:CIA4": 1643, "drug:FUL3": 1644, "drug:PRI6": 1645, "drug:DES3": 1646, "drug:BET6": 1647, "drug:KAL2": 1648, "drug:NESG": 1649, "drug:RIZ1": 1650, "drug:ERG2": 1651, "drug:EMGA": 1652, "drug:NUR10": 1653, "drug:CIN2": 1654, "drug:ARE1": 1655, "drug:WIT1": 1656, "drug:EXEQ": 1657, "drug:STI1": 1658, "drug:LEN1": 1659, "drug:EUR1": 1660, "drug:SOM2": 1661, "drug:DAY1": 1662, "drug:ANX1": 1663, "drug:XAN2": 1664, "drug:LEX1": 1665, "drug:LEE1": 1666, "drug:ZOL1": 1667, "drug:JUX1": 1668, "drug:EFE1": 1669, "drug:MIR2": 1670, "drug:MES1": 1671, "drug:SER6": 1672, "drug:NOV1": 1673, "drug:HYDO": 1674, "drug:FLUT": 1675, "drug:MONQ": 1676, "drug:TOPR": 1677, "drug:CLOQ": 1678, "drug:CLOR": 1679, "drug:EXTP": 1680, "drug:MYCQ": 1681, "drug:WINP": 1682, "drug:MENP": 1683, "drug:FUSP": 1684, "drug:SPEO": 1685, "drug:SULS": 1686, "drug:DEHP": 1687, "drug:PROP": 1688, "drug:ELIP": 1689, "drug:DUPD": 1690, "drug:ANTP": 1691, "drug:EURP": 1692, "drug:DIFP": 1693, "drug:ACZP": 1694, "drug:EASQ": 1695, "drug:ROA8": 1696, "drug:DAIP": 1697, "drug:PRO7": 1698, "drug:REGP": 1699, "drug:FESP": 1700, "drug:POVS": 1701, "drug:EASS": 1702, "drug:CRAO": 1703, "drug:TOBS": 1704, "drug:ERYT": 1705, "drug:ARTQ": 1706, "drug:LIPO": 1707, "drug:FOXQ": 1708, "drug:OTOP": 1709, "drug:MYCO": 1710, "drug:LOMV": 1711, "drug:NYSV": 1712, "drug:ESVQ": 1713, "drug:EST1": 1714, "drug:PRO5": 1715, "drug:UTR1": 1716, "drug:VIS1": 1717, "drug:MIRE": 1718, "drug:SID3": 1719, "drug:FEBA": 1720, "drug:V12A": 1721, "drug:BEE2": 1722, "drug:KGLSC": 1723, "drug:EPIS": 1724, "drug:NALC": 1725, "drug:ANEA": 1726, "drug:PRAA": 1727};
+const YCJREG={"f:p_visit": 1, "f:p_age": 2, "f:p_sex": 3, "f:p_ht": 4, "f:p_wt": 5, "f:p_waist": 6, "f:p_sbp": 7, "f:p_dbp": 8, "f:p_hr": 9, "f:p_bt": 10, "f:p_rr": 11, "f:p_spo2": 12, "f:p_egfr": 13, "f:p_uacr": 14, "f:p_k": 15, "f:p_cig": 16, "f:x_cad": 17, "f:x_cadx": 18, "f:x_stroke": 19, "f:x_pad": 20, "f:x_plaque": 21, "f:x_hfref": 22, "f:x_af": 23, "f:x_gout": 24, "f:x_fhx": 25, "f:x_cac": 26, "f:x_prediab": 27, "f:x_osa": 28, "f:x_frail": 29, "f:x_preg": 30, "f:x_ifg": 31, "f:x_pcn": 32, "f:x_nsaidx": 33, "f:x_immuno": 34, "f:x_liver": 35, "f:x_dmh": 36, "mod:htn": 37, "mod:dm": 38, "mod:lip": 39, "mod:ckd": 40, "mod:wt": 41, "mod:smk": 42, "mod:trk": 43, "f:h_sbp": 44, "f:h_dbp": 45, "f:h_step": 46, "f:h_adh": 47, "f:h_edema": 48, "f:h_sx": 49, "f:d_a1c": 50, "f:d_fpg": 51, "f:d_lvl": 52, "f:d_sym": 53, "f:d_hypo": 54, "f:d_gu": 55, "f:d_mci": 56, "f:d_adh": 57, "f:l_ldl": 58, "f:l_hdl": 59, "f:l_tg": 60, "f:l_tc": 61, "f:l_lvl": 62, "f:l_cur": 63, "f:l_my": 64, "f:l_adh": 65, "f:c_prev": 66, "f:c_hema": 67, "f:c_htn": 68, "f:w_drug": 69, "f:w_dose": 70, "f:w_wk": 71, "f:w_base": 72, "f:w_gi": 73, "f:w_ctx": 74, "f:s_yr": 75, "f:s_q1": 76, "f:s_stage": 77, "f:s_pref": 78, "f:s_cur": 79, "f:s_q2": 80, "f:s_q3": 81, "f:s_q5": 82, "f:s_q6": 83, "f:s_bc": 84, "f:s_dent": 85, "cdx:htn:I10": 86, "cdx:htn:I12.9": 87, "cdx:htn:I12.0": 88, "cdx:htn:I11.0": 89, "cdx:htn:I11.9": 90, "cdx:dm:E11.9": 91, "cdx:dm:E11.65": 92, "cdx:dm:E11.22": 93, "cdx:dm:E11.21": 94, "cdx:dm:E11.42": 95, "cdx:dm:E11.319": 96, "cdx:dm:E11.649": 97, "cdx:dm:Z79.84": 98, "cdx:dm:Z79.4": 99, "cdx:dm:Z79.85": 100, "cdx:lip:E78.00": 101, "cdx:lip:E78.01": 102, "cdx:lip:E78.1": 103, "cdx:lip:E78.2": 104, "cdx:lip:E78.5": 105, "cdx:ckd:N18.1": 106, "cdx:ckd:N18.2": 107, "cdx:ckd:N18.31": 108, "cdx:ckd:N18.32": 109, "cdx:ckd:N18.4": 110, "cdx:ckd:N18.5": 111, "cdx:ckd:E11.22": 112, "cdx:ckd:I12.9": 113, "cdx:wt:E66.9": 114, "cdx:wt:E66.01": 115, "cdx:wt:E66.3": 116, "cdx:wt:E88.81": 117, "cdx:smk:F17.210": 118, "cdx:smk:F17.290": 119, "cdx:smk:Z71.6": 120, "cdx:trk:Z09": 121, "cdx:trk:R74.01": 122, "cdx:trk:D64.9": 123, "cdx:trk:E61.1": 124, "cdx:trk:R94.6": 125, "cdx:trk:E03.9": 126, "cdx:trk:E04.1": 127, "cdx:trk:E79.0": 128, "cdx:trk:R97.20": 129, "cdx:trk:E55.9": 130, "cdx:trk:E53.8": 131, "cdx:trk:R73.03": 132, "cdx:trk:R91.1": 133, "cdx:trk:K80.20": 134, "cdx:trk:N28.1": 135, "cdx:trk:Z86.010": 136, "cdx:trk:M81.0": 137, "cdx:htn:N18.1": 138, "cdx:dm:N18.1": 139, "cdx:htn:N18.2": 140, "cdx:dm:N18.2": 141, "cdx:htn:N18.31": 142, "cdx:dm:N18.31": 143, "cdx:htn:N18.32": 144, "cdx:dm:N18.32": 145, "cdx:htn:N18.4": 146, "cdx:dm:N18.4": 147, "cdx:htn:N18.5": 148, "cdx:dm:N18.5": 149, "cdx:dm:I12.0": 150, "cdx:ckd:I12.0": 151, "cdx:htn:E11.649": 152, "cdx:ckd:E11.649": 153, "cdx:wt:Z68.20": 154, "cdx:wt:Z68.21": 155, "cdx:wt:Z68.22": 156, "cdx:wt:Z68.23": 157, "cdx:wt:Z68.24": 158, "cdx:wt:Z68.25": 159, "cdx:wt:Z68.26": 160, "cdx:wt:Z68.27": 161, "cdx:wt:Z68.28": 162, "cdx:wt:Z68.29": 163, "cdx:wt:Z68.30": 164, "cdx:wt:Z68.31": 165, "cdx:wt:Z68.32": 166, "cdx:wt:Z68.33": 167, "cdx:wt:Z68.34": 168, "cdx:wt:Z68.35": 169, "cdx:wt:Z68.36": 170, "cdx:wt:Z68.37": 171, "cdx:wt:Z68.38": 172, "cdx:wt:Z68.39": 173, "cdx:wt:Z68.40": 174, "cdx:wt:Z68.41": 175, "cdx:wt:Z68.42": 176, "cdx:wt:Z68.43": 177, "cdx:wt:Z68.44": 178, "cdx:wt:Z68.45": 179, "drug:MIC2": 180, "drug:APR3": 181, "drug:COD6": 182, "drug:EXF1": 183, "drug:EXF2": 184, "drug:TWY1": 185, "drug:NOR1": 186, "drug:NIF2": 187, "drug:CON1": 188, "drug:CON3": 189, "drug:PRO13": 190, "drug:XAD1": 191, "drug:NAT2": 192, "drug:FUR1": 193, "drug:SPI1": 194, "drug:KER2": 195, "drug:NTG1": 196, "drug:CRE2": 197, "drug:TUL1": 198, "drug:LIP5": 199, "drug:EZE1": 200, "drug:ATO2": 201, "drug:OMA1": 202, "drug:LEQA": 203, "drug:BOK1": 204, "drug:VOL1": 205, "drug:CTL1": 206, "drug:DIM3": 207, "drug:JAN1": 208, "drug:TRA5": 209, "drug:JAR3": 210, "drug:FOR3": 211, "drug:OZEA": 212, "drug:TRUA": 213, "drug:MOUC": 214, "drug:ACT5": 215, "drug:XIG1": 216, "drug:GLY1": 217, "drug:LANA": 218, "drug:WEGA": 219, "drug:XEN1": 220, "drug:CON7": 221, "drug:ELT2": 222, "drug:ALL3": 223, "drug:FEB1": 224, "drug:COL4": 225, "drug:LIQSC": 226, "drug:CEL2": 227, "drug:MEL6": 228, "drug:NAP2": 229, "drug:ACE6": 230, "drug:LYR1": 231, "drug:MET2": 232, "drug:FLRP": 233, "drug:GOOS": 234, "drug:MUS2": 235, "drug:MEP3": 236, "drug:PRE6": 237, "drug:NEX1": 238, "drug:PAN4": 239, "drug:VOK1": 240, "drug:ULSSC": 241, "drug:ALG1": 242, "drug:DOM2": 243, "drug:MOP1": 244, "drug:PRO15": 245, "drug:CAT1": 246, "drug:DIC1": 247, "drug:BUW1": 248, "drug:KAS2": 249, "drug:LOP2": 250, "drug:SME1": 251, "drug:BIO6": 252, "drug:MGO1": 253, "drug:LACSC": 254, "drug:DUL1": 255, "drug:BISP": 256, "drug:KOC1": 257, "drug:POSO": 258, "drug:DAF1": 259, "drug:SYMQ": 260, "drug:TREP": 261, "drug:ANOP": 262, "drug:SPIR": 263, "drug:SPIQ": 264, "drug:SYNP": 265, "drug:BESQ": 266, "drug:SIN10": 267, "drug:DEX3": 268, "drug:EUF1": 269, "drug:ACT2": 270, "drug:MUS1": 271, "drug:COMT": 272, "drug:LEV3": 273, "drug:ALL5": 274, "drug:CLA3": 275, "drug:AVAP": 276, "drug:MOMP": 277, "drug:DUFP": 278, "drug:SIDO": 279, "drug:HIR1": 280, "drug:AMO5": 281, "drug:CUR2": 282, "drug:CEP2": 283, "drug:ZIT2": 284, "drug:DOX6": 285, "drug:BAK1": 286, "drug:CIN3": 287, "drug:ERA3": 288, "drug:PAX6": 289, "drug:BAR2": 290, "drug:VEM2": 291, "drug:MAV1": 292, "drug:LOK5": 293, "drug:PRO14": 294, "drug:IMI3": 295, "drug:NIL1": 296, "drug:DIP1": 297, "drug:SUZ1": 298, "drug:TRI9": 299, "drug:WEL4": 300, "drug:CHA4": 301, "drug:NICOP": 302, "drug:NIC4": 303, "drug:NICQ": 304, "drug:PATQ": 305, "drug:EARP": 306, "drug:TED1": 307, "drug:FOA2": 308, "cfu:htn:Cr/eGFR": 309, "cfu:htn:K": 310, "cfu:htn:Na": 311, "cfu:htn:Uric acid": 312, "cfu:htn:FPG": 313, "cfu:htn:HbA1c": 314, "cfu:htn:Lipid profile": 315, "cfu:htn:UACR": 316, "cfu:htn:U/A": 317, "cfu:htn:ECG": 318, "cfu:htn:722 居家血壓": 319, "cfu:dm:HbA1c": 320, "cfu:dm:FPG": 321, "cfu:dm:Lipid profile": 322, "cfu:dm:Cr/eGFR": 323, "cfu:dm:UACR": 324, "cfu:dm:ALT": 325, "cfu:dm:Vit B12": 326, "cfu:dm:K": 327, "cfu:dm:眼底檢查": 328, "cfu:dm:足部檢查": 329, "cfu:lip:Lipid profile": 330, "cfu:lip:ALT": 331, "cfu:lip:CK": 332, "cfu:lip:HbA1c": 333, "cfu:ckd:Cr/eGFR": 334, "cfu:ckd:UACR": 335, "cfu:ckd:K": 336, "cfu:ckd:CBC (Hb)": 337, "cfu:ckd:Ca/P": 338, "cfu:ckd:HCO3": 339, "cfu:ckd:iPTH": 340, "cfu:ckd:U/A": 341, "cfu:ckd:腎臟超音波": 342, "cfu:wt:體重、腰圍": 343, "cfu:wt:FPG/HbA1c": 344, "cfu:wt:Lipid profile": 345, "cfu:wt:ALT": 346, "cfu:wt:Cr/eGFR": 347, "cfu:wt:TSH": 348, "cfu:smk:吐氣 CO": 349, "cfu:smk:LDCT": 350, "cfu:smk:口腔黏膜檢查": 351, "cfu:trk:ALT": 352, "cfu:trk:AST": 353, "cfu:trk:Hb": 354, "cfu:trk:Ferritin": 355, "cfu:trk:TSH": 356, "cfu:trk:FT4": 357, "cfu:trk:Uric acid": 358, "cfu:trk:Cr": 359, "cfu:trk:PSA": 360, "cfu:trk:25-OH Vit D": 361, "cfu:trk:Vit B12": 362, "cfu:trk:CRP": 363, "cfu:trk:HbA1c": 364, "cfu:trk:AFP": 365, "cfu:trk:腹部超音波": 366, "cfu:trk:甲狀腺超音波": 367, "cfu:trk:胸部 CT": 368, "cfu:trk:大腸鏡": 369, "cfu:trk:胃鏡": 370, "cfu:trk:骨密度 DXA": 371, "cfu:dm:Na": 372, "cfu:lip:Na": 373, "cfu:ckd:Na": 374, "cfu:wt:Na": 375, "cfu:smk:Na": 376, "cfu:trk:Na": 377, "cfu:dm:Uric acid": 378, "cfu:lip:Uric acid": 379, "cfu:ckd:Uric acid": 380, "cfu:wt:Uric acid": 381, "cfu:smk:Uric acid": 382, "cfu:lip:FPG": 383, "cfu:ckd:FPG": 384, "cfu:wt:FPG": 385, "cfu:smk:FPG": 386, "cfu:trk:FPG": 387, "cfu:ckd:HbA1c": 388, "cfu:wt:HbA1c": 389, "cfu:smk:HbA1c": 390, "cfu:ckd:Lipid profile": 391, "cfu:smk:Lipid profile": 392, "cfu:trk:Lipid profile": 393, "cfu:lip:UACR": 394, "cfu:wt:UACR": 395, "cfu:smk:UACR": 396, "cfu:trk:UACR": 397, "cfu:dm:U/A": 398, "cfu:lip:U/A": 399, "cfu:wt:U/A": 400, "cfu:smk:U/A": 401, "cfu:trk:U/A": 402, "cfu:dm:ECG": 403, "cfu:lip:ECG": 404, "cfu:ckd:ECG": 405, "cfu:wt:ECG": 406, "cfu:smk:ECG": 407, "cfu:trk:ECG": 408, "cfu:htn:眼底檢查": 409, "cfu:lip:眼底檢查": 410, "cfu:ckd:眼底檢查": 411, "cfu:wt:眼底檢查": 412, "cfu:smk:眼底檢查": 413, "cfu:trk:眼底檢查": 414, "cfu:htn:足部檢查": 415, "cfu:lip:足部檢查": 416, "cfu:ckd:足部檢查": 417, "cfu:wt:足部檢查": 418, "cfu:smk:足部檢查": 419, "cfu:trk:足部檢查": 420, "cfu:htn:Vit B12": 421, "cfu:lip:Vit B12": 422, "cfu:ckd:Vit B12": 423, "cfu:wt:Vit B12": 424, "cfu:smk:Vit B12": 425, "cfu:htn:ALT": 426, "cfu:ckd:ALT": 427, "cfu:smk:ALT": 428, "cfu:htn:CK": 429, "cfu:dm:CK": 430, "cfu:ckd:CK": 431, "cfu:wt:CK": 432, "cfu:smk:CK": 433, "cfu:trk:CK": 434, "cfu:htn:CBC (Hb)": 435, "cfu:dm:CBC (Hb)": 436, "cfu:lip:CBC (Hb)": 437, "cfu:wt:CBC (Hb)": 438, "cfu:smk:CBC (Hb)": 439, "cfu:trk:CBC (Hb)": 440, "cfu:htn:Ca/P": 441, "cfu:dm:Ca/P": 442, "cfu:lip:Ca/P": 443, "cfu:wt:Ca/P": 444, "cfu:smk:Ca/P": 445, "cfu:trk:Ca/P": 446, "cfu:htn:HCO3": 447, "cfu:dm:HCO3": 448, "cfu:lip:HCO3": 449, "cfu:wt:HCO3": 450, "cfu:smk:HCO3": 451, "cfu:trk:HCO3": 452, "cfu:htn:iPTH": 453, "cfu:dm:iPTH": 454, "cfu:lip:iPTH": 455, "cfu:wt:iPTH": 456, "cfu:smk:iPTH": 457, "cfu:trk:iPTH": 458, "cfu:htn:FPG/HbA1c": 459, "cfu:dm:FPG/HbA1c": 460, "cfu:lip:FPG/HbA1c": 461, "cfu:ckd:FPG/HbA1c": 462, "cfu:smk:FPG/HbA1c": 463, "cfu:trk:FPG/HbA1c": 464, "cfu:lip:Cr/eGFR": 465, "cfu:smk:Cr/eGFR": 466, "cfu:trk:Cr/eGFR": 467, "cfu:lip:K": 468, "cfu:wt:K": 469, "cfu:smk:K": 470, "cfu:trk:K": 471, "cc:resp": 472, "cc:fever": 473, "cc:age": 474, "cc:abd": 475, "cc:const": 476, "cc:uti": 477, "cc:cp": 478, "cc:ha": 479, "cc:dizzy": 480, "cc:lbp": 481, "cc:joint": 482, "cc:dysp": 483, "cc:palp": 484, "cc:edema": 485, "cc:fatigue": 486, "cc:ar": 487, "cc:asthma": 488, "cc:copd": 489, "cc:ear": 490, "cc:ccough": 491, "cc:ibs": 492, "cc:hemo": 493, "cc:masld": 494, "cc:hep": 495, "f:t_alt": 496, "f:t_ast": 497, "f:t_hb": 498, "f:t_plt": 499, "f:t_wbc": 500, "f:t_fer": 501, "f:t_tsh": 502, "f:t_ft4": 503, "f:t_ua": 504, "f:t_cr": 505, "f:t_ca": 506, "f:t_a1c": 507, "f:t_psa": 508, "f:t_vd": 509, "f:t_b12": 510, "f:t_crp": 511, "f:t_afp": 512, "f:t_cea": 513, "cc:resp:dur": 514, "cc:resp:rxd": 515, "pst:resp": 516, "resp:sx:fever": 517, "resp:sx:sore": 518, "resp:sx:odyn": 519, "resp:sx:rhin": 520, "resp:sx:cong": 521, "resp:sx:sneeze": 522, "resp:sx:purul": 523, "resp:sx:facial": 524, "resp:sx:cough": 525, "resp:sx:sputum": 526, "resp:sx:wheeze": 527, "resp:sx:ear": 528, "resp:sx:myal": 529, "resp:sx:ha": 530, "resp:sx:d10": 531, "resp:sx:contact": 532, "resp:sx:flu": 533, "resp:sx:covid": 534, "resp:rf:dysp": 535, "resp:rf:spo2": 536, "resp:rf:drool": 537, "resp:rf:potato": 538, "resp:rf:neck": 539, "resp:rf:fever3": 540, "resp:rf:orbit": 541, "resp:rf:conf": 542, "resp:pe:inject": 543, "resp:pe:exud": 544, "resp:pe:lap": 545, "resp:pe:tm": 546, "resp:pe:sinus": 547, "resp:pe:wh": 548, "resp:pe:crack": 549, "resp:pe:clear": 550, "resp:dx:uri": 551, "resp:dx:phar": 552, "resp:dx:strep": 553, "resp:dx:tons": 554, "resp:dx:flu": 555, "resp:dx:fluc": 556, "resp:dx:covid": 557, "resp:dx:sinus": 558, "resp:dx:ar": 559, "resp:dx:bronch": 560, "resp:dx:aom": 561, "resp:dx:pneu": 562, "resp:med:apap": 563, "resp:med:nap": 564, "resp:med:comt": 565, "resp:med:lev": 566, "resp:med:cla": 567, "resp:med:hir": 568, "resp:med:dex": 569, "resp:med:euf": 570, "resp:med:mus": 571, "resp:med:act": 572, "resp:med:momp": 573, "resp:med:synp": 574, "resp:med:amo": 575, "resp:med:zit": 576, "resp:med:cur": 577, "resp:med:amoaom": 578, "resp:med:cap": 579, "resp:med:era": 580, "resp:med:pax": 581, "resp:lab:flu": 582, "resp:lab:covid": 583, "resp:lab:radt": 584, "resp:lab:cxr": 585, "resp:lab:cbc": 586, "cc:fever:dur": 587, "cc:fever:rxd": 588, "pst:fever": 589, "fever:sx:chill": 590, "fever:sx:ha": 591, "fever:sx:myal": 592, "fever:sx:rash": 593, "fever:sx:dysu": 594, "fever:sx:diar": 595, "fever:sx:abd": 596, "fever:sx:cough": 597, "fever:sx:retro": 598, "fever:sx:travel": 599, "fever:sx:outdoor": 600, "fever:sx:eschar": 601, "fever:rf:conf": 602, "fever:rf:hypo": 603, "fever:rf:rr": 604, "fever:rf:neck": 605, "fever:rf:petech": 606, "fever:rf:immuno": 607, "fever:rf:infant": 608, "fever:pe:neck": 609, "fever:pe:cva": 610, "fever:pe:rash": 611, "fever:pe:lap": 612, "fever:pe:hsm": 613, "fever:dx:fev": 614, "fever:dx:viral": 615, "fever:dx:dengue": 616, "fever:dx:scrub": 617, "fever:med:apap": 618, "fever:med:dox": 619, "fever:lab:cbc": 620, "fever:lab:ua": 621, "fever:lab:ns1": 622, "fever:lab:lft": 623, "fever:lab:bc": 624, "fever:lab:cxr": 625, "cc:age:dur": 626, "cc:age:rxd": 627, "pst:age": 628, "age:sx:diar": 629, "age:sx:watery": 630, "age:sx:blood": 631, "age:sx:vomit": 632, "age:sx:nausea": 633, "age:sx:cramp": 634, "age:sx:fever": 635, "age:sx:food": 636, "age:sx:travel": 637, "age:sx:abx": 638, "age:rf:dehyd": 639, "age:rf:bldfev": 640, "age:rf:rlq": 641, "age:rf:dispro": 642, "age:rf:persist": 643, "age:rf:long": 644, "age:pe:tender": 645, "age:pe:rebound": 646, "age:pe:bs": 647, "age:pe:dry": 648, "age:dx:age": 649, "age:dx:nonin": 650, "age:dx:nv": 651, "age:med:ors": 652, "age:med:sme": 653, "age:med:bio": 654, "age:med:dom": 655, "age:med:lop": 656, "age:med:buw": 657, "age:lab:stool": 658, "age:lab:sc": 659, "age:lab:cbc": 660, "cc:abd:dur": 661, "cc:abd:rxd": 662, "pst:abd": 663, "abd:sx:epi": 664, "abd:sx:ruq": 665, "abd:sx:rlq": 666, "abd:sx:llq": 667, "abd:sx:burn": 668, "abd:sx:postp": 669, "abd:sx:hunger": 670, "abd:sx:hb": 671, "abd:sx:regurg": 672, "abd:sx:full": 673, "abd:sx:nausea": 674, "abd:sx:nsaid": 675, "abd:sx:alc": 676, "abd:sx:fever": 677, "abd:sx:bm": 678, "abd:sx:hppos": 679, "abd:sx:pud": 680, "abd:rf:perit": 681, "abd:rf:gib": 682, "abd:rf:alarm": 683, "abd:rf:age60": 684, "abd:rf:preg": 685, "abd:rf:acs": 686, "abd:rf:dispro": 687, "abd:pe:epit": 688, "abd:pe:mcb": 689, "abd:pe:murphy": 690, "abd:pe:rebound": 691, "abd:pe:guard": 692, "abd:pe:cva": 693, "abd:dx:epi": 694, "abd:dx:dysp": 695, "abd:dx:gerd": 696, "abd:dx:gast": 697, "abd:dx:abdu": 698, "abd:dx:appy": 699, "abd:dx:pu": 700, "abd:dx:hp": 701, "abd:med:alg": 702, "abd:med:vok": 703, "abd:med:pan": 704, "abd:med:mop": 705, "abd:med:uls": 706, "abd:med:buw": 707, "abd:med:kas": 708, "abd:med:nexpu": 709, "abd:med:hpdual": 710, "abd:med:hpbq": 711, "abd:lab:ubt": 712, "abd:lab:hp": 713, "abd:lab:cbc": 714, "abd:lab:lft": 715, "abd:lab:ua": 716, "abd:lab:hcg": 717, "abd:lab:ecg": 718, "abd:lab:egd": 719, "abd:lab:sono": 720, "cc:const:dur": 721, "cc:const:rxd": 722, "pst:const": 723, "const:sx:hard": 724, "const:sx:strain": 725, "const:sx:infreq": 726, "const:sx:bloat": 727, "const:sx:drug": 728, "const:sx:ibs": 729, "const:sx:alt": 730, "const:rf:bleed": 731, "const:rf:wt": 732, "const:rf:anemia": 733, "const:rf:new50": 734, "const:rf:fhx": 735, "const:rf:obst": 736, "const:pe:dist": 737, "const:pe:mass": 738, "const:pe:dre": 739, "const:dx:con": 740, "const:dx:cic": 741, "const:dx:ibsc": 742, "const:med:mgo": 743, "const:med:lac": 744, "const:med:koc": 745, "const:med:dul": 746, "const:med:bisp": 747, "const:lab:fit": 748, "const:lab:cbc": 749, "const:lab:tsh": 750, "const:lab:cfs": 751, "cc:uti:dur": 752, "cc:uti:rxd": 753, "pst:uti": 754, "uti:sx:dysu": 755, "uti:sx:freq": 756, "uti:sx:urg": 757, "uti:sx:hema": 758, "uti:sx:supra": 759, "uti:sx:fever": 760, "uti:sx:flank": 761, "uti:sx:disch": 762, "uti:sx:recur": 763, "uti:rf:pyelo": 764, "uti:rf:preg": 765, "uti:rf:male": 766, "uti:rf:vomit": 767, "uti:rf:cath": 768, "uti:rf:immuno": 769, "uti:pe:supt": 770, "uti:pe:cva": 771, "uti:dx:cys": 772, "uti:dx:cysh": 773, "uti:dx:pye": 774, "uti:dx:uti": 775, "uti:med:ceph": 776, "uti:med:bak": 777, "uti:med:cur": 778, "uti:med:cin": 779, "uti:lab:ua": 780, "uti:lab:uc": 781, "uti:lab:hcg": 782, "cc:cp:dur": 783, "cc:cp:rxd": 784, "pst:cp": 785, "cp:sx:press": 786, "cp:sx:sharp": 787, "cp:sx:exert": 788, "cp:sx:rest": 789, "cp:sx:pleur": 790, "cp:sx:posit": 791, "cp:sx:rad": 792, "cp:sx:dia": 793, "cp:sx:dysp": 794, "cp:sx:palp": 795, "cp:sx:burn": 796, "cp:sx:meal": 797, "cp:sx:cough": 798, "cp:sx:anx": 799, "cp:sx:thinkc": 800, "cp:rf:rest20": 801, "cp:rf:syncope": 802, "cp:rf:bpdiff": 803, "cp:rf:spo2": 804, "cp:rf:ecg": 805, "cp:rf:tear": 806, "cp:rf:pe": 807, "cp:pe:repro": 808, "cp:pe:murmur": 809, "cp:pe:rub": 810, "cp:pe:crack": 811, "cp:pe:calf": 812, "cp:dx:cpu": 813, "cp:dx:costo": 814, "cp:dx:gerd": 815, "cp:dx:pleu": 816, "cp:dx:anx": 817, "cp:dx:acs": 818, "cp:med:asp": 819, "cp:med:ntg": 820, "cp:med:apap": 821, "cp:med:nap": 822, "cp:med:flrp": 823, "cp:med:alg": 824, "cp:med:vok": 825, "cp:lab:ecg": 826, "cp:lab:cxr": 827, "cp:lab:trop": 828, "cp:lab:dd": 829, "cc:ha:dur": 830, "cc:ha:rxd": 831, "pst:ha": 832, "ha:sx:uni": 833, "ha:sx:throb": 834, "ha:sx:band": 835, "ha:sx:nausea": 836, "ha:sx:photo": 837, "ha:sx:aura": 838, "ha:sx:act": 839, "ha:sx:overuse": 840, "ha:sx:stress": 841, "ha:sx:mens": 842, "ha:sx:freq": 843, "ha:rf:thunder": 844, "ha:rf:fevneck": 845, "ha:rf:focal": 846, "ha:rf:new50": 847, "ha:rf:preg": 848, "ha:rf:cancer": 849, "ha:rf:posit": 850, "ha:rf:trauma": 851, "ha:rf:anticoag": 852, "ha:pe:neuro": 853, "ha:pe:neck": 854, "ha:pe:peric": 855, "ha:pe:ta": 856, "ha:pe:fundus": 857, "ha:dx:tth": 858, "ha:dx:mig": 859, "ha:dx:miga": 860, "ha:dx:moh": 861, "ha:dx:hau": 862, "ha:med:apap": 863, "ha:med:nap": 864, "ha:med:pro": 865, "ha:med:imi": 866, "ha:med:prop": 867, "ha:med:suz": 868, "ha:med:mep": 869, "ha:lab:ct": 870, "ha:lab:esr": 871, "cc:dizzy:dur": 872, "cc:dizzy:rxd": 873, "pst:dizzy": 874, "dizzy:sx:spin": 875, "dizzy:sx:light": 876, "dizzy:sx:imbal": 877, "dizzy:sx:turn": 878, "dizzy:sx:stand": 879, "dizzy:sx:sec": 880, "dizzy:sx:hrs": 881, "dizzy:sx:hear": 882, "dizzy:sx:nausea": 883, "dizzy:sx:uri": 884, "dizzy:sx:newmed": 885, "dizzy:rf:5d": 886, "dizzy:rf:weak": 887, "dizzy:rf:ataxia": 888, "dizzy:rf:ha": 889, "dizzy:rf:cp": 890, "dizzy:rf:syncope": 891, "dizzy:pe:ortho": 892, "dizzy:pe:nyst": 893, "dizzy:pe:dhr": 894, "dizzy:pe:dhl": 895, "dizzy:pe:fn": 896, "dizzy:pe:gait": 897, "dizzy:dx:bppvr": 898, "dizzy:dx:bppvl": 899, "dizzy:dx:vn": 900, "dizzy:dx:oh": 901, "dizzy:dx:dz": 902, "dizzy:med:epley": 903, "dizzy:med:dip": 904, "dizzy:med:nil": 905, "dizzy:med:tri": 906, "dizzy:med:dom": 907, "dizzy:lab:ecg": 908, "dizzy:lab:cbc": 909, "dizzy:lab:mri": 910, "cc:lbp:dur": 911, "cc:lbp:rxd": 912, "pst:lbp": 913, "lbp:sx:lift": 914, "lbp:sx:radr": 915, "lbp:sx:radl": 916, "lbp:sx:numb": 917, "lbp:sx:stiff": 918, "lbp:sx:night": 919, "lbp:sx:chronic": 920, "lbp:sx:better": 921, "lbp:rf:saddle": 922, "lbp:rf:urine": 923, "lbp:rf:fever": 924, "lbp:rf:cancer": 925, "lbp:rf:wt": 926, "lbp:rf:trauma": 927, "lbp:rf:steroid": 928, "lbp:rf:weak": 929, "lbp:pe:para": 930, "lbp:pe:spin": 931, "lbp:pe:slrr": 932, "lbp:pe:slrl": 933, "lbp:pe:motor": 934, "lbp:pe:sens": 935, "lbp:dx:lbp": 936, "lbp:dx:scr": 937, "lbp:dx:scl": 938, "lbp:dx:strain": 939, "lbp:med:apap": 940, "lbp:med:nap": 941, "lbp:med:mel": 942, "lbp:med:cel": 943, "lbp:med:mus2": 944, "lbp:med:mep": 945, "lbp:med:flrp": 946, "lbp:med:lyr": 947, "lbp:lab:xr": 948, "lbp:lab:esr": 949, "lbp:lab:mri": 950, "cc:joint:dur": 951, "cc:joint:rxd": 952, "pst:joint": 953, "joint:sx:mono": 954, "joint:sx:poly": 955, "joint:sx:knee": 956, "joint:sx:mtp": 957, "joint:sx:ankle": 958, "joint:sx:acute": 959, "joint:sx:red": 960, "joint:sx:ams": 961, "joint:sx:trauma": 962, "joint:sx:gouthx": 963, "joint:sx:diur": 964, "joint:sx:stairs": 965, "joint:sx:flare2": 966, "joint:sx:stone": 967, "joint:sx:onult": 968, "joint:sx:hla": 969, "joint:rf:septic": 970, "joint:rf:nowt": 971, "joint:rf:immuno": 972, "joint:pe:eff": 973, "joint:pe:warm": 974, "joint:pe:ery": 975, "joint:pe:crep": 976, "joint:pe:rom": 977, "joint:pe:tophi": 978, "joint:pe:syn": 979, "joint:dx:gout": 980, "joint:dx:goutr": 981, "joint:dx:goutl": 982, "joint:dx:oa": 983, "joint:dx:ra": 984, "joint:dx:jp": 985, "joint:med:col": 986, "joint:med:nap5": 987, "joint:med:pre": 988, "joint:med:goos": 989, "joint:med:apap": 990, "joint:med:cel": 991, "joint:med:mel": 992, "joint:med:all": 993, "joint:med:feb": 994, "joint:med:colp": 995, "joint:lab:ua": 996, "joint:lab:cbc": 997, "joint:lab:rf": 998, "joint:lab:xr": 999, "joint:lab:tap": 1000, "cc:dysp:dur": 1001, "cc:dysp:rxd": 1002, "pst:dysp": 1003, "dysp:sx:exer": 1004, "dysp:sx:rest": 1005, "dysp:sx:ortho": 1006, "dysp:sx:pnd": 1007, "dysp:sx:wheeze": 1008, "dysp:sx:cough": 1009, "dysp:sx:sputum": 1010, "dysp:sx:fever": 1011, "dysp:sx:leg": 1012, "dysp:sx:asthma": 1013, "dysp:sx:copd": 1014, "dysp:rf:sent": 1015, "dysp:rf:spo2": 1016, "dysp:rf:rr": 1017, "dysp:rf:cp": 1018, "dysp:rf:unileg": 1019, "dysp:rf:hemop": 1020, "dysp:rf:conf": 1021, "dysp:pe:wh": 1022, "dysp:pe:crack": 1023, "dysp:pe:dbs": 1024, "dysp:pe:jve": 1025, "dysp:pe:edema": 1026, "dysp:dx:dys": 1027, "dysp:dx:asx": 1028, "dysp:dx:copdx": 1029, "dysp:dx:pneu": 1030, "dysp:dx:hf": 1031, "dysp:med:synp": 1032, "dysp:med:besq": 1033, "dysp:med:pre": 1034, "dysp:med:symq": 1035, "dysp:med:cur": 1036, "dysp:med:fur": 1037, "dysp:lab:cxr": 1038, "dysp:lab:ecg": 1039, "dysp:lab:cbc": 1040, "dysp:lab:bnp": 1041, "dysp:lab:dd": 1042, "dysp:lab:pft": 1043, "cc:palp:dur": 1044, "cc:palp:rxd": 1045, "pst:palp": 1046, "palp:sx:reg": 1047, "palp:sx:irreg": 1048, "palp:sx:sudden": 1049, "palp:sx:caff": 1050, "palp:sx:stress": 1051, "palp:sx:heat": 1052, "palp:sx:drug": 1053, "palp:rf:syncope": 1054, "palp:rf:cp": 1055, "palp:rf:exer": 1056, "palp:rf:fhx": 1057, "palp:rf:shd": 1058, "palp:pe:irr": 1059, "palp:pe:tachy": 1060, "palp:pe:goiter": 1061, "palp:pe:murmur": 1062, "palp:dx:palp": 1063, "palp:dx:af": 1064, "palp:dx:anx": 1065, "palp:med:prop": 1066, "palp:lab:ecg": 1067, "palp:lab:tsh": 1068, "palp:lab:cbc": 1069, "palp:lab:holter": 1070, "cc:edema:dur": 1071, "cc:edema:rxd": 1072, "pst:edema": 1073, "edema:sx:uni": 1074, "edema:sx:bil": 1075, "edema:sx:eve": 1076, "edema:sx:dysp": 1077, "edema:sx:foam": 1078, "edema:sx:jaun": 1079, "edema:sx:calf": 1080, "edema:sx:drug": 1081, "edema:rf:dvt": 1082, "edema:rf:dysp": 1083, "edema:rf:cell": 1084, "edema:pe:pit": 1085, "edema:pe:jve": 1086, "edema:pe:crack": 1087, "edema:pe:calft": 1088, "edema:pe:skin": 1089, "edema:dx:ed": 1090, "edema:dx:drug": 1091, "edema:dx:vi": 1092, "edema:med:stock": 1093, "edema:med:fur": 1094, "edema:lab:cr": 1095, "edema:lab:ua": 1096, "edema:lab:alb": 1097, "edema:lab:tsh": 1098, "edema:lab:bnp": 1099, "edema:lab:duplex": 1100, "cc:fatigue:dur": 1101, "cc:fatigue:rxd": 1102, "pst:fatigue": 1103, "fatigue:sx:sleep": 1104, "fatigue:sx:snore": 1105, "fatigue:sx:mood": 1106, "fatigue:sx:menor": 1107, "fatigue:sx:cold": 1108, "fatigue:sx:polyu": 1109, "fatigue:rf:wt": 1110, "fatigue:rf:ns": 1111, "fatigue:rf:fever": 1112, "fatigue:rf:bleed": 1113, "fatigue:rf:lap": 1114, "fatigue:pe:pallor": 1115, "fatigue:pe:thy": 1116, "fatigue:pe:lapx": 1117, "fatigue:pe:hsm": 1118, "fatigue:dx:fat": 1119, "fatigue:dx:ins": 1120, "fatigue:dx:dep": 1121, "fatigue:lab:cbc": 1122, "fatigue:lab:tsh": 1123, "fatigue:lab:glu": 1124, "fatigue:lab:cr": 1125, "fatigue:lab:b12": 1126, "fatigue:lab:phq": 1127, "fatigue:lab:psg": 1128, "cc:ar:dur": 1129, "cc:ar:rxd": 1130, "pst:ar": 1131, "ar:sx:sneeze": 1132, "ar:sx:itch": 1133, "ar:sx:rhin": 1134, "ar:sx:cong": 1135, "ar:sx:eye": 1136, "ar:sx:asthma": 1137, "ar:sx:uni": 1138, "ar:sx:epis": 1139, "ar:rf:unilat": 1140, "ar:rf:polyp": 1141, "ar:rf:neck": 1142, "ar:pe:pale": 1143, "ar:pe:shiner": 1144, "ar:pe:polyp": 1145, "ar:sel:type": 1146, "ar:sel:sev": 1147, "ar:dx:ar": 1148, "ar:dx:ac": 1149, "ar:med:avap": 1150, "ar:med:momp": 1151, "ar:med:lev": 1152, "ar:med:all": 1153, "ar:med:duf": 1154, "ar:med:sin": 1155, "ar:med:pat": 1156, "ar:med:sido": 1157, "ar:lab:ige": 1158, "ar:lab:ent": 1159, "cc:asthma:dur": 1160, "cc:asthma:rxd": 1161, "pst:asthma": 1162, "asthma:sx:day": 1163, "asthma:sx:night": 1164, "asthma:sx:rel": 1165, "asthma:sx:limit": 1166, "asthma:sx:exac": 1167, "asthma:sx:tech": 1168, "asthma:sx:adh": 1169, "asthma:sx:smoke": 1170, "asthma:rf:speak": 1171, "asthma:rf:spo2": 1172, "asthma:rf:pef": 1173, "asthma:rf:conf": 1174, "asthma:rf:silent": 1175, "asthma:pe:wh": 1176, "asthma:pe:prol": 1177, "asthma:pe:acc": 1178, "asthma:sel:step": 1179, "asthma:dx:ast": 1180, "asthma:dx:astx": 1181, "asthma:med:symprn": 1182, "asthma:med:symlow": 1183, "asthma:med:symmed": 1184, "asthma:med:sin": 1185, "asthma:med:synp": 1186, "asthma:med:pre": 1187, "asthma:med:besq": 1188, "asthma:lab:pft": 1189, "asthma:lab:pef": 1190, "asthma:lab:eos": 1191, "cc:copd:dur": 1192, "cc:copd:rxd": 1193, "pst:copd": 1194, "copd:sx:cat": 1195, "copd:sx:aecopd": 1196, "copd:sx:purul": 1197, "copd:sx:smoke": 1198, "copd:rf:spo2": 1199, "copd:rf:conf": 1200, "copd:rf:rest": 1201, "copd:rf:edema": 1202, "copd:pe:wh": 1203, "copd:pe:prol": 1204, "copd:pe:dbs": 1205, "copd:sel:mmrc": 1206, "copd:sel:exh": 1207, "copd:num:eos": 1208, "copd:num:fev1": 1209, "copd:dx:copd": 1210, "copd:dx:copdx": 1211, "copd:med:spiq": 1212, "copd:med:anop": 1213, "copd:med:spir": 1214, "copd:med:trep": 1215, "copd:med:synp": 1216, "copd:med:pre": 1217, "copd:med:cur": 1218, "copd:med:vax": 1219, "copd:lab:pft": 1220, "copd:lab:cxr": 1221, "copd:lab:cbc": 1222, "cc:ear:dur": 1223, "cc:ear:rxd": 1224, "pst:ear": 1225, "ear:sx:pain": 1226, "ear:sx:fever": 1227, "ear:sx:hear": 1228, "ear:sx:otorr": 1229, "ear:sx:uri": 1230, "ear:sx:swim": 1231, "ear:sx:itch": 1232, "ear:sx:abx": 1233, "ear:rf:malig": 1234, "ear:rf:facial": 1235, "ear:rf:mast": 1236, "ear:rf:npc": 1237, "ear:pe:bulge": 1238, "ear:pe:red": 1239, "ear:pe:perf": 1240, "ear:pe:tragal": 1241, "ear:pe:eac": 1242, "ear:pe:effu": 1243, "ear:sel:side": 1244, "ear:dx:aom": 1245, "ear:dx:oe": 1246, "ear:dx:ome": 1247, "ear:med:amo": 1248, "ear:med:cur": 1249, "ear:med:zit": 1250, "ear:med:earp": 1251, "ear:med:apap": 1252, "ear:med:nap": 1253, "ear:lab:ent": 1254, "cc:ccough:dur": 1255, "cc:ccough:rxd": 1256, "pst:ccough": 1257, "ccough:sx:d8": 1258, "ccough:sx:smoke": 1259, "ccough:sx:acei": 1260, "ccough:sx:pnd": 1261, "ccough:sx:hb": 1262, "ccough:sx:wheeze": 1263, "ccough:sx:tbc": 1264, "ccough:sx:sput": 1265, "ccough:rf:hemop": 1266, "ccough:rf:wt": 1267, "ccough:rf:ns": 1268, "ccough:rf:fever": 1269, "ccough:rf:cxr": 1270, "ccough:pe:cobble": 1271, "ccough:pe:wh": 1272, "ccough:pe:crack": 1273, "ccough:dx:cc": 1274, "ccough:dx:uacs": 1275, "ccough:dx:gerd": 1276, "ccough:dx:cva": 1277, "ccough:dx:acei": 1278, "ccough:med:momp": 1279, "ccough:med:lev": 1280, "ccough:med:vok": 1281, "ccough:med:sym": 1282, "ccough:med:arb": 1283, "ccough:med:dex": 1284, "ccough:lab:cxr": 1285, "ccough:lab:pft": 1286, "ccough:lab:afb": 1287, "cc:ibs:dur": 1288, "cc:ibs:rxd": 1289, "pst:ibs": 1290, "ibs:sx:pain": 1291, "ibs:sx:defec": 1292, "ibs:sx:freq": 1293, "ibs:sx:form": 1294, "ibs:sx:d": 1295, "ibs:sx:c": 1296, "ibs:sx:bloat": 1297, "ibs:sx:stress": 1298, "ibs:rf:bleed": 1299, "ibs:rf:wt": 1300, "ibs:rf:anemia": 1301, "ibs:rf:noct": 1302, "ibs:rf:age50": 1303, "ibs:rf:fhx": 1304, "ibs:pe:tend": 1305, "ibs:pe:mass": 1306, "ibs:dx:ibsd": 1307, "ibs:dx:ibsc": 1308, "ibs:dx:ibsm": 1309, "ibs:dx:ibs": 1310, "ibs:med:cat": 1311, "ibs:med:dic": 1312, "ibs:med:koc": 1313, "ibs:med:mgo": 1314, "ibs:med:lop": 1315, "ibs:med:kas": 1316, "ibs:lab:cbc": 1317, "ibs:lab:tsh": 1318, "ibs:lab:fit": 1319, "ibs:lab:cfs": 1320, "cc:hemo:dur": 1321, "cc:hemo:rxd": 1322, "pst:hemo": 1323, "hemo:sx:bleed": 1324, "hemo:sx:prol": 1325, "hemo:sx:pain": 1326, "hemo:sx:itch": 1327, "hemo:sx:const": 1328, "hemo:rf:anemia": 1329, "hemo:rf:age45": 1330, "hemo:rf:bh": 1331, "hemo:rf:wt": 1332, "hemo:rf:fhx": 1333, "hemo:pe:ext": 1334, "hemo:pe:thromb": 1335, "hemo:pe:fiss": 1336, "hemo:pe:dre": 1337, "hemo:sel:grade": 1338, "hemo:dx:hem": 1339, "hemo:dx:thr": 1340, "hemo:dx:fis": 1341, "hemo:med:poso": 1342, "hemo:med:daf": 1343, "hemo:med:mgo": 1344, "hemo:med:lac": 1345, "hemo:med:apap": 1346, "hemo:lab:cbc": 1347, "hemo:lab:cfs": 1348, "hemo:lab:cr": 1349, "cc:masld:dur": 1350, "cc:masld:rxd": 1351, "pst:masld": 1352, "masld:sx:obese": 1353, "masld:sx:dm": 1354, "masld:sx:htn": 1355, "masld:sx:hld": 1356, "masld:sx:alc": 1357, "masld:rf:decomp": 1358, "masld:rf:mass": 1359, "masld:pe:hep": 1360, "masld:pe:stig": 1361, "masld:num:ast": 1362, "masld:num:alt": 1363, "masld:num:plt": 1364, "masld:dx:masld": 1365, "masld:dx:metald": 1366, "masld:dx:mash": 1367, "masld:med:wt": 1368, "masld:med:glp": 1369, "masld:med:pio": 1370, "masld:lab:basic": 1371, "masld:lab:hep": 1372, "masld:lab:sono": 1373, "masld:lab:fs": 1374, "cc:hep:dur": 1375, "cc:hep:rxd": 1376, "pst:hep": 1377, "hep:sx:hbsag": 1378, "hep:sx:hbeag": 1379, "hep:sx:alt2": 1380, "hep:sx:hcv": 1381, "hep:sx:rna": 1382, "hep:sx:cirr": 1383, "hep:sx:fhx": 1384, "hep:sx:tx": 1385, "hep:rf:mass": 1386, "hep:rf:afp": 1387, "hep:rf:decomp": 1388, "hep:pe:jaun": 1389, "hep:pe:stig": 1390, "hep:dx:hbv": 1391, "hep:dx:hbc": 1392, "hep:dx:hcv": 1393, "hep:dx:cir": 1394, "hep:med:bar": 1395, "hep:med:vem": 1396, "hep:med:mav": 1397, "hep:lab:hbv": 1398, "hep:lab:afp": 1399, "hep:lab:rna": 1400, "hep:lab:fib": 1401, "drug:ACE1": 1402, "drug:CAB1": 1403, "drug:DIO3": 1404, "drug:EDA1": 1405, "drug:SEV4": 1406, "drug:OLS1": 1407, "drug:AMT1": 1408, "drug:ATA1": 1409, "drug:CON8": 1410, "drug:LES2": 1411, "drug:HER1": 1412, "drug:NAK1": 1413, "drug:ISO3": 1414, "drug:SYN1": 1415, "drug:SYN3": 1416, "drug:ATE1": 1417, "drug:NEB1": 1418, "drug:LAB2": 1419, "drug:MET4": 1420, "drug:APR4": 1421, "drug:FLU3": 1422, "drug:AMI6": 1423, "drug:ENT3": 1424, "drug:ENT4": 1425, "drug:INS1": 1426, "drug:ISO5": 1427, "drug:IBI1": 1428, "drug:SIG1": 1429, "drug:RAN1": 1430, "drug:COR4": 1431, "drug:DIG1": 1432, "drug:ROS1": 1433, "drug:LIV2": 1434, "drug:ZUL1": 1435, "drug:MEC2": 1436, "drug:LIP7": 1437, "drug:PRA3": 1438, "drug:CAD1": 1439, "drug:NIL2": 1440, "drug:ASP5": 1441, "drug:CLO8": 1442, "drug:PLA2": 1443, "drug:BRI2": 1444, "drug:PLE3": 1445, "drug:PAR4": 1446, "drug:MAF2": 1447, "drug:ELI1": 1448, "drug:ELI2": 1449, "drug:XAR1": 1450, "drug:XAR2": 1451, "drug:LIX1": 1452, "drug:LIX2": 1453, "drug:PRA1": 1454, "drug:PRA2": 1455, "drug:CLEB": 1456, "drug:AMA1": 1457, "drug:MIN2": 1458, "drug:REP1": 1459, "drug:GAL1": 1460, "drug:ONG2": 1461, "drug:JAR1": 1462, "drug:CAN2": 1463, "drug:RYB1": 1464, "drug:ACA5": 1465, "drug:MIG1": 1466, "drug:JAN2": 1467, "drug:GAL2": 1468, "drug:TRA6": 1469, "drug:JAR2": 1470, "drug:GLI6": 1471, "drug:TOUA": 1472, "drug:TREA": 1473, "drug:INSA": 1474, "drug:NOVE": 1475, "drug:HUMFA": 1476, "drug:NOVF": 1477, "drug:RYZA": 1478, "drug:SOLB": 1479, "drug:GLUA": 1480, "drug:MET7": 1481, "drug:NEW4": 1482, "drug:POL1": 1483, "drug:FEB2": 1484, "drug:EUR2": 1485, "drug:FOS4": 1486, "drug:ACLC": 1487, "drug:PROI": 1488, "drug:FORE": 1489, "drug:EVEA": 1490, "drug:MAC1": 1491, "drug:CAL5": 1492, "drug:ECO2": 1493, "drug:VOR2": 1494, "drug:VOR3": 1495, "drug:VORO": 1496, "drug:IND4": 1497, "drug:PON2": 1498, "drug:ACE3": 1499, "drug:JOL1": 1500, "drug:KET3": 1501, "drug:KETC": 1502, "drug:MOBC": 1503, "drug:PIRB": 1504, "drug:PACA": 1505, "drug:APA1": 1506, "drug:ANTSC": 1507, "drug:TRA4": 1508, "drug:MUA1": 1509, "drug:SOM1": 1510, "drug:ANO1": 1511, "drug:LYG1": 1512, "drug:NEU2": 1513, "drug:CAR5": 1514, "drug:DUX1": 1515, "drug:TEIO": 1516, "drug:LIDP": 1517, "drug:BEF1": 1518, "drug:MUS3": 1519, "drug:VIA4": 1520, "drug:HYAC": 1521, "drug:VEJC": 1522, "drug:SHIA": 1523, "drug:DEXB": 1524, "drug:XYLO": 1525, "drug:SINM": 1526, "drug:MET6": 1527, "drug:DEC2": 1528, "drug:KIDSC": 1529, "drug:METD": 1530, "drug:HYDA": 1531, "drug:TAK2": 1532, "drug:PAR3": 1533, "drug:OME2": 1534, "drug:DEX2": 1535, "drug:VOC1": 1536, "drug:SCR1": 1537, "drug:ALU1": 1538, "drug:KCB1": 1539, "drug:CYT1": 1540, "drug:IMPA": 1541, "drug:ESCA": 1542, "drug:SET2": 1543, "drug:ARIP": 1544, "drug:HID1": 1545, "drug:ANT4": 1546, "drug:MIY1": 1547, "drug:EVAO": 1548, "drug:BOK2": 1549, "drug:BIO1": 1550, "drug:CRE1": 1551, "drug:SIL3": 1552, "drug:SAL3": 1553, "drug:PEN3": 1554, "drug:SERR": 1555, "drug:RELQ": 1556, "drug:FOSP": 1557, "drug:TRIR": 1558, "drug:DUAP": 1559, "drug:SALD": 1560, "drug:SIN4": 1561, "drug:MON3": 1562, "drug:XAN1": 1563, "drug:MEP1": 1564, "drug:BAB1": 1565, "drug:REG1": 1566, "drug:ASV1": 1567, "drug:ZCO1": 1568, "drug:COD3": 1569, "drug:ECT1": 1570, "drug:CASSD": 1571, "drug:SORSC": 1572, "drug:BETP": 1573, "drug:ALL4": 1574, "drug:BIS2": 1575, "drug:BEN3": 1576, "drug:ARA1": 1577, "drug:DIPB": 1578, "drug:AZEP": 1579, "drug:SOOA": 1580, "drug:CURSC": 1581, "drug:UCL1": 1582, "drug:CEF3": 1583, "drug:KLA2": 1584, "drug:ZITSC": 1585, "drug:TID1": 1586, "drug:LEF2": 1587, "drug:AVE1": 1588, "drug:MET8": 1589, "drug:GRA1": 1590, "drug:CEFD": 1591, "drug:TRIC": 1592, "drug:FURA": 1593, "drug:SUBA": 1594, "drug:GENB": 1595, "drug:TER2": 1596, "drug:ICO1": 1597, "drug:DIF1": 1598, "drug:VAC1": 1599, "drug:ACY1": 1600, "drug:VIR2": 1601, "drug:FAM1": 1602, "drug:XOF2": 1603, "drug:ALB7": 1604, "drug:COW1": 1605, "drug:PERQ": 1606, "drug:STR3": 1607, "drug:AKU1": 1608, "drug:RIN2": 1609, "drug:INH1": 1610, "drug:EBU2": 1611, "drug:PZA2": 1612, "drug:PPDA": 1613, "drug:VAXA": 1614, "drug:VAXC": 1615, "drug:PREJ": 1616, "drug:PNEB": 1617, "drug:PREK": 1618, "drug:SHID": 1619, "drug:BOOF": 1620, "drug:TETG": 1621, "drug:ENGA": 1622, "drug:HAVD": 1623, "drug:GARE": 1624, "drug:MMRA": 1625, "drug:VARC": 1626, "drug:AREA": 1627, "drug:COVGE": 1628, "drug:DIHA": 1629, "drug:JEVA": 1630, "drug:VERC": 1631, "drug:ROTD": 1632, "drug:HAR3": 1633, "drug:TAM4": 1634, "drug:URI4": 1635, "drug:XAT1": 1636, "drug:PRO3": 1637, "drug:AVO1": 1638, "drug:DUO1": 1639, "drug:BET8": 1640, "drug:VES2": 1641, "drug:DET2": 1642, "drug:CIA4": 1643, "drug:FUL3": 1644, "drug:PRI6": 1645, "drug:DES3": 1646, "drug:BET6": 1647, "drug:KAL2": 1648, "drug:NESG": 1649, "drug:RIZ1": 1650, "drug:ERG2": 1651, "drug:EMGA": 1652, "drug:NUR10": 1653, "drug:CIN2": 1654, "drug:ARE1": 1655, "drug:WIT1": 1656, "drug:EXEQ": 1657, "drug:STI1": 1658, "drug:LEN1": 1659, "drug:EUR1": 1660, "drug:SOM2": 1661, "drug:DAY1": 1662, "drug:ANX1": 1663, "drug:XAN2": 1664, "drug:LEX1": 1665, "drug:LEE1": 1666, "drug:ZOL1": 1667, "drug:JUX1": 1668, "drug:EFE1": 1669, "drug:MIR2": 1670, "drug:MES1": 1671, "drug:SER6": 1672, "drug:NOV1": 1673, "drug:HYDO": 1674, "drug:FLUT": 1675, "drug:MONQ": 1676, "drug:TOPR": 1677, "drug:CLOQ": 1678, "drug:CLOR": 1679, "drug:EXTP": 1680, "drug:MYCQ": 1681, "drug:WINP": 1682, "drug:MENP": 1683, "drug:FUSP": 1684, "drug:SPEO": 1685, "drug:SULS": 1686, "drug:DEHP": 1687, "drug:PROP": 1688, "drug:ELIP": 1689, "drug:DUPD": 1690, "drug:ANTP": 1691, "drug:EURP": 1692, "drug:DIFP": 1693, "drug:ACZP": 1694, "drug:EASQ": 1695, "drug:ROA8": 1696, "drug:DAIP": 1697, "drug:PRO7": 1698, "drug:REGP": 1699, "drug:FESP": 1700, "drug:POVS": 1701, "drug:EASS": 1702, "drug:CRAO": 1703, "drug:TOBS": 1704, "drug:ERYT": 1705, "drug:ARTQ": 1706, "drug:LIPO": 1707, "drug:FOXQ": 1708, "drug:OTOP": 1709, "drug:MYCO": 1710, "drug:LOMV": 1711, "drug:NYSV": 1712, "drug:ESVQ": 1713, "drug:EST1": 1714, "drug:PRO5": 1715, "drug:UTR1": 1716, "drug:VIS1": 1717, "drug:MIRE": 1718, "drug:SID3": 1719, "drug:FEBA": 1720, "drug:V12A": 1721, "drug:BEE2": 1722, "drug:KGLSC": 1723, "drug:EPIS": 1724, "drug:NALC": 1725, "drug:ANEA": 1726, "drug:PRAA": 1727, "f:p_cr": 1728, "f:p_na": 1729, "mod:thy": 1730, "f:th_tsh": 1731, "f:th_ft4": 1732, "f:th_ft3": 1733, "f:th_type": 1734, "f:th_cur": 1735, "f:th_dose": 1736, "f:th_mmi": 1737, "f:th_tri": 1738, "f:th_nod": 1739, "f:th_tpo": 1740, "f:th_trab": 1741, "f:th_post": 1742, "f:th_hsx": 1743, "f:th_sx": 1744, "f:th_amd": 1745, "cs:htn:prot": 1746, "cs:htn:tachy": 1747, "cs:htn:edema": 1748, "cs:htn:gout": 1749, "cs:htn:old": 1750, "cs:htn:one": 1751, "cs:dm:wtl": 1752, "cs:dm:hypo": 1753, "cs:dm:hfckd": 1754, "cs:dm:cost": 1755, "cs:dm:noinj": 1756, "cs:lip:ddi": 1757, "cs:lip:myal": 1758, "cs:lip:cost": 1759, "cs:ac:drive": 1760, "cs:ac:gi": 1761, "cs:ac:cv": 1762, "cs:ac:old": 1763, "cs:ac:preg": 1764, "cdx:thy:E03.9": 1765, "cdx:thy:E02": 1766, "cdx:thy:E06.3": 1767, "cdx:thy:E89.0": 1768, "cdx:thy:E05.90": 1769, "cdx:thy:E05.00": 1770, "cdx:thy:E04.1": 1771, "cdx:thy:E04.2": 1772, "cdx:thy:E07.9": 1773, "cdx:thy:R94.6": 1774, "cfu:thy:TSH": 1775, "cfu:thy:FT4": 1776, "cfu:thy:FT3": 1777, "cfu:thy:CBC": 1778, "cfu:thy:ALT": 1779, "cfu:thy:TRAb": 1780, "cfu:thy:anti-TPO": 1781, "cfu:thy:甲狀腺超音波": 1782, "cfu:thy:Na": 1783, "cfu:thy:Uric acid": 1784, "cfu:thy:FPG": 1785, "cfu:thy:HbA1c": 1786, "cfu:thy:Lipid profile": 1787, "cfu:thy:UACR": 1788, "cfu:thy:U/A": 1789, "cfu:thy:ECG": 1790, "cfu:thy:眼底檢查": 1791, "cfu:thy:足部檢查": 1792, "cfu:thy:Vit B12": 1793, "cfu:thy:CK": 1794, "cfu:thy:CBC (Hb)": 1795, "cfu:thy:Ca/P": 1796, "cfu:thy:HCO3": 1797, "cfu:thy:iPTH": 1798, "cfu:thy:FPG/HbA1c": 1799, "cfu:thy:Cr/eGFR": 1800, "cfu:thy:K": 1801, "resp:num:wbc": 1802, "resp:num:crp": 1803, "fever:num:wbc": 1804, "fever:num:crp": 1805, "fever:num:plt": 1806, "abd:num:ast": 1807, "abd:num:alt": 1808, "abd:num:lip": 1809, "abd:dx:panc": 1810, "uti:sel:nit": 1811, "uti:num:uwbc": 1812, "joint:num:ua": 1813, "joint:dx:hua": 1814, "joint:med:allup": 1815, "palp:num:tsh": 1816, "palp:dx:thyr": 1817, "fatigue:num:hb": 1818, "fatigue:num:mcv": 1819, "fatigue:num:fer": 1820, "fatigue:num:tsh": 1821, "fatigue:dx:ida": 1822, "fatigue:dx:b12a": 1823, "fatigue:dx:anem": 1824, "fatigue:dx:idnoa": 1825, "fatigue:med:ted": 1826, "fatigue:med:b12": 1827};
 const HB=1<<20;
 const fnv=s=>{let h=0x811c9dc5;for(const ch of unescape(encodeURIComponent(s))){h^=ch.charCodeAt(0);h=Math.imul(h,0x01000193)>>>0}return h>>>0};
 const keyId=k=>YCJREG[k]||(HB+(fnv(k)&0xFFFFF));
 const h16=s=>fnv(s)&0xFFFF;
-const PVF=['p_sbp','p_dbp','p_hr','p_bt','p_rr','p_spo2','p_wt','p_waist','p_egfr','p_uacr','p_k','p_cig','h_sbp','h_dbp','d_a1c','d_fpg','l_ldl','l_hdl','l_tg','l_tc'].concat(TRKI.map(x=>x[0]));
+const PVF=['p_sbp','p_dbp','p_hr','p_bt','p_rr','p_spo2','p_wt','p_waist','p_egfr','p_cr','p_na','th_tsh','th_ft4','th_ft3','p_uacr','p_k','p_cig','h_sbp','h_dbp','d_a1c','d_fpg','l_ldl','l_hdl','l_tg','l_tc'].concat(TRKI.map(x=>x[0]));
 const NOENC=new Set(['ycjIn','p_alg']);
-const DEC=new Set(['p_k','p_bt','p_wt','p_ht','p_waist','d_a1c','w_base','t_a1c','t_tsh','t_ft4','t_ua','t_cr','t_ca','t_psa','t_hb','t_crp','t_vd','t_alt'].concat([]));const sc=id=>DEC.has(id)?10:1;
+const DEC=new Set(['p_k','p_bt','p_wt','p_ht','p_waist','d_a1c','w_base','t_a1c','t_tsh','t_ft4','t_ua','t_cr','t_ca','t_psa','t_hb','t_crp','t_vd','t_alt','th_ft3'].concat([]));const SCX={p_cr:100,th_tsh:1000,th_ft4:100};const sc=id=>SCX[id]||(DEC.has(id)?10:1);
 function encFields(){return [...G.querySelectorAll('input[id],select[id]')].filter(el=>!NOENC.has(el.id)&&!/^(ck|gout|gslip)/.test(el.id)&&el.type!=='text'&&!el.closest('#ccList,.chrow,#ycjBox,#prevBox'))}
 function ycjKeys(){
  const K=[];encFields().forEach(el=>K.push('f:'+el.id));
@@ -1262,6 +1428,7 @@ function ycjKeys(){
  ['Na','Uric acid','FPG','HbA1c','Lipid profile','UACR','U/A','ECG','眼底檢查','足部檢查','Vit B12','ALT','CK','CBC (Hb)','Ca/P','HCO3','iPTH','FPG/HbA1c','Cr/eGFR','K'].forEach(f=>MODS.forEach(m=>K.push(`cfu:${m.k}:${f}`)));
  CC.forEach(c=>{K.push('cc:'+c.id,`cc:${c.id}:dur`,`cc:${c.id}:rxd`,'pst:'+c.id);['sx','rf','pe'].forEach(g=>c[g].forEach(x=>K.push(`${c.id}:${g}:${x[0]}`)));(c.sel||[]).forEach(x=>K.push(`${c.id}:sel:${x[0]}`));(c.num||[]).forEach(x=>K.push(`${c.id}:num:${x[0]}`));c.dx.forEach(d=>K.push(`${c.id}:dx:${d.k}`));c.med.forEach(m=>K.push(`${c.id}:med:${m.k}`));c.lab.forEach(l=>K.push(`${c.id}:lab:${l[0]}`));(c.fu||[]).forEach(f=>K.push(`${c.id}:fu:${f[0]}`))});
  (typeof FX!=='undefined'?FX:[]).forEach(d=>K.push('drug:'+d.code));
+ Object.entries(CONS).forEach(([k,L])=>L.forEach(([x])=>K.push(`cs:${k}:${x}`)));ACON.forEach(([x])=>K.push('cs:ac:'+x));
  return [...new Set(K)];
 }
 let REV=null;
@@ -1278,12 +1445,14 @@ const today=()=>Math.floor((Date.now()-EPOCH+8*3600e3)/864e5);
 const dstr=d=>{const t=new Date(EPOCH+d*864e5);return `${t.getUTCFullYear()}/${t.getUTCMonth()+1}/${t.getUTCDate()}`};
 /* 收集這次的狀態 */
 function ycjCollect(only){
- const T1=[],T2=[],T3=[],T5=[],T6=[];
+ const T1=[],T2=[],T3=[],T5=[],T6=[],T7=[];
  if(!only){
+  Object.entries(CS).forEach(([k,o])=>Object.keys(o).forEach(x=>{if(o[x]&&(k==='ac'||on(k)))T2.push(keyId(`cs:${k}:${x}`))}));
+  CUST.forEach(c=>{const v=c.v!==''?c.v:(c.pv||'');if(c.n&&v!=='')T7.push(`${c.n}\t${v}\t${c.u||''}`)});
   encFields().forEach(el=>{const k='f:'+el.id;
    if(el.type==='checkbox'){if(el.checked)T2.push(keyId(k))}
    else if(el.tagName==='SELECT'){if(el.selectedIndex>0)T1.push([keyId(k),el.selectedIndex])}
-   else{let v=parseFloat(el.value);if(isNaN(v)&&PREV[el.id]!==undefined)v=PREV[el.id];if(!isNaN(v))T1.push([keyId(k),Math.round(v*sc(el.id))])}});
+   else{let v=parseFloat(el.value);{const g=RANGE[el.id];if(g&&(v<g[0]||v>g[1]))v=NaN}if(isNaN(v)&&PREV[el.id]!==undefined)v=PREV[el.id];if(!isNaN(v))T1.push([keyId(k),Math.round(v*sc(el.id))])}});
   MODS.forEach(m=>{if(!on(m.k))return;T2.push(keyId('mod:'+m.k));const S=CH[m.k];
    Object.keys(S.dx).forEach(c=>T2.push(keyId(`cdx:${m.k}:${c}`)));
    const md=Object.keys(S.med);if(md.length)T3.push([keyId('mod:'+m.k),md.map(t=>[keyId('drug:'+t.split(' ')[0]),fnv(t)&255])]);
@@ -1296,16 +1465,17 @@ function ycjCollect(only){
   Object.entries(st.num||{}).forEach(([k,v])=>{if(v!==''&&!isNaN(+v))T1.push([keyId(`${c.id}:num:${k}`),Math.round(+v*10)])});
   ['dx','med','lab'].forEach(g=>Object.keys(st[g]||{}).forEach(k=>{if(st[g][k])T2.push(keyId(`${c.id}:${g}:${k}`))}));
   Object.entries(st.fu||{}).forEach(([it,w])=>T1.push([keyId(`${c.id}:fu:${it}`),w+2]))});
- return {T1,T2,T3,T5,T6};
+ return {T1,T2,T3,T5,T6,T7};
 }
 function ycjEncode(only){
- const {T1,T2,T3,T5,T6}=ycjCollect(only);if(!T1.length&&!T2.length&&!T3.length&&!T5.length&&!T6.length)return '';
+ const {T1,T2,T3,T5,T6,T7}=ycjCollect(only);if(!T1.length&&!T2.length&&!T3.length&&!T5.length&&!T6.length&&!T7.length)return '';
  const b=[];vput(b,1);vput(b,today());
  if(T1.length){vput(b,1);vput(b,T1.length);T1.forEach(([i,v])=>{vput(b,i);vput(b,v)})}
  if(T2.length){vput(b,2);vput(b,T2.length);T2.forEach(i=>vput(b,i))}
  if(T3.length){vput(b,3);vput(b,T3.length);T3.forEach(([a,L])=>{vput(b,a);vput(b,L.length);L.forEach(([d,h])=>{vput(b,d);vput(b,h)})})}
  if(T6.length){vput(b,6);vput(b,T6.length);T6.forEach(([a,w,mk])=>{vput(b,a);vput(b,w);vput(b,mk)})}
  if(T5.length){vput(b,5);vput(b,T5.length);T5.forEach(([a,w,ids])=>{vput(b,a);vput(b,w);vput(b,ids.length);ids.forEach(i=>vput(b,i))})}
+ if(T7.length){vput(b,7);vput(b,T7.length);T7.forEach(t=>{const u=[...new TextEncoder().encode(t)].slice(0,120);vput(b,u.length);u.forEach(x=>b.push(x))})} // 自訂抽血（文字）；放最後，舊版讀到這裡會停
  const c=crc16(b);const body=b32e(b)+AL[(c>>10)&31]+AL[(c>>5)&31]+AL[c&31];
  return 'YCJ1-'+body.match(/.{1,8}/g).join('-');
 }
@@ -1317,7 +1487,7 @@ function ycjDecode(str){
  const c=crc16(bytes);const want=AL[(c>>10)&31]+AL[(c>>5)&31]+AL[c&31];
  if(want!==crcS.replace(/O/g,'0').replace(/[IL]/g,'1'))throw new Error('檢查碼不符：可能少複製或打錯了');
  const pos={i:0};const ver=vget(bytes,pos),date=vget(bytes,pos);const R_=revMap();
- const out={ver,date,vals:{},flags:new Set(),meds:[],unknown:0};
+ const out={ver,date,vals:{},flags:new Set(),meds:[],cust:[],unknown:0};
  while(pos.i<bytes.length){const t=vget(bytes,pos),n_=vget(bytes,pos);
   for(let j=0;j<n_;j++){
    if(t===1){const i=vget(bytes,pos),v=vget(bytes,pos);const k=R_.get(i);if(k)out.vals[k]=v;else out.unknown++}
@@ -1325,8 +1495,9 @@ function ycjDecode(str){
    else if(t===3){const a=vget(bytes,pos),L=vget(bytes,pos);const ka=R_.get(a);for(let q=0;q<L;q++){const d=vget(bytes,pos),h=vget(bytes,pos);const kd=R_.get(d);if(ka)out.meds.push({scope:ka,drug:kd?kd.slice(5):'',h});else out.unknown++}}
    else if(t===5){const a=vget(bytes,pos),w=vget(bytes,pos),L=vget(bytes,pos);for(let q=0;q<L;q++){const i=vget(bytes,pos);const k=R_.get(i);if(k)out.vals[k]=w;else out.unknown++}}
    else if(t===6){const a=vget(bytes,pos),w=vget(bytes,pos),mk=vget(bytes,pos);const ka=R_.get(a);const k=ka?ka.slice(4):null;const L=k?(MFU[k]||[]):[];let x=mk,ix=0;while(x>0){if(x%2){if(L[ix])out.vals[`cfu:${k}:${L[ix]}`]=w;else out.unknown++}x=Math.floor(x/2);ix++}}
+   else if(t===7){const L=vget(bytes,pos);const u=bytes.slice(pos.i,pos.i+L);pos.i+=L;const t3=new TextDecoder().decode(new Uint8Array(u)).split('\t');out.cust.push({n:t3[0]||'',v:t3[1]||'',u:t3[2]||''})}
    else{out.unknown++;break}}
-  if(t>6)break;}
+  if(t>7)break;}
  return out;
 }
 /* 上次的資料 */
@@ -1342,6 +1513,8 @@ function ycjSummary(D){
  const mods=MODS.filter(m=>D.flags.has('mod:'+m.k));
  mods.forEach(m=>{const dx=[...D.flags].filter(k=>k.startsWith(`cdx:${m.k}:`)).map(k=>k.split(':')[2]);const md=D.meds.filter(x=>x.scope==='mod:'+m.k).map(x=>medTextByHash(x.scope,x.h,x.drug).split(' (')[0].split('（')[0]);const fu=Object.entries(D.vals).filter(([k])=>k.startsWith(`cfu:${m.k}:`)).map(([k,v])=>`${k.split(':').slice(2).join(':')}（${(FUT.find(t=>t[0]===v-2)||[0,v-2+' 週'])[1]}）`);L.push(`${m.n}：診斷 ${dx.join(', ')||'—'}；用藥 ${md.join('、')||'—'}${fu.length?'；追蹤 '+fu.join('、'):''}`)});
  CC.filter(c=>D.flags.has('cc:'+c.id)).forEach(c=>{const dx=c.dx.filter(d=>D.flags.has(`${c.id}:dx:${d.k}`)).map(d=>d.l);L.push(`主訴：${c.n}${dx.length?'（'+dx.join('、')+'）':''}`)});
+ if(D.cust.length)L.push('其他抽血：'+D.cust.map(c=>`${c.n} ${c.v}${c.u?' '+c.u:''}`).join('、'));
+ {const c=[...D.flags].filter(k=>k.startsWith('cs:')).map(k=>{const [,m,x]=k.split(':');const L_=m==='ac'?ACON:(CONS[m]||[]);const f=L_.find(q=>q[0]===x);return f?f[1]:''}).filter(Boolean);if(c.length)L.push('考量：'+c.join('、'))}
  if(D.unknown)L.push(`有 ${D.unknown} 項無法辨識（自訂文字，或較新版本才有的選項），已略過。`);
  return L;
 }
@@ -1361,6 +1534,8 @@ function ycjApply(D,opt){
   if(opt.prev&&D.vals['f:p_egfr']!==undefined&&days>=270&&$('c_prev')&&!$('c_prev').value)$('c_prev').value=D.vals['f:p_egfr']/sc('p_egfr');
   PREVD=dstr(D.date);
  }
+ if(opt.pt&&D.cust.length){CUST=D.cust.map(c=>({n:c.n,v:'',u:c.u,pv:c.v}));renderCust()}
+ [...D.flags].filter(k=>k.startsWith('cs:')).forEach(k=>{const [,m,x]=k.split(':');if((m==='ac'&&opt.cc)||(m!=='ac'&&opt.mods)){CS[m]=CS[m]||{};CS[m][x]=true}});
  if(opt.mods){
   MODS.forEach(m=>{const cb=document.querySelector(`[data-mod="${m.k}"]`);if(D.flags.has('mod:'+m.k))cb.checked=true;
    [...D.flags].filter(k=>k.startsWith(`cdx:${m.k}:`)).forEach(k=>CH[m.k].dx[k.split(':')[2]]=true);
@@ -1403,18 +1578,67 @@ const MDX={
  ckd:[['N18.1','CKD stage 1'],['N18.2','CKD stage 2'],['N18.31','CKD stage 3a'],['N18.32','CKD stage 3b'],['N18.4','CKD stage 4'],['N18.5','CKD stage 5'],['E11.22','Type 2 DM with diabetic CKD'],['I12.9','Hypertensive CKD']],
  wt:[['E66.9','Obesity, unspecified'],['E66.01','Morbid obesity due to excess calories'],['E66.3','Overweight'],['E88.81','Metabolic syndrome']],
  smk:[['F17.210','Nicotine dependence, cigarettes'],['F17.290','Nicotine dependence, other tobacco product'],['Z71.6','Tobacco abuse counseling']],
+ thy:[['E03.9','Hypothyroidism, unspecified'],['E02','Subclinical (iodine-deficiency) hypothyroidism'],['E06.3','Autoimmune thyroiditis (Hashimoto)'],['E89.0','Postprocedural hypothyroidism'],['E05.90','Thyrotoxicosis, unspecified'],['E05.00','Graves disease without thyrotoxic crisis'],['E04.1','Nontoxic single thyroid nodule'],['E04.2','Nontoxic multinodular goiter'],['E07.9','Disorder of thyroid, unspecified'],['R94.6','Abnormal results of thyroid function studies']],
  trk:[['Z09','Follow-up exam after completed treatment'],['R74.01','Elevation of liver transaminase levels'],['D64.9','Anemia, unspecified'],['E61.1','Iron deficiency'],['R94.6','Abnormal results of thyroid function studies'],['E03.9','Hypothyroidism, unspecified'],['E04.1','Nontoxic single thyroid nodule'],['E79.0','Hyperuricemia without gout'],['R97.20','Elevated PSA'],['E55.9','Vitamin D deficiency'],['E53.8','Vitamin B12 deficiency'],['R73.03','Prediabetes'],['R91.1','Solitary pulmonary nodule'],['K80.20','Gallstone without cholecystitis'],['N28.1','Cyst of kidney, acquired'],['Z86.010','Personal history of colonic polyps'],['M81.0','Age-related osteoporosis']]};
 const MALT={
  htn:['NOR1 Norvasc (amlodipine) 5mg 1# QD','NOR1 Norvasc (amlodipine) 5mg 2# QD','MIC2 Micardis (telmisartan) 40mg 1# QD','MIC2 Micardis (telmisartan) 40mg 2# QD','TWY1 Twynsta (telmisartan 80/amlodipine 5) 1# QD','EXF1 Exforge (valsartan 80/amlodipine 5) 1# QD','EXF2 Exforge HCT (amlodipine 5/valsartan 160/HCTZ 12.5) 1# QD','COD6 Co-Diovan (valsartan 80/HCTZ 12.5) 1# QD','NAT2 Natrilix SR (indapamide) 1.5mg 1# QD','SPI1 Spironolactone 25mg 1# QD','CON1 Concor (bisoprolol) 5mg 1/2# QD','XAD1 Xadosin SR (doxazosin) 4mg 1# HS','續用原降壓藥（慢箋）'],
  dm:['VOL1 Volv (metformin) 500mg 1# BID PC','VOL1 Volv (metformin) 500mg 2# BID PC','CTL1 C.T.L XR (metformin XR) 500mg 2# QD 晚餐後','DIM3 Diamicron MR (gliclazide) 30mg 1# QD AC','JAR3 Jardiance (empagliflozin) 10mg 1# QD','FOR3 Forxiga (dapagliflozin) 10mg 1# QD','TRA5 Trajenta (linagliptin) 5mg 1# QD','JAN1 Januvia (sitagliptin) 100mg 1# QD','GLY1 Glyxambi (empagliflozin 25/linagliptin 5) 1# QD','XIG1 Xigduo XR (dapagliflozin 10/metformin XR 1000) 1# QD 晚餐後','OZEA Ozempic (semaglutide) 0.25mg SC qw x4 → 0.5mg qw','TRUA Trulicity (dulaglutide) 0.75mg SC qw','續用原降血糖藥（慢箋）'],
- lip:['TUL1 Tulip (atorvastatin) 10mg 1# QD','TUL1 Tulip (atorvastatin) 10mg 2# QD','CRE2 Crestor (rosuvastatin) 10mg 1# QD','CRE2 Crestor (rosuvastatin) 10mg 2# QD','EZE1 Ezetrol (ezetimibe) 10mg 1# QD','ATO2 Atozet (atorvastatin 20/ezetimibe 10) 1# QD','LIP5 Lipanthyl (fenofibrate) 160mg 1# QD','OMA1 Omacor 1g 2# BID','續用原降血脂藥（慢箋）'],
+ lip:['TUL1 Tulip (atorvastatin) 10mg 1# QD','TUL1 Tulip (atorvastatin) 10mg 2# QD','CRE2 Crestor (rosuvastatin) 10mg 1# QD','CRE2 Crestor (rosuvastatin) 10mg 2# QD','EZE1 Ezetrol (ezetimibe) 10mg 1# QD','ATO2 Atozet (atorvastatin 20/ezetimibe 10) 1# QD','LIV2 Livalo (pitavastatin) 2mg 1# QD','LIV2 Livalo (pitavastatin) 2mg 2# QD','LIP5 Lipanthyl (fenofibrate) 160mg 1# QD','OMA1 Omacor 1g 2# BID','續用原降血脂藥（慢箋）'],
  ckd:['APR3 Aprovel (irbesartan) 300mg 1/2# QD','APR3 Aprovel (irbesartan) 300mg 1# QD','FOR3 Forxiga (dapagliflozin) 10mg 1# QD','KER2 Kerendia (finerenone) 20mg 1# QD','LOK5 Lokelma 5g 1 pack QD（高血鉀）','PRO14 Procal (calcium acetate) 667mg 1# TID 隨餐（高血磷）'],
  wt:['MOUC Mounjaro（tirzepatide） 2.5 mg SC qw（起始劑量）','WEGA Wegovy（semaglutide） 0.25 mg SC qw（起始劑量）','CON7 Contrave（naltrexone/bupropion） 1# QD AM （起始劑量）','XEN1 Xenical（orlistat） 120mg 1# TID 隨含脂餐'],
+ thy:[eltRx(25),eltRx(50),eltRx(75),eltRx(100),eltRx(125),'MET7 Methimazole 5mg 1# QD（5 mg/day）','MET7 Methimazole 5mg 2# QD（10 mg/day）','MET7 Methimazole 5mg 2# BID（20 mg/day）','NEW4 Newmazole (carbimazole) 10mg 1# QD','NEW4 Newmazole (carbimazole) 10mg 1# BID','POL1 Polupi (PTU) 50mg 2# TID（第一孕期或計畫懷孕）','PRO13 Propranolol 10mg 1# TID（控制心悸、手抖；心跳 <60 停）','續用原甲狀腺藥（慢箋）'],
  smk:['CHA4 Champix (varenicline) 1mg 1/2# QD (D1–3) → 1/2# BID (D4–7) → 1# BID（第 8 天停菸）','CHA4 Champix (varenicline) 1mg 1# BID','NICOP Nicotinell TTS 20 貼片 1 片 QD','NIC4 Nicotinell 2mg 口嚼錠 q1-2h PRN（想抽時）','NICQ Nicorette QuickMist 口腔噴劑 1-2 噴 PRN（想抽時）','WEL4 Wellbutrin XL (bupropion) 150mg 1# QD AM x 3 days → 2# QD AM']};
-const MFU={htn:['Cr/eGFR','K','Na','Uric acid','FPG','HbA1c','Lipid profile','UACR','U/A','ECG','722 居家血壓'],dm:['HbA1c','FPG','Lipid profile','Cr/eGFR','UACR','ALT','Vit B12','K','眼底檢查','足部檢查'],lip:['Lipid profile','ALT','CK','HbA1c'],ckd:['Cr/eGFR','UACR','K','CBC (Hb)','Ca/P','HCO3','iPTH','U/A','腎臟超音波'],wt:['體重、腰圍','FPG/HbA1c','Lipid profile','ALT','Cr/eGFR','TSH'],smk:['吐氣 CO','LDCT','口腔黏膜檢查'],trk:['ALT','AST','Hb','Ferritin','TSH','FT4','Uric acid','Cr','PSA','25-OH Vit D','Vit B12','CRP','HbA1c','AFP','腹部超音波','甲狀腺超音波','胸部 CT','大腸鏡','胃鏡','骨密度 DXA']};
+const MFU={htn:['Cr/eGFR','K','Na','Uric acid','FPG','HbA1c','Lipid profile','UACR','U/A','ECG','722 居家血壓'],dm:['HbA1c','FPG','Lipid profile','Cr/eGFR','UACR','ALT','Vit B12','K','眼底檢查','足部檢查'],lip:['Lipid profile','ALT','CK','HbA1c'],ckd:['Cr/eGFR','UACR','K','CBC (Hb)','Ca/P','HCO3','iPTH','U/A','腎臟超音波'],wt:['體重、腰圍','FPG/HbA1c','Lipid profile','ALT','Cr/eGFR','TSH'],smk:['吐氣 CO','LDCT','口腔黏膜檢查'],thy:['TSH','FT4','FT3','CBC','ALT','TRAb','anti-TPO','甲狀腺超音波'],trk:['ALT','AST','Hb','Ferritin','TSH','FT4','Uric acid','Cr','PSA','25-OH Vit D','Vit B12','CRP','HbA1c','AFP','腹部超音波','甲狀腺超音波','胸部 CT','大腸鏡','胃鏡','骨密度 DXA']};
+/* 每個藥的角色（顯示在按鈕上） */
+const ROLE={NOR1:'CCB',MIC2:'ARB・護腎、蛋白尿',TWY1:'ARB＋CCB 一顆',EXF1:'ARB＋CCB 一顆',EXF2:'三合一一顆',COD6:'ARB＋利尿劑',NAT2:'利尿劑・痛風避免',SPI1:'MRA・頑固型、注意 K',CON1:'β-blocker・心跳快、CAD、AF',CON3:'β-blocker・HFrEF',XAD1:'α-blocker・BPH',APR3:'ARB・蛋白尿',ACE1:'ACEi',
+ VOL1:'第一線・便宜',CTL1:'第一線・腸胃較少',DIM3:'SU・便宜強效・低血糖風險',JAR3:'SGLT2i・心衰竭、CKD、減重',FOR3:'SGLT2i・心衰竭、CKD',TRA5:'DPP-4i・長者、低血糖少、腎不用調',JAN1:'DPP-4i',GLY1:'SGLT2i＋DPP-4i 一顆',XIG1:'SGLT2i＋metformin 一顆',OZEA:'GLP-1・減重、ASCVD・打針',TRUA:'GLP-1・打針',LANA:'基礎胰島素・打針',
+ TUL1:'Statin・CYP3A4 代謝',CRE2:'Statin・高強度、交互作用少',LIV2:'Statin・交互作用少、血糖影響小',EZE1:'加強降 LDL',ATO2:'Statin＋ezetimibe 一顆',LIP5:'TG ≥500',OMA1:'降 TG',LEQA:'半年一針・條件給付',NIL2:'statin 不耐受・自費',KER2:'DKD 蛋白尿',LOK5:'高血鉀',PRO14:'高血磷',
+ ELT2:'甲狀腺素',MET7:'抗甲狀腺・首選',NEW4:'抗甲狀腺',POL1:'抗甲狀腺・第一孕期',PRO13:'β-blocker・心悸手抖',
+ MOUC:'GLP-1/GIP・自費',WEGA:'GLP-1・自費',CON7:'口服・自費',XEN1:'口服・油便',
+ CHA4:'戒菸最有效',NICOP:'長效尼古丁',NIC4:'短效・想抽時',NICQ:'短效噴劑',WEL4:'兼顧情緒',
+ ACE6:'止痛・胃腎較安全',NAP2:'NSAID・CV 風險較低',MEL6:'NSAID',CEL2:'COX-2・胃較安全',LEV3:'抗組織胺・可能嗜睡',CLA3:'抗組織胺・不嗜睡',ALL5:'抗組織胺・不嗜睡',HIR1:'含 pseudoephedrine・血壓↑',BUW1:'抗膽鹼・長者避免',TRI9:'嗜睡・抗膽鹼',DIP1:'止暈・抗膽鹼',MUS2:'肌鬆・嗜睡',PRE6:'類固醇・血糖↑',DOX6:'孕婦避免',CIN3:'孕婦避免',COL4:'痛風急性期',ALL3:'降尿酸・先驗 HLA-B*5801',FEB1:'降尿酸・CV 慎用',EUR2:'促尿酸排泄',TED1:'鐵劑',MET2:'B12',DOM2:'止吐・QT'};
+const roleOf=t=>ROLE[String(t).trim().replace(/^(＋|改 ?|原 statin＋)/,'').split(/\s/)[0]]||'';
+/* 這次的考量：點了會改推薦（規則決定加哪一類，考量決定這一類選哪個） */
+const CONS={htn:[['prot','蛋白尿／CKD'],['tachy','心跳快／CAD'],['edema','腳腫'],['gout','痛風'],['old','長者、怕頭暈'],['one','想一天一顆']],
+ dm:[['wtl','想減重'],['hypo','怕低血糖'],['hfckd','心衰竭／CKD'],['cost','在意費用'],['noinj','不想打針']],
+ lip:[['ddi','有交互作用（CYP3A4）'],['myal','肌肉痠痛'],['cost','在意費用']]};
+const ACON=[['drive','要開車、不想嗜睡'],['gi','胃不好'],['cv','心血管風險高'],['old','長者（避開抗膽鹼）'],['preg','懷孕／哺乳']];
+let CS={};const cs=(k,x)=>!!(CS[k]&&CS[k][x]);
+const consRow=(k,list,title)=>`<div class="sm">${title}</div><div class="tgs">${list.map(([x,l])=>`<button type="button" class="tg2 cons${cs(k,x)?' on':''}" data-cs="${k}:${x}">${esc(l)}</button>`).join('')}</div>`;
+function consHtml(k){return CONS[k]?consRow(k,CONS[k],'這次的考量（點了會改推薦用藥）'):''}
+const SED=/^(LEV3|HIR1|TRI9|DIP1|MUS2|SUZ1|EUF1)/,ACH=/^(BUW1|TRI9|DIP1|MUS2|HIR1)/,PRX=/^(NAP2|MEL6|CEL2|DOX6|CIN3|HIR1|BAK1)/;
+function consFilter(rec,all,X,o){let out=rec.slice();
+ const swap=(bad,alts,why)=>{const hit=out.filter(m=>bad.test(m.l));if(!hit.length)return;out=out.filter(m=>!bad.test(m.l));let a=null;for(const re of alts){a=all.find(m=>re.test(m.l));if(a)break}if(a&&!out.includes(a))out.push(a);X.consNote.push(`${why}：${hit.map(m=>m.l.split(' ')[0]).join('、')}${a?' → '+a.l.split(' ')[0]:' 不推薦'}`)};
+ if(o.drive)swap(SED,[/^CLA3/,/^ALL5/],'要開車');
+ if(o.old)swap(ACH,[],'長者（抗膽鹼）');
+ if(o.preg)swap(PRX,[/^ACE6/],'懷孕／哺乳');
+ if(o.gi&&o.cv)swap(/^(NAP2|MEL6|CEL2)/,[/^ACE6/],'胃不好＋心血管風險');
+ else if(o.gi)swap(/^(NAP2|MEL6)/,[/^CEL2/,/^ACE6/],'胃不好');
+ else if(o.cv)swap(/^(MEL6|CEL2)/,[/^NAP2/,/^ACE6/],'心血管風險');
+ return out}
+/* 用藥衝突：跨主訴與慢性病 */
+let KNOWN=null;
+function rxCodes(rx){if(!KNOWN){KNOWN=new Set(Object.keys(ROLE));(typeof FX!=='undefined'?FX:[]).forEach(d=>KNOWN.add(d.code))}const C=new Set();rx.forEach(m=>(String(m).match(/\b[A-Z][A-Z0-9]{2,5}\b/g)||[]).forEach(t=>{if(KNOWN.has(t))C.add(t)}));return C}
+function confWarn(rx,p,AC){const C=rxCodes(rx),h=(...a)=>a.some(x=>C.has(x)),cnt=a=>a.filter(x=>C.has(x)).length,out=[];
+ const RAS=['MIC2','TWY1','EXF1','EXF2','COD6','APR3','ACE1'],DIU=['NAT2','EXF2','COD6','FUR1'],NS=['NAP2','MEL6','CEL2'];
+ const gout=p.gout||cs('htn','gout')||AC.some(a=>/M10|E79\.0/.test(a.A.join(' ')));
+ if(cnt(RAS)>=2)out.push('衝突：兩種 ARB／ACEi 併用（dual RAS）→ 只留一種');
+ if(gout&&h(...DIU))out.push('衝突：痛風或高尿酸，處方有利尿劑（尿酸會升高）→ 改 CCB 或 α-blocker');
+ if(has(p.k)&&p.k>=5&&h(...RAS)&&h('SPI1','KER2'))out.push(`衝突：K ${p.k}，ARB＋spironolactone／finerenone 高血鉀風險`);
+ if((p.preg||cs('ac','preg')||sel('th_tri')>=1)&&h(...RAS,'SPI1','TUL1','CRE2','LIV2','ATO2','EZE1'))out.push('衝突：懷孕／備孕不要用 ACEi/ARB、spironolactone、statin');
+ if(h('OZEA','TRUA','MOUC','WEGA')&&h('TRA5','JAN1','GLY1'))out.push('衝突：GLP-1 類與 DPP-4i 不併用');
+ if(h('DIM3')&&(ck('d_hypo')||cs('dm','hypo')))out.push('衝突：有低血糖或怕低血糖，處方有 SU');
+ if(h('PRO13')&&(CCS.some(i=>/asthma|copd/.test(i.c.id))||AC.some(a=>/J45|J44/.test(a.A.join(' ')))))out.push('衝突：propranolol（非選擇性 β-blocker）氣喘、COPD 禁用');
+ if(h('PRO13')&&h('CON1','CON3'))out.push('衝突：兩種 β-blocker');
+ if(h(...NS)&&h(...RAS)&&h(...DIU))out.push('衝突：NSAID＋ARB＋利尿劑（triple whammy）急性腎損傷風險');
+ if(cnt(['MET7','NEW4','POL1'])>=2)out.push('衝突：抗甲狀腺藥重複');
+ if(h('ELT2')&&h('TED1','SID3','PRO14'))out.push('提醒：Eltroxin 和鐵劑、鈣片間隔 4 小時');
+ if(h('MET7','NEW4','POL1')&&AC.some(a=>/fever|sore|pharyn|URI/i.test(a.cc)))out.push('注意：抗甲狀腺藥＋發燒或喉嚨痛 → 今天驗 CBC 排除顆粒球缺乏');
+ if(has(p.crcl)&&rx.some(m=>/apixaban|rivaroxaban|edoxaban|dabigatran|Eliquis|Xarelto|Lixiana|Pradaxa/i.test(m)))out.push(`DOAC 劑量用 CrCl（Cockcroft–Gault）${p.crcl} mL/min`);
+ return out}
 const MC={};
 function chronicChips(k,r,p){
- const codes=[...new Set((r.A.join(' ').match(/\b[A-Z]\d{2}(?:\.[0-9A-Z]{1,4})?/g)||[]))].filter(c=>/\./.test(c)||/^I10$/.test(c));
+ const codes=[...new Set((r.A.join(' ').match(/\b[A-Z]\d{2}(?:\.[0-9A-Z]{1,4})?/g)||[]))].filter(c=>/\./.test(c)||/^(I10|E02)$/.test(c));
  if(k==='dm'){const rx=r.rx.join(' ');if(/LANA|insulin/i.test(rx)||sel('d_lvl')===6)codes.push('Z79.4');if(/OZEA|TRUA|glutide/i.test(rx)||sel('d_lvl')===5)codes.push('Z79.85');if(/VOL1|DIM3|JAR3|FOR3|TRA5|GLY1|JAN|XIG/.test(rx)||sel('d_lvl')>=1)codes.push('Z79.84');if(ck('d_hypo'))codes.push('E11.649');}
  if(k==='wt'&&has(p.bmi)&&p.bmi>=24){let ms=0;}
  if(k==='smk')codes.push('Z71.6');
@@ -1429,9 +1653,9 @@ function chronicChips(k,r,p){
  const S=CH[k];
  const dxb=dxl.map(([c,en],i)=>{const rc=recDx.has(c),o=!!S.dx[c];return `<button type="button" class="tg2${o?' on':''}${rc?' rec':''}" style="${rc?rot():''}" data-chm="${k}" data-chg="dx" data-chi="${i}">${esc(c)} <small>${esc(en)}</small></button>`}).join('');
  const LL=LAST[k]||[];const isLast=m=>LL.some(x=>m.startsWith(x.drug+' ')&&(x.h===h8(m)||!meds.some(q=>q.startsWith(x.drug+' ')&&h8(q)===x.h)));
- const mdb=meds.map((m,i)=>{const rc=recMed.has(m),o=!!S.med[m];return `<button type="button" class="tg2${o?' on':''}${rc?' rec':''}${isLast(m)?' last':''}" style="${rc?rot():''}" data-chm="${k}" data-chg="med" data-chi="${i}">${esc(m)}</button>`}).join('');
+ const mdb=meds.map((m,i)=>{const rc=recMed.has(m),o=!!S.med[m];return `<button type="button" class="tg2${o?' on':''}${rc?' rec':''}${isLast(m)?' last':''}" style="${rc?rot():''}" data-chm="${k}" data-chg="med" data-chi="${i}">${esc(m)}${roleOf(m)?` <small class="role">${esc(roleOf(m))}</small>`:''}</button>`}).join('');
  const lastInfo=(LL.length||Object.keys(LASTFU[k]||{}).length)?`<div class="lastinfo">上次（${PREVD}）：${esc(LL.map(x=>x.text.split(' (')[0].split('（')[0]).join('、')||'—')}${Object.keys(LASTFU[k]||{}).length?'；追蹤 '+esc(Object.keys(LASTFU[k]).join('、')):''} <button type="button" class="b o sm2" data-lastm="${k}">沿用上次</button></div>`:'';
- return `${lastInfo}<div class="adoptrow"><button type="button" class="b adopt" data-adoptm="${k}">全部採用推薦</button><button type="button" class="b g" data-unselm="${k}">清除已選</button></div>
+ return `${lastInfo}${consHtml(k)}<div class="adoptrow"><button type="button" class="b adopt" data-adoptm="${k}">全部採用推薦</button><button type="button" class="b g" data-unselm="${k}">清除已選</button></div>
  <div class="sm">診斷（<span class="reck">亮框＝推薦</span>，點了才寫進病歷）</div><div class="tgs">${dxb}</div>
  <div class="sm">用藥（推薦依上面的數值與規則；也可以改點院內其他品項）</div><div class="tgs">${mdb}</div>
  <div class="sm">追蹤檢查（可選時間）</div>${fuHtml('m:'+k,fuc,S.fu)}`;
@@ -1441,13 +1665,17 @@ function adoptInst(inst){const X=ctx(inst,pt()),st=inst.st;X.dxRec.forEach(d=>st
 function fuObj(owner){if(owner.startsWith('m:'))return CH[owner.slice(2)].fu;const inst=findInst(owner.slice(2));return inst?inst.st.fu:null}
 function fuRefresh(owner){if(owner.startsWith('m:'))build();else{const inst=findInst(owner.slice(2));refresh(inst)}}
 
+/* 抽血單合併：同一項不同寫法視為同一項 */
+const LNORM={'Cr':'Cr/eGFR','Creatinine':'Cr/eGFR','eGFR':'Cr/eGFR','Hb':'CBC','CBC (Hb)':'CBC','CBC (WBC)':'CBC','CBC/DC':'CBC','UA':'Uric acid','尿酸':'Uric acid','Free T4':'FT4','A1c':'HbA1c','LDL':'Lipid profile','LDL-C':'Lipid profile','25-OH Vit D':'Vit D','B12':'Vit B12'};
 const WKL={0:'今天','-1':'下次回診',1:'1 週',2:'2 週',4:'4 週',8:'6–8 週',12:'3 個月',17:'4 個月',26:'6 個月',52:'1 年'};
 const FAST=/FPG|Lipid/;
 let edited=false;
 function build(){
  const p=pt();const order=MODS.map(m=>m.k).filter(on);
  MODS.forEach(m=>{$('m_'+m.k).hidden=!on(m.k)});
+ egfrUI(p);
  renderCCs();
+ $('acCons').innerHTML=CCS.length?consRow('ac',ACON,'急性用藥考量（點了會改推薦）'):'';
  $('prevBox').innerHTML=prevBoxHtml();
  const AC=CCS.map(i=>evalCC(i,p));
  {const seen=new Set();AC.forEach(a=>{a.rx=a.rx.filter(r=>{const code=r.split(' ')[0];if(/^[A-Z][A-Z0-9]{2,5}$/.test(code)&&seen.has(code)){a.P=a.P.map(l=>l==='  '+r?`  ${code}：同上，不重複開`:l);return false}seen.add(code);return true})})}
@@ -1459,9 +1687,10 @@ function build(){
  if(on('ckd'))res.ckd=CKD(p,ctx);
  if(on('wt'))res.wt=WTM(p);
  if(on('smk'))res.smk=SMK(p);
+ if(on('thy'))res.thy=THY(p);
  if(on('trk'))res.trk=TRK(p);
  order.forEach(k=>{const r=res[k];$('chips_'+k).innerHTML=chronicChips(k,r,p);r.rxRec=r.rx;r.rx=MC[k].med.filter(m=>CH[k].med[m]);});
- const names={htn:'HTN',dm:'T2DM',lip:'HLD',ckd:'CKD',wt:'Obesity',smk:'Smoking',trk:'Other F/U'};
+ const names={htn:'HTN',dm:'T2DM',lip:'HLD',ckd:'CKD',wt:'Obesity',smk:'Smoking',thy:'Thyroid',trk:'Other F/U'};
  const S=[];
  if(AC.length)S.push(`S: CC: ${AC.map(a=>a.cc).join('; ')}.`);
  if(order.length)S.push(`${AC.length?'   Also':'S:'} ${p.visit?'initial visit':'F/U'} for ${order.map(k=>names[k]).join(', ')}.`);
@@ -1477,19 +1706,27 @@ function build(){
  const peU=[...new Set(pe)];
  const acPe=AC.flatMap(a=>a.pe);
  if(peU.length||acPe.length){if(peU.length)O.push('   PE: '+peU.join('; ')+'.');if(acPe.length)O.push('   '+(peU.length?'':'PE: ')+acPe.join(', ')+'.')}else O.push('   PE: [只寫實際有做的項目]');
- if(order.length){const L=[];
-  if(on('dm')&&has(n('d_a1c')))L.push('HbA1c '+pv('d_a1c','%'));
-  if(on('lip')){[['l_tc','TC'],['l_ldl','LDL-C'],['l_hdl','HDL-C'],['l_tg','TG']].forEach(([i,l])=>{if(has(n(i)))L.push(l+' '+pv(i))})}
-  if(has(p.egfr))L.push('eGFR '+pv('p_egfr'));if(has(p.uacr))L.push('UACR '+pv('p_uacr',' mg/g'));if(has(p.k))L.push('K '+pv('p_k'));
-  O.push('   Lab ([date]): '+(L.length?L.join(', '):'[ ]')+'.');}
+ {const L=[];
+  if(on('dm')&&has(n('d_a1c')))L.push('HbA1c '+pvF('d_a1c','%',p));
+  if(on('dm')&&has(n('d_fpg')))L.push('FPG '+pvF('d_fpg','',p));
+  if(on('lip')){[['l_tc','TC'],['l_ldl','LDL-C'],['l_hdl','HDL-C'],['l_tg','TG']].forEach(([i,l])=>{if(has(n(i)))L.push(l+' '+pvF(i,'',p))})}
+  if(on('thy'))[['th_tsh','TSH'],['th_ft4','FT4'],['th_ft3','FT3']].forEach(([i,l])=>{if(has(n(i)))L.push(l+' '+pvF(i,'',p))});
+  if(has(p.cr))L.push('Cr '+pvF('p_cr',' mg/dL',p));
+  if(has(p.egfr))L.push(p.egfrSrc?`eGFR ${p.egfr} (CKD-EPI 2021${p.egfrSrc==='crprev'?', from prev Cr':''})`:'eGFR '+pv('p_egfr'));
+  if(has(p.crcl))L.push(`CrCl ${p.crcl} mL/min (Cockcroft-Gault)`);
+  if(has(p.uacr))L.push('UACR '+pvF('p_uacr',' mg/g',p));if(has(p.k))L.push('K '+pvF('p_k','',p));if(has(p.na))L.push('Na '+pvF('p_na','',p));
+  AC.forEach(a=>L.push(...a.labs));
+  CUST.forEach(c=>{if(c.v!=='')L.push(`${c.n} ${c.v}${c.u?' '+c.u:''}${c.pv!==undefined&&c.pv!==''?` (prev ${c.pv})`:''}`);else if(c.pv!==undefined&&c.pv!=='')L.push(`${c.n} ${c.pv}${c.u?' '+c.u:''} (prev ${PREVD}, no new data)`)});
+  if(order.length||L.length)O.push('   Lab ([date]): '+(L.length?L.join(', '):'[ ]')+'.');}
  const A=['A:'];let i=1;AC.forEach(a=>a.A.forEach(x=>A.push(`   ${i++}. ${x}`)));order.forEach(k=>{const sl=MC[k].dx.filter(c=>CH[k].dx[c]);A.push(`   ${i++}. ${sl.length?sl.map(c=>`${MC[k].dxen[c]||c} (${c})`).join(' + '):'[ ]'}; ${res[k].info||''}`)});
  const YC=ycjEncode();if(YC)A.push('   YCJ: '+YC);
  const P=['P:'];let j=1;
  AC.forEach(a=>a.P.forEach((x,ix)=>P.push(ix===0?`   ${j++}. ${x}`:`     ${x.trim()}`)));
  order.forEach(k=>{const r=res[k];P.push(`   ${j++}. ${r.P[0]}`);r.rx.forEach(x=>P.push(`     ${x}`));r.P.slice(1).filter(x=>x!==''&&!r.rxRec.includes(x.trim())).forEach(x=>P.push(`     ${x.trim()}`))});
  let fu=99,grp={},goals=[];
- const fi={};order.forEach(k=>Object.entries(CH[k].fu).forEach(([n_,w])=>{fi[n_]=n_ in fi?Math.min(fi[n_]===-1?998:fi[n_],w===-1?998:w):w}));
- AC.forEach(a=>a.fu.forEach(([n_,w])=>{fi[n_]=n_ in fi?Math.min(fi[n_]===-1?998:fi[n_],w===-1?998:w):w}));
+ const fi={};const fadd=(n0,w)=>{const n_=LNORM[n0]||n0;fi[n_]=n_ in fi?Math.min(fi[n_]===-1?998:fi[n_],w===-1?998:w):w};
+ order.forEach(k=>Object.entries(CH[k].fu).forEach(([n_,w])=>fadd(n_,w)));
+ AC.forEach(a=>a.fu.forEach(([n_,w])=>fadd(n_,w)));
  Object.keys(fi).forEach(k=>{if(fi[k]===998)fi[k]=-1});
  if(order.length)fu=Math.min(...order.map(k=>res[k].fu));
  else{const ws=Object.values(fi).filter(w=>w>0);if(ws.length)fu=Math.min(...ws);else if(Object.values(fi).includes(-1))fu=1;}
@@ -1502,8 +1739,9 @@ function build(){
  P.push(`   ${j++}. Education: ${edu.join(' ')}`);
  P.push(fu<99?`   ${j++}. F/U OPD in ${WKL[fu]||fu+' 週'}${fu>=12&&order.length?'（慢箋）':''}. Return earlier if worse.`:`   ${j++}. F/U OPD PRN or in [ ] days.`);
  $('gout').value=[...S,...O,...A,...P].join('\n');edited=false;$('gedit').hidden=true;
- const warn=AC.flatMap(a=>a.warn).concat(order.flatMap(k=>res[k].warn));
- const allRx=AC.flatMap(a=>a.rx).concat(order.flatMap(k=>res[k].rx));warn.push(...ddiWarn(allRx),...renalWarn(allRx,p.egfr));
+ const warn=rangeWarn().concat(AC.flatMap(a=>a.warn)).concat(order.flatMap(k=>res[k].warn));
+ const allRx=AC.flatMap(a=>a.rx).concat(order.flatMap(k=>res[k].rx));warn.push(...confWarn(allRx,p,AC),...ddiWarn(allRx),...renalWarn(allRx,p.egfr));
+ {const ab=abnList(p);if(ab.length)warn.push('異常數值（需要的話寫進 A）：'+ab.join('、'))}
  const newRx=order.flatMap(k=>res[k].rx).filter(x=>/^[A-Z]{2,5}\d|^\S+ \d/.test(x)&&!/續用|維持|可考慮|自費|已在/.test(x));
  if(newRx.length>=3)warn.unshift(`這次慢性病處方共 ${newRx.length} 項：新病人一次加多種藥，考慮分次加（先處理最優先的），方便判斷副作用。`);
  $('gwarn').innerHTML=warn.length?'<ul class="wl">'+[...new Set(warn)].map(w=>'<li>'+esc(w)+'</li>').join('')+'</ul>':'';
@@ -1537,12 +1775,13 @@ document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.c
 document.addEventListener('contextmenu',e=>{const t=e.target.closest&&e.target.closest('.tri');if(!t||!inCards(t))return;e.preventDefault();clearTimeout(lp);if(recent())return;triSet(t,-1)});
 document.addEventListener('click',e=>{
  const t=e.target.closest&&e.target.closest('.tri,.tg2,[data-rm],[data-tpladd],[data-tplmod],[data-adopt],[data-unsel],[data-adoptm],[data-unselm],[data-fux],[data-lastm]');if(!t||!inCards(t))return;
+ if(t.dataset.cs){const [k,x]=t.dataset.cs.split(':');CS[k]=CS[k]||{};if(CS[k][x])delete CS[k][x];else CS[k][x]=true;refreshAll();return}
  if(t.dataset.adopt){const inst=findInst(t.dataset.adopt);adoptInst(inst);refresh(inst);return}
  if(t.dataset.unsel){const inst=findInst(t.dataset.unsel);Object.assign(inst.st,{dx:{},med:{},lab:{},fu:{}});refresh(inst);return}
  if(t.dataset.adoptm){adoptModule(t.dataset.adoptm);build();return}
  if(t.dataset.lastm){useLast(t.dataset.lastm);build();return}
  if(t.dataset.pst){const v=+t.dataset.v;PST[t.dataset.pst]=PST[t.dataset.pst]===v?0:v;if(!PST[t.dataset.pst])delete PST[t.dataset.pst];build();return}
- if(t.dataset.reuse){const pc=PREVCC.find(x=>x.id===t.dataset.reuse);if(pc&&!CCS.some(x=>x.c.id===pc.id))CCS.push({uid:++ccSeq,c:pc.c,st:JSON.parse(JSON.stringify(pc.st)),dur:pc.dur,rxd:pc.rxd});build();return}
+ if(t.dataset.reuse){const pc=PREVCC.find(x=>x.id===t.dataset.reuse);if(pc&&!CCS.some(x=>x.c.id===pc.id)){const st=JSON.parse(JSON.stringify(pc.st));st.pnum=st.num||{};st.num={};CCS.push({uid:++ccSeq,c:pc.c,st,dur:pc.dur,rxd:pc.rxd})}build();return}
  if(t.dataset.unselm){CH[t.dataset.unselm]={dx:{},med:{},fu:{}};build();return}
  if(t.dataset.chm){const k=t.dataset.chm,g=t.dataset.chg,key=MC[k][g][+t.dataset.chi];const o=CH[k][g];if(o[key])delete o[key];else o[key]=true;build();return}
  if(t.dataset.fuo){const ow=t.dataset.fuo,o=fuObj(ow);if(!o)return;
@@ -1569,6 +1808,16 @@ document.addEventListener('change',e=>{const t=e.target;if(!inCards(t))return;
  if(t.dataset.dur||t.dataset.rxd){if(t.dataset.dur)inst.dur=+t.value;else inst.rxd=+t.value;refresh(inst);}
 });
 document.addEventListener('keydown',e=>{const t=e.target;if(e.key==='Enter'&&t.classList&&t.classList.contains('funame')){e.preventDefault();const b=t.parentElement.querySelector('[data-fuadd]');if(b)b.click()}});
+/* ---------- 其他抽血數值（自己新增） ---------- */
+let CUST=[];
+function renderCust(){const box=$('custLab');if(!box)return;
+ box.innerHTML=CUST.map((c,i)=>`<div class="furow"><span>${esc(c.n)}</span><input data-cuv="${i}" type="text" inputmode="decimal" value="${esc(c.v)}" placeholder="${c.pv!==undefined&&c.pv!==''?'上次 '+esc(c.pv):'數值'}" style="max-width:7em"><span class="sm">${esc(c.u||'')}</span><button type="button" class="ccx" data-cux="${i}">✕</button></div>`).join('')+
+ `<div class="fuadd"><input id="cuN" placeholder="項目，例如 HBsAg、PSA"><input id="cuV" placeholder="數值" style="max-width:6em"><input id="cuU" placeholder="單位" style="max-width:5em"><button type="button" class="tg2" id="cuAdd">＋加入</button></div>`}
+function cuAdd(){const nm=$('cuN').value.trim();if(!nm)return;const v=$('cuV').value.trim(),u=$('cuU').value.trim();const ex=CUST.find(c=>c.n===nm);if(ex){ex.v=v;if(u)ex.u=u}else CUST.push({n:nm,v,u});renderCust();build();const f=$('cuN');if(f)f.focus()}
+document.addEventListener('click',e=>{const t=e.target;if(!t.closest)return;if(t.id==='cuAdd'){cuAdd();return}const x=t.closest('[data-cux]');if(x){CUST.splice(+x.dataset.cux,1);renderCust();build()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&/^cu[NVU]$/.test(e.target.id)){e.preventDefault();cuAdd()}});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&t.dataset.cuv!==undefined){const c=CUST[+t.dataset.cuv];if(c)c.v=t.value.trim()}});
+renderCust();
 /* ---------- 交互作用、腎劑量、去重、全部還原、自動暫存 ---------- */
 const D_RENAL=[
  /* diabetes */
@@ -1688,17 +1937,17 @@ const DDI=[
  [/DEX3|dextromethorphan/i,/LEE1|ZOL1|JUX1|EFE1|escitalopram|sertraline|fluoxetine/i,'Dextromethorphan＋SSRI：血清素症候群'],
  [/OZEA|TRUA|MOUC|WEGA|glutide|tirzepatide/i,/TRA5|JAN1|GLY1|gliptin/i,'GLP-1 類＋DPP-4i：不要併用（健保也不給付）']];
 function ddiWarn(meds){const out=[];DDI.forEach(([a,b,msg])=>{for(let i=0;i<meds.length;i++)if(a.test(meds[i]))for(let j=0;j<meds.length;j++)if(i!==j&&b.test(meds[j])){out.push('交互作用：'+msg);return}});return out}
-function renalWarn(meds,e){if(!has(e))return [];const out=[];meds.forEach(m=>{const ml=m.toLowerCase();const hit=D_RENAL.find(r=>(r[1]+' '+r[2]).toLowerCase().split(/[／/、,\s()]+/).filter(t=>t.length>=5).some(t=>ml.includes(t)));if(!hit)return;const res=hit[4](e);if(res&&res[1])out.push(`腎劑量（eGFR ${e}）：${hit[1]} → ${res[0]}${hit[5]?'；'+hit[5]:''}`)});return [...new Set(out)]}
+function renalWarn(meds,e){if(!has(e))return [];const out=[];meds.forEach(m=>{const ml=m.toLowerCase();const hit=D_RENAL.find(r=>(r[1]+' '+r[2]).toLowerCase().split(/[／/、,\s()]+/).filter(t=>t.length>=5).some(t=>{const i=ml.indexOf(t);if(i<0)return false;const a=ml[i-1],z=ml[i+t.length];return !(a&&/[a-z]/.test(a))&&!(z&&/[a-z]/.test(z))}));if(!hit)return;const res=hit[4](e);if(res&&res[1])out.push(`腎劑量（eGFR ${e}）：${hit[1]} → ${res[0]}${hit[5]?'；'+hit[5]:''}`)});return [...new Set(out)]}
 /* 自動暫存 */
 const SKEY='soap_state_v1';let saveT;
 function saveState(){clearTimeout(saveT);saveT=setTimeout(doSave,150)}
 function doSave(){try{
- const inp={};G.querySelectorAll('input[id],select[id]').forEach(el=>{if(/^(ck|tplout|gout|gslip)/.test(el.id))return;inp[el.id]=el.type==='checkbox'?el.checked:el.value});
+ const inp={};G.querySelectorAll('input[id],select[id]').forEach(el=>{if(/^(ck|tplout|gout|gslip|cu[NVU]$)/.test(el.id))return;inp[el.id]=el.type==='checkbox'?el.checked:el.value});
  const mods=[...G.querySelectorAll('[data-mod]')].filter(x=>x.checked).map(x=>x.dataset.mod);
  const pe=[...G.querySelectorAll('[data-pe]')].map(x=>x.checked);
  const cc=CCS.map(i=>({id:i.c.id,st:i.st,dur:i.dur,rxd:i.rxd,preset:i.preset||[]}));
  const tp={};Object.values(TPLI).forEach(i=>tp[i.n]={st:i.st,dur:i.dur,rxd:i.rxd});
- localStorage.setItem(SKEY,JSON.stringify({t:Date.now(),inp,mods,pe,cc,ch:CH,tp,prev:PREV,prevd:PREVD,last:LAST,lastfu:LASTFU,pcc:PREVCC.map(x=>({id:x.id,st:x.st,date:x.date,dur:x.dur,rxd:x.rxd})),pst:PST}));}catch(e){}}
+ localStorage.setItem(SKEY,JSON.stringify({t:Date.now(),inp,mods,pe,cc,ch:CH,tp,prev:PREV,prevd:PREVD,last:LAST,lastfu:LASTFU,pcc:PREVCC.map(x=>({id:x.id,st:x.st,date:x.date,dur:x.dur,rxd:x.rxd})),pst:PST,cs:CS,cust:CUST}));}catch(e){}}
 addEventListener('pagehide',()=>{clearTimeout(saveT);doSave()});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(saveT);doSave()}});
 function restoreState(){try{const j=JSON.parse(localStorage.getItem(SKEY)||'null');if(!j||Date.now()-j.t>12*3600e3)return false;
  Object.entries(j.inp||{}).forEach(([id,v])=>{const el=$(id);if(!el)return;if(el.type==='checkbox')el.checked=v;else el.value=v});
@@ -1707,6 +1956,7 @@ function restoreState(){try{const j=JSON.parse(localStorage.getItem(SKEY)||'null
  G.querySelectorAll('[data-pe]').forEach((x,i)=>x.checked=!!(j.pe||[])[i]);
  CCS=(j.cc||[]).map(o=>({uid:++ccSeq,c:CC.find(c=>c.id===o.id),st:o.st,dur:o.dur,rxd:o.rxd,preset:o.preset})).filter(x=>x.c);
  if(j.ch)MODS.forEach(m=>{if(j.ch[m.k])CH[m.k]=j.ch[m.k]});
+ CS=j.cs||{};CUST=j.cust||[];renderCust();
  Object.entries(j.prev||{}).forEach(([id,v])=>setPrev(id,v));PREVD=j.prevd||'';LAST=j.last||{};LASTFU=j.lastfu||{};PST=j.pst||{};PREVCC=(j.pcc||[]).map(o=>({...o,c:CC.find(c=>c.id===o.id)})).filter(x=>x.c);
  Object.entries(j.tp||{}).forEach(([n_,o])=>{const m=TMAP[n_];if(Array.isArray(m)){const c=CC.find(x=>x.id===m[0]);TPLI[n_]={uid:'t'+n_,n:+n_,tpl:true,c,st:o.st,preset:m[1],dur:o.dur,rxd:o.rxd}}});
  return true}catch(e){return false}}
@@ -1715,7 +1965,7 @@ function resetAll(btn){
  if(Date.now()-rstT>3000){rstT=Date.now();btn.textContent='再按一次確認還原';btn.classList.add('arm');setTimeout(()=>{btn.textContent='全部還原（換病人）';btn.classList.remove('arm')},3000);return}
  rstT=0;btn.textContent='全部還原（換病人）';btn.classList.remove('arm');
  G.querySelectorAll('input,select').forEach(el=>{if(el.type==='checkbox')el.checked=false;else if(el.tagName==='SELECT')el.selectedIndex=0;else el.value=''});
- fillWt();CCS=[];MODS.forEach(m=>CH[m.k]={dx:{},med:{},fu:{}});TPLI={};clearPrev();LAST={};LASTFU={};PREVCC=[];PST={};$('ycjPrev').innerHTML='';
+ fillWt();CCS=[];CS={};CUST=[];renderCust();MODS.forEach(m=>CH[m.k]={dx:{},med:{},fu:{}});TPLI={};clearPrev();LAST={};LASTFU={};PREVCC=[];PST={};$('ycjPrev').innerHTML='';
  document.querySelectorAll('.tplcc').forEach(b=>{b.innerHTML='';delete b.dataset.m;const d=b.closest('details.card');if(d&&d.open)mountTpl(b)});
  try{localStorage.removeItem(SKEY)}catch(e){}
  build();window.scrollTo(0,0);
@@ -1768,8 +2018,8 @@ function mountTpl(box){
  renderTpl(TPLI[n]);
 }
 document.addEventListener('toggle',e=>{const d=e.target;if(d.matches&&d.matches('details.card')&&d.open){const b=d.querySelector('.tplcc');if(b&&!b.dataset.m)mountTpl(b)}},true);
-G.addEventListener('input',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox'))return;if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
-G.addEventListener('change',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox'))return;if(e.target.tagName==='INPUT'&&/^(number|text)$/.test(e.target.type))return;if(e.target.id==='gout'||e.target.id==='gslip')return;build();Object.values(TPLI).forEach(renderTpl)});
+G.addEventListener('input',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox,#custLab .fuadd'))return;if(e.target.id==='gout'){edited=true;$('gedit').hidden=false;return}if(e.target.id==='gslip')return;build()});
+G.addEventListener('change',e=>{if(e.target.closest('#ccList,.chrow,#ycjBox,#prevBox,#custLab'))return;if(e.target.tagName==='INPUT'&&/^(number|text)$/.test(e.target.type))return;if(e.target.id==='gout'||e.target.id==='gslip')return;build();Object.values(TPLI).forEach(renderTpl)});
 $('gregen').addEventListener('click',build);
 $('gclear').addEventListener('click',()=>{CCS=[];G.querySelectorAll('input').forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''});G.querySelectorAll('select').forEach(s=>s.selectedIndex=0);fillWt();build()});
 // base PE
@@ -1777,9 +2027,9 @@ const bp=document.createElement('div');bp.innerHTML=peHtml('base');G.querySelect
 build();
 /* ---------- 衛教單張（門診實務共用套件 clinic-kit） ---------- */
 const HO={
- mascot:{htn:'heart',dm:'drop',lip:'heart',ckd:'kidney',wt:'leaf',smk:'lung',trk:'leaf'},
- title:{htn:'血壓照護單',dm:'血糖照護單',lip:'血脂照護單',ckd:'護腎照護單',wt:'體重管理單',smk:'戒菸計畫單',trk:'追蹤照護單'},
- warn:{trk:'新的症狀或報告異常時，提早回診',htn:'血壓超過 180/120，合併頭痛、胸痛、視力模糊或手腳無力',
+ mascot:{htn:'heart',dm:'drop',lip:'heart',ckd:'kidney',wt:'leaf',smk:'lung',thy:'leaf',trk:'leaf'},
+ title:{htn:'血壓照護單',dm:'血糖照護單',lip:'血脂照護單',ckd:'護腎照護單',wt:'體重管理單',smk:'戒菸計畫單',thy:'甲狀腺照護單',trk:'追蹤照護單'},
+ warn:{trk:'新的症狀或報告異常時，提早回診',thy:'吃抗甲狀腺藥時發燒、喉嚨痛：先停藥，當天回診抽血；心跳很快、喘、意識不清：打 <b>119</b>',htn:'血壓超過 180/120，合併頭痛、胸痛、視力模糊或手腳無力',
   dm:'血糖一直超過 300、很渴尿很多、噁心嘔吐；低血糖吃糖 15 分鐘後沒改善或叫不醒：打 <b>119</b>',
   lip:'全身肌肉痛、沒力氣、尿變成可樂色',
   ckd:'尿量變很少、全身水腫、喘到不能躺平',
@@ -1807,7 +2057,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  build();
  document.querySelectorAll('details.card[open] .tplcc').forEach(b=>{if(!b.dataset.m)mountTpl(b)});
 });
-window.__gen={build,pt,HTN,DM,LIP,CKD,WTM,SMK};
+window.__gen={build,pt,HTN,DM,LIP,CKD,WTM,SMK,THY,ckdepi,CS:()=>CS,setCS:(k,x,v)=>{CS[k]=CS[k]||{};CS[k][x]=v},CUST:()=>CUST};
 })();
 
 </script>
@@ -1867,6 +2117,11 @@ window.CK_CONFIG={
   },
   medInfo:[
     [/twynsta|exforge|sevikar|olsaaca/i,"兩種降血壓藥合一顆","每天固定時間吃；腳踝腫要告訴醫師。"],
+    [/eltroxin|levothyroxine/i,"甲狀腺素（補充不足）","早上空腹吃，30–60 分鐘後再吃早餐；和鈣片、鐵劑、胃藥間隔 4 小時；不要自己停。"],
+    [/methimazole|carbimazole|newmazole|polupi|ptu/i,"抗甲狀腺（降低甲狀腺素）","發燒、喉嚨痛要先停藥，當天回診抽血；皮膚癢、眼白變黃要回診。"],
+    [/propranolol/i,"減慢心跳、改善手抖","氣喘的人不能吃；頭暈、心跳太慢要回診。"],
+    [/tedalin|ferric|sideral/i,"補鐵","大便會變黑是正常的；和茶、咖啡、鈣片間隔 2 小時。"],
+    [/methycobal|mecobalamin/i,"維生素 B12","飯後吃。"],
     [/indapamide|natrilix/i,"降血壓、利尿","早上吃；會多跑廁所；要驗鈉、鉀、尿酸。"],
     [/doxazosin|xadosin/i,"降血壓、放鬆血管","睡前吃；起身慢一點，小心頭暈。"],
     [/leqvio|inclisiran/i,"打針降膽固醇","半年打一次，在診間施打。"],
